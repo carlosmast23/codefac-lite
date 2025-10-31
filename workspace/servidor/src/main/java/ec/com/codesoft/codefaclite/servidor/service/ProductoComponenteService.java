@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoComponenteServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 
 /**
@@ -29,7 +30,7 @@ public class ProductoComponenteService extends ServiceAbstract<ProductoComponent
     public ProductoComponente grabar(ProductoComponente entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
                 validar(entity);
 
@@ -45,7 +46,7 @@ public class ProductoComponenteService extends ServiceAbstract<ProductoComponent
     public void editar(ProductoComponente entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 validar(entity);
 
                 //entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
@@ -58,7 +59,7 @@ public class ProductoComponenteService extends ServiceAbstract<ProductoComponent
     public void eliminar(ProductoComponente entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
             }

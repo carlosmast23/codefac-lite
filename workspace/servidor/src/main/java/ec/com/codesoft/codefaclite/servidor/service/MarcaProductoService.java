@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -39,18 +40,18 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
     public MarcaProducto grabar(MarcaProducto marcaProducto) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //validarGrabar(marcaProducto);
                 //marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 //entityManager.persist(marcaProducto);
-                grabarSinTransaccion(marcaProducto);
+                grabarSinTransaccion(marcaProducto,entityManager);
             }
         });
         return marcaProducto;
     }
     
     
-    public MarcaProducto grabarSinTransaccion(MarcaProducto marcaProducto) throws ServicioCodefacException, RemoteException {
+    public MarcaProducto grabarSinTransaccion(MarcaProducto marcaProducto,EntityManager entityManager) throws ServicioCodefacException, RemoteException {
         validarGrabar(marcaProducto);
         marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         entityManager.persist(marcaProducto);
@@ -61,7 +62,7 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
     public void editar(MarcaProducto marcaProducto) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 validarGrabar(marcaProducto);
                 entityManager.merge(marcaProducto);
             }
@@ -72,7 +73,7 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
     public void eliminar(MarcaProducto marcaProducto) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 marcaProducto.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(marcaProducto);
             }
@@ -92,7 +93,7 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
         } );*/
         return (List<MarcaProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 return getFacade().obtenerActivosPorEmpresa(empresa);
             }
         });
@@ -100,16 +101,20 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
     
     public MarcaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("nombre",nombre);
-        List<MarcaProducto> resultados=getFacade().findByMap(mapParametros);
-        if(resultados.size()>0)
-        {
-            return resultados.get(0);
-        }
-        return null;
+        return (MarcaProducto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("nombre", nombre);
+                List<MarcaProducto> resultados = getFacade().findByMap(mapParametros,entityManager);
+                if (resultados.size() > 0) {
+                    return resultados.get(0);
+                }
+                return null;
+            }
+        });        
     }
     
     

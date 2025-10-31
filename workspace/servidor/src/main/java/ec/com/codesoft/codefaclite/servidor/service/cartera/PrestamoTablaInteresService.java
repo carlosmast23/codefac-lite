@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoTablaInteresServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
@@ -33,7 +34,7 @@ public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaIn
         validar(entity);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 entity.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                 entityManager.persist(entity);
@@ -47,7 +48,7 @@ public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaIn
         validar(entity);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //entity.setFechaCreacion(UtilidadesFecha.getFechaHoy());
                 entityManager.merge(entity);
             }
@@ -59,7 +60,7 @@ public class PrestamoTablaInteresService extends ServiceAbstract<PrestamoTablaIn
     public void eliminar(PrestamoTablaInteres entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
             }

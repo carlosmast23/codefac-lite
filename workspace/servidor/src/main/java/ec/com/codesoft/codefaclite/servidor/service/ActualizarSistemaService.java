@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ActualizarSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ActualizarSistemaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +34,10 @@ public class ActualizarSistemaService extends ServiceAbstract<ActualizarSistema,
         try {
             return (List<ActualizarSistema>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("cambioActualizado", EnumSiNo.NO.getLetra());
-                    return getFacade().findByMap(mapParametros);
+                    return getFacade().findByMap(mapParametros,em);
                 }
             });
         } catch (ServicioCodefacException ex) {
@@ -51,10 +52,10 @@ public class ActualizarSistemaService extends ServiceAbstract<ActualizarSistema,
          try {
             List<ActualizarSistema> resultadoList= (List<ActualizarSistema>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     //mapParametros.put("cambioActualizado", EnumSiNo.NO.getLetra());
-                    return getFacade().findByMap(mapParametros);
+                    return getFacade().findByMap(mapParametros,em);
                 }
             });
             

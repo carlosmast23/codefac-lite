@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.AplicarDescuentoAcademicoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;

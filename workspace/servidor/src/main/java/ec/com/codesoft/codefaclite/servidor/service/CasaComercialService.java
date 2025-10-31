@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CasaComercialServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.MarcaProductoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +43,11 @@ public class CasaComercialService extends ServiceAbstract<CasaComercial,CasaCome
     public CasaComercial grabar(CasaComercial casaComercial) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //validarGrabar(marcaProducto);
                 //marcaProducto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 //entityManager.persist(marcaProducto);
-                grabarSinTransaccion(casaComercial);
+                grabarSinTransaccion(casaComercial,entityManager);
             }
         });
         return casaComercial;
@@ -56,7 +57,7 @@ public class CasaComercialService extends ServiceAbstract<CasaComercial,CasaCome
 
     
     
-    public CasaComercial grabarSinTransaccion(CasaComercial casaComercial) throws ServicioCodefacException, RemoteException {
+    public CasaComercial grabarSinTransaccion(CasaComercial casaComercial,EntityManager entityManager) throws ServicioCodefacException, RemoteException {
         validarGrabar(casaComercial);
         casaComercial.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         entityManager.persist(casaComercial);
@@ -67,7 +68,7 @@ public class CasaComercialService extends ServiceAbstract<CasaComercial,CasaCome
     public void editar(CasaComercial casaComercial) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 validarGrabar(casaComercial);
                 entityManager.merge(casaComercial);
             }
@@ -78,7 +79,7 @@ public class CasaComercialService extends ServiceAbstract<CasaComercial,CasaCome
     public void eliminar(CasaComercial casaComercial) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 casaComercial.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(casaComercial);
             }
@@ -90,24 +91,34 @@ public class CasaComercialService extends ServiceAbstract<CasaComercial,CasaCome
     {
         return (List<CasaComercial>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParameros=new HashMap<String, Object>();
                 mapParameros.put("empresa", empresa);
                 mapParameros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                return getFacade().findByMap(mapParameros);
+                return getFacade().findByMap(mapParameros,em);
             }
         } );
     }
     
     public CasaComercial buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        return (CasaComercial) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return buscarPorNombre(empresa, nombre, entityManager);
+            }
+        });
+        
+    }
+    
+    public CasaComercial buscarPorNombre(Empresa empresa,String nombre,EntityManager em) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         mapParametros.put("empresa", empresa);
-        mapParametros.put("nombre",nombre);
-        List<CasaComercial> resultados=getFacade().findByMap(mapParametros);
-        if(resultados.size()>0)
-        {
+        mapParametros.put("nombre", nombre);
+        List<CasaComercial> resultados = getFacade().findByMap(mapParametros, em);
+        if (resultados.size() > 0) {
             return resultados.get(0);
         }
         return null;

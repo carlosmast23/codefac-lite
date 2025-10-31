@@ -86,7 +86,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
             }
         }
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         //query.setParameter(1,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         
         if(persona!=null)
@@ -182,7 +182,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
 
         try {//INNER JOIN Retencion r ON d.retencion=r.id  
             String queryString = "SELECT d FROM RetencionDetalle d WHERE " + tipor + " AND d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha + " AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE " + retiva + " AND " + retrenta + ") )";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             //System.err.println("QUERYD---JC--->" + query.toString());
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -212,7 +212,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     public List<RetencionDetalle> obtenerRetencionesRentaPorCompraFacade(Compra compra,SriRetencion sriRetencion) throws RemoteException
     {
         String queryString="SELECT rd FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.retencion.estado<>?3 and rd.codigoSri=?4 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,compra);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         query.setParameter(3,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
@@ -251,7 +251,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         
        
         String queryString="SELECT rd.porcentajeRetener,sum(rd.valorRetenido) FROM RetencionDetalle rd WHERE rd.retencion.compra=?1 and rd.retencion.estado<>?2 and rd.codigoSri=?3 and rd.retencion.estado=?4 group by rd.porcentajeRetener ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,compra);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         query.setParameter(3, sriRetencion.getCodigo());
@@ -297,7 +297,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         try {
             String queryString = "SELECT d.codigoRetencionSri,SUM(d.valorRetenido) FROM RetencionDetalle d WHERE " + tipoc + " AND d.retencion.id IN(SELECT r.id FROM Retencion r WHERE " + proveedor + fecha + " AND r.compra.id IN(SELECT e.compra.id FROM CompraDetalle e WHERE " + retiva + " AND " + retrenta + ")) GROUP BY d.codigoRetencionSri";
             //String queryString = "SELECT d.codigoSri,SUM(d.valorRetenido) FROM RetencionDetalle d GROUP BY d.codigoSri";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             //System.err.println("QUERY 2 --->" + query.toString());
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -331,7 +331,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
         //retencion.getEs
         
         String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?1 and r.estado<>?2 and r.compra=?3 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
         query.setParameter(3, compra);
@@ -343,7 +343,7 @@ public class RetencionFacade extends AbstractFacade<Retencion> {
     {
 
         String queryString = "SELECT r FROM Retencion r WHERE r.estado<>?1 and r.estado<>?2 and r.proveedor=?3 and r.preimpresoDocumento=?4 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
         query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
         query.setParameter(3, persona);

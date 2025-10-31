@@ -43,6 +43,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstrac
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -82,7 +83,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         
     }
     
-    private void postValidacion(Presupuesto entity,CrudEnum estado) throws ServicioCodefacException, RemoteException
+    private void postValidacion(Presupuesto entity,CrudEnum estado,EntityManager em) throws ServicioCodefacException, RemoteException
     {        
         //validar que si el estado se va a cambiar a facturado, primero se tiene que tener todas las actividades como terminadas
         if(entity.getEstadoEnum().equals(Presupuesto.EstadoEnum.TERMINADO))
@@ -92,7 +93,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
             {
                 if(entity.getId()!=null)
                 {
-                    presupuestoOriginal=buscarPorId(entity.getId());
+                    presupuestoOriginal=buscarPorId(entity.getId(),em);
                 }
             }
             
@@ -115,20 +116,21 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public void editar(Presupuesto p, Boolean enviarCorreo) throws RemoteException, ServicioCodefacException {
         validacion(p);
-        postValidacion(p,CrudEnum.EDITAR);
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                editarReservaProductos(p);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                postValidacion(p,CrudEnum.EDITAR,entityManager);
+                editarReservaProductos(p,entityManager);
                 entityManager.merge(p);
-                procesosRelacionados(p);                
+                procesosRelacionados(p,entityManager);                
                 verificarEnviarCorreo(enviarCorreo, p);
                 
             }
         });
     }
     
-    public void editarReservaProductos(Presupuesto p) throws RemoteException, ServicioCodefacException
+    public void editarReservaProductos(Presupuesto p,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Editar los presupuestos
         List<PresupuestoDetalle> detallesAnteriorList=ServiceFactory.getFactory().getPresupuestoDetalleServiceIf().buscarPorPresupuesto(p);
@@ -193,7 +195,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         return (Presupuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
         {
             @Override
-            public Object transaccion() throws ServicioCodefacException, RemoteException 
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {                
                 validacion(entity);
                 entity.getOrdenTrabajoDetalle().setEstado(OrdenTrabajoDetalle.EstadoEnum.PRESUPUESTADO.getLetra());
@@ -234,19 +236,19 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                         presupuestoDetalle.setPresupuesto(entity);
                         entityManager.persist(presupuestoDetalle);
                         
-                        crearActividadesPresupuesto(presupuestoDetalle);
+                        crearActividadesPresupuesto(presupuestoDetalle,entityManager);
                     }
                 }
                 
                 entity.setPresupuestoDetalles(presupuestoDetalleList);
-                ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity);
+                ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity,entityManager);
                 
                 entityManager.persist(entity);
                 entityManager.flush();
-                procesosRelacionados(entity);
+                procesosRelacionados(entity,entityManager);
                 Presupuesto presupuestoEdit=entityManager.merge(entity);                
                 verificarEnviarCorreo(enviarCorreo, presupuestoEdit);
-                postValidacion(presupuestoEdit,CrudEnum.CREAR);
+                postValidacion(presupuestoEdit,CrudEnum.CREAR,entityManager);
                 //entity=entityManager.merge(presupuestoEdit);
                 return presupuestoEdit;
             } 
@@ -255,7 +257,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         
     }
     
-    private void procesosRelacionados(Presupuesto presupuesto)
+    private void procesosRelacionados(Presupuesto presupuesto,EntityManager entityManager)
     {
         //Cambiar de estado la orden de trabajo cuando el presupuesto tenga estado TERMINADO
         if(presupuesto.getEstadoEnum().equals(Presupuesto.EstadoEnum.TERMINADO))
@@ -313,7 +315,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
 
     }
     
-    private void crearActividadesPresupuesto(PresupuestoDetalle presupuestoDetalle)throws ServicioCodefacException, RemoteException
+    private void crearActividadesPresupuesto(PresupuestoDetalle presupuestoDetalle,EntityManager entityManager)throws ServicioCodefacException, RemoteException
     {
         Producto producto=presupuestoDetalle.getProducto();
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.SERVICIO))
@@ -355,7 +357,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 p.setEstadoEnum(Presupuesto.EstadoEnum.ANULADO);
                 entityManager.merge(p);
             }
@@ -400,7 +402,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 for (PresupuestoDetalleActividad actividad : actividadList) 
                 {
                     if(usuarioSeleccionado!=null)

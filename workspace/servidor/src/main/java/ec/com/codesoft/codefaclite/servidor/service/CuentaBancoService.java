@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CuentaBancoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 
 /**
@@ -54,7 +55,7 @@ public class CuentaBancoService extends ServiceAbstract<CuentaBanco,CuentaBancoF
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);
@@ -73,16 +74,16 @@ public class CuentaBancoService extends ServiceAbstract<CuentaBanco,CuentaBancoF
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void editarSinTransaccion(CuentaBanco entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(CuentaBanco entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
@@ -92,7 +93,7 @@ public class CuentaBancoService extends ServiceAbstract<CuentaBanco,CuentaBancoF
     public void eliminar(CuentaBanco entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);

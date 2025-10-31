@@ -33,7 +33,7 @@ public class LoteFacade extends AbstractFacade<Lote>{
     {
         //Lote lote=n;
         String queryStr=" SELECT count(l.codigo) FROM Lote l WHERE l.estado=?1 and l.empresa=?2 ";
-        Query query=getEntityManager().createQuery(queryStr);
+        Query query=nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, empresa);
         return (Long) query.getSingleResult();
@@ -86,7 +86,7 @@ public class LoteFacade extends AbstractFacade<Lote>{
         
         
         String queryString="SELECT "+resultadoQuery +" FROM KARDEX K INNER JOIN LOTE L ON K.LOTE_ID = L.ID INNER JOIN PRODUCTO P ON K.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID =K.BODEGA_ID WHERE P.ESTADO='A' AND B.ESTADO='A' AND K.ESTADO ='A' AND B.SUCURSAL_ID=?1 AND L.FECHA_VENCIMIENTO<?3 AND K.STOCK>0 "+whereBodega;
-        Query query = getEntityManager().createNativeQuery(queryString);
+        Query query = nuevoEntityManager().createNativeQuery(queryString);
         query.setParameter(1,sucursal.getId());
         query.setParameter(3,fechaReferencia);
         

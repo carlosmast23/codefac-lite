@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PersonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -36,45 +37,55 @@ public class PersonaEstablecimientoService extends ServiceAbstract<PersonaEstabl
  
     public List<PersonaEstablecimiento> buscarActivoPorIdentificacion(String identificacion, Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException 
     {
+        return (List<PersonaEstablecimiento>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Boolean datosCompartidosEmpresas = false;
+                datosCompartidosEmpresas = ParametroUtilidades.comparar(empresa, ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, EnumSiNo.SI);
+
+                //PersonaEstablecimiento pe;
+                //pe.getPersona().getEstadoEnum()
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("persona.identificacion", identificacion);
+                if (!datosCompartidosEmpresas) {
+                    mapParametros.put("persona.empresa", empresa);
+                }
+                mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
+
+                return getFacade().findByMap(mapParametros,entityManager); //Todo crear mejor un metodo que ya obtener filtrado los datos
+            }
+        });
         
-        Boolean datosCompartidosEmpresas=false;
-        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);        
-        
-        //PersonaEstablecimiento pe;
-        //pe.getPersona().getEstadoEnum()
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("persona.identificacion", identificacion);
-        if(!datosCompartidosEmpresas)
-        {
-            mapParametros.put("persona.empresa", empresa);
-        }
-        mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
-        
-        return  getFacade().findByMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
+       
     }
     
     public PersonaEstablecimiento buscarActivoPorNombreComercial(String nombreComercial, Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException 
     {
+        return (PersonaEstablecimiento) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Boolean datosCompartidosEmpresas = false;
+                datosCompartidosEmpresas = ParametroUtilidades.comparar(empresa, ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, EnumSiNo.SI);
+
+                //PersonaEstablecimiento pe;
+                //pe.getNombreComercial();
+                //pe.getPersona().getEstadoEnum()
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("nombreComercial", nombreComercial);
+                if (!datosCompartidosEmpresas) {
+                    mapParametros.put("persona.empresa", empresa);
+                }
+                mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
+
+                List<PersonaEstablecimiento> resultadoList = getFacade().findByMap(mapParametros,entityManager); //Todo crear mejor un metodo que ya obtener filtrado los datos
+                if (resultadoList.size() > 0) {
+                    return resultadoList.get(0);
+                }
+                return null;
+            }
+        });
+
         
-        Boolean datosCompartidosEmpresas=false;
-        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);        
         
-        //PersonaEstablecimiento pe;
-        //pe.getNombreComercial();
-        //pe.getPersona().getEstadoEnum()
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("nombreComercial", nombreComercial);
-        if(!datosCompartidosEmpresas)
-        {
-            mapParametros.put("persona.empresa", empresa);
-        }
-        mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
-        
-        List<PersonaEstablecimiento> resultadoList=  getFacade().findByMap(mapParametros); //Todo crear mejor un metodo que ya obtener filtrado los datos
-        if(resultadoList.size()>0)
-        {
-            return resultadoList.get(0);
-        }
-        return null;
     }
 }

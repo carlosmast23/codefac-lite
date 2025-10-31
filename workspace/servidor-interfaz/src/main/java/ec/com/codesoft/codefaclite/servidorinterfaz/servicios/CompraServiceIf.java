@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -37,7 +38,7 @@ public interface CompraServiceIf extends ServiceAbstractIf<Compra>
     public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<Compra> obtenerCompraDisenable() throws java.rmi.RemoteException;
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException;
-    public void eliminarCompraSinTransaccion(Compra compra) throws ServicioCodefacException, RemoteException;
+    public void eliminarCompraSinTransaccion(Compra compra,EntityManager entityManager) throws ServicioCodefacException, RemoteException;
     //public Compra obtenerCompraDesdeXml(RemoteInputStream archivoCompraXml,Empresa empresa) throws RemoteException,ServicioCodefacException;
     public Compra obtenerCompraDesdeXml(ComprobanteElectronico comprobanteElectronico,Empresa empresa) throws RemoteException,ServicioCodefacException;
     

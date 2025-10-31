@@ -36,9 +36,9 @@ public class TestGrabarFechaValidacion {
             AbstractFacade.usuarioDb = "root";
             AbstractFacade.claveDb = "1234";
             String fecha="2019-12-01";
-           AbstractFacade.cargarEntityManager();
+           AbstractFacade.cargarEntityManagerFactory();
             
-            EntityManager em = AbstractFacade.entityManager;
+            EntityManager em = AbstractFacade.nuevoEntityManager();
             EntityTransaction et = em.getTransaction();
             
             EmpresaService empresaService=new EmpresaService();

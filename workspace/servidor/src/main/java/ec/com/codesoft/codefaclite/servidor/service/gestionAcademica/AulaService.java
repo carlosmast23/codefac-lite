@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.AulaFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AulaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +37,20 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
     
     public List<Aula> obtenerAulasActivas() throws RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+        try {
+            return (List<Aula>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String,Object> mapParametros=new HashMap<String, Object>();
+                    mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+                    return getFacade().findByMap(mapParametros,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(AulaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
     /*

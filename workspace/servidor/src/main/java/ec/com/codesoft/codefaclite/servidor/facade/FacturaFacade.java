@@ -163,7 +163,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         String queryString = selectStr+"FROM Factura u WHERE u.empresa=?7 and ( u.codigoDocumento=?6 "+documentoEnum2Str+"  ) and  " + cliente + usuarioId + fecha + estadoFactura + filtrarReferidos + filtroPuntoEmision + filtrarSucursal + enviadoGuiaRemisionStr + vendedorStr+afectaNotaCreditoTotalStr+orderByStr;
                 
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
 
         if (persona != null) {
             query.setParameter(1, persona);
@@ -261,7 +261,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         try {
             
             String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estadoNotaCredito<>?2 AND u.estado<>?3";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
             query.setParameter(2, Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
             query.setParameter(3, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
@@ -275,7 +275,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
         queryString += "AND ( f.cliente.razonSocial like ?1 )";
 
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, param);
         query.setMaxResults(limiteMaximo);
         query.setFirstResult(limiteMinimo);
@@ -288,7 +288,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         //Factura f;
         //f.getProforma().
         String queryString = "SELECT count(u) FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.proforma=?3  ";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
             query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
             query.setParameter(3, proforma);
@@ -307,7 +307,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             //f.getEmpresa();
             String queryString="SELECT MAX(CAST (F.SECUENCIAL AS BIGINT)) FROM FACTURA F WHERE F.EMPRESA_ID=?2 AND F.CODIGO_DOCUMENTO=?1"; //TODO: Por el momento dejo una consulta nativa porque tengo un problema al evaluar el secuencial que en la base de datos esta como string pero esta mapeado como entero y al hacer casting en jpql el compilador se confunde
             //String queryString = "SELECT max( CAST(u.secuencial CHAR(64))  ) FROM Factura u WHERE  u.codigoDocumento=?1";
-            Query query = getEntityManager().createNativeQuery(queryString);
+            Query query = nuevoEntityManager().createNativeQuery(queryString);
             //query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
             query.setParameter(1, documentoEnum.getCodigo());
             query.setParameter(2,empresa.getId());
@@ -352,7 +352,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           }
                     
           //String queryString="SELECT F FROM FACTURA F WHERE F.CODIGO_DOCUMENTO=?1 AND F.cliente=?2";
-          Query query=getEntityManager().createQuery(queryString);
+          Query query=nuevoEntityManager().createQuery(queryString);
           //query.setParameter(1,DocumentoEnum.PROFORMA.getCodigo());
           query.setParameter(1,documentoEnum.getCodigo());
           
@@ -389,7 +389,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           
           String queryString="SELECT F FROM Factura F WHERE F.secuencial=?1 AND F.puntoEmision=?2 AND F.puntoEstablecimiento=?3 AND F.estado=?4 ";
           
-          Query query=getEntityManager().createQuery(queryString);
+          Query query=nuevoEntityManager().createQuery(queryString);
           
           query.setParameter(1,secuencial);
           query.setParameter(2,puntoEmision);
@@ -410,7 +410,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         //Factura f;
         //f.getClaveAcceso();
         String queryString=" SELECT f FROM Factura f WHERE f.claveAcceso=?1 ";
-        Query query=getEntityManager().createQuery(queryString);
+        Query query=nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,autorizacion);
         return query.getResultList();
     }
@@ -420,7 +420,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         /*Factura f;
         f.getEs*/
         String queryString=" SELECT f FROM Factura f WHERE f.numeroOrden=?1 AND f.estado=?2 ORDER BY f.id ";
-        Query query=getEntityManager().createQuery(queryString);
+        Query query=nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,numeroOrden);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         return query.getResultList();
@@ -461,7 +461,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 "			FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS UTILIDAD \n" +
 "		FROM FACTURA_DETALLE FD	INNER JOIN FACTURA F ON F.ID =FD.FACTURA_ID WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado+whereDocumentos ;
       
-          Query query=getEntityManager().createNativeQuery(queryString);
+          Query query=nuevoEntityManager().createNativeQuery(queryString);
           Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);
           
           if(fechaMayor!=null)

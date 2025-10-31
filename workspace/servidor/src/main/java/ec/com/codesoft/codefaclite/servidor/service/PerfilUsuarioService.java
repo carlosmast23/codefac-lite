@@ -10,11 +10,15 @@ import ec.com.codesoft.codefaclite.servidor.facade.PerfilUsuarioFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilUsuarioServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,10 +31,20 @@ public class PerfilUsuarioService extends ServiceAbstract<PerfilUsuario,PerfilUs
     }
 
     @Override
-    public List<PerfilUsuario> buscarPorPerfil(Perfil perfil) throws RemoteException {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("perfil",perfil);            
-        return getFacade().findByMap(mapParametros);
+    public List<PerfilUsuario> buscarPorPerfil(Perfil perfil) throws RemoteException {        
+        try {
+            return (List<PerfilUsuario>)ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("perfil", perfil);
+                    return getFacade().findByMap(mapParametros,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PerfilUsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     

@@ -39,9 +39,9 @@ public class TestBaseDatos {
         try {
             AbstractFacade.usuarioDb = "root";
             AbstractFacade.claveDb = "1234";
-            AbstractFacade.cargarEntityManager();
+            AbstractFacade.cargarEntityManagerFactory();
             
-            EntityManager em= AbstractFacade.entityManager;
+            EntityManager em= AbstractFacade.nuevoEntityManager();
             EntityTransaction et= em.getTransaction();
             
             KardexDetalleService kardexService=new KardexDetalleService();

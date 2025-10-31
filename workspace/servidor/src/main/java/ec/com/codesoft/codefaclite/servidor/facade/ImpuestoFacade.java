@@ -29,7 +29,7 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
     public Impuesto getByName(String nombre) {
 
         String queryString = "SELECT i FROM Impuesto i WHERE i.nombre=?1";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,nombre); 
         return (Impuesto) query.getSingleResult();
     }
@@ -43,7 +43,7 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
             List<ImpuestoDetalle> impuestoDetallesAEliminar = new ArrayList<>();
             
             String queryString = "SELECT i FROM Impuesto i WHERE i.nombre=?1";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1,nombre);
             Impuesto impuestos = (Impuesto) query.getSingleResult();
             for(ImpuestoDetalle id : impuestos.getDetalleImpuestos())

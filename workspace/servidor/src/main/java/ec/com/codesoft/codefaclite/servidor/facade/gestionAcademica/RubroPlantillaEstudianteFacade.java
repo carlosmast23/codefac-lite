@@ -32,7 +32,7 @@ public class RubroPlantillaEstudianteFacade extends AbstractFacade<RubroPlantill
                 
         String queryString=" SELECT ei EstudianteInscrito ei,RubroPlantillaEstudiante rpe  WHERE rpe.rubroPlantilla=?1 AND "+subQueryString+">0";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,rubroPlantilla);
         
         return query.getResultList();

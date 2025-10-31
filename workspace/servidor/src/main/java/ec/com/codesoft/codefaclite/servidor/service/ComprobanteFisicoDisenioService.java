@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteFisicoDise
 import ec.com.codesoft.codefaclite.servidor.facade.ComprobanteFisicoDisenioFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteFisicoDisenioServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,10 +26,16 @@ public class ComprobanteFisicoDisenioService extends ServiceAbstract<Comprobante
     
     public ComprobanteFisicoDisenio buscarPorCodigoDocumento(String codigo) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
-        parametroComprobanteMap.put("codigoDocumento", codigo);
-        return getFacade().findByMap(parametroComprobanteMap).get(0);
-            //ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
+        return (ComprobanteFisicoDisenio) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> parametroComprobanteMap = new HashMap<String, Object>();
+                parametroComprobanteMap.put("codigoDocumento", codigo);
+                return getFacade().findByMap(parametroComprobanteMap,entityManager).get(0);
+                //ComprobanteFisicoDisenio documento = servicioComprobanteDisenio.obtenerPorMap(parametroComprobanteMap).get(0);
+            }
+        });
+        
     }
     
 }

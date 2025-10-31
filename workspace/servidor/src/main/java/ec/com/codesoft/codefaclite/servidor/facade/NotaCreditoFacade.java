@@ -59,7 +59,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
                 
         try {
             String queryString = "SELECT u FROM NotaCredito u WHERE 1=1 AND u.empresa=?7 AND " + cliente + fecha +estadoStr;
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -90,6 +90,8 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         }
     }
     
+    //TODO: Usar consultas con metodos predefinidos
+    @Deprecated
     public BigDecimal buscarsSaldoAfectaNotasCredito(Factura factura)
     {
         /*NotaCredito nc;
@@ -98,7 +100,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         nc.getTotal();*/
         
         String queryString="SELECT sum(nc.total) FROM NotaCredito nc WHERE nc.factura=?1 and ( nc.estado=?2 or nc.estado=?3 )";
-        Query query=entityManager.createQuery(queryString);
+        Query query=AbstractFacade.nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,factura);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         query.setParameter(3,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());

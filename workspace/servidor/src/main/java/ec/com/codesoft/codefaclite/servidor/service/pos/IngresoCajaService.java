@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ServiceAbstractIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.IngresoCajaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class IngresoCajaService extends ServiceAbstract<IngresoCaja, IngresoCaja
     public IngresoCaja grabar(IngresoCaja entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.persist(entity);
             }
         });
@@ -40,14 +41,15 @@ public class IngresoCajaService extends ServiceAbstract<IngresoCaja, IngresoCaja
 
     
     public void eliminarPorId(Long id) throws ServicioCodefacException, RemoteException {
-        IngresoCaja ingresoCaja=getFacade().find(id);
-        super.eliminar(ingresoCaja);
-        /*ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                IngresoCaja ingresoCaja=getFacade().find(id,entityManager);
+                eliminar(ingresoCaja);
             }
-        });*/
+        });
+        
         
     }
     

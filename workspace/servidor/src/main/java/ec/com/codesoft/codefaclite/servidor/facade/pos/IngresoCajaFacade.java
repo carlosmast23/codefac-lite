@@ -29,7 +29,7 @@ public class IngresoCajaFacade extends AbstractFacade<IngresoCaja>
         //IngresoCaja i;
         //i.getCajaSession().
         String queryString=" SELECT i FROM IngresoCaja i WHERE i.cajaSession=?1 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, cajaSession);
         List resultadoList = query.getResultList();
         return resultadoList;

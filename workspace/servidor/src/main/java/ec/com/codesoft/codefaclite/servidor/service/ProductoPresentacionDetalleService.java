@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionD
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoPresentacionDetalleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -27,32 +28,40 @@ public class ProductoPresentacionDetalleService extends ServiceAbstract<Producto
     }
     
     public List<ProductoPresentacionDetalle> buscarPorProducto(Producto producto) throws ServicioCodefacException, RemoteException {
-        //ProductoPresentacionDetalle d;
-        //d.getProductoOriginal();
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("productoOriginal", producto);
-        return getFacade().findByMap(mapParametros);
+        
+        return (List<ProductoPresentacionDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
+        {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //ProductoPresentacionDetalle d;
+                //d.getProductoOriginal();
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("productoOriginal", producto);
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
     }
     
     //TODO: Este metodo esta causando conflicto cuando se consulta muchas veces, se pone el sistema exageradamente lento
     @Deprecated
     public ProductoPresentacionDetalle buscarPorProductoEmpaquetado(Producto productoEmpaquetado) throws ServicioCodefacException, RemoteException 
     {
-        //ProductoPresentacionDetalle d;
-        //d.getProductoEmpaquetado().getIdProducto();
-        //d.getpro
-        //d.getProductoOriginal().getEstado();
-        //d.getProductoEmpaquetado();
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        //mapParametros.put("productoEmpaquetado", productoEmpaquetado);
-        mapParametros.put("productoEmpaquetado.idProducto", productoEmpaquetado.getIdProducto());
-        mapParametros.put("productoOriginal.estado", GeneralEnumEstado.ACTIVO.getLetra());
-        List<ProductoPresentacionDetalle> detalles = getFacade().findByMap(mapParametros);
-        if(detalles.size()>0)
-        {
-            return detalles.get(0);
-        }
-        return null;
+        return (ProductoPresentacionDetalle) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //mapParametros.put("productoEmpaquetado", productoEmpaquetado);
+                mapParametros.put("productoEmpaquetado.idProducto", productoEmpaquetado.getIdProducto());
+                mapParametros.put("productoOriginal.estado", GeneralEnumEstado.ACTIVO.getLetra());
+                List<ProductoPresentacionDetalle> detalles = getFacade().findByMap(mapParametros,entityManager);
+                if (detalles.size() > 0) {
+                    return detalles.get(0);
+                }
+                return null;
+            }
+        });
+        
     }
     
 }

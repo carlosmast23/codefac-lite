@@ -5,10 +5,12 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NacionalidadFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Nacionalidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NacionalidadServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,9 @@ public class NacionalidadService extends ServiceAbstract<Nacionalidad, Nacionali
     public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException, RemoteException {
         Map<String,Object> mapBusqueda=new HashMap<String, Object>();
         mapBusqueda.put("iso",Nacionalidad.ISO_NACIONALIDAD_DEFECTO);
-        List<Nacionalidad> nacionalidades=obtenerPorMap(mapBusqueda);
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+ 
+        List<Nacionalidad> nacionalidades=obtenerPorMap(mapBusqueda,entityManager);
         if(nacionalidades.size()>0)
         {
             return nacionalidades.get(0);

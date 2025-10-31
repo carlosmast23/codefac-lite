@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DepartamentoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -48,12 +49,15 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
     }*/
     public List<Departamento> obtenerActivos() throws ServicioCodefacException,RemoteException
     {
-        //Departamento d;
-        //d.getEstado();        
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
         
+        return (List<Departamento>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
         
     }
 
@@ -61,7 +65,7 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
     public void editar(Departamento d) throws ServicioCodefacException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.merge(d);
             }
         });
@@ -72,7 +76,7 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
   
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 d.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                 entityManager.merge(d);
             }

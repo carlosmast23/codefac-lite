@@ -82,7 +82,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
          * ===================> SETEAR VALORES <=====================
          */
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
 
         if (fechaInicial != null) {
             query.setParameter(1,fechaInicial);

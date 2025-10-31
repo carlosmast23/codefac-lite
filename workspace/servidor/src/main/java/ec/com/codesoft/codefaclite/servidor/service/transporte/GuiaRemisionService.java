@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidor.service.FacturaDetalleService;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceConsulta;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
@@ -28,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.GuiaRemisionServiceIf;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -48,7 +50,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         super(GuiaRemisionFacade.class);
     }
     
-    private void validarGuiaRemision(GuiaRemision entity) throws ServicioCodefacException, RemoteException
+    private void validarGuiaRemision(GuiaRemision entity,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         if(entity.getCodigoDocumentoEnum()==null)
         {
@@ -93,7 +95,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                     if (detallesProducto.getReferenciaId() != null) 
                     {
                         FacturaDetalleFacade facturaDetalleFacade = new FacturaDetalleFacade();
-                        FacturaDetalle facturaDetalle = facturaDetalleFacade.find(detallesProducto.getReferenciaId());
+                        FacturaDetalle facturaDetalle = facturaDetalleFacade.find(detallesProducto.getReferenciaId(),em);
                         //Verificar que los saldos no sean superiores a los diponibles en las facturas
                         BigDecimal saldo = consultarSaldoDetalleFactura(facturaDetalle);
                         if (new BigDecimal(detallesProducto.getCantidad() + "").compareTo(saldo) > 0) {
@@ -132,7 +134,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
             {            
                 FacturacionService facturaService=new FacturacionService();
                 //Actualizo la referencia de la factura para evitar tener alguna modificación
-                Factura factura=facturaService.buscarPorId(destinatario.getFacturaReferencia().getId());
+                Factura factura=facturaService.buscarPorId(destinatario.getFacturaReferencia().getId(),em);
                 if(factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) || factura.getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI))
                 {
                     throw  new ServicioCodefacException("No se puede procesar por que la factura: "+factura.getPreimpreso()+" fue eliminada");
@@ -150,16 +152,17 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
 
     public GuiaRemision grabar(GuiaRemision entity) throws ServicioCodefacException, RemoteException {
         //Validaciones previas antes de grabar
-        validarGuiaRemision(entity);
+        
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() {
+            public void transaccion(EntityManager entityManager) {
                 try {
+                    validarGuiaRemision(entity,entityManager);
                     ComprobantesService servicioComprobante = new ComprobantesService();
                     //entity.setCodigoDocumento(DocumentoEnum.GUIA_REMISION.getCodigo());
                     
-                    servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
+                    servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity,entityManager);
                     
                     if(entity.getDestinatarios()!=null)
                     {
@@ -185,7 +188,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
                                 {
                                     Long facturaId = detallesProducto.getReferenciaId();
                                     FacturaDetalleFacade facturaDetalleFacade = new FacturaDetalleFacade();
-                                    FacturaDetalle facturaDetalle = facturaDetalleFacade.find(facturaId);;
+                                    FacturaDetalle facturaDetalle = facturaDetalleFacade.find(facturaId,entityManager);;
 
                                     //TODO: Por el momento dejo pendiente de validar cuando un mismo producto puede ir en partes en varias guias de remision
                                     Factura facturaEditar = facturaDetalle.getFactura();
@@ -215,7 +218,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.merge(guiaRemision);
             }
         });
@@ -225,7 +228,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     {
         return (List<GuiaRemision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado,transportista,destinatario,codigoProducto,empresa);
             }
         });
@@ -235,31 +238,35 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
     //TODO: Optimizar esta parte
     public BigDecimal consultarSaldoDetalleFactura(FacturaDetalle facturaDetalle) throws ServicioCodefacException, RemoteException
     {
-        DetalleProductoGuiaRemision detalle;
-        //detalle.getDestinatario().getFacturaReferencia()
-        //g.get
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        
-        if(facturaDetalle==null || facturaDetalle.getId()==null)
-        {
-            return BigDecimal.ZERO;
-        }
-        
-        mapParametros.put("referenciaId", facturaDetalle.getId());
-        mapParametros.put("destinatario.facturaReferencia", facturaDetalle.getFactura());
-        DetalleProductoGuiaRemisionFacade facade=new DetalleProductoGuiaRemisionFacade();
-        
-        List<DetalleProductoGuiaRemision> listaGuiasRemision = facade.findByMap(mapParametros);
-        
-        BigDecimal totalEnviado=BigDecimal.ZERO;
-        for (DetalleProductoGuiaRemision detalleGuia : listaGuiasRemision) 
-        {
-            if(detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO) || detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR))
-            {
-                totalEnviado=totalEnviado.add(detalleGuia.getCantidad());
+        return (BigDecimal) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                DetalleProductoGuiaRemision detalle;
+                //detalle.getDestinatario().getFacturaReferencia()
+                //g.get
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+
+                if (facturaDetalle == null || facturaDetalle.getId() == null) {
+                    return BigDecimal.ZERO;
+                }
+
+                mapParametros.put("referenciaId", facturaDetalle.getId());
+                mapParametros.put("destinatario.facturaReferencia", facturaDetalle.getFactura());
+                DetalleProductoGuiaRemisionFacade facade = new DetalleProductoGuiaRemisionFacade();
+
+                List<DetalleProductoGuiaRemision> listaGuiasRemision = facade.findByMap(mapParametros,entityManager);
+
+                BigDecimal totalEnviado = BigDecimal.ZERO;
+                for (DetalleProductoGuiaRemision detalleGuia : listaGuiasRemision) {
+                    if (detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO) || detalleGuia.getDestinatario().getGuiaRemision().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR)) {
+                        totalEnviado = totalEnviado.add(detalleGuia.getCantidad());
+                    }
+                }
+                return facturaDetalle.getCantidad().subtract(totalEnviado);
             }
-        }
-        return facturaDetalle.getCantidad().subtract(totalEnviado);
+        });
+
+        
     }
     
 
@@ -268,9 +275,9 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                     ComprobantesService comprobanteService = new ComprobantesService();
-                    comprobanteService.eliminarComprobanteSinTransaccion(entity);
+                    comprobanteService.eliminarComprobanteSinTransaccion(entity,entityManager);
                     
                     //cambiar el estado de la factura para que vuelvan volver a reenviar en otra guia de remision
                     for (DestinatarioGuiaRemision destinatario : entity.getDestinatarios()) {

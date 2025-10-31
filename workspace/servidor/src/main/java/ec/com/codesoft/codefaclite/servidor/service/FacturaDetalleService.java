@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudi
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturaDetalleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -38,23 +39,32 @@ public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, Factu
         super(FacturaDetalleFacade.class);
     }
     
-    
     public Object getReferenciaDetalle(FacturaDetalle facturaDetalle) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        return ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getReferenciaDetalle(facturaDetalle, entityManager);
+            }
+        });
+    }
+    
+    public Object getReferenciaDetalle(FacturaDetalle facturaDetalle,EntityManager entityManager) throws ServicioCodefacException,java.rmi.RemoteException
     {
         try {
             TipoDocumentoEnum tipoReferenciaEnum=facturaDetalle.getTipoDocumentoEnum();
             switch (tipoReferenciaEnum) {
                 case ACADEMICO:
-                    RubroEstudiante rubroEstudiante = rubroEstudianteService.buscarPorId(facturaDetalle.getReferenciaId());
+                    RubroEstudiante rubroEstudiante = rubroEstudianteService.buscarPorId(facturaDetalle.getReferenciaId(),entityManager);
                     return rubroEstudiante;
                     
                 case PRESUPUESTOS:
-                    Presupuesto presupuesto=presupuestoService.buscarPorId(facturaDetalle.getReferenciaId());
+                    Presupuesto presupuesto=presupuestoService.buscarPorId(facturaDetalle.getReferenciaId(),entityManager);
                     return presupuesto;
                     
                 case INVENTARIO:
                 case LIBRE:
-                    Producto producto = productoService.buscarPorId(facturaDetalle.getReferenciaId());
+                    Producto producto = productoService.buscarPorId(facturaDetalle.getReferenciaId(),entityManager);
                     return producto;
                     
             }
@@ -64,11 +74,11 @@ public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, Factu
         return null;
     }
     
-    public List<FacturaDetalle> buscarPorFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<FacturaDetalle> buscarPorFactura(Factura factura,EntityManager em) throws ServicioCodefacException,java.rmi.RemoteException
     {        
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("factura",factura);
-        return getFacade().findByMap(mapParametros);
+        return getFacade().findByMap(mapParametros,em);
     }
     
 }

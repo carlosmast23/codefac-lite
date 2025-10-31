@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoEnsambleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +31,16 @@ public class ProductoEnsambleService extends ServiceAbstract<ProductoEnsamble,Pr
     
     public List<ProductoEnsamble> buscarPorProducto(Producto producto) throws ServicioCodefacException, java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("productoEnsamble", producto);
-        return getFacade().findByMap(mapParametros);
+        return (List<ProductoEnsamble>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("productoEnsamble", producto);
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
+        
     }
     
 }

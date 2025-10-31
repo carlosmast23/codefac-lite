@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface ObjetoMantenimientoServiceIf extends ServiceAbstractIf<ObjetoMa
     public void eliminar(ObjetoMantenimiento entity) throws ServicioCodefacException, RemoteException ;    
     public List<ObjetoMantenimiento> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
     public ObjetoMantenimiento buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void grabarSinTransaccion(ObjetoMantenimiento entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException ;
+    public void grabarSinTransaccion(ObjetoMantenimiento entity,Empresa empresa,Usuario usuarioCreacion,EntityManager entityManager) throws ServicioCodefacException, RemoteException ;
     public List<ObjetoMantenimiento> buscarPorPropietario(Empresa empresa,Persona propietario) throws ServicioCodefacException,java.rmi.RemoteException;
     public ObjetoMantenimiento buscarPorVIN(Empresa empresa,String vin) throws ServicioCodefacException,java.rmi.RemoteException;
 }

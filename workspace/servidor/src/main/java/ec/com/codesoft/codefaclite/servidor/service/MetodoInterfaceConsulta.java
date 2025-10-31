@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 
 /**
@@ -13,5 +14,5 @@ import java.rmi.RemoteException;
  * @author Carlos
  */
 public interface MetodoInterfaceConsulta {
-    public Object consulta() throws ServicioCodefacException,RemoteException;
+    public Object consulta(EntityManager em) throws ServicioCodefacException,RemoteException;
 }

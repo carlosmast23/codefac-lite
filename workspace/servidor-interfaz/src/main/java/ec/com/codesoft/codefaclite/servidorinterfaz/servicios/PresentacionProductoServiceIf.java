@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -19,5 +20,5 @@ import java.util.List;
 public interface PresentacionProductoServiceIf extends ServiceAbstractIf<PresentacionProducto>{
     public List<PresentacionProducto> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
     public PresentacionProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
-    public PresentacionProducto grabarSinTransaccion(PresentacionProducto presentacionProducto) throws ServicioCodefacException, RemoteException;
+    public PresentacionProducto grabarSinTransaccion(PresentacionProducto presentacionProducto,EntityManager entityManager) throws ServicioCodefacException, RemoteException;
 }

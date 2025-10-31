@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service.pos;
 
 import ec.com.codesoft.codefaclite.servidor.facade.pos.CajaSesionFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -18,12 +19,15 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaSesionServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,7 +46,7 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     public CajaSession grabar(CajaSession entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 if (entity.getValorApertura() == null) {
                     throw new ServicioCodefacException("El valor de apertura  no puede estar vacio");
@@ -91,7 +95,7 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 BigDecimal totalVentas = BigDecimal.ZERO;
                 boolean grabarAunqueNoTengaVentas = false;
@@ -139,7 +143,7 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         validarCierreCaja(entity);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //BigDecimal totalVentas = BigDecimal.ZERO;
                 boolean grabarAunqueNoTengaVentas = false;
@@ -173,11 +177,23 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     
     public List<CajaSession> buscarCajasActivas(Caja caja)
     {
-        Map<String, Object> mapParametros = new HashMap<>();
-        mapParametros.put("caja", caja);
-        mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
-        List<CajaSession> resultadoList = getFacade().findByMap(mapParametros);
-        return resultadoList;
+        
+        try {
+            return (List<CajaSession>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<>();
+                    mapParametros.put("caja", caja);
+                    mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+                    List<CajaSession> resultadoList = getFacade().findByMap(mapParametros,entityManager);
+                    return resultadoList;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       return null;
     }
 
     @Override
@@ -207,23 +223,43 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     
     public List<CajaSession> obtenerCajaSessionPorUsuario(Usuario usuario)
     {
-        Map<String, Object> mapParametros = new HashMap<>();
-        mapParametros.put("usuario", usuario);
-        mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+        try {
+            return (List<CajaSession>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<>();
+                    mapParametros.put("usuario", usuario);
+                    mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+
+                    List<CajaSession> cajasSession = getFacade().findByMap(mapParametros,entityManager);
+
+                    return cajasSession;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);
-                
-        return cajasSession;
+        return null;
+       
     }
     
     public List<CajaSession> obtenerTodasCajaSession(Sucursal sucursal) throws ServicioCodefacException, RemoteException 
     {
-        Map<String, Object> map = new HashMap<>();
-        map.put("caja.sucursal", sucursal);
-        map.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+        
+        return (List<CajaSession>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> map = new HashMap<>();
+                map.put("caja.sucursal", sucursal);
+                map.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
 
-        List<CajaSession> cajasSession = getFacade().findByMap(map);
-        return cajasSession;
+                List<CajaSession> cajasSession = getFacade().findByMap(map,entityManager);
+                return cajasSession;
+            }
+        });
+        
+       
     }
 
 
@@ -255,16 +291,26 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     @Override
     public List<CajaSession> obtenerCajaSessionPorCajaYUsuario(Caja caja, Usuario usuario)
     {
-        Map<String, Object> mapParametros = new HashMap<>();
-        mapParametros.put("caja", caja);
-        mapParametros.put("usuario", usuario);
-        mapParametros.put("estadoCierreCaja", CajaSessionEnum.FINALIZADO.getEstado());
-        
-        List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);
-        
-        if(cajasSession.size() > 0)
-        {
-            return cajasSession;
+        try {
+            return (List<CajaSession>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<>();
+                    mapParametros.put("caja", caja);
+                    mapParametros.put("usuario", usuario);
+                    mapParametros.put("estadoCierreCaja", CajaSessionEnum.FINALIZADO.getEstado());
+
+                    List<CajaSession> cajasSession = getFacade().findByMap(mapParametros,entityManager);
+
+                    if (cajasSession.size() > 0) {
+                        return cajasSession;
+                    }
+
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         return null;
@@ -273,20 +319,32 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     @Override
     public List<CajaSession> obtenerCajaSessionPorUsuarioYSucursal(Usuario usuario, Sucursal sucursal) throws RemoteException 
     {
-        Map<String, Object> map = new HashMap<>();
         
-        map.put("usuario", usuario);
-        map.put("caja.sucursal", sucursal);
-        map.put("estadoCierreCaja",  CajaSessionEnum.ACTIVO.getEstado());
+        try {
+            return (List<CajaSession>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> map = new HashMap<>();
+
+                    map.put("usuario", usuario);
+                    map.put("caja.sucursal", sucursal);
+                    map.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
+
+                    List<CajaSession> cajasSession = getFacade().findByMap(map,entityManager);
+
+                    //if(cajasSession.size() > 0)
+                    //{
+                    return cajasSession;
+                    //}
+
+                    //return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        List<CajaSession> cajasSession = getFacade().findByMap(map);
-        
-        //if(cajasSession.size() > 0)
-        //{
-        return cajasSession;
-        //}
-        
-        //return null;
+        return null;
     }
 
     @Override

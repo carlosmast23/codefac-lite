@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,6 @@ public interface OrdenTrabajoServiceIf extends ServiceAbstractIf<OrdenTrabajo>
     public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado,ObjetoMantenimiento objetoMantenimiento, OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException;
     public OrdenTrabajo grabar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,java.rmi.RemoteException;
     public List<OrdenTrabajoDetalle> filtrarDetallesPorEstadoYEmpleado(OrdenTrabajoDetalle.EstadoEnum estadoEnum,Empleado empleado)throws ServicioCodefacException, java.rmi.RemoteException;
-    public void terminarDetallesOrdenesTrabajo(Empleado empleado,List<OrdenTrabajoDetalle> detalles) throws ServicioCodefacException, java.rmi.RemoteException;
+    public void terminarDetallesOrdenesTrabajo(Empleado empleado,List<OrdenTrabajoDetalle> detalles,EntityManager entityManager) throws ServicioCodefacException, java.rmi.RemoteException;
     public OrdenTrabajo consultarUltimaOTporObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException;
 }

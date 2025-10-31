@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.Remote;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public interface ServiceAbstractIf<Entity> extends Remote {
     public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException;
     
     public void eliminar(Entity entity) throws ServicioCodefacException, java.rmi.RemoteException;
+    
+    public Entity buscarPorId(Object primaryKey,EntityManager entityManager) throws java.rmi.RemoteException;
     
     public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException;
     

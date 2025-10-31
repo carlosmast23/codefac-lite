@@ -43,7 +43,7 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         f.getSecuencial();*/
         
         String queryString = "SELECT f FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4 AND f.secuencial=?5 AND f.codigoDocumento=?6 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier }
         
@@ -63,7 +63,7 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         //Factura factura;
         //factura.getId();
         String queryStr="UPDATE ComprobanteEntity f SET f.claveAcceso = ?1 WHERE f.id = ?2 ";
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         
         query.setParameter(1, claveAcceso);
         query.setParameter(2, entityId);
@@ -93,7 +93,7 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         f.getSecuencial();*/
         
         String queryString = "SELECT max( CAST(f.secuencial as INT) ) FROM "+nombreTabla+" f WHERE f.estado<>?1 AND f.empresa=?2 AND f.puntoEstablecimiento=?3 AND f.puntoEmision=?4  AND f.codigoDocumento=?6 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //TODO: Buscar cualquier 
         query.setParameter(2, empresa);

@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BancoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +58,7 @@ public class BancoService extends ServiceAbstract<Banco,BancoFacade> implements 
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.CREAR);
@@ -76,16 +77,16 @@ public class BancoService extends ServiceAbstract<Banco,BancoFacade> implements 
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void editarSinTransaccion(Banco entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(Banco entity,EntityManager entityManager ) throws ServicioCodefacException, RemoteException 
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
@@ -95,7 +96,7 @@ public class BancoService extends ServiceAbstract<Banco,BancoFacade> implements 
     public void eliminar(Banco entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
@@ -105,12 +106,16 @@ public class BancoService extends ServiceAbstract<Banco,BancoFacade> implements 
     
     public List<Banco> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException
     {
-        //Banco banco;
-        //banco.get
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        //mapParametros.put("empresa",empresa);
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+        return (List<Banco>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //mapParametros.put("empresa",empresa);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
     }
     
 }

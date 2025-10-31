@@ -7,11 +7,15 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.servidor.facade.SriRetencionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencion;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,13 +29,25 @@ public class SriRetencionService extends ServiceAbstract<SriRetencion,SriRetenci
     
     public SriRetencion consultarPorNombre(String nombre) throws RemoteException
     {
-       //SriRetencion sriRetencion=new SriRetencion();
-       //sriRetencion.getNombre()
-       Map<String,Object> mapParametros=new HashMap<String, Object>();
-       mapParametros.put("nombre",nombre);
-       
-       List<SriRetencion> resultados=getFacade().findByMap(mapParametros);
-       return resultados.get(0);
+        try {
+            return (SriRetencion) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    //SriRetencion sriRetencion=new SriRetencion();
+                    //sriRetencion.getNombre()
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nombre", nombre);
+                    
+                    List<SriRetencion> resultados = getFacade().findByMap(mapParametros,entityManager);
+                    return resultados.get(0);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriRetencionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
+      
     }
     
 }

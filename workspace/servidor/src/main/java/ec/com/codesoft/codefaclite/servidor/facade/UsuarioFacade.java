@@ -27,7 +27,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         try
         {
             String queryString = "SELECT u FROM Usuario u WHERE u.nick=?1 AND u.clave=?2";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1,nick);
             query.setParameter(2,clave);
             return (Usuario) query.getSingleResult();

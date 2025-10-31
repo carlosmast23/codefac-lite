@@ -32,7 +32,7 @@ public class PrestamoFacade extends AbstractFacade<Prestamo> {
             //pc.getPrestamo()
             //pc.getNumeroCuota()
             String queryString = "SELECT u FROM PrestamoCuota u WHERE u.prestamo<>?1 ORDER BY u.numeroCuota ";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1, prestamo);
             //query.setParameter(2, Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
             //query.setParameter(3, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());

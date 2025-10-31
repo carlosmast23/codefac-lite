@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Descuento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoCondicionPrecio;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicionPrecioServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,11 +30,15 @@ public class DescuentoCondicionPrecioService extends ServiceAbstract<DescuentoCo
     
     public List<DescuentoCondicionPrecio>  consultarPorDescuento(Descuento descuento)  throws ServicioCodefacException,java.rmi.RemoteException
     {
-        //DescuentoCondicionPrecio dcp;
-        //dcp.getDescuento();
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("descuento", descuento);
-        return getFacade().findByMap(mapParametros);
+        return (List<DescuentoCondicionPrecio>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("descuento", descuento);
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
     }
     
 }

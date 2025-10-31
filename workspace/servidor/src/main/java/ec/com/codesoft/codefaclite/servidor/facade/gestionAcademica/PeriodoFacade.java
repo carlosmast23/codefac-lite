@@ -24,7 +24,7 @@ public class PeriodoFacade extends AbstractFacade<Periodo>{
     
     public List<Periodo> getPeriodosSinEliminar() {
         String queryString = "SELECT u FROM Periodo u WHERE u.estado<>?1 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ELIMINADO.getEstado());
 
         return (List<Periodo>) query.getResultList();

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -161,7 +163,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 Usuario usuarioRoot = null; //variable para consultar la variable root
                 try {
                     UsuarioServicio usuarioServicio=new UsuarioServicio();
-                    usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros).get(0);//obtiene el usuario root de la base de datos 
+                    EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+                    usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros,entityManager).get(0);//obtiene el usuario root de la base de datos 
                     usuarioRoot.isRoot = true;
                     usuarioRoot.setEmpresa(empresa); //Seteo con el nombre de la empresa que vayan a usar
                 } catch (RemoteException ex) {
@@ -215,7 +218,14 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
                     mapParametros.put("nick", Usuario.SUPER_USUARIO);
-                    List<Usuario> resultados = getFacade().findByMap(mapParametros);
+                    
+                    List<Usuario> resultados = (List<Usuario>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                        @Override
+                        public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                            return getFacade().findByMap(mapParametros,entityManager);
+                        }
+                    });
+                    
                     LOG.log(Level.INFO, "Ingresando con usuario de configuracion");
                     loginRespuesta.estadoEnum = LoginRespuesta.EstadoLoginEnum.CORRECTO_USUARIO;
                     loginRespuesta.usuario = resultados.get(0);
@@ -262,26 +272,36 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     private Usuario verificarCredencialesUsuario(String nick,String clave,Empresa empresa)
     {
-        Usuario usaurio;
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("nick",nick);
-        mapParametros.put("empresa",empresa);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        
-        List<Usuario> usuarios=usuarioFacade.findByMap(mapParametros);
-        
-        if(usuarios.size()>0)
-        {
-            if(UtilidadesHash.verificarHashBcrypt(clave,usuarios.get(0).getClave()))
-            {
-                return usuarios.get(0);
-            }
+        try {
+            return (Usuario) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Usuario usaurio;
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nick", nick);
+                    mapParametros.put("empresa", empresa);
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    
+                    List<Usuario> usuarios = usuarioFacade.findByMap(mapParametros,entityManager);
+                    
+                    if (usuarios.size() > 0) {
+                        if (UtilidadesHash.verificarHashBcrypt(clave, usuarios.get(0).getClave())) {
+                            return usuarios.get(0);
+                        }
+                    }
+                    
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         return null;
+
     }
     
     public void eliminar(Usuario entity) throws java.rmi.RemoteException {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion=getTransaccion();
         transaccion.begin();
         entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
@@ -295,7 +315,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         //Actualizo las referencia del nuevo objecto a editar
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() {
+            public void transaccion(EntityManager entityManager) {
                 String claveHash=UtilidadesHash.generarHashBcrypt(claveNueva);
                 usuario.setClave(claveHash);
                 entityManager.merge(usuario);
@@ -313,11 +333,11 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //EntityTransaction transaccion = getTransaccion();
                 //transaccion.begin();
 
-                Usuario usuarioOriginal = getFacade().find(entity.getId());
+                Usuario usuarioOriginal = getFacade().find(entity.getId(),entityManager);
 
                 //Verificar que no sea el usuario root el quieren editar
                 //usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)
@@ -402,8 +422,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(entity,true);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(entity,true,entityManager);
             }
         });
                 
@@ -411,7 +431,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     }
     
-    public void grabarSinTransaccion(Usuario entity,Boolean validarConLicencia) throws ServicioCodefacException,java.rmi.RemoteException
+    public void grabarSinTransaccion(Usuario entity,Boolean validarConLicencia,EntityManager entityManager) throws ServicioCodefacException,java.rmi.RemoteException
     {
         if(validarConLicencia)
         {
@@ -419,7 +439,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("empresa", entity.getEmpresa());
-                List<Usuario> usuariosActivos = obtenerPorMap(mapParametros);
+                List<Usuario> usuariosActivos = obtenerPorMap(mapParametros,entityManager);
                 if (usuariosActivos.size() > 0 && ParametrosSistemaCodefac.MODO.equals(ModoSistemaEnum.PRODUCCION)) {
                     throw new ServicioCodefacException("En la licencia gratuita solo puede crear 1 usuario \n Si desea mas usuarios necesita una licencia PREMIUN");
                 }
@@ -445,12 +465,12 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 usuario.setClave(UtilidadesHash.generarHashBcrypt(usuario.getClave()));
                 entityManager.persist(usuario);
                 Map<String, Object> parametros = new HashMap<String, Object>();
                 parametros.put("nombre", nombrePerfil);
-                List<Perfil> perfilesList = perfilFacade.findByMap(parametros);
+                List<Perfil> perfilesList = perfilFacade.findByMap(parametros,entityManager);
                 Perfil perfil = null;
 
                 if (perfilesList.size() > 0) { //Por defecto esta seteando el primer perfil que encuentra, revisar este tema 
@@ -477,30 +497,41 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     public List<Usuario> consultarUsuariosActivos(Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String, Object> mapParametros = new HashMap<String, Object>();        
-        //Usuario u;
-        //u.getEmpresa();
-        mapParametros = new HashMap<String, Object>();
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
+            return (List<Usuario>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                    @Override
+                    public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+                });
+            }
+        });
         
-        return getFacade().findByMap(mapParametros);
+
     }
     
     public Usuario consultarUsuarioActivoPorEmpresa(String nick,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String, Object> mapParametros = new HashMap<String, Object>();        
-        mapParametros = new HashMap<String, Object>();
-        mapParametros.put("nick", "root");
-        //mapParametros.put("empresa",empresa); TODO: Terminar de implementar esta funcionalidad
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        //UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
-        List<Usuario> usuarios=getFacade().findByMap(mapParametros);
-        if(usuarios.size()>0)
-        {
-            return usuarios.get(0);
-        }
-        return null;
+        return (Usuario) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros = new HashMap<String, Object>();
+                mapParametros.put("nick", "root");
+                //mapParametros.put("empresa",empresa); TODO: Terminar de implementar esta funcionalidad
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                //UsuarioServicioIf usuarioServiceIf = ServiceFactory.getFactory().getUsuarioServicioIf();
+                List<Usuario> usuarios = getFacade().findByMap(mapParametros, entityManager);
+                if (usuarios.size() > 0) {
+                    return usuarios.get(0);
+                }
+                return null;
+            }
+        });
+
     }
     
     private static FechaMaximoPagoRespuesta verificarFechaMaximaPago(String usuario,Empresa empresa) {
@@ -540,16 +571,23 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     
     public Integer obtenerCantidadUsuariosActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        //TODO: Optimizar para obtener directamente por Query
-        //Usuario u;
-        //u.getEmpresa();
-        //u.getEstado();
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("empresa",empresa);
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return (Integer) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //TODO: Optimizar para obtener directamente por Query
+                //Usuario u;
+                //u.getEmpresa();
+                //u.getEstado();
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+
+                List<Usuario> resultadoList = getFacade().findByMap(mapParametros,entityManager);
+                return resultadoList.size();
+            }
+        });
         
-        List<Usuario> resultadoList=getFacade().findByMap(mapParametros);
-        return resultadoList.size();
+
     }
     
     @Deprecated
@@ -557,33 +595,33 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     // Analizar si debo borrar
     public Usuario obtenerUsuarioConfiguracion() throws ServicioCodefacException,java.rmi.RemoteException
     {
-        //Usuario u;
-        //u.get
-        //Usuario usuario=null;
-        Map<String,Object> mapParametro=new HashMap<String,Object>();
-        mapParametro.put("nick",ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
-                
-        List<Usuario> resultados=getFacade().findByMap(mapParametro);
-        if(resultados.size()>0)
-        {
-            resultados.get(0);
-        }
-        else
-        {            
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
-                    Usuario usuario=new Usuario();
+            return (Usuario) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //Usuario u;
+                //u.get
+                //Usuario usuario=null;
+                Map<String, Object> mapParametro = new HashMap<String, Object>();
+                mapParametro.put("nick", ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
+
+                List<Usuario> resultados = getFacade().findByMap(mapParametro,entityManager);
+                if (resultados.size() > 0) {
+                    resultados.get(0);
+                } else {
+
+                    Usuario usuario = new Usuario();
                     usuario.setNick(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
                     usuario.setClave(ParametrosSistemaCodefac.CREDENCIALES_USUARIO_CONFIGURACION);
-                    usuario.setEstadoEnum(GeneralEnumEstado.ACTIVO);     
+                    usuario.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                     entityManager.persist(usuario);
+
+                    return getFacade().findByMap(mapParametro,entityManager).get(0);
                 }
-            });
-            
-            return getFacade().findByMap(mapParametro).get(0);
-        }
-        return null;
+                return null;
+            }
+        });
+        
+        
     }
       
     

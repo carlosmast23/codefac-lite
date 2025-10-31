@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.CarteraCruceServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ public class CarteraCruceService extends ServiceAbstract<CarteraCruce,CarteraCru
         super(CarteraCruceFacade.class);
     }
     
+    @Deprecated
     public List<CarteraCruce>  buscarPorCarteraDetalle(CarteraDetalle carteraDetalle) throws ServicioCodefacException, java.rmi.RemoteException
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
@@ -35,17 +37,27 @@ public class CarteraCruceService extends ServiceAbstract<CarteraCruce,CarteraCru
         //{
         parametros.put("carteraDetalle", carteraDetalle);
         //}
-        return getFacade().findByMap(parametros);
+        return getFacade().findByMap(parametros,null);
     }
     
-    public List<CarteraCruce>  buscarPorCarteraAfecta(Cartera carteraAfecta) throws ServicioCodefacException, java.rmi.RemoteException
+    public List<CarteraCruce>  buscarPorCarteraDetalle(CarteraDetalle carteraDetalle,EntityManager entityManager) throws ServicioCodefacException, java.rmi.RemoteException
+    {
+        Map<String, Object> parametros = new HashMap<String, Object>();
+        //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))
+        //{
+        parametros.put("carteraDetalle", carteraDetalle);
+        //}
+        return getFacade().findByMap(parametros,entityManager);
+    }
+    
+    public List<CarteraCruce>  buscarPorCarteraAfecta(Cartera carteraAfecta,EntityManager entityManager) throws ServicioCodefacException, java.rmi.RemoteException
     {
         Map<String, Object> parametros = new HashMap<String, Object>();
         //if(cartera.getTipoCarteraEnum().equals(tipoCarteraEnum.CL))
         //{
         parametros.put("carteraAfectada", carteraAfecta);
         //}
-        return getFacade().findByMap(parametros);
+        return getFacade().findByMap(parametros,entityManager);
     }
     
 }

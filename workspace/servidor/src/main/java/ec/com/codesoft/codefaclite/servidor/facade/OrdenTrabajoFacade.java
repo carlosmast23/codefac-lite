@@ -70,7 +70,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         }
         
         
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         
         
         if(fechaInicial!=null)
@@ -105,7 +105,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         //ot.getEstado();
         //ot.getObjetoMantenimiento()
         String queryStr="SELECT u FROM OrdenTrabajo u WHERE u.objetoMantenimiento = ?1 AND u.estado<> ?2 ORDER BY u.fechaIngreso desc ";
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         
         query.setParameter(1, objetoMantenimiento);
         query.setParameter(2, OrdenTrabajo.EstadoEnum.ELIMINADO.getEstado());

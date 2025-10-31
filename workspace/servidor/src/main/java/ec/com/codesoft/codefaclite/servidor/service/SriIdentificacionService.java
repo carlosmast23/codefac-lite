@@ -11,10 +11,13 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriIdentificacionServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,14 +32,21 @@ public class SriIdentificacionService extends ServiceAbstract<SriIdentificacion,
     
     public SriIdentificacion buscarPorCodigo(String codigo) throws ServicioCodefacException, java.rmi.RemoteException
     {
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("codigo",codigo);
-        List<SriIdentificacion> resultados=getFacade().findByMap(parametros);
-        if(resultados.size()>0)
-        {
-            return resultados.get(0);
-        }
-        return null;
+        return (SriIdentificacion) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> parametros = new HashMap<String, Object>();
+                parametros.put("codigo", codigo);
+                List<SriIdentificacion> resultados = getFacade().findByMap(parametros,entityManager);
+                if (resultados.size() > 0) {
+                    return resultados.get(0);
+                }
+                return null;
+            }
+        });
+
+        
+        
         //SriIdentificacion identificacion = service.obtenerPorMap(parametros).get(0);
     }
     /**
@@ -47,14 +57,24 @@ public class SriIdentificacionService extends ServiceAbstract<SriIdentificacion,
      */
     public SriIdentificacion obtenerPorTransaccionEIdentificacion(Persona.TipoIdentificacionEnum tipoIdentificacion,SriIdentificacion.tipoTransaccionEnum tipoTransaccion) throws java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("tipoIdentificacion",tipoIdentificacion.getLetra());
-        mapParametros.put("tipoTransaccion",tipoTransaccion.getNombre());
-        List<SriIdentificacion> sriIdentficacionList=getFacade().findByMap(mapParametros);
-        if(sriIdentficacionList!=null && sriIdentficacionList.size()>0)
-        {
-            return sriIdentficacionList.get(0);
+        try {
+            return (SriIdentificacion) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("tipoIdentificacion", tipoIdentificacion.getLetra());
+                    mapParametros.put("tipoTransaccion", tipoTransaccion.getNombre());
+                    List<SriIdentificacion> sriIdentficacionList = getFacade().findByMap(mapParametros,entityManager);
+                    if (sriIdentficacionList != null && sriIdentficacionList.size() > 0) {
+                        return sriIdentficacionList.get(0);
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriIdentificacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return null;
     }
     

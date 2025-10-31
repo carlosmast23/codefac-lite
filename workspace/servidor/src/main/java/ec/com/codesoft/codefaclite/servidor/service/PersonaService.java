@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.utilidades.email.UtilidadesCorreo;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -81,8 +82,8 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                validarCliente(p, Boolean.TRUE, CrudEnum.EDITAR,modoForzado);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                validarCliente(p, Boolean.TRUE, CrudEnum.EDITAR,modoForzado,entityManager);
                 for (PersonaEstablecimiento establecimiento : p.getEstablecimientos()) {
                     if (establecimiento.getId() == null) {
                         entityManager.persist(establecimiento);
@@ -106,9 +107,9 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     public Persona grabarConValidacion(Persona p, Boolean validarCedula,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
-                validarCliente(p, validarCedula, CrudEnum.CREAR,modoForzado);
+                validarCliente(p, validarCedula, CrudEnum.CREAR,modoForzado,entityManager);
                 /*if (p.getEstablecimientos() == null || p.getEstablecimientos().size() == 0) {
                     //Si no tiene un establecimiento lo creo automaticamente 
                     PersonaEstablecimiento personaEstablecimiento = PersonaEstablecimiento.buildFromPersona(p);
@@ -138,7 +139,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return p;
     }
 
-    private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException {
+    private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum,Boolean modoForzado,EntityManager em) throws ServicioCodefacException, java.rmi.RemoteException {
         
         validarEdicionCampo(persona.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<Persona>() {
             @Override
@@ -150,7 +151,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
             public Boolean compararCampos(Persona dato) {
                 return persona.getIdentificacion().equals(dato.getIdentificacion());
             }
-        });
+        },em);
         
         if(!UtilidadesTextos.verificarNullOVacio(persona.getCorreoElectronico()))
         {
@@ -209,7 +210,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         //Si es un crud verifico sin los datos editados y consultados son los mismos
         if (crudEnum.equals(CrudEnum.EDITAR)) 
         {
-            Persona personaTmp = getFacade().find(persona.getIdCliente());
+            Persona personaTmp = getFacade().find(persona.getIdCliente(),em);
             if (personaTmp.getIdentificacion().equals(persona.getIdentificacion())) {
                 return;
             }
@@ -249,7 +250,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         //personaFacade.remove(p);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                 entityManager.merge(p);
 
@@ -265,17 +266,23 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     public Persona buscarPorIdentificacionYestado(String identificacion, GeneralEnumEstado estado) throws ServicioCodefacException, java.rmi.RemoteException {
 
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("identificacion", identificacion);
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return (Persona) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("identificacion", identificacion);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
 
-        List<Persona> resultados = getFacade().findByMap(mapParametros);
-        if (resultados.size() == 0) {
-            return null;
-        } else {
-            return resultados.get(0);
-        }
-
+                List<Persona> resultados = getFacade().findByMap(mapParametros,entityManager);
+                if (resultados.size() == 0) {
+                    return null;
+                } else {
+                    return resultados.get(0);
+                }
+            }
+        });
+        
+       
     }
 
     @Override
@@ -295,38 +302,48 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     @Override
     public Persona buscarPorIdentificacion(String identificacion, Empresa empresa) throws java.rmi.RemoteException {
         
-       // String queryFiltroEmpresa=" AND u.persona.empresa=?2 ";
-        
-        Boolean datosCompartidosEmpresas=false;
-        
-        datosCompartidosEmpresas=ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI);
-        
-        PersonaEstablecimientoFacade personaEstablecimientoFacade = new PersonaEstablecimientoFacade();
-        PersonaEstablecimiento personaEstablecimiento;
-        //Persona p;
-        //p.getIdentificacion();
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("persona.identificacion", identificacion);        
-        mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
-        
-        //Si los datos son campartidos entre empresas no hago ningun filtro
-        if (!datosCompartidosEmpresas) 
-        {
-            //Si los datos son compratidos entre empresas entoces no hago ningun filtro
-            mapParametros.put("persona.empresa", empresa);
+        try {
+            return (Persona) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    // String queryFiltroEmpresa=" AND u.persona.empresa=?2 ";
+                    
+                    Boolean datosCompartidosEmpresas = false;
+                    
+                    datosCompartidosEmpresas = ParametroUtilidades.comparar(empresa, ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA, EnumSiNo.SI);
+                    
+                    PersonaEstablecimientoFacade personaEstablecimientoFacade = new PersonaEstablecimientoFacade();
+                    PersonaEstablecimiento personaEstablecimiento;
+                    //Persona p;
+                    //p.getIdentificacion();
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("persona.identificacion", identificacion);
+                    mapParametros.put("persona.estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    
+                    //Si los datos son campartidos entre empresas no hago ningun filtro
+                    if (!datosCompartidosEmpresas) {
+                        //Si los datos son compratidos entre empresas entoces no hago ningun filtro
+                        mapParametros.put("persona.empresa", empresa);
+                    }
+                    
+                    List<PersonaEstablecimiento> establecimientos = personaEstablecimientoFacade.findByMap(mapParametros,entityManager);
+                    
+                    //List<Persona> personas = getFacade().findByMap(mapParametros);
+                    if (establecimientos.size() > 0) {
+                        if (establecimientos.get(0).getPersona() != null) {
+                            return establecimientos.get(0).getPersona();
+                        }
+                    }
+                    
+                    return null;
+                    
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        List<PersonaEstablecimiento> establecimientos = personaEstablecimientoFacade.findByMap(mapParametros);
-
-        //List<Persona> personas = getFacade().findByMap(mapParametros);
-        if (establecimientos.size() > 0) {
-            if (establecimientos.get(0).getPersona() != null) {
-                return establecimientos.get(0).getPersona();
-            }
-        }
-
         return null;
-
+      
     }
 
     @Override
@@ -355,7 +372,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
         return (Persona) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
         {
             @Override
-            public Object transaccion() throws ServicioCodefacException, RemoteException {
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 Persona proveedor=crearPlantillaPersona(
                 empresa, 
                 empresa.getIdentificacion(), 
@@ -396,7 +413,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     }
 
     //TODO: Unir con el metodo de crearPlantillaPersona
-    public Persona crearConsumidorFinalSinTransaccion(Empresa empresa) {
+    public Persona crearConsumidorFinalSinTransaccion(Empresa empresa,EntityManager entityManager) {
         Persona persona = new Persona();
         persona.setEstadoEnum(GeneralEnumEstado.ACTIVO);
         persona.setIdentificacion(Persona.IDENTIFICACION_CONSUMIDOR_FINAL);
@@ -426,8 +443,8 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
     public Persona crearConsumidorFinal(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException {
         MetodoInterfaceTransaccion transaccion = new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                crearConsumidorFinalSinTransaccion(empresa);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                crearConsumidorFinalSinTransaccion(empresa,entityManager);
             }
         };
         ejecutarTransaccion(transaccion);

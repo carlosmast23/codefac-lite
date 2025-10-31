@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -77,7 +78,7 @@ public interface ComprobanteServiceIf extends Remote {
     public RemoteInputStream obtenerXmlFirmadoComprobante(Empresa empresa,String claveAcceso,Boolean soloAutorizado) throws RemoteException, ServicioCodefacException;
     
     
-    public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException;
+    public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante,EntityManager entityManager) throws RemoteException,ServicioCodefacException;
     
     public boolean eliminarComprobanteFisico(String claveAcceso) throws RemoteException, ServicioCodefacException;
     public boolean eliminarComprobanteFisico(String claveAcceso,String carpeta) throws RemoteException, ServicioCodefacException;

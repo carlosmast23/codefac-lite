@@ -31,7 +31,7 @@ public class DestinatarioGuiaRemisionFacade extends AbstractFacade<DestinatarioG
         List<DestinatarioGuiaRemision> resultado=new ArrayList<DestinatarioGuiaRemision>();
         try {            
             String queryString = "SELECT u FROM DestinatarioGuiaRemision u WHERE u.facturaReferencia=?1";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1, factura);
             
             //List<DestinatarioGuiaRemision> resultadoList= (List<DestinatarioGuiaRemision>) query.getResultList();

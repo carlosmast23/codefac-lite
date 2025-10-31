@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReporteFechaCaduc
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -40,7 +41,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         super(LoteFacade.class);
     }
     
-    private void validarGrabar(Lote lote,CrudEnum crudEnum) throws ServicioCodefacException
+    private void validarGrabar(Lote lote,CrudEnum crudEnum,EntityManager em) throws ServicioCodefacException
     {           
         if(lote.getEmpresa()==null)
         {
@@ -62,7 +63,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         mapParametros.put("codigo", lote.getCodigo());
         mapParametros.put("estado", lote.getEstadoEnum().ACTIVO.getLetra());
         mapParametros.put("producto", lote.getProducto());
-        List<Lote> resultadoList=getFacade().findByMap(mapParametros);
+        List<Lote> resultadoList=getFacade().findByMap(mapParametros,em);
         
         if(resultadoList.size()>0)
         {
@@ -86,19 +87,19 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(entity, empresa, usuarioCreacion);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(entity, empresa, usuarioCreacion,entityManager);
             }
         });
         return entity;
     }
     
-    public Lote grabarSinTransaccion(Lote entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException {
+    public Lote grabarSinTransaccion(Lote entity,Empresa empresa,Usuario usuarioCreacion,EntityManager entityManager) throws ServicioCodefacException, RemoteException {
         entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
         setDatosAuditoria(entity, usuarioCreacion, CrudEnum.CREAR);
         setearDatosGrabar(entity, empresa, CrudEnum.CREAR);
-        validarGrabar(entity, CrudEnum.CREAR);
+        validarGrabar(entity, CrudEnum.CREAR,entityManager);
         entityManager.persist(entity);
         return entity;
     }
@@ -115,6 +116,16 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
     
     public Lote buscarPorProductoYFechaCaducidad(Producto producto,java.sql.Date fechaVencimiento) throws ServicioCodefacException, RemoteException 
     {
+        return (Lote) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return buscarPorProductoYFechaCaducidad(producto, fechaVencimiento, entityManager);
+            }
+        });
+    }
+    
+    public Lote buscarPorProductoYFechaCaducidad(Producto producto,java.sql.Date fechaVencimiento,EntityManager em) throws ServicioCodefacException, RemoteException 
+    {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         //mapParametros.put("empresa", empresa);
         mapParametros.put("producto", producto);
@@ -122,7 +133,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         mapParametros.put("producto.estado", GeneralEnumEstado.ACTIVO.getEstado());  
         mapParametros.put("fechaVencimiento",fechaVencimiento);
         
-        List<Lote> loteList= getFacade().findByMap(mapParametros);
+        List<Lote> loteList= getFacade().findByMap(mapParametros,em);
         if(loteList.size()>0)
         {
             return loteList.get(0);
@@ -135,18 +146,18 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void editarSinTransaccion(Lote entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(Lote entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
-        validarGrabar(entity, CrudEnum.EDITAR);
+        validarGrabar(entity, CrudEnum.EDITAR,entityManager);
         entityManager.merge(entity);
     }
     
@@ -163,7 +174,7 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
     public void eliminar(Lote entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
@@ -204,11 +215,6 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         return total;
     }
 
-    @Override
-    public Lote buscarPorId(Object primaryKey) throws RemoteException {
-        return super.buscarPorId(primaryKey); //To change body of generated methods, choose Tools | Templates.
-    }
-    
     
     
     

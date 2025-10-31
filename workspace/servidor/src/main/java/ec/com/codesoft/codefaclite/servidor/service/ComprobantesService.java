@@ -92,6 +92,7 @@ import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
+import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -138,7 +139,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
     
-    public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException,ServicioCodefacException
+    public void eliminarComprobanteSinTransaccion(ComprobanteEntity comprobante,EntityManager entityManager) throws RemoteException,ServicioCodefacException
     {
         if (comprobante.getEstadoEnum().equals(ComprobanteEnumEstado.AUTORIZADO)) {
             comprobante.setEstadoEnum(ComprobanteEnumEstado.ELIMINADO_SRI);
@@ -154,7 +155,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                
                 comprobanteElectronica.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO);
                 entityManager.merge(comprobanteElectronica);
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO,"El comprobante "+comprobanteElectronica.getPreimpreso()+" fue autorizado desde el metodo autorizarComprobante() en la clase ComprobantesService, para cambiar de estado manualmente");
@@ -210,7 +211,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             try {
                 ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                     @Override
-                    public void transaccion() throws ServicioCodefacException, RemoteException {
+                    public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                         entityManager.merge(comprobanteEntity);
                     }
                 });
@@ -699,14 +700,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             case FACTURA:
             case LIQUIDACION_COMPRA:
                 FacturaFacade servicio=new FacturaFacade();                
-                List<Factura> comprobantes=servicio.findByMap(mapParametros);
+                List<Factura> comprobantes=servicio.findByMap(mapParametros,null);
                 if(comprobantes.size()>0)
                     return comprobantes.get(0);
                 break;
 
             case COMPROBANTE_RETENCION:
                 RetencionFacade servicio2 = new RetencionFacade();
-                List<Retencion> comprobantes2 = servicio2.findByMap(mapParametros);
+                List<Retencion> comprobantes2 = servicio2.findByMap(mapParametros,null);
                 if (comprobantes2.size() > 0) {
                     return comprobantes2.get(0);
                 }
@@ -714,7 +715,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             case GUIA_REMISION:
                 GuiaRemisionFacade servicio3 = new GuiaRemisionFacade();
-                List<GuiaRemision> comprobantes3 = servicio3.findByMap(mapParametros);
+                List<GuiaRemision> comprobantes3 = servicio3.findByMap(mapParametros,null);
                 if (comprobantes3.size() > 0) {
                     return comprobantes3.get(0);
                 }
@@ -722,7 +723,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
             case NOTA_CREDITO:
                 NotaCreditoFacade servicio4 = new NotaCreditoFacade();
-                List<NotaCredito> comprobantes4 = servicio4.findByMap(mapParametros);
+                List<NotaCredito> comprobantes4 = servicio4.findByMap(mapParametros,null);
                 if (comprobantes4.size() > 0) {
                     return comprobantes4.get(0);
                 }
@@ -1031,21 +1032,26 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
       
     private Integer obtenerSecuencialLote(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
-
-        ParametroCodefacServiceIf servicio = new ParametroCodefacService();
-        ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE, empresa);
-        //Si la variable para enviar por lote no se encuentra creada generar un numero secuencial
-        if (parametroCodefac == null) {
-            parametroCodefac = new ParametroCodefac();
-            parametroCodefac.setEmpresa(empresa);
-            parametroCodefac.setNombre(ParametroCodefac.SECUENCIAL_LOTE);
-            parametroCodefac.setValor("0");//Si no existe el primer dato lo creo en la base de datos
-            entityManager.persist(parametroCodefac);
-        }
-        Integer secuencialLote = Integer.parseInt(parametroCodefac.getValor());
-        parametroCodefac.setValor((secuencialLote + 1) + "");
-        entityManager.merge(parametroCodefac);
-        return secuencialLote;
+        return (Integer) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                ParametroCodefacServiceIf servicio = new ParametroCodefacService();
+                ParametroCodefac parametroCodefac = servicio.getParametroByNombre(ParametroCodefac.SECUENCIAL_LOTE, empresa);
+                //Si la variable para enviar por lote no se encuentra creada generar un numero secuencial
+                if (parametroCodefac == null) {
+                    parametroCodefac = new ParametroCodefac();
+                    parametroCodefac.setEmpresa(empresa);
+                    parametroCodefac.setNombre(ParametroCodefac.SECUENCIAL_LOTE);
+                    parametroCodefac.setValor("0");//Si no existe el primer dato lo creo en la base de datos
+                    entityManager.persist(parametroCodefac);
+                }
+                Integer secuencialLote = Integer.parseInt(parametroCodefac.getValor());
+                parametroCodefac.setValor((secuencialLote + 1) + "");
+                entityManager.merge(parametroCodefac);
+                return secuencialLote;
+            }
+        });
+        
 
     }
     /**
@@ -1129,7 +1135,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @param comprobantesData
      * @param listaClaves 
      */
-    protected void setClaveAccesoLotes(List<ComprobanteDataInterface> comprobantesData,List<ClaveAcceso> listaClaves)
+    protected void setClaveAccesoLotes(List<ComprobanteDataInterface> comprobantesData,List<ClaveAcceso> listaClaves,EntityManager entityManager)
     {
         for (ComprobanteDataInterface comprobanteDataInterface : comprobantesData) {
             try {
@@ -1141,7 +1147,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     case  FACTURA:
                         Long id=comprobanteDataInterface.getComprobanteId();
                         FacturacionService servicio=new FacturacionService();
-                        Factura factura=servicio.buscarPorId(id);
+                        Factura factura=servicio.buscarPorId(id,entityManager);
                         ClaveAcceso claveAcceso=buscarClaveAccesoPorFactura(factura, listaClaves);
                         factura.setClaveAcceso(claveAcceso.clave);
                         servicio.editar(factura);
@@ -1326,7 +1332,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     try {
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                             @Override
-                            public void transaccion() {
+                            public void transaccion(EntityManager entityManager) {
                                 entityManager.merge(factura);
                             }                    
                         });
@@ -1438,7 +1444,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() {
+                public void transaccion(EntityManager entityManager) {
                     entityManager.merge(comprobanteOriginal);
                 }        
             });
@@ -1504,7 +1510,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                         
                         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                             @Override
-                            public void transaccion() {                                
+                            public void transaccion(EntityManager entityManager) {                                
                                 entityManager.merge(comprobanteOriginal);
                             }
                         });
@@ -1612,7 +1618,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             
            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                     
                     ClaveAcceso claveAcceso=new ClaveAcceso(comprobanteOriginal.getClaveAcceso());
                     ComprobanteEntity comprobanteEditar=obtenerComprobantePorClaveAcceso(claveAcceso);
@@ -2624,12 +2630,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    public void setearSecuencialComprobanteSinTransaccion(ComprobanteEntity comprobante,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         
         PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
         
-        PuntoEmision puntoEmision=puntoEmisionService.buscarPorId(comprobante.getPuntoEmisionId());
+        PuntoEmision puntoEmision=puntoEmisionService.buscarPorId(comprobante.getPuntoEmisionId(),entityManager);
         //PuntoEmision puntoEmision=puntoEmisionService.obtenerPorCodigo(comprobante.getPuntoEmision(),comprobante.getSucursalEmpresa());
         
         if(puntoEmision==null)
@@ -2674,7 +2680,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         //Agregar campos ocultos que no se deben mostrar en los detalles de las facturas electronicas
         //TODO: Este cambio se hizo para el señor Centeno que decia que no aparescan algunos detalles en la factura
-        agregarEtiquetaDetallesCamposOcultos(comprobante);        
+        agregarEtiquetaDetallesCamposOcultos(comprobante,entityManager);        
                 
         //Agregado parametro generales en datos adicionales
         agregarParametrosGenerales(comprobante);
@@ -2746,7 +2752,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    private void agregarEtiquetaDetallesCamposOcultos(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    private void agregarEtiquetaDetallesCamposOcultos(ComprobanteEntity comprobante,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         DocumentoEnum documentoEnum = comprobante.getCodigoDocumentoEnum();
         switch(documentoEnum)
@@ -2762,7 +2768,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                     {
                         case LIBRE:
                         case INVENTARIO:
-                            Producto producto=productoService.buscarPorId(detalle.getReferenciaId());
+                            Producto producto=productoService.buscarPorId(detalle.getReferenciaId(),entityManager);
                             if(producto.getOcultarDetalleVentaEnum().equals(EnumSiNo.SI))
                             {
                                 detalle.setDescripcion(detalle.getDescripcion()+" "+ParametrosSistemaCodefac.ETIQUETA_OCULTAR_DETALLE_FACTURA);
@@ -3078,7 +3084,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.merge(comprobante);
             }
         });
@@ -3147,7 +3153,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
     }
     
-    private ComprobanteEntity consultarPorAutorizacion(String claveAcceso)
+    /*private ComprobanteEntity consultarPorAutorizacion(String claveAcceso)
     {
         //ComprobanteEntity comprobante;
         //comprobante.getClaveAcceso();
@@ -3161,7 +3167,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         return null;
         
-    }
+    }*/
     
     /**
      * TODO:Falta agregar para liquidaciones de compra

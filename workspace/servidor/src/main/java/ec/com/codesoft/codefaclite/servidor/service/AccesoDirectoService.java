@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidor.facade.AccesoDirectoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -27,14 +28,21 @@ public class AccesoDirectoService extends ServiceAbstract<AccesoDirecto,AccesoDi
     
     public AccesoDirecto buscarPorNombre(String nombre)  throws RemoteException ,ServicioCodefacException
     {
-        Map<String,Object> mapBuscar=new HashMap<String, Object>();
-        mapBuscar.put("nombre",nombre);
-        List<AccesoDirecto> resultados= getFacade().findByMap(mapBuscar);
-        if(resultados.size()>0)
-        {
-            return resultados.get(0);
-        }
-        return null;
+        return (AccesoDirecto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapBuscar = new HashMap<String, Object>();
+                mapBuscar.put("nombre", nombre);
+                List<AccesoDirecto> resultados = getFacade().findByMap(mapBuscar,entityManager);
+                if (resultados.size() > 0) {
+                    return resultados.get(0);
+                }
+                return null;
+            }
+        });
+        
     }
+
+
     
 }

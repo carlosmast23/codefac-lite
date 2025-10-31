@@ -32,6 +32,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCode
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadFechas;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -60,7 +61,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
          
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
              @Override
-             public void transaccion() throws ServicioCodefacException, RemoteException {
+             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 validarRetencion(entity,CrudEnum.EDITAR);
                 entityManager.merge(entity);
              }             
@@ -75,7 +76,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         validarRetencion(entity,CrudEnum.EDITAR);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //Editado la retencion directamente
                 entityManager.merge(entity);
@@ -87,7 +88,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 validarRetencion(entity,CrudEnum.CREAR);
                 
@@ -109,7 +110,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 
                 
                 ComprobantesService servicioComprobante = new ComprobantesService();
-                servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity);
+                servicioComprobante.setearSecuencialComprobanteSinTransaccion(entity,entityManager);
                
 
                 List<RetencionDetalle> detallesEliminar=new ArrayList<>();
@@ -137,7 +138,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
                 entityManager.persist(entity);
                 entityManager.flush();
                 
-                grabarCartera(entity);
+                grabarCartera(entity,entityManager);
 
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
                 entityManager.flush();               
@@ -152,11 +153,11 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         return entity;
     }
     
-    private void grabarCartera(Retencion retencion) throws RemoteException, ServicioCodefacException
+    private void grabarCartera(Retencion retencion,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,ModoProcesarEnum.NORMAL);
+        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,ModoProcesarEnum.NORMAL,entityManager);
     }
     
     private void validarRetencion(Retencion retencion,CrudEnum crudEnum) throws ServicioCodefacException, RemoteException
@@ -233,9 +234,9 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                     ComprobantesService comprobanteService=new ComprobantesService();
-                    comprobanteService.eliminarComprobanteSinTransaccion(entity);
+                    comprobanteService.eliminarComprobanteSinTransaccion(entity,entityManager);
                     
                     //entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);

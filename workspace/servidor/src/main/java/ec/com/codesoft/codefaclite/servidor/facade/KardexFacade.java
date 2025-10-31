@@ -57,7 +57,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //k.getEstado();
         //k.getCostoPromedio()>0
         String queryString="SELECT k FROM Kardex k WHERE k.producto=?1 AND k.estado=?2 AND k.costoPromedio>0 ORDER BY k.id DESC ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, producto);
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         List<Kardex> kardexList= query.getResultList();
@@ -79,7 +79,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 + "WHERE k.producto=?1 AND k.bodega=?2 AND k.stock>0 "
                 + "ORDER BY k.lote.fechaVencimiento asc ";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,producto);
         query.setParameter(2,bodega);
         query.setMaxResults(1);
@@ -103,7 +103,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 + "WHERE k.producto=?1 "
                 + "ORDER BY k.fechaModificacion desc ";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, producto);
         //query.setMaxResults(1);
         List<Kardex> kardexList= query.getResultList();
@@ -131,7 +131,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 + "WHERE kd.fechaIngreso<?1 and kd.kardex.bodega=?2 and kd.kardex.producto=?3 "
                 + "group by kd.codigoTipoDocumento ";
 
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, fechaCorte);
         query.setParameter(2, bodega);
         query.setParameter(3, producto);
@@ -186,7 +186,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             //Agregar orden y un limite de la consulta
             //queryString+=" order by kd.id desc ";
             System.out.println(queryString);
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
 
             //if (cantidadMovimientos != null) {
             //    query.setMaxResults(cantidadMovimientos);
@@ -233,7 +233,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //b.getStockMinimoAdvertencia()
         //String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima AND k.bodega.stockMinimoAdvertencia=?5  ";               
         String queryString = "SELECT  COUNT(*) FROM ( SELECT P.ID_PRODUCTO FROM KARDEX k INNER JOIN PRODUCTO P ON k.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID=k.BODEGA_ID WHERE B.STOCK_MINIMO_ADVERTENCIA='s' AND UPPER(P.ESTADO) !=UPPER('e') AND P.MANEJAR_INVENTARIO='s' AND P.TIPO_PRODUCTO_COD='p' AND K.ESTADO='A' GROUP BY P.ID_PRODUCTO,P.CANTIDAD_MINIMA HAVING SUM((k.STOCK+ABS(k.STOCK))/2)<=P.CANTIDAD_MINIMA ) e";               
-        Query query = getEntityManager().createNativeQuery(queryString);
+        Query query = nuevoEntityManager().createNativeQuery(queryString);
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(5,EnumSiNo.SI.getLetra());
         Number totalMinimo= (Number) query.getSingleResult();
@@ -302,7 +302,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             }
         }
         
-        Query query = getEntityManager().createQuery(queryString);        
+        Query query = nuevoEntityManager().createQuery(queryString);        
         
         query.setParameter(99,EnumSiNo.SI.getLetra());
         
@@ -546,7 +546,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         String whereTipoProducto=" AND ( k.producto.tipoProductoCodigo=?12 OR k.producto.tipoProductoCodigo=?13 ) ";
         
         String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+orderBy;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         
         query.setParameter(6,GeneralEnumEstado.ACTIVO.getEstado());
@@ -789,7 +789,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //Ordenar por nombre de producto
         queryString+=" ORDER BY kd.kardex.producto.nombre ";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         
@@ -825,7 +825,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         /*kd.getCodigoTipoDocumentoEnum().VENTA
         kd.;*/
         String queryString="SELECT kd.kardex.producto,sum(kd.cantidad) FROM KardexDetalle kd WHERE kd.codigoTipoDocumento=?1 and kd.fechaIngreso>=?2 and kd.fechaIngreso<=?3 and kd.kardex.bodega.sucursal=?4 group by kd.kardex.producto ";        
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
                
         query.setParameter(1,TipoDocumentoEnum.VENTA_INVENTARIO);
         query.setParameter(2,fechaInicio);
@@ -860,7 +860,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     public Map<Producto,StockPromedioYCantidadRespuesta> obtenerStockComprasPromedioYCantidad(Date fechaInicio,Date fechaFinal,Sucursal sucursal)
     {
         String queryString="SELECT kd.kardex.producto,avg(kd.cantidad),count(kd.id) FROM KardexDetalle kd WHERE kd.codigoTipoDocumento=?1 and kd.fechaIngreso>=?2 and kd.fechaIngreso<=?3 and kd.kardex.bodega.sucursal=?4 group by kd.kardex.producto ";        
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
                
         query.setParameter(1,TipoDocumentoEnum.COMPRA_INVENTARIO);
         query.setParameter(2,fechaInicio);
@@ -895,7 +895,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //producto.setEmpresa(empresa);
                 
         String queryString="SELECT p FROM Producto p WHERE p.estado=?1 and p.manejarInventario=?2 and p.empresa=?3 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2,EnumSiNo.SI.getLetra());

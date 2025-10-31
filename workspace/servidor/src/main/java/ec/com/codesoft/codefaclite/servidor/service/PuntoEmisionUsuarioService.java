@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PuntoEmisionUsuarioServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
     public PuntoEmisionUsuario grabar(PuntoEmisionUsuario entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 entityManager.persist(entity);
             }
@@ -46,12 +47,12 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
     {
         return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("usuario",usuario);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("puntoEmision.sucursal",sucursal);
-                return getFacade().findByMap(mapParametros);
+                return getFacade().findByMap(mapParametros,em);
             }
         });
     }
@@ -77,11 +78,11 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
         return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() 
         {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("puntoEmision.sucursal",sucursal);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-                return getFacade().findByMap(mapParametros);
+                return getFacade().findByMap(mapParametros,em);
             }
         });
         

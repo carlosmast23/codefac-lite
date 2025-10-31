@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -23,6 +24,6 @@ public interface TipoProductoServiceIf extends ServiceAbstractIf<TipoProducto> {
     public void eliminar(TipoProducto entity) throws ServicioCodefacException, RemoteException ;
     public List<TipoProducto> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
     public TipoProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
-    public TipoProducto grabarSinTransaccion(TipoProducto entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException;
+    public TipoProducto grabarSinTransaccion(TipoProducto entity,Empresa empresa,Usuario usuarioCreacion,EntityManager entityManager) throws ServicioCodefacException, RemoteException;
     
 }

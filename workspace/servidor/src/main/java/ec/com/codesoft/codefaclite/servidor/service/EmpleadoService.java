@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpleadoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -66,32 +67,45 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
     
     public List<Empleado> buscarVendedores(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
-        //Empleado e;
-        //e.get
-        //e.getDepartamento().getTipo();
-        Map<String, Object> parametroMap = new HashMap<String, Object>();
-        parametroMap.put("departamento.tipo",Departamento.TipoEnum.Ventas.getLetra());
-        parametroMap.put("estado",GeneralEnumEstado.ACTIVO.getLetra());
         
-        return getFacade().findByMap(parametroMap);
+        return (List<Empleado>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> parametroMap = new HashMap<String, Object>();
+                parametroMap.put("departamento.tipo", Departamento.TipoEnum.Ventas.getLetra());
+                parametroMap.put("estado", GeneralEnumEstado.ACTIVO.getLetra());
+
+                return getFacade().findByMap(parametroMap,entityManager);
+            }
+        });
+        
     }   
     
     public List<Empleado> buscarPorDepartamento(Departamento departamento,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
-        Map<String, Object> parametroMap = new HashMap<String, Object>();
-        parametroMap.put("departamento", departamento);
-        //parametroMap.put("departamento", departamento);
-        return getFacade().findByMap(parametroMap);
+        return (List<Empleado>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> parametroMap = new HashMap<String, Object>();
+                parametroMap.put("departamento", departamento);
+                //parametroMap.put("departamento", departamento);
+                return getFacade().findByMap(parametroMap,entityManager);
+            }
+        });
+        
     }
     
     //TODO: Terminar de implementar para que funcione tomando en cuenta el parametro de la empresa
     public List<Empleado> buscarActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException
     {
-        //Empleado empleado;
-        //empleado.getEstado()
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+        return (List<Empleado>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
     }
     
     /*public Empleado buscarPorUsuario(Usuario usuario) throws ServicioCodefacException, java.rmi.RemoteException

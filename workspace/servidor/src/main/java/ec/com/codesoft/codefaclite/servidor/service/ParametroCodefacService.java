@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacSe
 import ec.com.codesoft.codefaclite.utilidades.seguridad.UtilidadesEncriptar;
 import ec.com.codesoft.codefaclite.utilidades.sql.UtilidadSql;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         try {
             return (Map<String, ParametroCodefac>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     Map<String, ParametroCodefac> parametrosCodefacMap = new HashMap<String, ParametroCodefac>();
                     //System.out.println("EJECUNTANDO CONSULTA DE getParametrosMap <--------------------------");
                     
@@ -76,7 +77,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         try {
             return (ParametroCodefac) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     /*Map<String, Object> map = new HashMap<String, Object>();
                     map.put("nombre", nombre);
                     map.put("empresa", empresa);
@@ -86,7 +87,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                     else
                         return null;
                 }*/
-                return getFacade().getParametroByNombreFacade(nombre, empresa);
+                return getFacade().getParametroByNombreFacade(nombre, empresa,em);
                 }
                 
             });
@@ -101,10 +102,10 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         try {
             return (ParametroCodefac) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put("nombre", nombre);
-                    List<ParametroCodefac> parametroCodefacList = getFacade().findByMap(map);
+                    List<ParametroCodefac> parametroCodefacList = getFacade().findByMap(map,em);
                     if (parametroCodefacList != null && parametroCodefacList.size() > 0)
                         return parametroCodefacList.get(0);
                     else
@@ -127,8 +128,8 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
-                    editarParametrosSinTransaccion(parametro);
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    editarParametrosSinTransaccion(parametro,entityManager);
                 }
             });
         } catch (ServicioCodefacException ex) {
@@ -137,7 +138,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         
     }
     
-    public void editarParametrosSinTransaccion(List<ParametroCodefac> parametros) throws java.rmi.RemoteException
+    public void editarParametrosSinTransaccion(List<ParametroCodefac> parametros,EntityManager entityManager) throws java.rmi.RemoteException
     {
         for (ParametroCodefac parametroCodefac : parametros) {
             if (parametroCodefac.getId() == null) //Si no existe el dato lo grabo
@@ -154,7 +155,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Analizar si debo tener creado 2 metodos por separado para grabar y editar
                 if(parametro.getId()==null)
                 {
@@ -194,7 +195,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() {
+                public void transaccion(EntityManager entityManager) {
                     for (Map.Entry<String, ParametroCodefac> entry : parametro.entrySet()) {
                         //String key = entry.getKey();
                         ParametroCodefac value = entry.getValue();
@@ -237,14 +238,26 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     
     public List<ParametroCodefac> buscarParametrosPorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {
-        return parametroCodefacFacade.findByMap(map);
+        try {
+            return (List<ParametroCodefac>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado()
+            {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return parametroCodefacFacade.findByMap(map,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ParametroCodefacService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
     }
     
     public void procesoBloqueadoPrueba() throws java.rmi.RemoteException, ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 try {
                     System.out.println("Iniciada transaccion");
                     Thread.sleep(10000000);
@@ -256,7 +269,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         });
     }
     
-    public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa) throws java.rmi.RemoteException,ServicioCodefacException
+    public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException
     {
         //Datos de un correo por defecto para que puedan hacer pruebas
         entityManager.persist(crearObjectoSinTransaccion(empresa, ParametroCodefac.CORREO_USUARIO, ParametrosSistemaCodefac.CORREO_DEFECTO_USUARIO));
@@ -312,7 +325,8 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     {
         try
         {
-            Query query=AbstractFacade.entityManager.createNativeQuery(queryStr);
+            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+            Query query=entityManager.createNativeQuery(queryStr);
                         
             //En el caso que no se mande un tipo de comando el sistema genera uno de manera Automatica
             if(tipoComandoEnum==null)
@@ -341,7 +355,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                 Integer numeroFilasAfectadas=(Integer) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
                     
                     @Override
-                    public Object transaccion() throws ServicioCodefacException, RemoteException {
+                    public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                         return query.executeUpdate();
                     }                    
                 });

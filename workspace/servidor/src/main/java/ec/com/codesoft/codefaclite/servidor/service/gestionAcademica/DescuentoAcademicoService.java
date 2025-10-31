@@ -7,12 +7,14 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.DescuentoAcademicoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.gestionacademica.DescuentoAcademicoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,7 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
     public DescuentoAcademico grabar(DescuentoAcademico entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
                 //buscar el periodo actual activo pqara grabar
                 PeriodoService periodoService = new PeriodoService();
@@ -50,7 +52,7 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
     public void eliminar(DescuentoAcademico entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
             }
@@ -58,25 +60,40 @@ public class DescuentoAcademicoService extends ServiceAbstract<DescuentoAcademic
     }
 
     public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo()throws ServicioCodefacException, RemoteException {
-        PeriodoService periodoService = new PeriodoService();
-        Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
         
-        Map<String,Object> mapParametros =new HashMap<String, Object>();
-        mapParametros.put("periodo",periodoActivo);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+            return (List<DescuentoAcademico>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                PeriodoService periodoService = new PeriodoService();
+                Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
+
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("periodo", periodoActivo);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
     }
     
     public List<DescuentoAcademico> obtenerDescuentoActivosPorPeriodoActivo(DescuentoAcademico.TipoEnum tipoEnum)throws ServicioCodefacException, RemoteException
     {
-        PeriodoService periodoService = new PeriodoService();
-        Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
         
-        Map<String,Object> mapParametros =new HashMap<String, Object>();
-        mapParametros.put("periodo",periodoActivo);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("tipo",tipoEnum.getLetra());
-        return getFacade().findByMap(mapParametros);
+            return (List<DescuentoAcademico>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                PeriodoService periodoService = new PeriodoService();
+                Periodo periodoActivo = periodoService.obtenerUnicoPeriodoActivo();
+
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("periodo", periodoActivo);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("tipo", tipoEnum.getLetra());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
+        
     
     }
 

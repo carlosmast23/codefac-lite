@@ -43,7 +43,7 @@ public class ImpuestoDetalleFacade extends AbstractFacade<ImpuestoDetalle>
                 + "((?1>=id.fechaInicio and ?1<=id.fechaFin) or id.fechaFin is null) and "
                 + "i.nombre=?2 "
                 + "ORDER BY id.tarifa asc ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,fechaHoy);
         query.setParameter(2,nombre);
         return query.getResultList();

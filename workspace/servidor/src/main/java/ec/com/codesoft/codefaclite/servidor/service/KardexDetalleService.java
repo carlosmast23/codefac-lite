@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexDetalleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -28,19 +29,15 @@ public class KardexDetalleService extends ServiceAbstract<KardexDetalle, KardexD
         super(KardexDetalleFacade.class);
     }
     
-    public KardexDetalle consultarPorReferencia(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaDocumentoId,Producto producto) throws RemoteException
+    public KardexDetalle consultarPorReferencia(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaDocumentoId,Producto producto,EntityManager em) throws RemoteException
     {
-        //KardexDetalle kd;
-        //kd.getKardex().getProducto();
-        //kd.getCodigoTipoDocumento();
-        //kd.getCodigoTipoDocumentoEnum();
-        //kd.getReferenciaDocumentoId();
+
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("codigoTipoDocumento",tipoDocumentoEnum.getCodigo());
         mapParametros.put("referenciaDocumentoId",referenciaDocumentoId);
         mapParametros.put("kardex.producto",producto);
         
-        List<KardexDetalle> resultado=getFacade().findByMap(mapParametros);
+        List<KardexDetalle> resultado=getFacade().findByMap(mapParametros,em);
         
         if(resultado.size()>0)
         {
@@ -52,10 +49,20 @@ public class KardexDetalleService extends ServiceAbstract<KardexDetalle, KardexD
     
     public List<KardexDetalle> consultarPorKardex(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException
     {
+        return (List<KardexDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return consultarPorKardex(kardex);
+            }
+        });
+    }
+    
+    public List<KardexDetalle> consultarPorKardex(Kardex kardex,EntityManager em) throws java.rmi.RemoteException,ServicioCodefacException
+    {
         KardexDetalle kd;
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("kardex",kardex);
-        List<KardexDetalle> resultado=getFacade().findByMap(mapParametros);
+        List<KardexDetalle> resultado=getFacade().findByMap(mapParametros,em);
         
         return resultado;
     }

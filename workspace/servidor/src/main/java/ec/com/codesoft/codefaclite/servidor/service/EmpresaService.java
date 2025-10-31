@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.EmpresaFacade;
@@ -30,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EmpresaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.ws.codefac.test.service.WebServiceCodefac;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -59,16 +61,16 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException 
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
-                grabarSinTransaccion(p,true,true);
+                grabarSinTransaccion(p,true,true,entityManager);
             }
         });
         
         return p;
     }
     
-    private void grabarSinTransaccion(Empresa p,Boolean crearCorreoDefecto,Boolean crearPerfilDefecto) throws ServicioCodefacException, RemoteException
+    private void grabarSinTransaccion(Empresa p,Boolean crearCorreoDefecto,Boolean crearPerfilDefecto,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         //Grabar la empresa        
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
@@ -83,13 +85,13 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
 
         //Grabar el usuario de consumidor final por defecto
         PersonaService personaService = new PersonaService();
-        personaService.crearConsumidorFinalSinTransaccion(p);
+        personaService.crearConsumidorFinalSinTransaccion(p,entityManager);
 
         //Grabar parametros por defecto}
         if(crearCorreoDefecto)
         {
             ParametroCodefacService parametroService = new ParametroCodefacService();
-            parametroService.crearParametroPorDefectoEmpresaSinTrasaccion(p);
+            parametroService.crearParametroPorDefectoEmpresaSinTrasaccion(p,entityManager);
         }
 
         //TODO: Por el momento no puedo crear una bodega por defecto en este punto por que necesito una sucursal
@@ -124,7 +126,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         //p.setEstadoEnum(GeneralEnumEstado.);
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 p.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(p);
             }
@@ -139,10 +141,24 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     
     public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException 
     {
-        //Empresa empresa;       
+        try {
+            return (Empresa) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return buscarPorIdentificacion(identificacion, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public Empresa buscarPorIdentificacion(String identificacion,EntityManager entityManager) throws RemoteException 
+    {
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("identificacion", identificacion);
-        List<Empresa> empresas=getFacade().findByMap(mapParametros);
+        List<Empresa> empresas=getFacade().findByMap(mapParametros,entityManager);
         if(empresas.size()>0)
         {
             return empresas.get(0);
@@ -296,7 +312,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         return (Empresa) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
-            public Object transaccion() throws ServicioCodefacException, RemoteException {
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //Servicios que vamos a utilizar
                 ParametroCodefacService parametroCodefacService =new ParametroCodefacService();
@@ -309,32 +325,33 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 //System.out.println("Grabado la sucursal"+sucursal);
                 //Grabando primero la EMPRESA y Fomatear los valores de SI y NO en mayuscula como acepta el Sri
                 empresa.setCodigo("COD");
-                grabarSinTransaccion(empresa,crearCorreoDefecto,false);
+                //EntityManager entityManager=AbstractFacade.nuevoEntityManager()
+                grabarSinTransaccion(empresa,crearCorreoDefecto,false,entityManager);
                 
                 
                 //Grabar la SUCURSAL
                 agregarDatosDefectoSucursal(sucursal, empresa);
                 SucursalService sucursalService=new SucursalService();
-                sucursalService.grabarSinTransaccion(sucursal);
+                sucursalService.grabarSinTransaccion(sucursal,entityManager);
                 
                 
                 //Grabar el PUNTO DE EMISION completando los datos por DEFECTO que faltaban
                 agregarDatosPuntoEmisionDefecto(puntoEmision, sucursal);
                 PuntoEmisionService puntoEmisionService=new PuntoEmisionService();
-                puntoEmisionService.grabarSinTransaccion(puntoEmision);
+                puntoEmisionService.grabarSinTransaccion(puntoEmision,entityManager);
                 
                 
                 //Grabar el USUARIO POR DEFECTO para ingresar al sistema
                 agregarDatosUsuarioDefecto(usuario, empresa, puntoEmision);
                 UsuarioServicio usuarioService=new UsuarioServicio();
-                usuarioService.grabarSinTransaccion(usuario,false);
+                usuarioService.grabarSinTransaccion(usuario,false,entityManager);
                 
                 //Grabando los PARAMETROS DEL SISTEMA
                 agregarParametroPorDefecto(empresa, parametros);                
-                parametroCodefacService.editarParametrosSinTransaccion(parametros);
+                parametroCodefacService.editarParametrosSinTransaccion(parametros,entityManager);
                 
                 //Grabar un producto por defecto para luego hacer pruebas
-                crearProductoDefectoSinTransaccion(empresa,Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO));
+                crearProductoDefectoSinTransaccion(empresa,Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO),entityManager);
                 
                 //Grabar una bodega por defecto
                 crearBodegaPorDefecto(sucursal);
@@ -356,15 +373,16 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {
         BodegaService bodegaService=new BodegaService();
         Bodega bodegaDefecto=bodegaService.crearBodegaDefectoSinTransaccion(sucursal);
-        bodegaService.grabarSinTransaccion(bodegaDefecto);
+        EntityManager entityManager= AbstractFacade.nuevoEntityManager();
+        bodegaService.grabarSinTransaccion(bodegaDefecto,entityManager);
     }
     
-    private void crearProductoDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto) throws RemoteException, ServicioCodefacException
+    private void crearProductoDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         ProductoService service=new ProductoService();
         Producto producto=service.crearProductoPorDefectoSinTransaccion(empresa,ivaDefecto);
         //entityManager.persist(producto.getCatalogoProducto());        
-        service.grabarSinTransaccion(producto,false,true,ModoProcesarEnum.NORMAL);
+        service.grabarSinTransaccion(producto,false,true,ModoProcesarEnum.NORMAL,entityManager);
     }
     
     
@@ -499,13 +517,13 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     {        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Solo ejecuto el metodo para forzar a que se gener un commit y un flush para evitar perdidads de datos
             }
         });
-        
-        EntityManagerFactory managerFactory= entityManager.getEntityManagerFactory();
-        entityManager.close();
+                
+        EntityManagerFactory managerFactory= AbstractFacade.entityManagerFactory;
+        //entityManager.close();
         managerFactory.close();
         
         Logger.getLogger(EmpresaService.class.getName()).log(Level.INFO,"Cerrando Conexión Base de Datos");

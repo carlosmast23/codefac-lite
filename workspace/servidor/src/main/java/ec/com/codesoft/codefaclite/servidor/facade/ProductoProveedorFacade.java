@@ -31,7 +31,7 @@ public class ProductoProveedorFacade extends AbstractFacade<ProductoProveedor>{
         //pp.getProducto();
         //pp.getProveedor();
         String queryStr=" SELECT pp FROM ProductoProveedor pp WHERE pp.producto=?1 AND pp.proveedor=?2 ";        
-        Query query=getEntityManager().createQuery(queryStr);
+        Query query=nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1, producto);
         query.setParameter(2, proveedor);
         

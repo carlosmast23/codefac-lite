@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -38,14 +39,14 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
     {
         return (List<PrestamoCuota>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 return getFacade().buscarCuotasPorPrestamo(prestamo);
             }
         });
     }
     
     
-    public void grabarSinTransaccion(Prestamo prestamo,Factura factura) throws RemoteException, ServicioCodefacException
+    public void grabarSinTransaccion(Prestamo prestamo,Factura factura,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         /**
          * ===========================================
@@ -58,7 +59,8 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
                 factura.getCodigoDocumentoEnum(), 
                 GeneralEnumEstado.ACTIVO, 
                 Cartera.TipoCarteraEnum.CLIENTE, 
-                factura.getSucursalEmpresa());
+                factura.getSucursalEmpresa(),
+                entityManager);
         
         prestamo.setVenta(factura);
         prestamo.setCliente(factura.getCliente());
@@ -73,15 +75,15 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
          *      GENERAR LA CUOTA INICIAL
          * ===============================================
          */
-        crearCuotaInicial(prestamo);
+        crearCuotaInicial(prestamo,entityManager);
         
-        crearCuotasPrestamo(prestamo);
+        crearCuotasPrestamo(prestamo,entityManager);
         
         
         
     }
     
-    private void crearCuotaInicial(Prestamo prestamo)
+    private void crearCuotaInicial(Prestamo prestamo,EntityManager entityManager)
     {
         PrestamoCuota prestamoCuota=new PrestamoCuota();
         prestamoCuota.setTipoEnum(PrestamoCuota.TipoCuotaEnum.CUOTA_INICIAL);
@@ -105,7 +107,7 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
      * @param numeroCuota
      * @param valorCuota 
      */
-    private void crearCuotaPrestamo(Prestamo prestamo,PrestamoCuota.TipoCuotaEnum tipoCuotaEnum,Date fechaPagoGenerado,Integer numeroCuota,BigDecimal valorCuota)
+    private void crearCuotaPrestamo(Prestamo prestamo,PrestamoCuota.TipoCuotaEnum tipoCuotaEnum,Date fechaPagoGenerado,Integer numeroCuota,BigDecimal valorCuota,EntityManager entityManager)
     {
         PrestamoCuota prestamoCuota=new PrestamoCuota();
         prestamoCuota.setTipoEnum(tipoCuotaEnum);
@@ -121,7 +123,7 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
         entityManager.persist(prestamoCuota);
     }
     
-    private void crearCuotasPrestamo(Prestamo prestamo)
+    private void crearCuotasPrestamo(Prestamo prestamo,EntityManager entityManager)
     {
         Integer numeroCuotas=prestamo.getPlazo();
         BigDecimal valorCuotaMensual=prestamo.calcularCuotaMensual();
@@ -129,7 +131,7 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
         
         for (int i = 1; i <= numeroCuotas; i++) {
             Date fechaPago=generarFechaPagoCuota(diaPago, i, prestamo.getFechaCreacion());
-            crearCuotaPrestamo(prestamo, PrestamoCuota.TipoCuotaEnum.CUOTA_MENSUAL, fechaPago, i, valorCuotaMensual);
+            crearCuotaPrestamo(prestamo, PrestamoCuota.TipoCuotaEnum.CUOTA_MENSUAL, fechaPago, i, valorCuotaMensual,entityManager);
         }
         
     }

@@ -24,7 +24,7 @@ public class SriIdentificacionFacade extends AbstractFacade<SriIdentificacion> {
     public List<SriIdentificacion> getSriIdentificacionByTipoTransaccion(String tipo)
     {
         String queryString = "SELECT e FROM SriIdentificacion e WHERE ?1=e.tipoTransaccion";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, tipo);
         return (List<SriIdentificacion>) query.getResultList();
     }

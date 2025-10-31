@@ -5,12 +5,15 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
 import ec.com.codesoft.codefaclite.servidor.facade.SriFormaPagoFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.SriIdentificacionFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
@@ -35,13 +38,14 @@ public class SriService extends UnicastRemoteObject implements SriServiceIf
     
     public SriFormaPago obtenerFormarPagoDefecto() throws java.rmi.RemoteException
     {
+        EntityManager em= AbstractFacade.nuevoEntityManager();
         //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
         String codigoFormaPago="01";
         
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("codigo",codigoFormaPago);
         
-        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros);
+        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros,em);
         if(formasPago.size()>0)
         {
             return formasPago.get(0);
@@ -51,13 +55,15 @@ public class SriService extends UnicastRemoteObject implements SriServiceIf
     
     public SriFormaPago obtenerFormarPagoConCartera() throws java.rmi.RemoteException
     {
+        
+        EntityManager em= AbstractFacade.nuevoEntityManager();
     //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
         String aliasFormaPago="Cartera";
         
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("alias",aliasFormaPago);
         
-        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros);
+        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros,em);
         if(formasPago.size()>0)
         {
             return formasPago.get(0);

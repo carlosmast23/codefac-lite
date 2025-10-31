@@ -26,7 +26,7 @@ public class MarcaProductoFacade extends AbstractFacade<MarcaProducto>{
     {
         
         String queryStr=" SELECT m FROM MarcaProducto m WHERE m.estado=?1 and m.empresa=?2 ORDER BY m.nombre";
-        Query query=getEntityManager().createQuery(queryStr);
+        Query query=nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, empresa);
         return query.getResultList();

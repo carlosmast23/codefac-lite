@@ -8,6 +8,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -18,5 +20,5 @@ import java.util.List;
  */
 public interface CompraDetalleServiceIf extends ServiceAbstractIf<CompraDetalle>
 {
-    public List<CompraDetalle> buscarPorCompra(Compra compra) throws ServicioCodefacException, RemoteException;
+    public List<CompraDetalle> buscarPorCompra(Compra compra,EntityManager em) throws ServicioCodefacException, RemoteException;
 }

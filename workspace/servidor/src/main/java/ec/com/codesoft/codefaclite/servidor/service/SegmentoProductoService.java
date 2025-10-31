@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -55,15 +56,15 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(entity, empresa, usuarioCreacion);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(entity, empresa, usuarioCreacion,entityManager);
                 
             }
         });
         return entity;
     }
     
-    public void grabarSinTransaccion(SegmentoProducto entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException 
+    public void grabarSinTransaccion(SegmentoProducto entity,Empresa empresa,Usuario usuarioCreacion,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
@@ -78,16 +79,16 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void editarSinTransaccion(SegmentoProducto entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(SegmentoProducto entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
@@ -97,7 +98,7 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
     public void eliminar(SegmentoProducto entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
@@ -109,7 +110,7 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
     {
         return (List<SegmentoProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParameros=new HashMap<String, Object>();                
                 mapParameros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
          
@@ -120,22 +121,28 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
                     //Si los datos son compratidos entre empresas entoces no hago ningun filtro
                     mapParameros.put("empresa", empresa);
                 }
-                return getFacade().findByMap(mapParameros);
+                return getFacade().findByMap(mapParameros,em);
             }
         } );
     }
     
     public SegmentoProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("nombre",nombre);
-        List<SegmentoProducto> resultados=getFacade().findByMap(mapParametros);
-        if(resultados.size()>0)
-        {
-            return resultados.get(0);
-        }
-        return null;
+        return (SegmentoProducto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("nombre", nombre);
+                List<SegmentoProducto> resultados = getFacade().findByMap(mapParametros,entityManager);
+                if (resultados.size() > 0) {
+                    return resultados.get(0);
+                }
+                return null;
+            }
+        });
+        
+        
     }
 }

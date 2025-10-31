@@ -26,7 +26,7 @@ public class SriRetencionIvaFacade extends AbstractFacade<SriRetencionIva>{
         //u.getCodigo();
         try {            
             String queryString = "SELECT u FROM SriRetencionIva u order by u.codigo desc";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             return (List<SriRetencionIva>) query.getResultList();
         } catch (NoResultException e) {
             return null;

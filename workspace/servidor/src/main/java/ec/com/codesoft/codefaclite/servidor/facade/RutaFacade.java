@@ -36,7 +36,7 @@ public class RutaFacade extends AbstractFacade<Ruta> {
         rutaDetalle.getEstablecimiento();*/
         
         String queryStr="SELECT r FROM RutaDetalle rd JOIN rd.ruta r WHERE r.estado=?1 and r.vendedor=?2 and rd.establecimiento=?3 and r.diaVisita=?4 ";
-        Query query=getEntityManager().createQuery(queryStr);
+        Query query=nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2,vendedor);
         query.setParameter(3,clienteOficina);

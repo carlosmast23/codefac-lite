@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -12,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.CategoriaProductoFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +52,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
     public CategoriaProducto grabar(CategoriaProducto entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.persist(entity);
             }
         });
@@ -75,7 +77,8 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         mapParametros.put("empresa", empresa);
-        return getFacade().findByMap(mapParametros,"nombre");
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+        return getFacade().findByMap(mapParametros,"nombre",entityManager);
     }
     
     public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
@@ -84,7 +87,8 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
         mapParametros.put("empresa", empresa);
         mapParametros.put("nombre",nombre);
-        List<CategoriaProducto> resultados=getFacade().findByMap(mapParametros,"nombre");
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+        List<CategoriaProducto> resultados=getFacade().findByMap(mapParametros,"nombre",entityManager);
         if(resultados.size()>0)
         {
             return resultados.get(0);

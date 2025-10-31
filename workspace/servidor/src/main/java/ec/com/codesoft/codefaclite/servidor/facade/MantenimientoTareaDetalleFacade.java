@@ -31,7 +31,7 @@ public class MantenimientoTareaDetalleFacade extends AbstractFacade<Mantenimient
         //mtd.getMantenimiento().getFechaIngreso();
         
         String queryStr=" SELECT mtd FROM MantenimientoTareaDetalle mtd WHERE mtd.mantenimiento.estado<>?3 AND mtd.mantenimiento.estado<>?4 ORDER BY  mtd.mantenimiento.prioridad DESC, mtd.mantenimiento.fechaIngreso";
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         //query.setParameter(1, empleado);
         //query.setParameter(2, MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
         query.setParameter(3, Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());

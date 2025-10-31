@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.KardexItemEspecificoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +34,11 @@ public class KardexItemEspecificoService extends ServiceAbstract<KardexItemEspec
         //kie.getKardexDetalle().getKardex().getProducto();
         return (int) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("kardexDetalle.kardex.producto",producto);
-                return getFacade().findByMap(mapParametros).size();
+                return getFacade().findByMap(mapParametros,em).size();
             }
         });
     }
@@ -48,11 +49,11 @@ public class KardexItemEspecificoService extends ServiceAbstract<KardexItemEspec
         //kie.getKardexDetalle().getKardex().getProducto();
         return (List) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String,Object>();
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("kardexDetalle.kardex.producto",producto);
-                return getFacade().findByMap(mapParametros);
+                return getFacade().findByMap(mapParametros,em);
             }
         });
     }

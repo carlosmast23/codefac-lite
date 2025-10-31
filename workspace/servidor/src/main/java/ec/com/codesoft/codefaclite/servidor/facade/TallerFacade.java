@@ -31,7 +31,7 @@ public class TallerFacade extends AbstractFacade<Taller> {
         
         String queryString = "SELECT u FROM TallerTarea u WHERE u.taller=?1";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, taller);
         return query.getResultList();
     }

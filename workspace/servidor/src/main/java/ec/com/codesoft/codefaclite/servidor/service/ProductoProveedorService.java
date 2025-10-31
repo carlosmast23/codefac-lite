@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +37,16 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
 
     @Override
     public List<ProductoProveedor> buscarProductoCompraActivo(Producto producto, Compra compra) throws ServicioCodefacException, java.rmi.RemoteException {
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("producto", producto);
-        mapParametros.put("proveedor", compra.getProveedor());
-        return getFacade().findByMap(mapParametros);
+        
+        return (List<ProductoProveedor>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("producto", producto);
+                mapParametros.put("proveedor", compra.getProveedor());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
     }
 
     //TODO: Hacer que solo devuelva si el producto existe porque me parece que cuando se borra datos puede generar problemas    
@@ -54,67 +61,79 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
     }
 
     public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException {
-        //ProductoProveedor pp;
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        //mapParametros.put("producto", producto);
-        mapParametros.put("proveedor", proveedor);
-        return getFacade().findByMap(mapParametros);
+        
+        return (List<ProductoProveedor>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //ProductoProveedor pp;
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //mapParametros.put("producto", producto);
+                mapParametros.put("proveedor", proveedor);
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+
     }
 
     public List<ProductoProveedor> buscarPorProductoActivo(Producto producto) throws ServicioCodefacException, java.rmi.RemoteException {
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("producto", producto);
-        //mapParametros.put("proveedor", proveedor);
-        return getFacade().findByMap(mapParametros);
+        
+        return (List<ProductoProveedor>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("producto", producto);
+                //mapParametros.put("proveedor", proveedor);
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
     }
 
     public ProductoProveedor buscarActivoPorCodigoProveedor(String codigoProveedor, Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException {
-        //TODO: Mejorar esta parte para solo obtener productos y no empaques
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("codigoProveedor", codigoProveedor);
-        mapParametros.put("producto.empresa", empresa);
-        mapParametros.put("producto.estado", GeneralEnumEstado.ACTIVO.getLetra());
-        //mapParametros.put("proveedor", proveedor);
-        List<ProductoProveedor> resultadoList = getFacade().findByMap(mapParametros);
+        
+        return (ProductoProveedor) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //TODO: Mejorar esta parte para solo obtener productos y no empaques
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("codigoProveedor", codigoProveedor);
+                mapParametros.put("producto.empresa", empresa);
+                mapParametros.put("producto.estado", GeneralEnumEstado.ACTIVO.getLetra());
+                //mapParametros.put("proveedor", proveedor);
+                List<ProductoProveedor> resultadoList = getFacade().findByMap(mapParametros,entityManager);
 
-        if (resultadoList.size() > 0) 
-        {
-            Producto producto=new Producto();
-            ProductoService productoService=new ProductoService();
-            
-            producto=productoService.buscarProductoDefectoCompras(resultadoList.get(0).getProducto());            
-            
-            //Validar si el producto es un ensamble tengo que verificar si el producto original existe y esta activo
-            if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
-            {
-                ProductoPresentacionDetalle productoOriginalPresentacion=producto.buscarPresentacionDetalleProducto();
-                if(productoOriginalPresentacion==null)
-                {
-                    return null;
-                }
-                else
-                {
-                    if(productoOriginalPresentacion.getProductoOriginal()==null)
-                    {
-                        return null;
-                    }
-                    else
-                    {
-                        if(productoOriginalPresentacion.getProductoOriginal().getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO))
-                        {
+                if (resultadoList.size() > 0) {
+                    Producto producto = new Producto();
+                    ProductoService productoService = new ProductoService();
+
+                    producto = productoService.buscarProductoDefectoCompras(resultadoList.get(0).getProducto());
+
+                    //Validar si el producto es un ensamble tengo que verificar si el producto original existe y esta activo
+                    if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
+                        ProductoPresentacionDetalle productoOriginalPresentacion = producto.buscarPresentacionDetalleProducto();
+                        if (productoOriginalPresentacion == null) {
                             return null;
+                        } else {
+                            if (productoOriginalPresentacion.getProductoOriginal() == null) {
+                                return null;
+                            } else {
+                                if (productoOriginalPresentacion.getProductoOriginal().getEstadoEnum().equals(GeneralEnumEstado.ELIMINADO)) {
+                                    return null;
+                                }
+                            }
                         }
                     }
-                }
-            }
-            
-            ProductoProveedor productoProveedor=resultadoList.get(0);
-            productoProveedor.setProducto(producto);
-            
-            return resultadoList.get(0);
-        }
 
-        return null;
+                    ProductoProveedor productoProveedor = resultadoList.get(0);
+                    productoProveedor.setProducto(producto);
+
+                    return resultadoList.get(0);
+                }
+
+                return null;
+            }
+        });
+        
+        
     }
 
     public ProductoProveedor construirSinTransaccion(Producto productoSeleccionado, Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException {

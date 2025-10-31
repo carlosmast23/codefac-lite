@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.BodegaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -57,14 +58,14 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     public Bodega grabar(Bodega entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(entity);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void grabarSinTransaccion(Bodega entity) throws ServicioCodefacException, RemoteException
+    public void grabarSinTransaccion(Bodega entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         //Esta sucursal solo sirve de guia para grabar null
         if (entity.getSucursal().equals(Sucursal.getSucursalPermitirTodos())) 
@@ -91,7 +92,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //Esta sucursal solo sirve de guia para grabar null
                 if(b.getSucursal().equals(Sucursal.getSucursalPermitirTodos()))
@@ -109,7 +110,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     public void eliminar(Bodega b) throws ServicioCodefacException,RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 KardexService kardexService=new KardexService();
                 List<Kardex> kardexResultado=kardexService.buscarPorBodega(b);
                 
@@ -148,10 +149,10 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
         //bodega.getEstado(); //FALTA FILTRAR
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                 mapParametros.put("nombre", nombre);
-                return getFacade().findByMap(mapParametros);
+                return getFacade().findByMap(mapParametros,em);
             }
         });
         
@@ -167,13 +168,13 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Bodega bodega=new Bodega();
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("empresa", empresa);
-                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros);
+                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros,em);
                 
                 /**
                  * Obtener resultado de las bodegas generales
@@ -181,7 +182,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 mapParametros = new HashMap<String, Object>();               
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("empresa",null);
-                resultadoConsulta.addAll(getFacade().findByMap(mapParametros));
+                resultadoConsulta.addAll(getFacade().findByMap(mapParametros,em));
                 return resultadoConsulta;
                 
             }
@@ -193,12 +194,12 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Bodega bodega=new Bodega();
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros);
+                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros,em);
                 
                 return resultadoConsulta;
                 
@@ -211,13 +212,13 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Bodega bodega=new Bodega();
                 Map<String, Object> mapParametros = new HashMap<String, Object>();
                
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("sucursal", sucursal);
-                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros);
+                List<Bodega> resultadoConsulta=getFacade().findByMap(mapParametros,em);
                 
                 /**
                  * Obtener resultado de las bodegas generales
@@ -225,7 +226,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 mapParametros = new HashMap<String, Object>();               
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("empresa",null);
-                resultadoConsulta.addAll(getFacade().findByMap(mapParametros));
+                resultadoConsulta.addAll(getFacade().findByMap(mapParametros,em));
                 return resultadoConsulta;
                 
             }
@@ -247,7 +248,7 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
     {        
         List<Bodega> bodegas=(List<Bodega>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 //Primero busco si exite alguna bodega por sucursal asignada
                 //Bodega b;
                 //b.getTipoBodega();
@@ -256,14 +257,14 @@ public class BodegaService extends ServiceAbstract<Bodega, BodegaFacade> impleme
                 mapParametros.put("sucursal",sucursal);
                 mapParametros.put("tipoBodega",Bodega.TipoBodegaEnum.VENTA.getLetra());
                 
-                List<Bodega> resultado= getFacade().findByMap(mapParametros);
+                List<Bodega> resultado= getFacade().findByMap(mapParametros,em);
                 
                 //Tambien busco bodegas generales si no eneuntra por sucursal
                 mapParametros = new HashMap<String, Object>();
                 mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
                 mapParametros.put("empresa",null);               
                 mapParametros.put("tipoBodega",Bodega.TipoBodegaEnum.VENTA.getLetra());
-                resultado.addAll(getFacade().findByMap(mapParametros));
+                resultado.addAll(getFacade().findByMap(mapParametros,em));
                 return resultado;
             }
         });

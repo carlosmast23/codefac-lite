@@ -42,11 +42,11 @@ public class HerramientasCodefacService extends ServiceAbstract<Object,Herramien
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 for (Factura factura : facturasProcesarList) 
                 {
                     FacturacionService facturacionService=new FacturacionService();
-                    Factura facturaOriginal=facturacionService.buscarPorId(factura.getId());
+                    Factura facturaOriginal=facturacionService.buscarPorId(factura.getId(),entityManager);
                     
                     Logger.getLogger(HerramientasCodefacService.class.getName()).log(Level.WARNING,"Corriendo factura: "+facturaOriginal.getPreimpreso()+" ,ID="+facturaOriginal.getId());
                     //Grabando la nueva factura 

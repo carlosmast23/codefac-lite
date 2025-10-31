@@ -36,7 +36,7 @@ public class AjustarValoresProductos {
         try {
             AbstractFacade.usuarioDb = "root";
             AbstractFacade.claveDb = "1234";
-            AbstractFacade.cargarEntityManager();
+            AbstractFacade.cargarEntityManagerFactory();
 
             ProductoService service=new ProductoService();
             List<Producto> productos=service.obtenerTodos();

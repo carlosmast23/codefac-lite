@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SegmentoProductoSe
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         
     }
     
-    private void validarCodigoEditar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
+    private void validarCodigoEditar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum,EntityManager em) throws RemoteException, ServicioCodefacException
     {
        //validarDatoRepetidoObjectoMantenimiento(objetoMantenimiento);
        
@@ -66,7 +67,7 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
             public Boolean compararCampos(ObjetoMantenimiento dato) {
                 return objetoMantenimiento.getCodigo().equals(dato.getCodigo());
             }
-        });
+        },em);
     }
     
     
@@ -80,7 +81,7 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         validarDatoRepetido(mapParametro);
     }
     
-    private void validar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
+    private void validar(ObjetoMantenimiento objetoMantenimiento,CrudEnum crudEnum,EntityManager em) throws RemoteException, ServicioCodefacException
     {
        validarDatoRepetidoObjectoMantenimiento(objetoMantenimiento);
        
@@ -95,7 +96,7 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
             public Boolean compararCampos(ObjetoMantenimiento dato) {
                 return objetoMantenimiento.getCodigo().equals(dato.getCodigo());
             }
-        });
+        },em);
     }
     
     
@@ -104,16 +105,16 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                validar(entity, CrudEnum.CREAR);
-                grabarSinTransaccion(entity, empresa, usuarioCreacion);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                validar(entity, CrudEnum.CREAR,entityManager);
+                grabarSinTransaccion(entity, empresa, usuarioCreacion,entityManager);
                 
             }
         });
         return entity;
     }
     
-    public void grabarSinTransaccion(ObjetoMantenimiento entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException 
+    public void grabarSinTransaccion(ObjetoMantenimiento entity,Empresa empresa,Usuario usuarioCreacion,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
@@ -128,17 +129,17 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {           
-                validarCodigoEditar(entity, CrudEnum.EDITAR);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {           
+                validarCodigoEditar(entity, CrudEnum.EDITAR,entityManager);
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void editarSinTransaccion(ObjetoMantenimiento entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(ObjetoMantenimiento entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
@@ -148,7 +149,7 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
     public void eliminar(ObjetoMantenimiento entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
@@ -160,27 +161,32 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
     {
         return (List<ObjetoMantenimiento>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParameros=new HashMap<String, Object>();
                 mapParameros.put("empresa", empresa);
                 mapParameros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                return getFacade().findByMap(mapParameros);
+                return getFacade().findByMap(mapParameros,em);
             }
         } );
     }
     
     public ObjetoMantenimiento buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("nombre",nombre);
-        List<ObjetoMantenimiento> resultados=getFacade().findByMap(mapParametros);
-        if(resultados.size()>0)
-        {
-            return resultados.get(0);
-        }
-        return null;
+        return (ObjetoMantenimiento) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("nombre", nombre);
+                List<ObjetoMantenimiento> resultados = getFacade().findByMap(mapParametros,entityManager);
+                if (resultados.size() > 0) {
+                    return resultados.get(0);
+                }
+                return null;
+            }
+        });
+        
     }
     
     public ObjetoMantenimiento buscarPorVIN(Empresa empresa,String vin) throws ServicioCodefacException,java.rmi.RemoteException
@@ -194,12 +200,19 @@ public class ObjetoMantenimientoService extends ServiceAbstract<ObjetoMantenimie
     
     public List<ObjetoMantenimiento> buscarPorPropietario(Empresa empresa,Persona propietario) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("propietario",propietario);
-        List<ObjetoMantenimiento> resultados=getFacade().findByMap(mapParametros);
+        return (List<ObjetoMantenimiento>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                 Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("propietario", propietario);
+                List<ObjetoMantenimiento> resultados = getFacade().findByMap(mapParametros,entityManager);
+
+                return resultados;
+            }
+        });
         
-        return resultados;
+       
     }
 }

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class TipoEstablecimientoService extends ServiceAbstract<TipoEstablecimie
     public TipoEstablecimiento grabar(TipoEstablecimiento entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 validar(entity);
                 
@@ -61,7 +62,7 @@ public class TipoEstablecimientoService extends ServiceAbstract<TipoEstablecimie
     public void editar(TipoEstablecimiento entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 validar(entity);
                 
                 //entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
@@ -74,19 +75,27 @@ public class TipoEstablecimientoService extends ServiceAbstract<TipoEstablecimie
     public void eliminar(TipoEstablecimiento entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);
+                
             }
         });
     }
     
     public List<TipoEstablecimiento> obtenerActivos(OperadorNegocioEnum operadorNegocio) throws ServicioCodefacException, RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("tipo", operadorNegocio.getLetra());
-        return getFacade().findByMap(mapParametros);        
+        return (List<TipoEstablecimiento>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("tipo", operadorNegocio.getLetra());
+                return getFacade().findByMap(mapParametros, entityManager);
+            }
+        });
+        
+      
     }
     
     

@@ -971,7 +971,7 @@ public class Main {
          */
         try {
             
-            AbstractFacade.cargarEntityManager();
+            AbstractFacade.cargarEntityManagerFactory();
             verificarCreacionBaseDatosMysql();
             
         } catch (PersistenceException e) {
@@ -979,7 +979,7 @@ public class Main {
                 System.out.println(e.getMessage());
                 UtilidadesServidor.crearBaseDatos();
                 
-                AbstractFacade.cargarEntityManager();
+                AbstractFacade.cargarEntityManagerFactory();
             } catch (PersistenceException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (PersistenciaDuplicadaException ex) {
@@ -1014,7 +1014,7 @@ public class Main {
     {
         if(AbstractFacade.baseDatosEnum.equals(TipoBaseDatosEnum.MYSQL))
         {
-            EntityManager em=AbstractFacade.entityManager;
+            EntityManager em=AbstractFacade.nuevoEntityManager();
              // Verificar la existencia de tablas
             Query queryTables = em.createNativeQuery(
                 "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'codefac'"

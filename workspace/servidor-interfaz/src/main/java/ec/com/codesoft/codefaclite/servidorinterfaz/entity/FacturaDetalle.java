@@ -41,7 +41,7 @@ import jakarta.persistence.Transient;
 public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements Cloneable{
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "ID", updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //@Column(name = "PRODUCTO_ID")

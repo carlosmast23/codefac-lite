@@ -41,7 +41,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         //Mantenimiento mantenimiento;
         //mantenimiento.getUbicacion();
         String queryStr = " SELECT m FROM Mantenimiento m WHERE M.ubicacion IS NULL ";
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         
         return query.getResultList();
     }
@@ -113,7 +113,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         
         String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr+tallerStr;
         Logger.getLogger(MantenimientoService.class.getName()).log(Level.INFO, queryStr);
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         
         
         //query.setParameter(3,Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());

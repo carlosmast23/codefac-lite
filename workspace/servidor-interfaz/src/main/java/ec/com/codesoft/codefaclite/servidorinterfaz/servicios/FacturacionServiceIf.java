@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -69,8 +70,8 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public void grabarCartera(Factura factura) throws RemoteException, ServicioCodefacException;
     
     public Factura grabarLiquidacionCompra(Factura liquidacionCompra) throws RemoteException,ServicioCodefacException;
-    public ReferenciaDetalleFacturaRespuesta obtenerReferenciaDetalleFactura(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaId) throws java.rmi.RemoteException,ServicioCodefacException;
-    public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws RemoteException, ServicioCodefacException;
+    public ReferenciaDetalleFacturaRespuesta obtenerReferenciaDetalleFactura(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaId,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException;
+    public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas,EntityManager entityManager) throws RemoteException, ServicioCodefacException;
     public Factura editarProforma(Factura proforma) throws RemoteException,ServicioCodefacException;
     public Long obtenerFacturasReporteTamanio(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) throws java.rmi.RemoteException ;
     
@@ -93,5 +94,9 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public Factura editarProforma(Factura proforma,Boolean enviarCorreo,Boolean imprimirSinCodigo,Boolean imprimirUbicacion) throws RemoteException,ServicioCodefacException;
     
     public Factura buscarPorNumeroOrdenActivo(Integer numeroOrden) throws RemoteException,ServicioCodefacException;
+    
+    public ReferenciaDetalleFacturaRespuesta obtenerReferenciaDetalleFactura(TipoDocumentoEnum tipoDocumentoEnum,Long referenciaId) throws java.rmi.RemoteException,ServicioCodefacException;
+    
+    public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws RemoteException, ServicioCodefacException;
     
 }

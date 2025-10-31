@@ -38,6 +38,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCode
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -117,7 +118,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     public void editarNotaCredito(NotaCredito entity) throws ServicioCodefacException,  RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
                    //Validacion para evitar hacer notas de credito al consumidor final lo que no permite el Sri
 
@@ -170,7 +171,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 validacion(notaCredito, CrudEnum.CREAR);
 
@@ -179,7 +180,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
 
                 ComprobantesService servicioComprobante = new ComprobantesService();
-                servicioComprobante.setearSecuencialComprobanteSinTransaccion(notaCredito);
+                servicioComprobante.setearSecuencialComprobanteSinTransaccion(notaCredito,entityManager);
 
                 //notaCredito.setEstado(ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
                 entityManager.persist(notaCredito);
@@ -189,7 +190,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                  * documento de cada detalle
                  */
                 for (NotaCreditoDetalle detalle : notaCredito.getDetalles()) {
-                    anularProcesoNotCredito(detalle);
+                    anularProcesoNotCredito(detalle,entityManager);
 
                 }
 
@@ -210,7 +211,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 }
                 
                 //Actualizar la cartera cuando se hacen notas de credito
-                grabarCarteraSinTransaccion(notaCredito,modoProcesarEnum);
+                grabarCarteraSinTransaccion(notaCredito,modoProcesarEnum,entityManager);
                 
                 FacturacionService facturaService=new FacturacionService();
                 facturaService.agregarDatosParaCajaSession(notaCredito,SignoEnum.NEGATIVO);
@@ -224,23 +225,23 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     
     
     
-    private void grabarCarteraSinTransaccion(NotaCredito notaCredito,ModoProcesarEnum modoProcesarEnum) throws RemoteException, ServicioCodefacException
+    private void grabarCarteraSinTransaccion(NotaCredito notaCredito,ModoProcesarEnum modoProcesarEnum,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Si quiere procesar en modo forzar primero anulo los cruces anteriores        
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null,CrudEnum.CREAR,modoProcesarEnum);
+        carteraService.grabarDocumentoCartera(notaCredito, Cartera.TipoCarteraEnum.CLIENTE,null,CrudEnum.CREAR,modoProcesarEnum,entityManager);
     }
     
-    private void anularRubroEstudiante(Long referenciaId,BigDecimal total) throws RemoteException
+    private void anularRubroEstudiante(Long referenciaId,BigDecimal total,EntityManager entityManager) throws RemoteException
     {
-        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId);
+        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId,entityManager);
         rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
         rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(total));
         entityManager.merge(rubroEstudiante);
     }
     
-    private void anularPresupuesto(Presupuesto presupuestoEliminar) throws RemoteException
+    private void anularPresupuesto(Presupuesto presupuestoEliminar,EntityManager entityManager) throws RemoteException
     {
         //PresupuestoService presupuestoServicio = new PresupuestoService();
         //Presupuesto presupuesto = presupuestoServicio.buscarPorId(referenciaId);
@@ -254,20 +255,20 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
      * @param total
      * @throws RemoteException 
      */
-    public void anularProcesoFactura(FacturaDetalle facturaDetalle) throws RemoteException, ServicioCodefacException
+    public void anularProcesoFactura(FacturaDetalle facturaDetalle,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Anular directamente cuando viene de un presupuesto
         if (facturaDetalle.getFactura().getPresupuestoId() != null) {
-            Presupuesto presupuestoEliminar = presupuestoService.buscarPorId(facturaDetalle.getFactura().getPresupuestoId());
+            Presupuesto presupuestoEliminar = presupuestoService.buscarPorId(facturaDetalle.getFactura().getPresupuestoId(),entityManager);
             facturaDetalle.getFactura().getPresupuestoId();
-            anularPresupuesto(presupuestoEliminar);
+            anularPresupuesto(presupuestoEliminar,entityManager);
         }
         
         //TipoDocumentoEnum tipoDocumento,Long referenciaId,BigDecimal total
         TipoDocumentoEnum tipoDocumentoEnum=facturaDetalle.getTipoDocumentoEnum();
         switch (tipoDocumentoEnum) {
             case ACADEMICO:
-                anularRubroEstudiante(facturaDetalle.getReferenciaId(),facturaDetalle.getTotal());
+                anularRubroEstudiante(facturaDetalle.getReferenciaId(),facturaDetalle.getTotal(),entityManager);
                 break;
 
             /*case PRESUPUESTOS:
@@ -295,7 +296,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         facturaDetalle.getFactura().getPuntoEstablecimiento().toString(),
                         facturaDetalle.getFactura().getSecuencial(),
                         UtilidadesFecha.castDateUtilToSql(facturaDetalle.getFactura().getFechaEmision()),
-                        facturaDetalle.getFactura().getUsuario().getNick()
+                        facturaDetalle.getFactura().getUsuario().getNick(),
+                        entityManager
                 );
                 
                 break;
@@ -319,17 +321,17 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         return bodegaVenta;
     }
     
-    public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle) throws RemoteException, ServicioCodefacException
+    public void anularProcesoNotCredito(NotaCreditoDetalle notaDetalle,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Anular directo cuando viene de un presupuesto
         if (notaDetalle.getNotaCredito().getFactura().getPresupuestoId() != null) {
-            Presupuesto presupuestoEliminar = presupuestoService.buscarPorId(notaDetalle.getNotaCredito().getFactura().getPresupuestoId());
-            anularPresupuesto(presupuestoEliminar);
+            Presupuesto presupuestoEliminar = presupuestoService.buscarPorId(notaDetalle.getNotaCredito().getFactura().getPresupuestoId(),entityManager);
+            anularPresupuesto(presupuestoEliminar,entityManager);
         }
         
         switch (notaDetalle.getTipoDocumentoEnum()) {
             case ACADEMICO:
-                anularRubroEstudiante(notaDetalle.getReferenciaId(),notaDetalle.getTotal());
+                anularRubroEstudiante(notaDetalle.getReferenciaId(),notaDetalle.getTotal(),entityManager);
                 break;
 
             /*case PRESUPUESTOS:
@@ -363,7 +365,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                         notaDetalle.getNotaCredito().getPuntoEstablecimiento().toString(),
                         notaDetalle.getNotaCredito().getSecuencial(),
                         UtilidadesFecha.castDateUtilToSql(notaDetalle.getNotaCredito().getFechaEmision()),
-                        notaDetalle.getNotaCredito().getUsuario().getNick()
+                        notaDetalle.getNotaCredito().getUsuario().getNick(),
+                        entityManager
                 );
                 
                 //Actualizar el costo promedio del kardex generado
@@ -465,14 +468,14 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                    
                     entity.getFactura().setEstadoNotaCredito(Factura.EstadoNotaCreditoEnum.SIN_ANULAR.getEstado());
                     entityManager.merge(entity.getFactura());
                     
                     //entity.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
                     ComprobantesService comprobanteService = new ComprobantesService();
-                    comprobanteService.eliminarComprobanteSinTransaccion(entity);
+                    comprobanteService.eliminarComprobanteSinTransaccion(entity,entityManager);
                     entityManager.merge(entity);
                     
                 }

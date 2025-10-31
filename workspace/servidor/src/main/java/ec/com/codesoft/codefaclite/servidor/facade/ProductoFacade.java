@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import ec.com.codesoft.codefaclite.servidor.service.ProductoService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
@@ -17,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OperadorNegocioEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
@@ -24,6 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jakarta.persistence.Query;
+import java.math.BigDecimal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -43,7 +48,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         //ppd.getProductoEmpaquetado();
         //ppd.getProductoOriginal();
         String queryString = "SELECT DISTINCT pd.presentacionProducto FROM ProductoPresentacionDetalle pd WHERE ( pd.productoEmpaquetado=?1 OR pd.productoOriginal=?1) " ;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, producto);
         
         return query.getResultList();
@@ -55,7 +60,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         //ppd.getProductoEmpaquetado().getEstado();        
         //ppd.getPresentacionProducto()
         String queryString = "SELECT DISTINCT pd FROM ProductoPresentacionDetalle pd WHERE (pd.productoOriginal=?2 and pd.productoEmpaquetado.estado=?3 ) " ;
-        Query query = getEntityManager().createQuery(queryString);        
+        Query query = nuevoEntityManager().createQuery(queryString);        
         query.setParameter(2, producto);
         query.setParameter(3, GeneralEnumEstado.ACTIVO.getEstado());
         
@@ -69,7 +74,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         ProductoPresentacionDetalle ppd;
         //ppd.getPresentacionProducto()
         String queryString = "SELECT DISTINCT pd FROM ProductoPresentacionDetalle pd WHERE pd.presentacionProducto=?1 AND (pd.productoOriginal=?2 )" ;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, presentacion);
         query.setParameter(2, producto);
         
@@ -89,7 +94,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         //ppd.getPresentacionProducto().getNombre();
         //ppd.getPresentacionProducto()
         String queryString = "SELECT DISTINCT pd FROM ProductoPresentacionDetalle pd WHERE pd.presentacionProducto.nombre=?1 AND (pd.productoOriginal=?2 )" ;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, presentacionCodigo);
         query.setParameter(2, producto);
         
@@ -109,7 +114,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         //pa.getProducto()
         
         String queryString = "SELECT DISTINCT pa FROM ProductoActividad pa WHERE pa.producto=?1 " ;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, producto);
         
         return query.getResultList();
@@ -121,7 +126,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         //pcd.getProducto();
         
         String queryString = "SELECT DISTINCT pd FROM ProductoComponenteDetalle pd WHERE pd.producto=?1 " ;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, producto);
         
         return query.getResultList();
@@ -131,7 +136,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
     public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
     {
         String queryString = "SELECT DISTINCT pd FROM ProductoPresentacionDetalle pd WHERE pd.productoEmpaquetado=?1 " ;
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, producto);
         
         List<ProductoPresentacionDetalle> productoList=query.getResultList();
@@ -143,6 +148,45 @@ public class ProductoFacade extends AbstractFacade<Producto>
         
         return null;
     }
+    
+    
+    //TODO: Buscar por Id
+    /*@Deprecated
+    public Producto buscarPorId(Object primaryKey) throws java.rmi.RemoteException
+    {
+        return find(primaryKey);
+    }*/
+    
+    public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException
+    {
+        ProductoPresentacionDetalle presentacionDetalle = productoEmpaqueSecundario.buscarPresentacionDetalleProducto();
+        
+        if(presentacionDetalle==null)
+        {
+            throw new ServicioCodefacException("No se pudo encontrar la presentación principal para el producto: "+productoEmpaqueSecundario.getNombre()+"\n Posible Solución: Volver a REINGRESAR LA COMPRA");
+        }
+        
+        //TODO: Codigo por el momento para encontrar un error que puede dar al querer convertir un empaque en producto normal
+        if (presentacionDetalle.getProductoOriginal().getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
+            String mensajeError = "Error al convertir el Producto:" + presentacionDetalle.getProductoOriginal().getNombre() + " en la presentacion original para poder guardar.\\n Error con id producto original: " + presentacionDetalle.getProductoOriginal().getIdProducto() + " id producto secundario: " + productoEmpaqueSecundario.getIdProducto();
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, mensajeError);
+            throw new ServicioCodefacException(mensajeError);
+
+        }
+        
+        if(presentacionDetalle.getCantidad().compareTo(BigDecimal.ZERO)<=0)
+        {
+            throw new ServicioCodefacException("Error con la PRESENTACION del producto "+presentacionDetalle.getProductoOriginal().getNombre()+" porque tiene una presentacion con una CANTIDAD NO VALIDA");
+        }
+        
+        BigDecimal cantidadEquivalencia = presentacionDetalle.getCantidad();
+        cantidad = cantidad.multiply(cantidadEquivalencia);
+        precioUnitario = (precioUnitario.divide(cantidadEquivalencia, 6, BigDecimal.ROUND_HALF_UP));
+        //Finalmente dejo seleccionado el producto principal para que continue con el proceso
+        ProductoConversionPresentacionRespuesta respuesta=new ProductoConversionPresentacionRespuesta(productoEmpaqueSecundario, presentacionDetalle.getProductoOriginal(), cantidad, precioUnitario);
+        return  respuesta;
+    }
+    
     
     public List<Producto> reporteProductoFacade(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException
     {
@@ -163,7 +207,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         
         String queryString = "SELECT p FROM Producto p WHERE p.estado=?1 "+whereProducto+wherePendienteActualizar ;
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
         
@@ -215,7 +259,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         
         String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 and ( p.tipoProductoCodigo=?7 or p.tipoProductoCodigo=?8 or p.tipoProductoCodigo=?9 ) "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
         {
             query.setParameter(3,empresa);
@@ -276,7 +320,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
     public List<TopProductoRespuesta> topProductosMasVendidosFacade() throws ServicioCodefacException, RemoteException
     {
         String queryString = "SELECT FD.CODIGO_PRINCIPAL,FD.DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD FROM FACTURA_DETALLE FD INNER JOIN FACTURA F ON FD.FACTURA_ID =F.ID INNER JOIN PRODUCTO P ON FD.CODIGO_PRINCIPAL=P.CODIGO_PERSONALIZADO WHERE F.ESTADO <>'E' AND F.ESTADO<>'N' AND F.ESTADO_NOTA_CREDITO='N' AND P.TIPO_PRODUCTO_COD='p' GROUP BY DESCRIPCION,CODIGO_PRINCIPAL ORDER BY SUM(CANTIDAD) DESC" ;
-        Query query=getEntityManager().createNativeQuery(queryString);
+        Query query=nuevoEntityManager().createNativeQuery(queryString);
         //Object resultado= query.getResultList();
         
         List<Object[]> listaResultado= query.getResultList();
@@ -284,5 +328,6 @@ public class ProductoFacade extends AbstractFacade<Producto>
         return TopProductoRespuesta.castList(listaResultado);
         
     }
+    
       
 }

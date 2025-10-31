@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,17 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
     
     public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {
-        return impuestoDetalleFacade.findByMap(map);        
+        try {
+            return (List<ImpuestoDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return impuestoDetalleFacade.findByMap(map,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<ImpuestoDetalle> obtenerIvaVigente() throws java.rmi.RemoteException
@@ -82,11 +93,11 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
     {
         List<ImpuestoDetalle> resultados=(List<ImpuestoDetalle>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String, Object>();
                 mapParametros.put("tarifa",tarifa);
                 mapParametros.put("impuesto.idImpuesto",1); //TODO: Mejorar esta parte para que sea paramtrizada
-                return getFacade().findByMap(mapParametros);
+                return getFacade().findByMap(mapParametros,em);
             }
         });
         
@@ -101,10 +112,10 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
     {
         List<ImpuestoDetalle> resultados=(List<ImpuestoDetalle>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
-            public Object consulta() throws ServicioCodefacException, RemoteException {
+            public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new HashMap<String, Object>();
                 mapParametros.put("codigo",codigo);
-                return getFacade().findByMap(mapParametros);
+                return getFacade().findByMap(mapParametros,em);
             }
         });
         

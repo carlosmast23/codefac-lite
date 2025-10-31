@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -24,6 +25,6 @@ public interface VehiculoServiceIf extends ServiceAbstractIf<Vehiculo> {
     public void eliminar(Vehiculo entity) throws ServicioCodefacException, RemoteException ;    
     public List<Vehiculo> obtenerActivosPorEmpresa(Empresa empresa) throws ServicioCodefacException, RemoteException;
     public Vehiculo buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void grabarSinTransaccion(Vehiculo entity,Empresa empresa,Usuario usuarioCreacion) throws ServicioCodefacException, RemoteException ;
+    public void grabarSinTransaccion(Vehiculo entity,Empresa empresa,Usuario usuarioCreacion,EntityManager entityManager) throws ServicioCodefacException, RemoteException ;
     public List<Vehiculo> buscarPorPropietario(Empresa empresa,Persona propietario) throws ServicioCodefacException,java.rmi.RemoteException;
 }

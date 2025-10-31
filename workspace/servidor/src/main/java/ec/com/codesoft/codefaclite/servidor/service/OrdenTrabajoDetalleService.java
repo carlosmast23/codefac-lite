@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoDetalleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -27,10 +28,18 @@ public class OrdenTrabajoDetalleService extends ServiceAbstract<OrdenTrabajoDeta
     
     public List<OrdenTrabajoDetalle> buscarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo)throws ServicioCodefacException, java.rmi.RemoteException
     {
-        Map<String, Object> parametroMap = new HashMap<String, Object>();
-        parametroMap.put("ordenTrabajo", ordenTrabajo);
-        //parametroMap.put("departamento", departamento);
-        return getFacade().findByMap(parametroMap);
+        return (List<OrdenTrabajoDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
+        {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> parametroMap = new HashMap<String, Object>();
+                parametroMap.put("ordenTrabajo", ordenTrabajo);
+                //parametroMap.put("departamento", departamento);
+                return getFacade().findByMap(parametroMap,entityManager);
+            }
+        });
+        
+        
     }
    
 }

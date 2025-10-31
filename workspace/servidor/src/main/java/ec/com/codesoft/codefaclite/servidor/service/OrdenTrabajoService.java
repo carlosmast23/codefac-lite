@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.FacturaFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.OrdenTrabajoFacade;
@@ -28,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenTrabajoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Date;
@@ -58,9 +60,11 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Deprecated
     @Override
     public void grabarOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, RemoteException {
         try {
+            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
             entityManager.getTransaction().begin(); //Inicio de la transaccion
             entityManager.persist(ordenTrabajo);
             entityManager.getTransaction().commit();
@@ -74,12 +78,12 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         return ordenTrabajoFacade.findAll();
     }
     
-    private void validar(OrdenTrabajo ordenTrabajo,CrudEnum crudEnum) throws RemoteException,ServicioCodefacException
+    private void validar(OrdenTrabajo ordenTrabajo,CrudEnum crudEnum,EntityManager em) throws RemoteException,ServicioCodefacException
     {
         if(crudEnum.equals(CrudEnum.EDITAR))
         {
             //Consultar la orden Original para saber el estado
-            OrdenTrabajo ordenTrabajoTmp=getFacade().find(ordenTrabajo.getId());
+            OrdenTrabajo ordenTrabajoTmp=getFacade().find(ordenTrabajo.getId(),em);
             //OrdenTrabajo ordenTrabajoTmp= buscarPorId(ordenTrabajo.getId());
             if(ordenTrabajoTmp.getEstadoEnum().equals(OrdenTrabajo.EstadoEnum.FINALIZADO))
             {
@@ -90,10 +94,11 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
 
     @Override
     public void editar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {        
-        validar(ordenTrabajo,CrudEnum.EDITAR);
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                
+                validar(ordenTrabajo,CrudEnum.EDITAR,entityManager);
                 entityManager.merge(ordenTrabajo);
                 
                 //si se hizo una modificacion del CLIENTE, se cambia igual a los presupuestos para tener igual los datos en los demas lugares
@@ -120,7 +125,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     public void eliminar(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, java.rmi.RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.ELIMINADO);
                 entityManager.merge(ordenTrabajo);
             }
@@ -138,7 +143,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         
         return (OrdenTrabajo) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
-            public Object transaccion() throws ServicioCodefacException, RemoteException 
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
                 OrdenTrabajo.EstadoEnum estadoEnum = OrdenTrabajo.EstadoEnum.GENERADO;
                 ordenTrabajo.setEstadoEnum(estadoEnum);
@@ -239,7 +244,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
      * Metodo que me permite establecer el estado de la orden dea trabajo segun el estado de los detalles
      * @param ordenTrabajo 
      */
-    public void actualizarEstadoSinTransaccion(OrdenTrabajo ordenTrabajo)
+    public void actualizarEstadoSinTransaccion(OrdenTrabajo ordenTrabajo,EntityManager entityManager)
     {
         //OrdenTrabajo.EstadoEnum estadoEnum=OrdenTrabajo.EstadoEnum.GENERADO;
         
@@ -259,22 +264,29 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     
     public List<OrdenTrabajoDetalle> filtrarDetallesPorEstadoYEmpleado(OrdenTrabajoDetalle.EstadoEnum estadoEnum,Empleado empleado)throws ServicioCodefacException, java.rmi.RemoteException 
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",estadoEnum.getLetra());
-        //mapParametros.put("ordenTrabajo.", empresa);
-        mapParametros.put("empleado",empleado);
+        return (List<OrdenTrabajoDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", estadoEnum.getLetra());
+                //mapParametros.put("ordenTrabajo.", empresa);
+                mapParametros.put("empleado", empleado);
+
+                OrdenTrabajoDetalleFacade facade = new OrdenTrabajoDetalleFacade();
+                List<OrdenTrabajoDetalle> resultados = facade.findByMap(mapParametros,entityManager);
+                return resultados;
+            }
+        });
         
-        OrdenTrabajoDetalleFacade facade=new OrdenTrabajoDetalleFacade();
-        List<OrdenTrabajoDetalle> resultados=facade.findByMap(mapParametros);        
-        return resultados;
+       
     }
     
-    public void terminarDetallesOrdenesTrabajo(Empleado empleado,List<OrdenTrabajoDetalle> detalles) throws ServicioCodefacException, java.rmi.RemoteException 
+    public void terminarDetallesOrdenesTrabajo(Empleado empleado,List<OrdenTrabajoDetalle> detalles,EntityManager entityManager) throws ServicioCodefacException, java.rmi.RemoteException 
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException 
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {                
                 for (OrdenTrabajoDetalle detalle : detalles) 
                 {
@@ -285,13 +297,13 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                 
                 if(detalles.size()>0)
                 {
-                    verificarTerminarOrdenTrabajoSinTransaccion(detalles.get(0).getOrdenTrabajo());
+                    verificarTerminarOrdenTrabajoSinTransaccion(detalles.get(0).getOrdenTrabajo(),entityManager);
                 }
             }
         });
     }
     
-    public void verificarTerminarOrdenTrabajoSinTransaccion(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, RemoteException
+    public void verificarTerminarOrdenTrabajoSinTransaccion(OrdenTrabajo ordenTrabajo,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {       
         Boolean terminadoTodo=true;
         List<OrdenTrabajoDetalle> detalles= ServiceFactory.getFactory().getOrdenDetalleTrabajoServiceIf().buscarPorOrdenTrabajo(ordenTrabajo);

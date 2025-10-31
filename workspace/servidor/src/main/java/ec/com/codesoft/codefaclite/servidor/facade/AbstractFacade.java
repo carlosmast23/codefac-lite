@@ -40,7 +40,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
  */
 public abstract class AbstractFacade<T>
 {
-    public static EntityManager entityManager;
+    public static EntityManagerFactory entityManagerFactory;
     
     /**
      * Datos para setear las variables globales de conexion a la base de datos
@@ -59,10 +59,10 @@ public abstract class AbstractFacade<T>
     }
 
     //protected abstract EntityManager getEntityManager();
-    public EntityManager getEntityManager()
+    public static EntityManager nuevoEntityManager()
     {
         //EntityManagerFactory factory=Persistence.createEntityManagerFactory(namePersistence);
-        return entityManager;
+        return entityManagerFactory.createEntityManager();
     }
 
     //Metodo eliminado porque esta en desuso y puede generar muchos problemas de persistencia
@@ -104,44 +104,45 @@ public abstract class AbstractFacade<T>
      * @param entity 
      */
     public void edit(T entity) {
-        EntityTransaction tx= getEntityManager().getTransaction();
+        EntityTransaction tx= nuevoEntityManager().getTransaction();
         tx.begin();
-        getEntityManager().merge(entity);
+        nuevoEntityManager().merge(entity);
         tx.commit();
     }
 
     public void remove(T entity) {
-        getEntityManager().getTransaction().begin();
-        getEntityManager().remove(getEntityManager().merge(entity));
-        getEntityManager().getTransaction().commit();
+        nuevoEntityManager().getTransaction().begin();
+        nuevoEntityManager().remove(nuevoEntityManager().merge(entity));
+        nuevoEntityManager().getTransaction().commit();
     }
 
-    public T find(Object id) {
-        return getEntityManager().find(entityClass, id);
+    public T find(Object id,EntityManager entityManager) {
+        return entityManager.find(entityClass, id);
     }
 
     public List<T> findAll() {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
-        return getEntityManager().createQuery(cq).getResultList();
+        return nuevoEntityManager().createQuery(cq).getResultList();
     }
 
     public List<T> findRange(int[] range) {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
+        jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
-        jakarta.persistence.Query q = getEntityManager().createQuery(cq);
+        jakarta.persistence.Query q = nuevoEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
         return q.getResultList();
     }
     
-    public List<T> findByMap(Map<String, Object> parametros)
-    {
-        return findByMap(parametros,null);
-
-    }   
     
-    public List<T> findByMap(Map<String, Object> parametros,String orderField)
+    public List<T> findByMap(Map<String, Object> parametros,EntityManager entityManager)
+    {
+        return findByMap(parametros,null,entityManager);
+
+    }
+    
+    public List<T> findByMap(Map<String, Object> parametros,String orderField,EntityManager entityManager)
     {
         String queryString = buildQueryString(entityClass, parametros);
         
@@ -151,7 +152,12 @@ public abstract class AbstractFacade<T>
             queryString += " ORDER BY e." + orderField + (asc ? " ASC" : " DESC");
         }
         
-        Query query=getEntityManager().createQuery(queryString);
+        if(entityManager==null)
+        {
+            entityManager=nuevoEntityManager();
+        }
+        
+        Query query=entityManager.createQuery(queryString);
         
         
         /**
@@ -232,7 +238,7 @@ public abstract class AbstractFacade<T>
 		return query;
 	}
     
-    public static void cargarEntityManager() throws PersistenceException,PersistenciaDuplicadaException
+    public static void cargarEntityManagerFactory() throws PersistenceException,PersistenciaDuplicadaException
     {
         try 
         {
@@ -256,7 +262,7 @@ public abstract class AbstractFacade<T>
             properties.put("jakarta.persistence.jdbc.user", AbstractFacade.usuarioDb);
             properties.put("jakarta.persistence.jdbc.password", AbstractFacade.claveDb);
             
-            entityManager=Persistence.createEntityManagerFactory(namePersistence,properties).createEntityManager();
+            entityManagerFactory=Persistence.createEntityManagerFactory(namePersistence,properties);
         }
         catch(PersistenceException e)
         {
@@ -300,8 +306,10 @@ public abstract class AbstractFacade<T>
     {
         String queryString="VALUES SYSCS_UTIL.SYSCS_CHECK_TABLE ('LAGOS' ,'?1')";
         queryString=queryString.replace("?1",nombreTabla);
-               
-        Query query = entityManager.createNativeQuery(queryString);
+        
+        
+      
+        Query query = nuevoEntityManager().createNativeQuery(queryString);
         List resultado=query.getResultList();        
         System.out.println("resultado:"+resultado);
     }
@@ -324,11 +332,11 @@ public abstract class AbstractFacade<T>
         
         if(tipoQueryEnum==null || tipoQueryEnum.equals(TipoQueryEnum.JPQL))
         {
-            query=entityManager.createQuery(queryStr);
+            query=nuevoEntityManager().createQuery(queryStr);
         }
         else if(tipoQueryEnum.equals(tipoQueryEnum.NATIVO))
         {
-            query=entityManager.createNativeQuery(queryStr);
+            query=nuevoEntityManager().createNativeQuery(queryStr);
         }
                 
         //Agregar los parametros del map al query
@@ -345,7 +353,7 @@ public abstract class AbstractFacade<T>
     
     
     public static Long findCountStaticDialog(String queryStr,Map<Integer,Object> map) {
-        Query query = entityManager.createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         //Agregar los parametros del map al query
         for (Map.Entry<Integer, Object> entry : map.entrySet()) {
             Integer key = entry.getKey();
@@ -363,7 +371,7 @@ public abstract class AbstractFacade<T>
     public static void detachEntity(Object obj)
     {
         //entityManager.contains(obj) para saber si el dato es administrable
-        entityManager.detach(obj);
+        nuevoEntityManager().detach(obj);
     }
     
     /**
@@ -374,7 +382,7 @@ public abstract class AbstractFacade<T>
     //TODO implementar metodo cuando tenga referencias recursivas
     public static void detachRecursive(Object obj)
     {
-        entityManager.detach(obj);
+        nuevoEntityManager().detach(obj);
         Method[] metodos= obj.getClass().getMethods();
         for (Method metodo : metodos) {
             //Verifica que el tipo de dato sea una lista
@@ -414,7 +422,7 @@ public abstract class AbstractFacade<T>
         queryString=queryString.replace("?ID",nombrePK);
         queryString=queryString.replace("?NOMBRE_TABLA",nombreTabla);
                 
-        Query query = entityManager.createNativeQuery(queryString);
+        Query query = nuevoEntityManager().createNativeQuery(queryString);
         
         List resultados=query.getResultList();
         
@@ -435,7 +443,7 @@ public abstract class AbstractFacade<T>
     
     public static EntityTransaction crearTransaccion()
     {
-        return entityManager.getTransaction();
+        return nuevoEntityManager().getTransaction();
     }
     
     

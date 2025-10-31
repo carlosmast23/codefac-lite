@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service.pos;
 
 import ec.com.codesoft.codefaclite.servidor.facade.pos.CajaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -15,10 +16,13 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefacInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +41,7 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
     public Caja grabar(Caja entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 if(entity.getPuntoEmision() == null)
                 {
                     throw new ServicioCodefacException("No existe un punto de emisión seleccionado");
@@ -59,7 +63,7 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
     public void eliminar(Caja entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 CajaEnum estado = CajaEnum.ELIMINADO;
                 entity.setEstadoEnum(estado);
                 entityManager.merge(entity);
@@ -75,11 +79,23 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
     @Override
     public List<Caja> buscarCajasPorSucursal(SessionCodefacInterface session)
     {
-        Map<String, Object> mapParametros = new HashMap<>();
-        mapParametros.put("sucursal", session.getSucursal());
-        mapParametros.put("estado", CajaEnum.ACTIVO.getEstado());
-        List<Caja> cajas = getFacade().findByMap(mapParametros);
+        
+        try {
+            return (List<Caja>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<>();
+                    mapParametros.put("sucursal", session.getSucursal());
+                    mapParametros.put("estado", CajaEnum.ACTIVO.getEstado());
+                    List<Caja> cajas = getFacade().findByMap(mapParametros,entityManager);
 
-        return (cajas.size() > 0)? cajas : null;    
+                    return (cajas.size() > 0) ? cajas : null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
     }
 }

@@ -39,7 +39,7 @@ public class DescuentoFacade extends AbstractFacade<Descuento>{
         //dpd.getDescuento().getEstado();
         //dpd.getDescuento().getFechaFin();
         String queryStr=" SELECT d FROM DescuentoProductoDetalle d WHERE d.producto=?1 AND d.descuento.estado=?2 AND ?3>=d.descuento.fechaInicio AND ?3<=d.descuento.fechaFin ";
-        Query query=getEntityManager().createQuery(queryStr);
+        Query query=nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1, producto);
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3, UtilidadesFecha.getFechaHoraHoy());
@@ -54,7 +54,7 @@ public class DescuentoFacade extends AbstractFacade<Descuento>{
         //dpd.getDescuento().getEstado();
         //dpd.getDescuento().getFechaFin();
         String queryStr=" SELECT d FROM DescuentoProductoDetalle d WHERE d.producto.idProducto=?1 AND d.descuento.estado=?2 AND ?3>=d.descuento.fechaInicio AND ?3<=d.descuento.fechaFin ";
-        Query query=getEntityManager().createQuery(queryStr);
+        Query query=nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1, productoId);
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3, UtilidadesFecha.getFechaHoraHoy());

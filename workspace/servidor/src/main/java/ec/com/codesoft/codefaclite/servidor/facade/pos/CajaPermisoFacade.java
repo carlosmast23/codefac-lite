@@ -34,7 +34,7 @@ public class CajaPermisoFacade extends AbstractFacade<CajaPermiso>
         {
             String queryString = "Select distinct(cp.usuario) from CajaPermiso cp where cp.caja = ?1 and cp.caja.sucursal = ?2 and cp.estado = ?3";
 
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1, caja);
             query.setParameter(2, sucursal);
             query.setParameter(3, GeneralEnumEstado.ACTIVO.getEstado());

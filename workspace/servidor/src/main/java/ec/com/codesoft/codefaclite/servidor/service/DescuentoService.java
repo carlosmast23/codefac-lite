@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoCondicion
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.DescuentoSeviceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.LoteSeviceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
@@ -83,7 +84,7 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 setearDatosDefecto(entity, empresa);
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 
@@ -145,16 +146,16 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 //setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public void editarSinTransaccion(Descuento entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(Descuento entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         List<DescuentoCondicionPrecio> descuentoCondicionPrecioList=entity.getCondicionPrecioList();
         List<DescuentoProductoDetalle> descuentoProductoDetalleList=entity.getProductoList();
@@ -188,8 +189,8 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
             
         }
         
-        eliminarDetallesDescuentoCondicion(entity);
-        eliminarDetallesProducto(entity);
+        eliminarDetallesDescuentoCondicion(entity,entityManager);
+        eliminarDetallesProducto(entity,entityManager);
         entityManager.flush();
                
                 
@@ -199,7 +200,7 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         
     }
     
-    private void eliminarDetallesDescuentoCondicion(Descuento entity) throws RemoteException, ServicioCodefacException
+    private void eliminarDetallesDescuentoCondicion(Descuento entity,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         DescuentoCondicionPrecioServiceIf  descuentoCondicionPrecioServiceIf= ServiceFactory.getFactory().getDescuentoCondicionPrecioServiceIf();
         List<DescuentoCondicionPrecio> originalList= descuentoCondicionPrecioServiceIf.consultarPorDescuento(entity);
@@ -219,7 +220,7 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         
     }
     
-    private void eliminarDetallesProducto(Descuento entity) throws RemoteException, ServicioCodefacException
+    private void eliminarDetallesProducto(Descuento entity,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         List<DescuentoProductoDetalle> originalList= ServiceFactory.getFactory().getDescuentoProductoDetalleServiceIf().consultarPorDescuento(entity);
         
@@ -244,7 +245,7 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
     public void eliminar(Descuento entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entity.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
                 entityManager.merge(entity);

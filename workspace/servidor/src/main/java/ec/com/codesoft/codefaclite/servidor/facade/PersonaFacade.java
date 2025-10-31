@@ -50,7 +50,7 @@ public class PersonaFacade extends AbstractFacade<Persona>
         //persona.getEmpresa();
         ////persona.getTipo();
         String queryString = "SELECT p FROM Persona p WHERE (p.tipo=?1 or p.tipo=?2 ) and p.estado=?3 and p.empresa=?4";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         
         query.setParameter(1,OperadorNegocioEnum.AMBOS.getLetra());
         query.setParameter(2,tipoEnum.getLetra());

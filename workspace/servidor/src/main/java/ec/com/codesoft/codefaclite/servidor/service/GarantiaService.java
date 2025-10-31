@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.GarantiaServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 
 /**
@@ -39,7 +40,7 @@ public class GarantiaService extends ServiceAbstract<Garantia,GarantiaFacade> im
         
     }
     
-    public void editarSinTransaccion(Garantia entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(Garantia entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);
@@ -50,7 +51,7 @@ public class GarantiaService extends ServiceAbstract<Garantia,GarantiaFacade> im
 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entity.setEstadoEnum(GeneralEnumEstado.ACTIVO);
 
                 setDatosAuditoria(entity, usuarioCreacion, CrudEnum.CREAR);
@@ -68,10 +69,10 @@ public class GarantiaService extends ServiceAbstract<Garantia,GarantiaFacade> im
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 setDatosAuditoria(entity, usuarioCreacion, CrudEnum.EDITAR);
                 //setearDatosGrabar(entity, empresa, CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;

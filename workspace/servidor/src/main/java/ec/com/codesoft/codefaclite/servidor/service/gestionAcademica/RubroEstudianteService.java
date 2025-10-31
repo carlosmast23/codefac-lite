@@ -5,8 +5,10 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.RubroEstudianteFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.DescuentoAcademico;
@@ -55,6 +57,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
     public void eliminar(RubroEstudiante entity) throws java.rmi.RemoteException
     {        
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
@@ -64,11 +67,22 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     
     public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estudianteInscrito",estudianteInscrito);
-        mapParametros.put("rubroNivel.catalogoProducto.tipoCod",CatalogoProducto.TipoEnum.MATRICULA.getCodigo());
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+        try {
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estudianteInscrito", estudianteInscrito);
+                    mapParametros.put("rubroNivel.catalogoProducto.tipoCod", CatalogoProducto.TipoEnum.MATRICULA.getCodigo());
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    return getFacade().findByMap(mapParametros,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
@@ -91,6 +105,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
@@ -108,7 +123,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException {
                 try {
                     RubrosNivel rubroNivel=rubroPlantillaMes.getRubroNivel();
                     
@@ -167,7 +182,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 /**
                  * =============================================================
                  *      CALCULAR EL TEMA DE PORCENTAJES DE DESCUENTOS
@@ -311,7 +326,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() {
+                public void transaccion(EntityManager entityManager) {
                     for (RubroEstudiante rubroEstudiante : rubroEstudiantes) {                    
                         entityManager.merge(rubroEstudiante);
                     }
@@ -327,7 +342,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //TODO: Agregar validacion para evitar ingresar rubros de estudiantes duplicados
                 
@@ -353,6 +368,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
@@ -396,22 +412,38 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
     
     public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivel(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {
-        Map<String, Object> mapParametro = new HashMap<String, Object>();
-        mapParametro.put("estudianteInscrito", estudianteInscrito);
-        mapParametro.put("rubroNivel", rubroNivel);
+        
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                        
+                Map<String, Object> mapParametro = new HashMap<String, Object>();
+                mapParametro.put("estudianteInscrito", estudianteInscrito);
+                mapParametro.put("rubroNivel", rubroNivel);
 
-        return getFacade().findByMap(mapParametro);
+                return getFacade().findByMap(mapParametro,entityManager);
+            }
+        });
+
     }
     
     public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivelActivos(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {
-        //RubroEstudiante R;
-        //R.getEstadoEnum()
-        Map<String, Object> mapParametro = new HashMap<String, Object>();
-        mapParametro.put("estudianteInscrito", estudianteInscrito);
-        mapParametro.put("rubroNivel", rubroNivel);
-        mapParametro.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
+        
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //RubroEstudiante R;
+                //R.getEstadoEnum()
+                Map<String, Object> mapParametro = new HashMap<String, Object>();
+                mapParametro.put("estudianteInscrito", estudianteInscrito);
+                mapParametro.put("rubroNivel", rubroNivel);
+                mapParametro.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
 
-        return getFacade().findByMap(mapParametro);
+                return getFacade().findByMap(mapParametro,entityManager);
+            }
+        });
+
+
     }
 
 }

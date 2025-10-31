@@ -38,7 +38,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         estudianteInscrito.getNivelAcademico();
         String queryString = "SELECT count(1) FROM EstudianteInscrito u WHERE u.estado=?1 and u.estudiante=?2 ";
 
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, estudiante);
         return (Long) query.getSingleResult();
@@ -51,7 +51,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         estudianteInscrito.getNivelAcademico();
         String queryString="SELECT count(1) FROM EstudianteInscrito u WHERE u.estado=?1 and u.nivelAcademico=?2 ";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, nivelAcademico);
         return (Long) query.getSingleResult();
@@ -84,7 +84,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
             queryString+=" order by u.nivelAcademico.nivel.orden asc,u.nivelAcademico, u.estudiante.apellidos asc,u.estudiante.nombres asc";
             
             System.out.println(queryString);
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
             
             if(periodo!=null)
@@ -129,7 +129,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
         System.out.println(queryString);
         //getEntityManager().createNativeQuery(queryString)
-        Query query = getEntityManager().createNativeQuery(queryString);
+        Query query = nuevoEntityManager().createNativeQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3, GeneralEnumEstado.ACTIVO.getEstado());
@@ -166,7 +166,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
         String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?1  " + wherePeriodo +" ORDER BY u.nivelAcademico.nivel.orden asc ,u.nivelAcademico.nombre, u.estudiante.apellidos , u.estudiante.nombres ";
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
          
         if(nivel!=null)

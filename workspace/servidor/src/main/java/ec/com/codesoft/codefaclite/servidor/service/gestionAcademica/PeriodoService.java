@@ -7,12 +7,14 @@ package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.PeriodoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -36,16 +38,26 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     
     public Periodo buscarPorNombreyEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("nombre",nombre);
-        mapParametros.put("estado",estado.getEstado());
-        
-        List<Periodo> periodos=getFacade().findByMap(mapParametros);
-        if(periodos.size()>0)
-        {
-            return periodos.get(0);
+        try {
+            return (Periodo) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nombre", nombre);
+                    mapParametros.put("estado", estado.getEstado());
+
+                    List<Periodo> periodos = getFacade().findByMap(mapParametros,entityManager);
+                    if (periodos.size() > 0) {
+                        return periodos.get(0);
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PeriodoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+
     }
 
     /*
@@ -64,22 +76,43 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     
     public List<Periodo> obtenerPeriodoActivo() throws RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Periodo> periodos= getFacade().findByMap(mapParametros);
-        return periodos;
+        try {
+            return (List<Periodo>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    List<Periodo> periodos = getFacade().findByMap(mapParametros,entityManager);
+                    return periodos;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PeriodoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
     }
     
     public Periodo obtenerUnicoPeriodoActivo() throws RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Periodo> periodos= getFacade().findByMap(mapParametros);
-        if(periodos.size()>0)
-        {
-            return periodos.get(0);
+        try {
+            return (Periodo) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    List<Periodo> periodos = getFacade().findByMap(mapParametros,entityManager);
+                    if (periodos.size() > 0) {
+                        return periodos.get(0);
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PeriodoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+
     }
     
     
@@ -88,7 +121,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 List<Periodo> periodos=obtenerPeriodosSinEliminar();
                 for (Periodo periodo : periodos) 
                 {

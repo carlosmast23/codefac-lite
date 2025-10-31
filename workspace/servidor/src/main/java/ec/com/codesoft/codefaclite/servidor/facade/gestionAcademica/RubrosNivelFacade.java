@@ -55,7 +55,7 @@ public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
         //Une los querys parciales y genera uno total
         stringQuery += stringQueryMeses;
 
-        Query query = getEntityManager().createQuery(stringQuery);
+        Query query = nuevoEntityManager().createQuery(stringQuery);
         query.setParameter(1, catalogoProducto);
         query.setParameter(2, periodo);
 

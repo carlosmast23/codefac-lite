@@ -83,14 +83,15 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
 
     //TODO: Verificar porque no esta funcionando este metodo
     public Object mergeEntity(Object entity) throws java.rmi.RemoteException {
-        return AbstractFacade.entityManager.merge(entity);
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+        return entityManager.merge(entity);
     }
 
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map,TipoQueryEnum tipoQueryEnum, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
         try {
             return (List<Object>) ServiceAbstract.ejecutarConsultaStatic(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     return AbstractFacade.findStaticDialog(query, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
                 }
             });
@@ -575,7 +576,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         return utilidadFacade.obtenerCodigoMaximoPorId(nombreTabla, nombreCampoPk);
     }
     
-    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla) throws RemoteException,ServicioCodefacException
+    public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla,EntityManager entityManager) throws RemoteException,ServicioCodefacException
     {
        // final String SEPARADOR_CODIGO="-";
         
@@ -595,7 +596,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
         String prefijo=UtilidadesCodigos.generarPrefijo(codigoEmpresa, codigoSucursal, codigoDocumento,ParametrosSistemaCodefac.CARACTER_SEPARACION_CODIGO);
         
         UtilidadFacade utilidadFacade=new UtilidadFacade();
-        Integer numeracionNueva=utilidadFacade.obtenerCodigoMaximo(prefijo, nombreTabla);
+        Integer numeracionNueva=utilidadFacade.obtenerCodigoMaximo(prefijo, nombreTabla,entityManager);
         return UtilidadesCodigos.generarFormatoCodigo(prefijo,numeracionNueva,ParametrosSistemaCodefac.TAMANIO_CODIGOS);
         
     }

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SucursalServiceIf;
+import jakarta.persistence.EntityManager;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -35,14 +36,14 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     public Sucursal grabar(Sucursal entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(entity);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
     }
     
-    public Sucursal grabarSinTransaccion(Sucursal entity) throws ServicioCodefacException, RemoteException {
+    public Sucursal grabarSinTransaccion(Sucursal entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException {
         entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         entityManager.persist(entity);
         return entity;
@@ -69,13 +70,19 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     @Override
     public List<Sucursal> consultarActivosPorEmpresa(Empresa empresa)  throws ServicioCodefacException, RemoteException
     {
-        //Sucursal sucursal;
-        //sucursal.getEmpresa();
-        //sucursal.getEstado();
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);        
+        return (List<Sucursal>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //Sucursal sucursal;
+                //sucursal.getEmpresa();
+                //sucursal.getEstado();
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
+        
     }
 
     @Override
@@ -83,7 +90,7 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                     entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(entity);
                 }
@@ -95,35 +102,46 @@ public class SucursalService extends ServiceAbstract<Sucursal, SucursalFacade> i
     
     @Override
     public Sucursal obtenerPorCodigo(Integer codigo) throws ServicioCodefacException, RemoteException {
-       Map<String,Object> mapParametros=new HashMap<String,Object>();
-       //Sucursal sucursal;
-       //sucursal.getCodigoSucursal()
-       mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-       mapParametros.put("codigoSucursal",codigo);
-       List<Sucursal> sucursales=getFacade().findByMap(mapParametros);
-       if(sucursales.size()>0)
-       {
-            return sucursales.get(0);
-       }
-       return null;
+        
+        return (Sucursal) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //Sucursal sucursal;
+                //sucursal.getCodigoSucursal()
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("codigoSucursal", codigo);
+                List<Sucursal> sucursales = getFacade().findByMap(mapParametros,entityManager);
+                if (sucursales.size() > 0) {
+                    return sucursales.get(0);
+                }
+                return null;
+            }
+        });
+      
     }
     
     //TODO: Cambiar nombre por busca por empresa no por sucursal
     public Sucursal obtenerMatrizPorSucursal(Empresa empresa) throws ServicioCodefacException, RemoteException
     {
-       Map<String,Object> mapParametros=new HashMap<String,Object>();
-       //Sucursal sucursal;
-       //sucursal.getT
-       mapParametros.put("empresa",empresa);
-       mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-       mapParametros.put("tipo",Sucursal.TipoSucursalEnum.MATRIZ.getCodigo());
-       List<Sucursal> sucursales=getFacade().findByMap(mapParametros);
+        return (Sucursal) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                //Sucursal sucursal;
+                //sucursal.getT
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("tipo", Sucursal.TipoSucursalEnum.MATRIZ.getCodigo());
+                List<Sucursal> sucursales = getFacade().findByMap(mapParametros,entityManager);
+
+                if (sucursales.size() > 0) {
+                    return sucursales.get(0);
+                }
+                return null;
+            }
+        });
        
-       if(sucursales.size()>0)
-       {
-           return sucursales.get(0);
-       }
-       return null;
     }
     
     

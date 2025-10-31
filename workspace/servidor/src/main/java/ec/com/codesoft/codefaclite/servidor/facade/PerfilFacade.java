@@ -33,7 +33,7 @@ public class PerfilFacade extends AbstractFacade<Perfil>{
             //"SELECT c1, c2 FROM Country c1 INNER JOIN c1.neighbors c2";
             
             String queryString = "SELECT p FROM PerfilUsuario pu INNER JOIN pu.perfil p WHERE pu.usuario=?1";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1,usuario);
             return (List<Perfil>) query.getResultList();
         }

@@ -80,7 +80,7 @@ public class TestPruebaRMI {
             //try {
             AbstractFacade.usuarioDb="root";
             AbstractFacade.claveDb="1234";
-            AbstractFacade.cargarEntityManager();
+            AbstractFacade.cargarEntityManagerFactory();
             //PersonaServiceIf servicioIf;
             /*
             Map<Class,Class> mapRecursos=new HashMap<Class, Class>();

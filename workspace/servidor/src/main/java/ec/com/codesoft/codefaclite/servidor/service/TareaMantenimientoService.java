@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TareaMantenimientoServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +34,18 @@ public class TareaMantenimientoService extends ServiceAbstract<TareaMantenimient
     //TODO: Terminar de programar para que salgan todos los estados menos el eliminado
     public List<TareaMantenimiento> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException 
     {
+        return (List<TareaMantenimiento>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                 Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                return getFacade().findByMap(mapParametros,entityManager);
+            }
+        });
         //TareaMantenimiento mesa;
         
         //mesa.getEstadoEnum();
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
+       
     }
     
     private void validarGrabar(TareaMantenimiento entidad,CrudEnum crudEnum) throws ServicioCodefacException
@@ -55,7 +62,7 @@ public class TareaMantenimientoService extends ServiceAbstract<TareaMantenimient
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException 
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
                 mesa.setEstadoEnum(GeneralEnumEstado.ACTIVO);
                 setDatosAuditoria(mesa,usuarioCreacion,CrudEnum.CREAR);
@@ -73,10 +80,10 @@ public class TareaMantenimientoService extends ServiceAbstract<TareaMantenimient
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                                
                 setDatosAuditoria(entity,usuarioCreacion,CrudEnum.EDITAR);
                 //setearDatosGrabar(entity, empresa,CrudEnum.EDITAR);
-                editarSinTransaccion(entity);
+                editarSinTransaccion(entity,entityManager);
             }
         });
         return entity;
@@ -86,7 +93,7 @@ public class TareaMantenimientoService extends ServiceAbstract<TareaMantenimient
     public void eliminar(TareaMantenimiento entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException 
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
                 //TODO: Agregar validacion para solo eliminar los lotes si no tiene ningun saldo disponible
                 entityManager.merge(entity);
@@ -94,7 +101,7 @@ public class TareaMantenimientoService extends ServiceAbstract<TareaMantenimient
         });
     }
 
-    public void editarSinTransaccion(TareaMantenimiento entity) throws ServicioCodefacException, RemoteException 
+    public void editarSinTransaccion(TareaMantenimiento entity,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
     {
         validarGrabar(entity, CrudEnum.EDITAR);
         entityManager.merge(entity);

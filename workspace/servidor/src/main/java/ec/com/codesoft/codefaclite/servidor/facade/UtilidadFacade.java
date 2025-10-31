@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 
@@ -26,13 +27,13 @@ public class UtilidadFacade extends AbstractFacade<Object>
      * @param nombreTabla
      * @return 
      */
-    public Integer obtenerCodigoMaximo(String prefijo,String nombreTabla)
+    public Integer obtenerCodigoMaximo(String prefijo,String nombreTabla,EntityManager entityManager)
     {
         //String query=" Select ";
         String queryString = "SELECT MAX(u.codigo) FROM :nombreTabla u WHERE u.codigo LIKE ?1 ";
         queryString=queryString.replace(":nombreTabla",nombreTabla);
         
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         query.setParameter(1,prefijo+"%");
         
         String codigo=null;
@@ -71,7 +72,7 @@ public class UtilidadFacade extends AbstractFacade<Object>
         queryString=queryString.replace(":nombreCampo",nombreCampoPk);
         queryString=queryString.replace(":nombreTabla",nombreTabla);
         
-        Query query = getEntityManager().createNativeQuery(queryString);
+        Query query = nuevoEntityManager().createNativeQuery(queryString);
         
         Object resultado=null;
         try

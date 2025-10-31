@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import static ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade.nuevoEntityManager;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -22,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefa
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import jakarta.persistence.Entity;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
@@ -50,16 +52,20 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     
     protected AbstractFacade<Entity> facade;
-    protected EntityManager entityManager;
+    //protected EntityManager entityManager;
     
     /**
      * TODO: Variable temporal solo para hacer aritificios para las clases internas
      */
     public Object tmp;
+    
+    ///Variables globales que me deberia servir para todas las instancias
+    //TODO: Revisar esta solución a futuro
+    public static Boolean CARTERA_ACTIVA=null;
 
     public ServiceAbstract() throws RemoteException {
         super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
-        this.entityManager=AbstractFacade.entityManager;
+        //this.entityManager=AbstractFacade.entityManager;
     }
     
     /**
@@ -67,7 +73,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      */
     public EntityTransaction getTransaccion()
     {
-        return entityManager.getTransaction();
+        return AbstractFacade.nuevoEntityManager().getTransaction();
     }
  
     public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
@@ -75,7 +81,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
         try {
             this.facade =(AbstractFacade<Entity>) clase.newInstance();
-            this.entityManager=AbstractFacade.entityManager;
+            //this.entityManager=AbstractFacade.entityManager;
         } catch (InstantiationException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -89,7 +95,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         try {
             return (List<Entity>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                     return facade.findAll();
                 }
             });
@@ -103,14 +109,14 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                entityManager.persist(entity);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                AbstractFacade.nuevoEntityManager().persist(entity);
             }
         });
         return entity;
     }
    
-    public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException
+    public Entity buscarPorId(Object primaryKey,EntityManager entityManager) throws java.rmi.RemoteException
     {
         //Cuando manden un valor que es null que genere un error
         if(primaryKey==null)
@@ -121,8 +127,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         try {
             return (Entity) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
-                public Object consulta() throws ServicioCodefacException, RemoteException {
-                    return facade.find(primaryKey);
+                public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
+                    return facade.find(primaryKey,em);
                 }
             });
         } catch (ServicioCodefacException ex) {
@@ -132,24 +138,44 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         
     }
     
+    public Entity buscarPorId(Object primaryKey) throws java.rmi.RemoteException
+    {
+        try {
+            return (Entity) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return buscarPorId(primaryKey,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public void editar(Entity entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                entityManager.merge(entity);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                AbstractFacade.nuevoEntityManager().merge(entity);
             }
         });
     }
     
     public void eliminar(Entity entity) throws ServicioCodefacException, java.rmi.RemoteException 
     {
-        this.facade.remove(entity);
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                entityManager.remove(entity);
+            }
+        });        
     }
     
-    public List<Entity> obtenerPorMap(Map<String,Object> parametros) throws ServicioCodefacException, java.rmi.RemoteException 
+    public List<Entity> obtenerPorMap(Map<String,Object> parametros,EntityManager entityManager) throws ServicioCodefacException, java.rmi.RemoteException 
     {
-        return this.facade.findByMap(parametros);
+        return this.facade.findByMap(parametros,entityManager);
     }
     
     protected Object ejecutarConsulta(MetodoInterfaceConsulta interfaz) throws ServicioCodefacException
@@ -196,7 +222,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     public static Object ejecutarConsultaStatic(MetodoInterfaceConsulta interfaz) throws ServicioCodefacException
     {
         try {
-            return interfaz.consulta();
+            EntityManager em=AbstractFacade.nuevoEntityManager();
+            return interfaz.consulta(em);
         } catch (RemoteException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
@@ -237,8 +264,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     {
         return ejecutarTransaccionGenerico(new TransaccionIf() {
             @Override
-            public Object transaccionGenerica() throws ServicioCodefacException, RemoteException {
-                return interfaz.transaccion();
+            public Object transaccionGenerica(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return interfaz.transaccion(entityManager);
             }
         });
     }
@@ -251,13 +278,15 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      */
     protected void ejecutarTransaccion(MetodoInterfaceTransaccion interfaz) throws ServicioCodefacException
     {
+        //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         ejecutarTransaccionGenerico(new TransaccionIf() {
             @Override
-            public Object transaccionGenerica() throws ServicioCodefacException, RemoteException 
+            public Object transaccionGenerica(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
                 try
                 {
-                    interfaz.transaccion();                
+                    
+                    interfaz.transaccion(entityManager);                
                 }
                 catch(ServicioCodefacException ex)
                 {
@@ -275,7 +304,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     private Object ejecutarTransaccionGenerico(TransaccionIf interfaz) throws ServicioCodefacException
     {
-        
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion = entityManager.getTransaction();
         Object resultadoTransaccion=null;
         
@@ -317,7 +346,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         try {        
             //si no hay problema de transacciones anteriones inicio la NUEVA TRANSACCION
             transaccion.begin();
-            resultadoTransaccion=interfaz.transaccionGenerica();
+            resultadoTransaccion=interfaz.transaccionGenerica(entityManager);
             //Agrego un flush para enviar los datos directamente a la base de datos, y evitar datos por tener en memoria
             entityManager.flush();
             transaccion.commit();
@@ -402,6 +431,16 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             throw new ServicioCodefacException(e.getMessage());
             //throw e;
         }
+        finally {
+            // SIEMPRE cerrar el EM
+            if (entityManager.isOpen()) {
+                try {
+                    entityManager.close();
+                } catch (Exception closeEx) {
+                    Logger.getLogger(ServiceAbstract.class.getName()).log(Level.WARNING, "Error cerrando EntityManager", closeEx);
+                }
+            }
+        }
         return resultadoTransaccion;
         
     }
@@ -432,7 +471,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     
     public interface  TransaccionIf
     {
-        public Object transaccionGenerica() throws ServicioCodefacException,RemoteException;
+        public Object transaccionGenerica(EntityManager entityManager) throws ServicioCodefacException,RemoteException;
     }
     
     
@@ -469,7 +508,8 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     {
         //Map<String,Object> mapParametros=new HashMap<String,Object>();
         //mapParametros.put(campo,datoComparacion);
-        List resultadoList=obtenerPorMap(mapParametros);        
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+        List resultadoList=obtenerPorMap(mapParametros,entityManager);        
         if(resultadoList.size()>0)
         {            
             throw new ServicioCodefacException(MensajeCodefacSistema.ErrorValidación.ERROR_DATO_REPETIDO.mensaje);
@@ -499,7 +539,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         
     }
     
-    public void eliminarDetalles(List listaOriginal,List listaModificada)
+    public void eliminarDetalles(List listaOriginal,List listaModificada,EntityManager em)
     {
         List eliminarList=new ArrayList();
         
@@ -514,8 +554,9 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         
         for (Object object : eliminarList) 
         {
-            Object objectTmp=entityManager.merge(object);
-            entityManager.remove(objectTmp);
+            //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+            Object objectTmp=em.merge(object);
+            em.remove(objectTmp);
         }
         
     }
@@ -526,7 +567,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    public void validarEdicionCampo(Empresa empresa,CrudEnum estadoEnum,ValidarEdicionCampoIf validarEdicionCampoIf) throws ServicioCodefacException, RemoteException
+    public void validarEdicionCampo(Empresa empresa,CrudEnum estadoEnum,ValidarEdicionCampoIf validarEdicionCampoIf,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         //Si no esta en modo editar no hago ninguna validacion
         if(!estadoEnum.equals(CrudEnum.EDITAR))
@@ -536,7 +577,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         
         if(ParametroUtilidades.comparar(empresa,ParametroCodefac.PERMITIR_EDITAR_CODIGO,EnumSiNo.NO))
         {
-            Object objectoOriginal=buscarPorId(validarEdicionCampoIf.getId());
+            Object objectoOriginal=buscarPorId(validarEdicionCampoIf.getId(),entityManager);
             //Verificar que no edite el código principal del producto        
             //Producto productoOriginal = ServiceFactory.getFactory().getProductoServiceIf().buscarProductoActivoPorCodigo(producto.getCodigoPersonalizado(), producto.getEmpresa());
             if (!validarEdicionCampoIf.compararCampos(objectoOriginal)) {

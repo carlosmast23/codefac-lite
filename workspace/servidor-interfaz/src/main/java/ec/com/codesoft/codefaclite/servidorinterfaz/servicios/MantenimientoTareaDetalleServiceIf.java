@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 //import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface MantenimientoTareaDetalleServiceIf extends ServiceAbstractIf<Ma
     public List<MantenimientoTareaDetalle> obtenerTodosActivos(Empresa empresa)  throws ServicioCodefacException, RemoteException;
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleado(Empleado empleado) throws ServicioCodefacException, RemoteException;
     public void finalizarTarea(MantenimientoTareaDetalle tareaDetalle,Boolean terminarMantenimiento) throws ServicioCodefacException, RemoteException;
-    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorUsuario(Usuario usuario) throws ServicioCodefacException, RemoteException ;
+    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorUsuario(Usuario usuario,EntityManager em) throws ServicioCodefacException, RemoteException ;
     public List<MantenimientoTareaDetalle> buscarPorMantenimiento(Mantenimiento mantenimiento) throws ServicioCodefacException, RemoteException ;
     public MantenimientoInformeDetalle grabarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException;    
     public void eliminarInformeDetalle(MantenimientoInformeDetalle detalle,MantenimientoTareaDetalle tareaDetalle) throws ServicioCodefacException, RemoteException;

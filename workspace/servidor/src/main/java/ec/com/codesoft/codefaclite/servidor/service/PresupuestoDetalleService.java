@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PresupuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.util.ExcepcionDataBaseEnum;
 import ec.com.codesoft.codefaclite.servidor.util.UtilidadesExcepciones;
@@ -14,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresupuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PresupuestoDetalleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,6 +41,7 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
     
     public PresupuestoDetalle grabar(PresupuestoDetalle pd) throws ServicioCodefacException
     {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion = getTransaccion();
         transaccion.begin();
         try {
@@ -86,9 +89,10 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
     {
         /*PresupuestoDetalle pd;
         pd.getPresupuesto()*/
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("presupuesto", presupuesto);
-        return this.obtenerPorMap(mapParametros);
+        return this.obtenerPorMap(mapParametros,entityManager);
     }
     
     

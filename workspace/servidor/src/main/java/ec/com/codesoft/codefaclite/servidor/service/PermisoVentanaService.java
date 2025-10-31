@@ -5,11 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.PermisoVentanaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PermisoVentanaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,7 @@ public class PermisoVentanaService extends ServiceAbstract<PermisoVentana,Permis
     
     public PermisoVentana crearPermisoVentanaConTodosPermisoSinTransaccion(Perfil perfil,String codigo)
     {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         PermisoVentana permisoVentana=new PermisoVentana();
         permisoVentana.setNombreClase(codigo);
         permisoVentana.setPerfil(perfil);

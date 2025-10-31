@@ -64,6 +64,7 @@ import ec.com.codesoft.codefaclite.utilidades.sri.ComprobantesElectronicosParame
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import jakarta.persistence.EntityManager;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -578,14 +579,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //Setear los datos del usuario y la ultima fecha de modificacion
                 compra.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
                 compra.setUsuarioUltimaEdicion(compra.getUsuario());
                 
                 
-                validarDatosCompra(compra,CrudEnum.EDITAR);
+                validarDatosCompra(compra,CrudEnum.EDITAR,entityManager);
                 
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                     for (CompraDetalle compraDetalle : compra.getDetalles()) 
@@ -600,7 +601,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     }
                     
                     //Eliminar detalles de reembolso
-                    List<CompraFacturaReembolso> reembolsosEliminar=obtenerDetallesEliminarReembolso(compra);   
+                    List<CompraFacturaReembolso> reembolsosEliminar=obtenerDetallesEliminarReembolso(compra,entityManager);   
                     
                     for (CompraFacturaReembolso compraFacturaReembolso : reembolsosEliminar) {
                         compraFacturaReembolso= entityManager.merge(compraFacturaReembolso);
@@ -612,7 +613,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     //Modificar datos de la cartera en el caso que se haya modificado
                     //TODO: por el momento solo tengo en cuenta el cliente
                     CarteraService carteraService=new CarteraService();
-                    Cartera carteraCompra= carteraService.buscarCarteraPorReferencia(compra.getId(),compra.getCodigoDocumentoEnum(), GeneralEnumEstado.ACTIVO, Cartera.TipoCarteraEnum.PROVEEDORES, compra.getSucursalEmpresa());
+                    Cartera carteraCompra= carteraService.buscarCarteraPorReferencia(compra.getId(),compra.getCodigoDocumentoEnum(), GeneralEnumEstado.ACTIVO, Cartera.TipoCarteraEnum.PROVEEDORES, compra.getSucursalEmpresa(),entityManager);
                     if(carteraCompra!=null)
                     {
                         carteraCompra.setPersona(compra.getProveedor());
@@ -620,15 +621,15 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     }
                     
                     //Eliminar detalles que fueron eliminados en la vista
-                    eliminarDetallesCompra(compra);
+                    eliminarDetallesCompra(compra,entityManager);
                     
             }
         });
     }
     
-    private void eliminarDetallesCompra(Compra compra) throws RemoteException, ServicioCodefacException
+    private void eliminarDetallesCompra(Compra compra,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
-        List<CompraDetalle> detalles=ServiceFactory.getFactory().getCompraDetalleServiceIf().buscarPorCompra(compra);
+        List<CompraDetalle> detalles=ServiceFactory.getFactory().getCompraDetalleServiceIf().buscarPorCompra(compra,entityManager);
         List<CompraDetalle> detallesCompraActual=compra.getDetalles();
         
         List<CompraDetalle> detallesEliminar=new ArrayList<CompraDetalle>();
@@ -652,13 +653,13 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
     
-    private List<CompraFacturaReembolso> obtenerDetallesEliminarReembolso(Compra compra) throws ServicioCodefacException, RemoteException
+    private List<CompraFacturaReembolso> obtenerDetallesEliminarReembolso(Compra compra,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         List<CompraFacturaReembolso> reembolsosEliminar=new ArrayList<CompraFacturaReembolso>();
                 
         if(compra.getFacturaReembolsoList()!=null)
         {            
-            List<CompraFacturaReembolso> reembolsosOriginales =ServiceFactory.getFactory().getCompraFacturaReembolsoServiceIf().buscarPorCompra(compra);
+            List<CompraFacturaReembolso> reembolsosOriginales =ServiceFactory.getFactory().getCompraFacturaReembolsoServiceIf().buscarPorCompra(compra,em);
             List<CompraFacturaReembolso> reembolsoList=compra.getFacturaReembolsoList();
             
             for (CompraFacturaReembolso reembolsoOriginal : reembolsosOriginales) {
@@ -688,13 +689,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
         llenarDatosPorDefecto(compra);
-        validarDatosCompra(compra,CrudEnum.CREAR);
+        
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException 
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
+                validarDatosCompra(compra,CrudEnum.CREAR,entityManager);
                 //TODO: por el momento dejo para pruebas
                 entityManager.flush();
                 compra.setInventarioIngreso(EnumSiNo.NO.getLetra()); //La primera vez que grabo por defecto grabo NO para poder ingresar al inventario
@@ -749,7 +751,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     facturaService.agregarDatosParaCajaSession(compra,null);
                 }
                 
-                grabarCartera(compra,carteraParametro); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
+                grabarCartera(compra,carteraParametro,entityManager); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
                 
             }
         });
@@ -787,7 +789,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         }
     }
     
-    private void validarDatosCompra(Compra compra,CrudEnum crudEnum) throws RemoteException, ServicioCodefacException
+    private void validarDatosCompra(Compra compra,CrudEnum crudEnum,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         if (compra.getPuntoEstablecimiento() == null) 
         {
@@ -885,7 +887,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             mapParametros.put("proveedor", compra.getProveedor());
             
             //compra.get
-            List<Compra> resultadoCompra = getFacade().findByMap(mapParametros);
+            List<Compra> resultadoCompra = getFacade().findByMap(mapParametros,em);
 
             ServicioCodefacException expecion=new ServicioCodefacException("No se puede grabar compras repetidas del mismo proveedor");
             if(crudEnum.equals(CrudEnum.CREAR))
@@ -963,30 +965,30 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         }
     }
     
-    private void grabarCartera(Compra compra,CarteraParametro carteraParametro) throws RemoteException, ServicioCodefacException
+    private void grabarCartera(Compra compra,CarteraParametro carteraParametro,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,carteraParametro,CrudEnum.CREAR,ModoProcesarEnum.NORMAL);
+        carteraService.grabarDocumentoCartera(compra, Cartera.TipoCarteraEnum.PROVEEDORES,carteraParametro,CrudEnum.CREAR,ModoProcesarEnum.NORMAL,entityManager);
     }
 
     public void eliminarCompra(Compra compra) throws ServicioCodefacException,RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {                
-                eliminarCompraSinTransaccion(compra);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                
+                eliminarCompraSinTransaccion(compra,entityManager);
             }
         });
     }
     
-    public void eliminarCompraSinTransaccion(Compra compra) throws ServicioCodefacException, RemoteException {
-        eliminarRetencionCompraSinTransaccion(compra);
+    public void eliminarCompraSinTransaccion(Compra compra,EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+        eliminarRetencionCompraSinTransaccion(compra,entityManager);
 
         //Solo crear movimiento de egreso de mercaderia cuando ya fueron ingresados al inventario
         if (compra.getInventarioIngresoEnum()!=null && compra.getInventarioIngresoEnum().equals(EnumSiNo.SI)) {
             for (CompraDetalle detalle : compra.getDetalles()) {
-                eliminarDetalleCompra(detalle);
+                eliminarDetalleCompra(detalle,entityManager);
             }
         }
 
@@ -995,27 +997,27 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
          * ELIMINACION EN CARTERA DE LAS COMPRAS
          * ==================================================================================
          */
-        eliminarCarteraCompra(compra);
+        eliminarCarteraCompra(compra,entityManager);
     }
     
-    private void eliminarCarteraCompra(Compra entity) throws RemoteException, ServicioCodefacException
+    private void eliminarCarteraCompra(Compra entity,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {        
         //Cartera cartera;
         //cartera.
         CarteraService carteraService=new CarteraService();
-        Cartera carteraCompra=carteraService.buscarCarteraPorReferencia(entity.getId(),entity.getCodigoDocumentoEnum(), GeneralEnumEstado.ACTIVO, Cartera.TipoCarteraEnum.PROVEEDORES,entity.getSucursalEmpresa());                
+        Cartera carteraCompra=carteraService.buscarCarteraPorReferencia(entity.getId(),entity.getCodigoDocumentoEnum(), GeneralEnumEstado.ACTIVO, Cartera.TipoCarteraEnum.PROVEEDORES,entity.getSucursalEmpresa(),entityManager);                
         if(carteraCompra!=null)
         {
-            carteraService.eliminarCarteraSinTransaccion(carteraCompra,ModoProcesarEnum.NORMAL);
+            carteraService.eliminarCarteraSinTransaccion(carteraCompra,ModoProcesarEnum.NORMAL,entityManager);
             
         }
     }
     
 
-    private void eliminarDetalleCompra(CompraDetalle compraDetalle) throws RemoteException, ServicioCodefacException
+    private void eliminarDetalleCompra(CompraDetalle compraDetalle,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {   
         
-        Bodega bodega = obtenerBodegaDevolucion(compraDetalle);
+        Bodega bodega = obtenerBodegaDevolucion(compraDetalle,entityManager);
         KardexService kardexService=new KardexService();
         
         String usuario=null;
@@ -1037,14 +1039,15 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 compraDetalle.getCompra().getPuntoEstablecimiento().toString(),
                 compraDetalle.getCompra().getSecuencial(),
                 compraDetalle.getCompra().getFechaEmision(),
-                usuario
+                usuario,
+                entityManager
         );
 
         
     }
     
     @Deprecated //Mejorar esta parte con las presentaciones porque exist ecodigo repetido al buscar la bodega y luego generar el kardex detalle de la anulacion
-    private Bodega obtenerBodegaDevolucion(CompraDetalle compraDetalle) throws RemoteException, ServicioCodefacException
+    private Bodega obtenerBodegaDevolucion(CompraDetalle compraDetalle,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         KardexDetalleService kardexDetalleService=new KardexDetalleService();
         
@@ -1061,7 +1064,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             //cantidad = respuesta.cantidad;
         }
         
-        KardexDetalle kardexDetalle=kardexDetalleService.consultarPorReferencia(compraDetalle.getCompra().getCodigoTipoDocumentoEnum(),compraDetalle.getCompra().getId(),producto);
+        KardexDetalle kardexDetalle=kardexDetalleService.consultarPorReferencia(compraDetalle.getCompra().getCodigoTipoDocumentoEnum(),compraDetalle.getCompra().getId(),producto,em);
         if(kardexDetalle!=null)
         {
             return kardexDetalle.getKardex().getBodega();
@@ -1069,7 +1072,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         return null;
     }
     
-    private void eliminarRetencionCompraSinTransaccion(Compra compra) throws ServicioCodefacException, RemoteException
+    private void eliminarRetencionCompraSinTransaccion(Compra compra,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         RetencionService retencionService = new RetencionService();
         List<Retencion> retencionesAsociadas = retencionService.obtenerRetencionesPorCompra(compra);

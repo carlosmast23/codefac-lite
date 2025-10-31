@@ -29,7 +29,7 @@ public class ObjetoMantenimientoFacade extends AbstractFacade<ObjetoMantenimient
         //o.getVin();
         
         String queryStr="SELECT u FROM ObjetoMantenimiento u WHERE u.vin LIKE ?1 AND u.estado=?2 ";
-        Query query = getEntityManager().createQuery(queryStr);
+        Query query = nuevoEntityManager().createQuery(queryStr);
         query.setParameter(1,"%"+vin+"%");
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getLetra());
         return query.getResultList();

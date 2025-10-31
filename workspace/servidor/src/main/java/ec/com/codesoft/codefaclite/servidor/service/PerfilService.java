@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidor.facade.PerfilFacade;
@@ -23,6 +24,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.MenuCodefacRespues
 import java.rmi.RemoteException;
 import java.util.List;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PerfilServiceIf;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,6 +51,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     
     public Perfil grabar(Perfil entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaction=getTransaccion();
         transaction.begin();
         entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
@@ -59,6 +62,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     
     public void eliminar(Perfil entity) throws java.rmi.RemoteException
     {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaction=getTransaccion();
         transaction.begin();        
         entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
@@ -69,10 +73,11 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     public void editar(Perfil entity)
     {
         try {
+            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
             EntityTransaction transaction=getTransaccion();
             transaction.begin();
             
-            Perfil perfilSinModificar = buscarPorId(entity.getId());
+            Perfil perfilSinModificar = buscarPorId(entity.getId(),entityManager);
             for (PermisoVentana permisoVentana : perfilSinModificar.getVentanasPermisos()) {
                 //Comprabar si algun objeto fue eliminado
                 if (!entity.getVentanasPermisos().contains(permisoVentana)) {
@@ -314,6 +319,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     
     private void crearPerfilAbstract(Empresa empresa,String nombrePerfil,VentanaEnum[] ventanaList) throws RemoteException
     {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         Perfil perfilDefecto = new Perfil();
         perfilDefecto.setDescripcion(nombrePerfil);
         perfilDefecto.setEmpresa(empresa);
@@ -338,16 +344,23 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     
     public Perfil consultarPerfileDefectoPorEmpresa(Empresa empresa) throws RemoteException, ServicioCodefacException
     {
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("nombre", Perfil.PERFIL_DEFECTO);
-        List<Perfil> resultadoList=getFacade().findByMap(mapParametros);
-        if(resultadoList.size()>0)
-        {
-            return resultadoList.get(0);
-        }
-        return null;
+     
+        return (Perfil) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("nombre", Perfil.PERFIL_DEFECTO);
+                List<Perfil> resultadoList = getFacade().findByMap(mapParametros,entityManager);
+                if (resultadoList.size() > 0) {
+                    return resultadoList.get(0);
+                }
+                return null;
+            }
+        });
+        
+        
     }
     
     public MenuCodefacRespuesta construirMenuPermisosUsuario(SessionCodefac sessionCodefac) throws RemoteException, ServicioCodefacException

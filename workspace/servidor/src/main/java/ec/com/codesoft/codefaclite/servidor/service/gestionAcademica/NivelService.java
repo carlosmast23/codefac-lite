@@ -6,12 +6,14 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.NivelFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.NivelServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,20 +34,30 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         super(NivelFacade.class);
         this.nivelFacade = new NivelFacade();
     }
-    
-    public Nivel obtenerNivelPorNombreYEstado(String nombre,GeneralEnumEstado estado) throws RemoteException
-    {
-        Map<String,Object> parametros=new HashMap<String,Object>();
-        parametros.put("nombre",nombre);
-        parametros.put("estado",estado.getEstado());
-        List<Nivel> niveles=getFacade().findByMap(parametros);
-        if(niveles.size()>0)
-        {
-            return niveles.get(0);
+
+    public Nivel obtenerNivelPorNombreYEstado(String nombre, GeneralEnumEstado estado) throws RemoteException {
+        try {
+            return (Nivel) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> parametros = new HashMap<String, Object>();
+                    parametros.put("nombre", nombre);
+                    parametros.put("estado", estado.getEstado());
+                    List<Nivel> niveles = getFacade().findByMap(parametros, entityManager);
+                    if (niveles.size() > 0) {
+                        return niveles.get(0);
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NivelService.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return null;
-        
+
     }
+
     /*
     public Nivel grabar(Nivel n) throws ServicioCodefacException {
         try {
@@ -68,14 +80,24 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
         nivelFacade.edit(n);
     }
-    
-    public List<Nivel> obtenerNivelesActivos() throws RemoteException
-    {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        return getFacade().findByMap(mapParametros);
-        
+
+    public List<Nivel> obtenerNivelesActivos() throws RemoteException {
+
+        try {
+            return (List<Nivel>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    return getFacade().findByMap(mapParametros,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NivelService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+
     }
-            
 
 }

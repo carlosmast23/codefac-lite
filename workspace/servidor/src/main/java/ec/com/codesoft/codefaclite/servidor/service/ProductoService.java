@@ -39,6 +39,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ProductoPrecioDataTable;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.TopProductoRespuesta;
@@ -50,6 +51,7 @@ import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegular
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -72,10 +74,21 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 {
     private ProductoFacade productoFacade;
     
+    private KardexService kardexService=new KardexService();
+    private TipoProductoService tipoProductoService=new TipoProductoService();
+    private SegmentoProductoService segmentoProductoService=new SegmentoProductoService();
+    private CasaComercialService casaComercialService=new CasaComercialService();
+    private MarcaProductoService marcaProductoService=new MarcaProductoService();
+    
     public ProductoService() throws RemoteException
     {
         super(ProductoFacade.class);
         this.productoFacade = new ProductoFacade();
+        //this.kardexService=new KardexService();
+        //this.tipoProductoService=new TipoProductoService();
+        //this.segmentoProductoService=new SegmentoProductoService();
+        //this.casaComercialService=new CasaComercialService();
+        //this.marcaProductoService=new MarcaProductoService();
     }
     
     public ProductoPresentacionDetalle buscarProductoPorPresentacion(PresentacionProducto presentacion,Producto producto) throws RemoteException,ServicioCodefacException
@@ -94,32 +107,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException
     {
-        ProductoPresentacionDetalle presentacionDetalle = productoEmpaqueSecundario.buscarPresentacionDetalleProducto();
-        
-        if(presentacionDetalle==null)
-        {
-            throw new ServicioCodefacException("No se pudo encontrar la presentación principal para el producto: "+productoEmpaqueSecundario.getNombre()+"\n Posible Solución: Volver a REINGRESAR LA COMPRA");
-        }
-        
-        //TODO: Codigo por el momento para encontrar un error que puede dar al querer convertir un empaque en producto normal
-        if (presentacionDetalle.getProductoOriginal().getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {
-            String mensajeError = "Error al convertir el Producto:" + presentacionDetalle.getProductoOriginal().getNombre() + " en la presentacion original para poder guardar.\\n Error con id producto original: " + presentacionDetalle.getProductoOriginal().getIdProducto() + " id producto secundario: " + productoEmpaqueSecundario.getIdProducto();
-            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, mensajeError);
-            throw new ServicioCodefacException(mensajeError);
-
-        }
-        
-        if(presentacionDetalle.getCantidad().compareTo(BigDecimal.ZERO)<=0)
-        {
-            throw new ServicioCodefacException("Error con la PRESENTACION del producto "+presentacionDetalle.getProductoOriginal().getNombre()+" porque tiene una presentacion con una CANTIDAD NO VALIDA");
-        }
-        
-        BigDecimal cantidadEquivalencia = presentacionDetalle.getCantidad();
-        cantidad = cantidad.multiply(cantidadEquivalencia);
-        precioUnitario = (precioUnitario.divide(cantidadEquivalencia, 6, BigDecimal.ROUND_HALF_UP));
-        //Finalmente dejo seleccionado el producto principal para que continue con el proceso
-        ProductoConversionPresentacionRespuesta respuesta=new ProductoConversionPresentacionRespuesta(productoEmpaqueSecundario, presentacionDetalle.getProductoOriginal(), cantidad, precioUnitario);
-        return  respuesta;
+        return getFacade().convertirProductoEmpaqueSecundarioEnPrincipal(productoEmpaqueSecundario, cantidad, precioUnitario);
     }
     
     /**
@@ -208,15 +196,20 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public List<Producto> buscarPorCategoria(CategoriaProducto categoria) throws RemoteException,ServicioCodefacException
     {
-        //Producto producto;
-        //producto.getCatalogoProducto().getCategoriaProducto();
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("catalogoProducto.categoriaProducto",categoria);
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        //mapParametros.put("empresa",empresa);        
-        List<Producto> productos=getFacade().findByMap(mapParametros);
         
-        return productos;
+        return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("catalogoProducto.categoriaProducto", categoria);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                //mapParametros.put("empresa",empresa);        
+                List<Producto> productos = getFacade().findByMap(mapParametros,entityManager);
+
+                return productos;
+            }
+        });
+        
     }
     
     public List<Producto> reporteProducto(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException
@@ -245,8 +238,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
         {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                grabarSinTransaccion(p,generarCodigo,true,modoProcesar);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                grabarSinTransaccion(p,generarCodigo,true,modoProcesar,entityManager);
             }
         });        
         
@@ -256,9 +249,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             ejecutarTransaccion(new MetodoInterfaceTransaccion() 
             {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
-                    Producto pTmp = getFacade().find(p.getIdProducto());
+                    Producto pTmp = getFacade().find(p.getIdProducto(),entityManager);
                     entityManager.merge(pTmp);
 
                 }
@@ -272,7 +265,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     }
     
     //TODO: revisar una mejor solucion con lo de generar kardex
-    public void grabarSinTransaccion(Producto p,Boolean generarCodigo,Boolean generarKardex,ModoProcesarEnum modoProcesar) throws java.rmi.RemoteException,ServicioCodefacException{
+    public void grabarSinTransaccion(Producto p,Boolean generarCodigo,Boolean generarKardex,ModoProcesarEnum modoProcesar,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException{
         
         if(generarCodigo)
         {
@@ -280,7 +273,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
         
         p.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-        validarGrabarProducto(p,CrudEnum.CREAR,modoProcesar);
+        validarGrabarProducto(p,CrudEnum.CREAR,modoProcesar,entityManager);
         
         //Agregando datos por defecto
         p.setFechaCreacion(UtilidadesFecha.getFechaHoyTimeStamp());        
@@ -324,7 +317,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             if(categoriaProducto!=null)
             {
                 CategoriaProductoService categoriaProductoService=new CategoriaProductoService();
-                CategoriaProducto categoriaTmp=categoriaProductoService.buscarPorId(categoriaProducto.getIdCatProducto());
+                CategoriaProducto categoriaTmp=categoriaProductoService.buscarPorId(categoriaProducto.getIdCatProducto(),entityManager);
                 //Si no existe la categoria entonces la voy a crear
                 if(categoriaTmp==null)
                 {
@@ -371,9 +364,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {   
             if(tipoProducto.getId()==null)
             {
-                ServiceFactory.getFactory().getTipoProductoServiceIf().grabarSinTransaccion(tipoProducto, p.getEmpresa(),null);
+                tipoProductoService.grabarSinTransaccion(tipoProducto, p.getEmpresa(),null,entityManager);
                 entityManager.flush();
-                tipoProducto=ServiceFactory.getFactory().getTipoProductoServiceIf().buscarPorNombre(p.getEmpresa(), tipoProducto.getNombre());
+                tipoProducto=tipoProductoService.buscarPorNombre(p.getEmpresa(), tipoProducto.getNombre());
             }
             
         }
@@ -381,10 +374,10 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(segmentoProducto!=null)
         {   
             if(segmentoProducto.getId()==null)
-            {
-                ServiceFactory.getFactory().getSegmentoProductoServiceIf().grabarSinTransaccion(segmentoProducto,  p.getEmpresa(), null);
+            {                
+                segmentoProductoService.grabarSinTransaccion(segmentoProducto,  p.getEmpresa(), null,entityManager);
                 entityManager.flush();
-                segmentoProducto=ServiceFactory.getFactory().getSegmentoProductoServiceIf().buscarPorNombre(p.getEmpresa(), segmentoProducto.getNombre());
+                segmentoProducto=segmentoProductoService.buscarPorNombre(p.getEmpresa(), segmentoProducto.getNombre());
             }
                         
         }
@@ -392,10 +385,10 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(marcaProducto!=null)
         {
             if(marcaProducto.getId()==null)
-            {
-                ServiceFactory.getFactory().getMarcaProductoServiceIf().grabarSinTransaccion(marcaProducto);
+            {                
+                marcaProductoService.grabarSinTransaccion(marcaProducto,entityManager);
                 entityManager.flush();
-                marcaProducto=ServiceFactory.getFactory().getMarcaProductoServiceIf().buscarPorNombre(p.getEmpresa(),marcaProducto.getNombre());
+                marcaProducto=marcaProductoService.buscarPorNombre(p.getEmpresa(),marcaProducto.getNombre());
             }
         
         }
@@ -403,40 +396,20 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         if(casaComercial!=null)
         {
             if(casaComercial.getId()==null)
-            {
-                ServiceFactory.getFactory().getCasaComercialServiceIf().grabarSinTransaccion(casaComercial);
+            {                
+                casaComercialService.grabarSinTransaccion(casaComercial,entityManager);
                 entityManager.flush();
-                casaComercial=ServiceFactory.getFactory().getCasaComercialServiceIf().buscarPorNombre(p.getEmpresa(),casaComercial.getNombre());
+                casaComercial=casaComercialService.buscarPorNombre(p.getEmpresa(),casaComercial.getNombre(),entityManager);
             }
         
         }
         
 
         
-        grabarEmpaques(p, productoPresentacionList,CrudEnum.CREAR);
+        grabarEmpaques(p, productoPresentacionList,CrudEnum.CREAR,entityManager);
         
         
-        /*if(presentacion!=null)
-        {
-            if(presentacion.getId()==null)
-            {
-                ServiceFactory.getFactory().getPresentacionProductoServiceIf().grabarSinTransaccion(presentacion);
-                entityManager.flush();
-                presentacion=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(p.getEmpresa(),presentacion.getNombre());
-            }
-            
-            //Agregar por defecto una presentacion a la lista de detalles
-            ProductoPresentacionDetalle presentacionDetalleTmp=new ProductoPresentacionDetalle();
-            presentacionDetalleTmp.setCantidad(new BigDecimal(1));
-            presentacionDetalleTmp.setPresentacionProducto(presentacion);
-            presentacionDetalleTmp.setProductoEmpaquetado(p);
-            presentacionDetalleTmp.setProductoOriginal(p);
-            entityManager.persist(presentacionDetalleTmp);
-            entityManager.flush();
-        
-        }*/
-        
-        
+   
         
         
         p.setTipoProducto(tipoProducto);            
@@ -465,14 +438,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             //if(p.getManejarInventarioEnum().equals(EnumSiNo.SI) && !p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
             if(!p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
             {
-                ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(p);
+                kardexService.crearKardexSiNoExisteSinTransaccion(p,entityManager);
             }
         }
         
-        validacionPostGrabarSinTransaccion(p);
+        validacionPostGrabarSinTransaccion(p,entityManager);
     }
     
-    private void validacionPostGrabarSinTransaccion(Producto producto) throws ServicioCodefacException
+    private void validacionPostGrabarSinTransaccion(Producto producto,EntityManager entityManager) throws ServicioCodefacException
     {
         for (ProductoPresentacionDetalle productoPresentacionDetalle : producto.getPresentacionList()) 
         {
@@ -492,7 +465,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    private List<ProductoPresentacionDetalle> grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList,CrudEnum crudEnum) throws ServicioCodefacException
+    private List<ProductoPresentacionDetalle> grabarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList,CrudEnum crudEnum,EntityManager entityManager) throws ServicioCodefacException
     {
         
         List<ProductoPresentacionDetalle> productoPresentacionNuevoList=new ArrayList<ProductoPresentacionDetalle>();
@@ -652,7 +625,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    private void eliminarActividades(Producto producto) throws ServicioCodefacException, RemoteException
+    private void eliminarActividades(Producto producto,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
                         
         List<ProductoActividad> actividadList = producto.getActividadList();        
@@ -668,7 +641,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         }
     }
     
-    private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList) throws ServicioCodefacException, RemoteException
+    private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         //Detalle Original
         List<ProductoPresentacionDetalle> detallesOriginales= ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProducto(producto);
@@ -703,7 +676,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }*/
     
-    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum,ModoProcesarEnum modoProcesar) throws java.rmi.RemoteException,ServicioCodefacException    
+    private void validarGrabarProducto(Producto p,CrudEnum estadoEnum,ModoProcesarEnum modoProcesar,EntityManager em) throws java.rmi.RemoteException,ServicioCodefacException    
     {
         
         if(p.getCodigoPersonalizado()==null || p.getCodigoPersonalizado().trim().isEmpty())
@@ -861,7 +834,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             public Boolean compararCampos(Producto dato) {
                 return p.getCodigoPersonalizado().equals(dato.getCodigoPersonalizado());
             }
-        });
+        },em);
         
         //Validar advertencia de nombres iguales
         advertenciaDatosProducto(p, estadoEnum, modoProcesar);
@@ -946,15 +919,15 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public void editarProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        validarGrabarProducto(producto,CrudEnum.EDITAR,ModoProcesarEnum.NORMAL);
+        
         producto.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                validarGrabarProducto(producto,CrudEnum.EDITAR,ModoProcesarEnum.NORMAL,entityManager);
                 //Eliminar componentes que no se necesitan
-                eliminarComponentes(producto);
-                eliminarActividades(producto);
+                eliminarComponentes(producto,entityManager);
+                eliminarActividades(producto,entityManager);
                 
                 //Buscar componentes ensambles eliminados
                 List<ProductoEnsamble> productoEnsambleEliminar=productoEnsamblesEliminados(producto);
@@ -982,8 +955,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 producto.setComponenteList(null);
                 
                 
-                grabarEmpaques(producto, productoPresentacionList,CrudEnum.EDITAR);
-                eliminarEmpaques(producto, productoPresentacionList);
+                grabarEmpaques(producto, productoPresentacionList,CrudEnum.EDITAR,entityManager);
+                eliminarEmpaques(producto, productoPresentacionList,entityManager);
                 
                 
                 //producto.setPresentacion(presentacion);
@@ -1000,7 +973,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 if(TipoProductoEnum.PRODUCTO.equals(producto.getTipoProductoEnum()) || TipoProductoEnum.EMSAMBLE.equals(producto.getTipoProductoEnum()))
                 {
                     if (producto.getManejarInventarioEnum().equals(EnumSiNo.SI)) {
-                        ServiceFactory.getFactory().getKardexServiceIf().crearKardexSiNoExisteSinTransaccion(producto);
+                        kardexService.crearKardexSiNoExisteSinTransaccion(producto,entityManager);
                     }
                 }
 
@@ -1012,9 +985,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         try {
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
-                public void transaccion() throws ServicioCodefacException, RemoteException {
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
-                    Producto pTmp = getFacade().find(producto.getIdProducto());
+                    Producto pTmp = getFacade().find(producto.getIdProducto(),entityManager);
                     List<Kardex> kardexList=ServiceFactory.getFactory().getKardexServiceIf().buscarPorProducto(pTmp);
                     for (Kardex kardex : kardexList) {
                         entityManager.merge(kardex);
@@ -1040,7 +1013,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return getFacade().buscarComponentePorProducto(producto);
     }
     
-    private void eliminarComponentes(Producto producto) throws RemoteException, ServicioCodefacException
+    private void eliminarComponentes(Producto producto,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         List<ProductoComponenteDetalle> componenteList=producto.getComponenteList();
         if(componenteList!=null)
@@ -1073,7 +1046,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
 
                 //Hacer validaciones mas complicadas si sale que el producto maneja inventario
                 if(p.getManejarInventarioEnum().equals(EnumSiNo.SI))
@@ -1134,33 +1107,54 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public List<Producto> buscar(Empresa empresa)
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        //mapParametros.put("estado",estadoEnum.getEstado());
-        mapParametros.put("empresa",empresa);
-        
-        List<Producto> productos=getFacade().findByMap(mapParametros);
-        /*if(productos.size()>0)
-        {
-            return productos.;
-        }*/
-        return productos;
-        //return productoFacade.findAll();
+        try {
+            return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //mapParametros.put("estado",estadoEnum.getEstado());
+                    mapParametros.put("empresa", empresa);
+                    
+                    List<Producto> productos = getFacade().findByMap(mapParametros,entityManager);
+                    /*if(productos.size()>0)
+                    {
+                    return productos.;
+                    }*/
+                    return productos;
+                    //return productoFacade.findAll();
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+       
     }
     
     public Producto buscarPorNombreyEstado(String nombre,GeneralEnumEstado estadoEnum,Empresa empresa) throws RemoteException
     {
-
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("nombre",nombre);
-        mapParametros.put("estado",estadoEnum.getEstado());
-        mapParametros.put("empresa",empresa);
-        
-        List<Producto> productos=getFacade().findByMap(mapParametros);
-        if(productos.size()>0)
-        {
-            return productos.get(0);
+        try {
+            return (Producto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("nombre", nombre);
+                    mapParametros.put("estado", estadoEnum.getEstado());
+                    mapParametros.put("empresa", empresa);
+                    
+                    List<Producto> productos = getFacade().findByMap(mapParametros,entityManager);
+                    if (productos.size() > 0) {
+                        return productos.get(0);
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+
         
     }
     
@@ -1203,48 +1197,62 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
     public List<Producto> obtenerTodosActivos(Empresa empresa) throws java.rmi.RemoteException
     {
-        //Producto producto;
-        //producto.getEstado()
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa",empresa);
-        List<Producto> resultados=getFacade().findByMap(mapParametros);
-        return resultados;
+        
+        try {
+            return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    mapParametros.put("empresa", empresa);
+                    List<Producto> resultados = getFacade().findByMap(mapParametros,entityManager);
+                    return resultados;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+        
     }
     
     public List<Producto> buscarGenerarCodigoBarras(EnumSiNo enumSiNo,Empresa empresa ) throws ServicioCodefacException,RemoteException
     {
-        //Producto p;
-        //p.getEmpresa();
-        Map<String, Object> mapParametros = new HashMap<String, Object>();
-        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("generarCodigoBarras", EnumSiNo.SI.getLetra());
-        mapParametros.put("empresa",empresa);
         
+        return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("generarCodigoBarras", EnumSiNo.SI.getLetra());
+                mapParametros.put("empresa", empresa);
 
-        List<Producto> resultado=getFacade().findByMap(mapParametros);
-        /*if(resultado.size()>0)
+                List<Producto> resultado = getFacade().findByMap(mapParametros,entityManager);
+                /*if(resultado.size()>0)
         {
             return resultado.get(0);
         }*/
-        return resultado;
+                return resultado;
+            }
+        });
+
     }
     
     public void actualizarPreciosPresentaciones(Producto producto) throws RemoteException, ServicioCodefacException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
-                actualizarPreciosPresentacionesSinTransaccion(producto);
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                actualizarPreciosPresentacionesSinTransaccion(producto,entityManager);
             }
         });
         
     }
     
-    public void actualizarPreciosPresentacionesSinTransaccion(Producto producto) throws RemoteException, ServicioCodefacException
+    public void actualizarPreciosPresentacionesSinTransaccion(Producto producto,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Consultar el producto original para ver si ha tenido cambios
-        Producto productoOriginal=buscarPorId(producto.getIdProducto());
+        Producto productoOriginal=buscarPorId(producto.getIdProducto(),entityManager);
         
         ///////////  Verificar si existen cambios en los productos
         if(productoOriginal!=null)
@@ -1275,7 +1283,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 for (ProductoPrecioDataTable productoData : productos) 
                 {
@@ -1366,30 +1374,29 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public Producto crearOBuscarProductoReembolso(Empresa empresa) throws RemoteException, ServicioCodefacException
     {
-        //Producto p;
-        //p.getEmpresa():
-        //p.getNombre()
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("empresa",empresa);
-        mapParametros.put("nombre",Producto.NOMBRE_PRODUCTO_REEMBOLSO);
         
-       List<Producto> productoList=getFacade().findByMap(mapParametros);
-       if(productoList.size()==0)
-       {
-           Producto producto=crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO,12);
-           
-           if(producto.getIdProducto()==null)
-           {
-                producto=grabar(producto, Boolean.FALSE,ModoProcesarEnum.NORMAL);
-           }
-           
-           return producto;
-       }
-       else
-       {
-           return productoList.get(0);
-       }
-        
+        return (Producto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("nombre", Producto.NOMBRE_PRODUCTO_REEMBOLSO);
+
+                List<Producto> productoList = getFacade().findByMap(mapParametros,entityManager);
+                if (productoList.size() == 0) {
+                    Producto producto = crearProductoPorDefectoSinTransaccion(empresa, Producto.NOMBRE_PRODUCTO_REEMBOLSO, 12);
+
+                    if (producto.getIdProducto() == null) {
+                        producto = grabar(producto, Boolean.FALSE, ModoProcesarEnum.NORMAL);
+                    }
+
+                    return producto;
+                } else {
+                    return productoList.get(0);
+                }
+            }
+        });
+
     }
 
     
@@ -1432,13 +1439,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
                 //Solo grabo el producto cuando no esta creado previamente
                 //System.out.println("Costo: "+kardexDetalle.getKardex().getCostoPromedio());
                 if(p.getIdProducto()==null)
                 {
-                    grabarSinTransaccion(p,false,false,ModoProcesarEnum.FORZADO); //graba el producto                
+                    grabarSinTransaccion(p,false,false,ModoProcesarEnum.FORZADO,entityManager); //graba el producto                
                 }
                 else //Si ya tiene grabado el producto solo actualizo los datos
                 {
@@ -1452,7 +1459,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 if(kardexDetalle!=null)
                 {
                     KardexService kardexService=new KardexService();
-                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,kardexDetalle.getKardex().getLote(),true);
+                    kardexService.grabarKardexDetallSinTransaccion(kardexDetalle,kardexDetalle.getKardex().getLote(),true,entityManager);
                 }
                 
             }
@@ -1461,32 +1468,43 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public List<Producto> buscarPorCategoria(Empresa empresa, CategoriaProducto categoria)
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        //mapParametros.put("estado",estadoEnum.getEstado());
-        mapParametros.put("empresa",empresa);
+        try {
+            return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //mapParametros.put("estado",estadoEnum.getEstado());
+                    mapParametros.put("empresa", empresa);
+                    
+                    List<Producto> productos = getFacade().findByMap(mapParametros,entityManager);
+                    
+                    return productos;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        List<Producto> productos=getFacade().findByMap(mapParametros);
-        /*if(productos.size()>0)
-        {
-            return productos.;
-        }*/
-        return productos;
-        //return productoFacade.findAll();
+        return null;
     }
     
     public List<Producto> buscarProductoActivo(Producto producto,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
-        Map<String,Object> mapParametros = new HashMap<String,Object>();        
-        mapParametros.put("producto",producto);
-        mapParametros.put("empresa",empresa);        
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());        
-        
-        List<Producto> productos = getFacade().findByMap(mapParametros);
-        if(productos.size()>0)
-        {
-            return productos;
-        }
-        return null;
+        return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("producto", producto);
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+
+                List<Producto> productos = getFacade().findByMap(mapParametros,entityManager);
+                if (productos.size() > 0) {
+                    return productos;
+                }
+                return null;
+            }
+        });
     }
     
     public List<TopProductoRespuesta> topProductosMasVendidosService() throws ServicioCodefacException, RemoteException

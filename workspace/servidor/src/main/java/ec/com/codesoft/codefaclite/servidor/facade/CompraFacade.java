@@ -89,7 +89,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         try {
             String queryString = selectStr+ " FROM Compra u WHERE u.empresa=?7 and " + cliente + fecha + documento + tipoDocumento+estadoEnumQuery;
             System.out.println("Script: "+queryString);
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             if (proveedor != null) 
             {
                 query.setParameter(1, proveedor);
@@ -208,7 +208,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         try {
             
             String queryString = "SELECT u FROM Compra u WHERE u.estadoRetencion=?1";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1, Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
             return (List<Compra>) query.getResultList();
         } catch (NoResultException e) {
@@ -225,7 +225,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
             compra.getPuntoEstablecimiento();*/
             
             String queryString = "SELECT count(u.id) FROM Compra u WHERE u.proveedor=?1 and u.secuencial=?2 and u.puntoEmision=?3 and u.puntoEstablecimiento=?4 and u.estado<>?5 ";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1,compra.getProveedor());
             query.setParameter(2,compra.getSecuencial());
             query.setParameter(3,compra.getPuntoEmision());
@@ -261,7 +261,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         //c.getSecuencial()
         
         String queryString="SELECT MAX( CAST (c.secuencial AS BIGINT )) FROM Compra c WHERE c.puntoEmision=?1 AND c.puntoEstablecimiento=?2 AND c.codigoDocumento=?3 AND c.empresa=?4 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,puntoEmision);
         query.setParameter(2,puntoEstablecimiento);
         query.setParameter(3,documentoEnum.getCodigo());
@@ -283,7 +283,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         //compradetalle.getProductoProveedor().getProducto();
         
         String queryString="SELECT cd.productoProveedor.producto FROM Compra u LEFT JOIN u.detalles cd  WHERE u=?1 AND cd.productoProveedor.producto.actualizarPrecio=?2 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,compra);
         query.setParameter(2,EnumSiNo.SI.getLetra());
         return query.getResultList();

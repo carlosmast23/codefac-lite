@@ -35,7 +35,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         {
             String stringQuery = "Select cs from CajaSession cs where cs.caja = ?1 and cs.estadoCierreCaja = ?2 order by cs.id desc";
 
-            Query query = getEntityManager().createQuery(stringQuery);
+            Query query = nuevoEntityManager().createQuery(stringQuery);
             query.setParameter(1, caja);
             query.setParameter(2, CajaSessionEnum.FINALIZADO.getEstado());
             query.setMaxResults(1);
@@ -96,7 +96,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
 
 
             stringQuery += queryStringFecha+" ORDER BY cs.fechaHoraApertura DESC";
-            Query query = getEntityManager().createQuery(stringQuery);
+            Query query = nuevoEntityManager().createQuery(stringQuery);
                         
             //query.setParameter(3, CajaSessionEnum.FINALIZADO.getEstado());
             
@@ -163,7 +163,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             consultaGeneral = consultaGeneral.replace("?#","2");
         }
         
-        Query query = getEntityManager().createQuery(consultaGeneral);
+        Query query = nuevoEntityManager().createQuery(consultaGeneral);
         query.setParameter(1, usuario);
         query.setParameter(2, CajaSessionEnum.ACTIVO.getEstado());
         

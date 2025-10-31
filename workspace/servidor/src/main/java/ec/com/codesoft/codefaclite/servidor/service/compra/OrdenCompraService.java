@@ -5,12 +5,14 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service.compra;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.compra.OrdenCompraFacade;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.compra.OrdenCompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.OrdenCompraServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 
 /**
@@ -24,6 +26,7 @@ public class OrdenCompraService extends ServiceAbstract<OrdenCompra, OrdenCompra
     }
 
     public OrdenCompra grabar(OrdenCompra entity) throws ServicioCodefacException, RemoteException {
+        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         entityManager.getTransaction().begin(); //Inicio de la transaccion
 
         try {

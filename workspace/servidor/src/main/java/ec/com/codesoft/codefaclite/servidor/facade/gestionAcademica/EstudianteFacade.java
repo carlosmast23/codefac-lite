@@ -37,7 +37,7 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
             String queryString = "SELECT e FROM Estudiante e where "
                     + "( SELECT COUNT(ei.id) FROM EstudianteInscrito ei WHERE ei.estudiante=e AND ei.nivelAcademico.periodo=?1 ) "
                     + "=0";
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1,periodo);
             return (List<Estudiante>) query.getResultList();
         } catch (NoResultException e) {
@@ -51,7 +51,7 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
             String queryString = "SELECT e FROM Estudiante e where "
                     + "( SELECT COUNT(ei.id) FROM EstudianteInscrito ei WHERE ei.estudiante=e and ei.estado=?1) "
                     + "=0";
-            Query query = getEntityManager().createQuery(queryString);            
+            Query query = nuevoEntityManager().createQuery(queryString);            
             query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
             return (List<Estudiante>) query.getResultList();
         } catch (NoResultException e) {

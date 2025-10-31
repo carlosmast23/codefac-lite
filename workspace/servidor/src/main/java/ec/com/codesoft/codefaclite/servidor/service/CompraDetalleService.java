@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.CompraDetalleFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CompraDetalleServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +26,10 @@ public class CompraDetalleService extends ServiceAbstract<CompraDetalle, CompraD
         super(CompraDetalleFacade.class);
     }
 
-    public List<CompraDetalle> buscarPorCompra(Compra compra) throws ServicioCodefacException, RemoteException
+    public List<CompraDetalle> buscarPorCompra(Compra compra,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("compra",compra);
-        return getFacade().findByMap(mapParametros);
+        return getFacade().findByMap(mapParametros,em);
     }
 }

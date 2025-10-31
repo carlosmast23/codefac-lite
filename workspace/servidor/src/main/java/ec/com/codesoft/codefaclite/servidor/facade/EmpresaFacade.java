@@ -29,7 +29,7 @@ public class EmpresaFacade extends AbstractFacade<Empresa>
         try
         {   
             String queryString = "SELECT e FROM Empresa e WHERE e.estado=?1 ORDER BY e.orden "+ ordenarEnum.getValor();
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
             return (List<Empresa>) query.getResultList();
         }

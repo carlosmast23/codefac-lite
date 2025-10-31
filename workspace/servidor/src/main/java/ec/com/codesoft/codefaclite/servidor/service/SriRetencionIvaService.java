@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.SriRetencionIvaFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class SriRetencionIvaService extends ServiceAbstract<SriRetencionIva,SriR
     public SriRetencionIva grabar(SriRetencionIva entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.persist(entity);
             }
         });
@@ -42,7 +43,7 @@ public class SriRetencionIvaService extends ServiceAbstract<SriRetencionIva,SriR
     public void editar(SriRetencionIva entity) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
-            public void transaccion() throws ServicioCodefacException, RemoteException {
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 entityManager.merge(entity);
             }
         });

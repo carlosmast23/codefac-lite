@@ -25,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
 import jakarta.persistence.FlushModeType;
@@ -174,7 +175,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         try {
             String queryString = selectStr+" FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+whereDocumento+whereSegundaReferencia+whereSecuencial+whereDocumentos+whereSucursal+" AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
-            Query query = getEntityManager().createQuery(queryString);
+            Query query = nuevoEntityManager().createQuery(queryString);
             if (persona != null) {
                 query.setParameter(1, persona);
             }
@@ -260,7 +261,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         //c.getCarteraAfectada().getPersona();
         
         String queryString = "SELECT u FROM CarteraCruce u WHERE u.carteraAfectada.persona=?1 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, persona);
         return query.getResultList();
         
@@ -271,12 +272,12 @@ public class CarteraFacade extends AbstractFacade<Cartera>
      * @param cartera
      * @return 
      */
-    public BigDecimal obtenerValorCruceCarteraAfecta(Cartera cartera)
+    public BigDecimal obtenerValorCruceCarteraAfecta(Cartera cartera,EntityManager entityManager)
     {
         CarteraCruce carteraCruce;
 
         String queryString = "SELECT SUM(u.valor) FROM CarteraCruce u WHERE u.carteraAfectada=?1 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         query.setFlushMode(FlushModeType.AUTO);
         query.setParameter(1, cartera);
         Number sumatoria=(Number) query.getSingleResult();
@@ -290,7 +291,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
      * @param carteraDetalle
      * @return 
      */
-    public BigDecimal obtenerValorCruceCarteraDetalle(CarteraDetalle  carteraDetalle)
+    public BigDecimal obtenerValorCruceCarteraDetalle(CarteraDetalle  carteraDetalle,EntityManager entityManager)
     {
         //Metodo temporal para ver cuando cruces estan relacionados
         /*String queryStringTmp = "SELECT u FROM CarteraCruce u WHERE u.carteraDetalle=?1 ";
@@ -317,7 +318,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         //carteraDetalle.get
         //carteraCruce.get        
         String queryString = "SELECT SUM(u.valor) FROM CarteraCruce u WHERE u.carteraDetalle=?1 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         query.setParameter(1, carteraDetalle);
         Number sumatoria=(Number) query.getSingleResult();
         return new BigDecimal(sumatoria.toString());
@@ -329,10 +330,10 @@ public class CarteraFacade extends AbstractFacade<Cartera>
      * @param cartera
      * @return 
      */
-    public BigDecimal obtenerValorCruceCarteraAfectados(Cartera cartera)
+    public BigDecimal obtenerValorCruceCarteraAfectados(Cartera cartera,EntityManager entityManager)
     {
         String queryString2 = "SELECT distinct u FROM CarteraCruce u WHERE u.carteraDetalle.cartera=?1 ";
-        Query query2 = getEntityManager().createQuery(queryString2);
+        Query query2 = entityManager.createQuery(queryString2);
         query2.setParameter(1, cartera);
         List<CarteraCruce> carteras=query2.getResultList();
         for (CarteraCruce carteraResult : carteras) {
@@ -340,7 +341,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }
         
         String queryString = "SELECT distinct SUM(u.valor) FROM CarteraCruce u WHERE u.carteraDetalle.cartera=?1 ";
-        Query query = getEntityManager().createQuery(queryString);
+        Query query = entityManager.createQuery(queryString);
         query.setParameter(1, cartera);
         Number sumatoria=(Number) query.getSingleResult();
         if(sumatoria==null)
@@ -359,7 +360,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         c.getSaldo();*/
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT c FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
-        Query query=getEntityManager().createQuery(queryString);
+        Query query=nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,cliente);
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
@@ -374,7 +375,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         c.getSaldo();*/
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT c FROM Cartera c WHERE c.segundaReferenciaId=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
-        Query query=getEntityManager().createQuery(queryString);
+        Query query=nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,estudiante.getIdEstudiante());
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
@@ -392,7 +393,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
         
-        Query query=getEntityManager().createQuery(queryString);
+        Query query=nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,cliente);
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
@@ -407,7 +408,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         //cartera.getSegundaReferenciaId();
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.segundaReferenciaId=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
-        Query query=getEntityManager().createQuery(queryString);
+        Query query=nuevoEntityManager().createQuery(queryString);
         query.setParameter(1,estudiante.getIdEstudiante());
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
