@@ -32,7 +32,7 @@ public class TestClienteRMI {
             //ServiceFactory.newController("192.168.100.13");
             
             PersonaServiceIf personaServiceIf= ServiceFactory.getFactory().getPersonaServiceIf();
-            List<Persona> buscarList= personaServiceIf.buscar();
+            List<Persona> buscarList= personaServiceIf.obtenerTodos();
             
             for (Persona persona : buscarList) {
                System.out.println(persona.getNombres()); 

@@ -73,10 +73,10 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         }
     }
 
-    @Override
+    /*@Override
     public List<OrdenTrabajo> obtenerTodos() {
         return ordenTrabajoFacade.findAll();
-    }
+    }*/
     
     private void validar(OrdenTrabajo ordenTrabajo,CrudEnum crudEnum,EntityManager em) throws RemoteException,ServicioCodefacException
     {

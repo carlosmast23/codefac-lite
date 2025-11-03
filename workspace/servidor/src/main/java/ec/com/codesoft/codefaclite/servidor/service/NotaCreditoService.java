@@ -455,9 +455,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     }*/
 
 
-    public List<NotaCredito> obtenerTodos() {
+    /*public List<NotaCredito> obtenerTodos() {
         return notaCreditoFacade.findAll();
-    }
+    }*/
 
     public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws RemoteException {
         return notaCreditoFacade.lista(persona, fi, ff,estado,empresa);

@@ -365,11 +365,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
         
     }
     
-    public List<Presupuesto> buscar()
-    {
-        return presupuestoFacade.findAll();
-    }
-    
+        
     public List<OrdenTrabajoDetalle> listarOrdenesTrabajo(OrdenTrabajo ordenTrabajo)
     {
         return presupuestoFacade.listarOrdenTrabajo(ordenTrabajo);

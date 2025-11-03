@@ -136,7 +136,17 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     
     public List<Empresa> buscar() throws java.rmi.RemoteException
     {
-        return empresaFacade.findAll();
+        try {
+            return (List<Empresa>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return empresaFacade.findAllData(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     } 
     
     public Empresa buscarPorIdentificacion(String identificacion) throws RemoteException 

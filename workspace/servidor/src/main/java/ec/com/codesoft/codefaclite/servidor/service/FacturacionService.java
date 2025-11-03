@@ -1719,9 +1719,9 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
 
-    public List<Factura> obtenerTodos() {
+    /*public List<Factura> obtenerTodos() {
         return facturaFacade.findAll();
-    }
+    }*/
 
     //public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) throws java.rmi.RemoteException {
     //    return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal);

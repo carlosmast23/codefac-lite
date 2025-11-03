@@ -14,69 +14,103 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriServiceIf;
 import jakarta.persistence.EntityManager;
+import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Carlos
  */
-public class SriService extends UnicastRemoteObject implements SriServiceIf
+public class SriService extends ServiceAbstract<SriFormaPago,SriFormaPagoFacade> implements SriServiceIf
 {
-    private SriFormaPagoFacade sriFormaPagoFacade;
+    //private SriFormaPagoFacade sriFormaPagoFacade;
     private SriIdentificacionFacade sriIdentificacionFacade;
 
     public SriService() throws java.rmi.RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
-        this.sriFormaPagoFacade = new SriFormaPagoFacade();
+        super(SriFormaPagoFacade.class);
+        //super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+        //this.sriFormaPagoFacade = new SriFormaPagoFacade();
         this.sriIdentificacionFacade = new SriIdentificacionFacade();
     }
     
     public SriFormaPago obtenerFormarPagoDefecto() throws java.rmi.RemoteException
     {
-        EntityManager em= AbstractFacade.nuevoEntityManager();
-        //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
-        String codigoFormaPago="01";
-        
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("codigo",codigoFormaPago);
-        
-        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros,em);
-        if(formasPago.size()>0)
-        {
-            return formasPago.get(0);
+        try {
+            return (SriFormaPago) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    //EntityManager em= AbstractFacade.nuevoEntityManager();
+                    //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
+                    String codigoFormaPago = "01";
+
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("codigo", codigoFormaPago);
+
+                    List<SriFormaPago> formasPago = facade.findByMap(mapParametros, entityManager);
+                    if (formasPago.size() > 0) {
+                        return formasPago.get(0);
+                    }
+                    return null;
+                }
+            });
+                    
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
     
     public SriFormaPago obtenerFormarPagoConCartera() throws java.rmi.RemoteException
     {
-        
-        EntityManager em= AbstractFacade.nuevoEntityManager();
-    //Todo:Cambiar por algun parametro del sistema para que sepa cual forma de pago buscar
-        String aliasFormaPago="Cartera";
-        
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("alias",aliasFormaPago);
-        
-        List<SriFormaPago> formasPago=sriFormaPagoFacade.findByMap(mapParametros,em);
-        if(formasPago.size()>0)
-        {
-            return formasPago.get(0);
+        try {
+            return (SriFormaPago) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    //EntityManager em = AbstractFacade.nuevoEntityManager();
+                    
+                    String aliasFormaPago = "Cartera";
+                    
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("alias", aliasFormaPago);
+                    
+                    List<SriFormaPago> formasPago = facade.findByMap(mapParametros, entityManager);
+                    if (formasPago.size() > 0) {
+                        return formasPago.get(0);
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+        
     }
     
     public List<SriFormaPago> obtenerFormasPagoActivo() throws java.rmi.RemoteException
     {
-        java.util.Date fechaActual=new java.util.Date();
-        
-        //return sriFormaPagoFacade.getFormaPagoByDate(new Date(fechaActual.getTime()));
-        return sriFormaPagoFacade.findAll();
+        try {
+            return (List<SriFormaPago>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    // java.util.Date fechaActual=new java.util.Date();
+
+                    //return sriFormaPagoFacade.getFormaPagoByDate(new Date(fechaActual.getTime()));
+                    //EntityManager em = AbstractFacade.nuevoEntityManager();
+                    return facade.findAllData(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     /**

@@ -84,8 +84,8 @@ public class DepartamentoService extends ServiceAbstract<Departamento, Departame
         
     }
 
-    public List<Departamento> buscar()
+    /*public List<Departamento> buscar()
     {
         return departamentoFacade.findAll();
-    } 
+    } */
 }

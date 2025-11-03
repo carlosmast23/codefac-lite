@@ -52,7 +52,7 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo) throws java.rmi.RemoteException;
     //public void editar(Factura factura) throws java.rmi.RemoteException;
     public void editarFactura(Factura factura) throws ServicioCodefacException,java.rmi.RemoteException,ServicioCodefacException; 
-    public List<Factura> obtenerTodos()throws java.rmi.RemoteException;
+    //public List<Factura> obtenerTodos()throws java.rmi.RemoteException;
     //public List<Factura> obtenerFacturasReporte(Persona persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa) throws java.rmi.RemoteException;
     //public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal) throws java.rmi.RemoteException;
     public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor) throws java.rmi.RemoteException;

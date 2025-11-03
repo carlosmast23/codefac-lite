@@ -77,33 +77,19 @@ public class Main2 {
     public static void imprimir()
     {
         PersonaFacade personaFacade=new PersonaFacade();
-        List<Persona> personasList=personaFacade.findAll();
-        for (Persona persona : personasList) {
-            //System.out.println(persona.getNombreLegal());
-        }
+        
     }
     
     public static void editar()
     {
 
         PersonaFacade personaFacade=new PersonaFacade();
-        List<Persona> personasList=personaFacade.findAll();
-        for (Persona persona : personasList) {
-            //persona.setNombreLegal(persona.getNombreLegal()+"-");
-            personaFacade.edit(persona);
-            //System.out.println(persona.getNombre());
-        }
+        
     }
     
     public static void eliminar()
     {
         PersonaFacade personaFacade=new PersonaFacade();
-        List<Persona> personasList=personaFacade.findAll();
-        for (Persona persona : personasList) {
-            //persona.setNombreLegal(persona.getNombreLegal()+"-");
-            personaFacade.remove(persona);
-            return;
-            //System.out.println(persona.getNombre());
-        }
+        
     }
 }

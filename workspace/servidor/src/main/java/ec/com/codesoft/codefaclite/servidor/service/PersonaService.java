@@ -260,9 +260,7 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     }
 
-    public List<Persona> buscar() {
-        return personaFacade.findAll();
-    }
+    
 
     public Persona buscarPorIdentificacionYestado(String identificacion, GeneralEnumEstado estado) throws ServicioCodefacException, java.rmi.RemoteException {
 

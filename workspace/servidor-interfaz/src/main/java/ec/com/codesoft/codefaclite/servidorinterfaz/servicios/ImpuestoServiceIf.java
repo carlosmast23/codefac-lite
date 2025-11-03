@@ -21,6 +21,6 @@ public interface ImpuestoServiceIf extends ServiceAbstractIf<Impuesto>
     public void eliminar(Impuesto i) throws java.rmi.RemoteException;;
     public Impuesto obtenerImpuestoPorCodigo(String nombre) throws java.rmi.RemoteException;;
     public Impuesto obtenerImpuestoPorVigencia(String nombre) throws java.rmi.RemoteException;;
-    public List<Impuesto> obtenerTodos() throws java.rmi.RemoteException;;
-    public List<ImpuestoDetalle> obtenerDetalle() throws java.rmi.RemoteException;;
+    //public List<Impuesto> obtenerTodos() throws java.rmi.RemoteException;;
+    //public List<ImpuestoDetalle> obtenerDetalle() throws java.rmi.RemoteException;;
 }

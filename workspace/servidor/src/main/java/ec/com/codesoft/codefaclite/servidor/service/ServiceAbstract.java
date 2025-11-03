@@ -48,8 +48,6 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     private static final Integer TIEMPO_ESPERA_TRANSACCION=1000;
     private static final Integer INTENTOS_ESPERA_TRANSACCION=15;
 
-    //private static final Logger LOG = Logger.getLogger(ServiceAbstract.class.getName());
-    
     
     protected AbstractFacade<Entity> facade;
     //protected EntityManager entityManager;
@@ -96,7 +94,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             return (List<Entity>) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
                 public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
-                    return facade.findAll();
+                    return facade.findAllData(em);
                 }
             });
         } catch (ServicioCodefacException ex) {

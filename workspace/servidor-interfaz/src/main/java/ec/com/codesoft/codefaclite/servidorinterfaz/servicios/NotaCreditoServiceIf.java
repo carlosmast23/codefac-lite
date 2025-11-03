@@ -25,7 +25,7 @@ public interface NotaCreditoServiceIf extends ServiceAbstractIf<NotaCredito>
     public NotaCredito grabar(NotaCredito notaCredito,ModoProcesarEnum modoProcesarEnum) throws ServicioCodefacException,RemoteException;
     //public String getPreimpresoSiguiente() throws java.rmi.RemoteException;;
     //public void editar(NotaCredito notaCredito) throws java.rmi.RemoteException;
-    public List<NotaCredito> obtenerTodos() throws java.rmi.RemoteException;
+    //public List<NotaCredito> obtenerTodos() throws java.rmi.RemoteException;
     public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws java.rmi.RemoteException;
     public void editarNotaCredito(NotaCredito entity) throws ServicioCodefacException,  RemoteException;
     

@@ -65,13 +65,13 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
         return impuestoFacade.getByImpuestoVigente(nombre);
     }
     
-    public List<Impuesto> obtenerTodos()
+    /*public List<Impuesto> obtenerTodos()
     {
         return impuestoFacade.findAll();
-    }
+    }*/
     
-    public List<ImpuestoDetalle> obtenerDetalle()
+    /*public List<ImpuestoDetalle> obtenerDetalle()
     {
         return impuestoDetalleFacade.findAll();
-    }
+    }*/
 }

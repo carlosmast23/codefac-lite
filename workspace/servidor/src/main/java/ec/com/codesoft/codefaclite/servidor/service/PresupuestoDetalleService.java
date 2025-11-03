@@ -80,11 +80,7 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
         editar(p);
     }
     
-    public List<PresupuestoDetalle> buscar()
-    {
-        return presupuestoDetalleFacade.findAll();
-    }
-    
+       
     public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto) throws ServicioCodefacException, RemoteException
     {
         /*PresupuestoDetalle pd;

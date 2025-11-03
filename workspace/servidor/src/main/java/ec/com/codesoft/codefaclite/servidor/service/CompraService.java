@@ -1095,11 +1095,11 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     
 
-    @Override
+    /*@Override
     public List<Compra> obtenerTodos()
     {
         return compraFacade.findAll();
-    }
+    }*/
     
     @Override
     public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException

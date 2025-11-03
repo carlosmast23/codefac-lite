@@ -5,7 +5,6 @@
  */
 package ec.com.codesoft.codefaclite.servidor.facade;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.PersistenciaDuplicadaException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
@@ -28,10 +27,6 @@ import jakarta.persistence.FlushModeType;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
-import jakarta.persistence.RollbackException;
-import org.apache.derby.shared.common.error.DerbySQLIntegrityConstraintViolationException;
-import org.eclipse.persistence.config.HintValues;
-import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -60,44 +55,9 @@ public abstract class AbstractFacade<T>
 
     //protected abstract EntityManager getEntityManager();
     public static EntityManager nuevoEntityManager()
-    {
-        //EntityManagerFactory factory=Persistence.createEntityManagerFactory(namePersistence);
+    {        
         return entityManagerFactory.createEntityManager();
     }
-
-    //Metodo eliminado porque esta en desuso y puede generar muchos problemas de persistencia
-    /*
-    public void create(T entity) throws ConstrainViolationExceptionSQL,DatabaseException{
-        try
-        {
-            EntityTransaction tx= getEntityManager().getTransaction();
-            tx.begin();
-            //getEntityManager().getTransaction().begin();
-            getEntityManager().persist(entity);
-            entityManager.flush();
-            tx.commit();
-        }catch(PersistenceException e)
-        {
-
-            if(e.getCause()!=null && e.getCause().getClass().equals(DatabaseException.class) )
-            {
-                DatabaseException dbe=(DatabaseException) e.getCause();
-                //TODO: Esta valifacion de la claves primarias es solo para la base de datos derby
-                if(dbe.getCause()!=null && dbe.getCause().getClass().equals(DerbySQLIntegrityConstraintViolationException.class))
-                {
-                    DerbySQLIntegrityConstraintViolationException constrainViolation = (DerbySQLIntegrityConstraintViolationException) dbe.getCause();
-                    System.out.println(constrainViolation.getMessage());
-                    throw new ConstrainViolationExceptionSQL("Ya existe un registro registrado con la clave primaria");
-                }
-                throw dbe;
-            }
-
-            
-        }
-
-        //getEntityManager().getTransaction().commit();
-    }
-    */
 
     /**
      * @deprecated 
@@ -119,12 +79,19 @@ public abstract class AbstractFacade<T>
     public T find(Object id,EntityManager entityManager) {
         return entityManager.find(entityClass, id);
     }
+    
+    public List<T> findAllData(EntityManager em) {
+        jakarta.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(entityClass));
+        return em.createQuery(cq).getResultList();
+    }
+   
 
-    public List<T> findAll() {
+    /*public List<T> findAll() {
         jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));
         return nuevoEntityManager().createQuery(cq).getResultList();
-    }
+    }*/
 
     public List<T> findRange(int[] range) {
         jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
