@@ -73,6 +73,8 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
             DialogoCodefac.mensaje("Datos correctos", "La categoria del producto se edito correctamente", DialogoCodefac.MENSAJE_CORRECTO);
         } catch (RemoteException ex) {
             Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CategoriaProductoModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

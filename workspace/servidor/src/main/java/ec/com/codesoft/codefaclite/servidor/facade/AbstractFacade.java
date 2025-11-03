@@ -63,11 +63,11 @@ public abstract class AbstractFacade<T>
      * @deprecated 
      * @param entity 
      */
-    public void edit(T entity) {
-        EntityTransaction tx= nuevoEntityManager().getTransaction();
-        tx.begin();
-        nuevoEntityManager().merge(entity);
-        tx.commit();
+    public void editData(T entity,EntityManager em) {
+        //EntityTransaction tx= nuevoEntityManager().getTransaction();
+        //tx.begin();
+        em.merge(entity);
+        //tx.commit();
     }
 
     public void remove(T entity) {
@@ -86,13 +86,6 @@ public abstract class AbstractFacade<T>
         return em.createQuery(cq).getResultList();
     }
    
-
-    /*public List<T> findAll() {
-        jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
-        cq.select(cq.from(entityClass));
-        return nuevoEntityManager().createQuery(cq).getResultList();
-    }*/
-
     public List<T> findRange(int[] range) {
         jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));

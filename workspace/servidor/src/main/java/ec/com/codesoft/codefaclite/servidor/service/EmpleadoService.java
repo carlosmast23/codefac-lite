@@ -50,14 +50,20 @@ public class EmpleadoService extends ServiceAbstract<Empleado, EmpleadoFacade> i
     }
     */
     @Override
-    public void editar(Empleado b) {
-        empleadoFacade.edit(b);
-    }
-
-    @Override
     public void eliminar(Empleado b) {
-        b.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        empleadoFacade.edit(b);
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    b.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    empleadoFacade.editData(b,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriIdentificacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     @Override

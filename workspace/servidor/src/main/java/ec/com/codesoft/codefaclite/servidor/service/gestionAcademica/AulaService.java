@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.AulaFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Aula;
@@ -67,13 +68,21 @@ public class AulaService extends ServiceAbstract<Aula, AulaFacade> implements Au
         return a;
     }*/
 
-    public void editar(Aula a) {
-        aulaFacade.edit(a);
-    }
 
     public void eliminar(Aula a) {
-        a.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        aulaFacade.edit(a);
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    a.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    aulaFacade.editData(a,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(AulaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

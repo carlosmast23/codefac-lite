@@ -17,8 +17,7 @@ import java.util.List;
  */
 public interface CategoriaProductoServiceIf extends ServiceAbstractIf<CategoriaProducto>
 {
-    public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void editar(CategoriaProducto c) throws java.rmi.RemoteException;
+    public CategoriaProducto grabar(CategoriaProducto c) throws ServicioCodefacException,java.rmi.RemoteException;    
     public void eliminar(CategoriaProducto c) throws java.rmi.RemoteException;
     
     public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException;

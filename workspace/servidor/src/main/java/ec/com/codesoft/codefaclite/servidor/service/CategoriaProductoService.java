@@ -59,13 +59,21 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
         return entity;
     }
 
-    public void editar(CategoriaProducto c) {
-        categoriaProductoFacade.edit(c);
-    }
 
     public void eliminar(CategoriaProducto c) {
-        c.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        categoriaProductoFacade.edit(c);
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    c.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    categoriaProductoFacade.editData(c,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CategoriaProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException

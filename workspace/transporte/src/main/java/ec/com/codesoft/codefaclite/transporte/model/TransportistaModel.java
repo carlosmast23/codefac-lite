@@ -83,6 +83,8 @@ public class TransportistaModel extends TransportistaPanel implements DialogInte
         } catch (RemoteException ex) {
             Logger.getLogger(Transportista.class.getName()).log(Level.SEVERE, null, ex);
             DialogoCodefac.mensaje("Error","Error de comunicacion con el servidor",DialogoCodefac.MENSAJE_INCORRECTO);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TransportistaModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

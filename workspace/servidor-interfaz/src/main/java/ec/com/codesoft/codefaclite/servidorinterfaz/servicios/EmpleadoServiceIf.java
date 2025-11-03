@@ -18,7 +18,6 @@ import java.util.List;
 public interface EmpleadoServiceIf  extends ServiceAbstractIf<Empleado>
 {
     public Empleado grabar(Empleado e) throws ServicioCodefacException,java.rmi.RemoteException;
-    public void editar(Empleado e) throws java.rmi.RemoteException;
     public void eliminar(Empleado e) throws java.rmi.RemoteException;
     public List<Empleado> buscar() throws java.rmi.RemoteException;
     public List<Empleado> buscarPorDepartamento(Departamento departamento,Empresa empresa) throws ServicioCodefacException, java.rmi.RemoteException;

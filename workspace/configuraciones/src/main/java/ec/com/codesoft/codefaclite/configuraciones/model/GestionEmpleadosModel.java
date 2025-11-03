@@ -73,6 +73,8 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
             limpiar();
         } catch (RemoteException ex) {
             Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -108,6 +110,8 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
                         DialogoCodefac.mensaje("Eliminar", "El empleado se elimino correctamente", DialogoCodefac.MENSAJE_ADVERTENCIA);
                     } catch (RemoteException ex) {
                         Logger.getLogger(DepartamentoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
+                        Logger.getLogger(GestionEmpleadosModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }

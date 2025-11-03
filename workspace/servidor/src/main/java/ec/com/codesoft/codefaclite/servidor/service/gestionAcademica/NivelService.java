@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.service.gestionAcademica;
 
 import ec.com.codesoft.codefaclite.servidor.facade.gestionAcademica.NivelFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Nivel;
@@ -72,13 +73,20 @@ public class NivelService extends ServiceAbstract<Nivel, NivelFacade> implements
         return n;
     }*/
 
-    public void editar(Nivel n) {
-        nivelFacade.edit(n);
-    }
 
     public void eliminar(Nivel n) {
-        n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        nivelFacade.edit(n);
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    nivelFacade.editData(n,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NivelService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public List<Nivel> obtenerNivelesActivos() throws RemoteException {

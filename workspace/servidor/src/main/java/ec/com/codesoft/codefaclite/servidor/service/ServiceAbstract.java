@@ -156,7 +156,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                AbstractFacade.nuevoEntityManager().merge(entity);
+                entityManager.merge(entity);
             }
         });
     }

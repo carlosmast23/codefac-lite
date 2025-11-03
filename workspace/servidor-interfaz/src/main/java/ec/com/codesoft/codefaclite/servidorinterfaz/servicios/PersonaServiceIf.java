@@ -22,9 +22,7 @@ public interface PersonaServiceIf extends ServiceAbstractIf<Persona>{
     public Persona grabarConValidacion(Persona p, Boolean validarCedula,Boolean modoForzado) throws ServicioCodefacException, java.rmi.RemoteException ;    
     
     public Persona grabar(Persona p) throws ServicioCodefacException,java.rmi.RemoteException;    
-   
-    public void editar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException;
-    
+           
     public void eliminar(Persona p) throws ServicioCodefacException, java.rmi.RemoteException;
         
     public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum, GeneralEnumEstado estado,Empresa empresa) throws java.rmi.RemoteException;

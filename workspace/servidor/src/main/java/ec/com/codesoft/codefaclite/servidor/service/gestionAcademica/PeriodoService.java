@@ -145,12 +145,19 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         return getFacade().getPeriodosSinEliminar();
     }
 
-    public void editar(Periodo p) {
-        periodoFacade.edit(p);
-    }
-
     public void eliminar(Periodo p) {
-        p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        periodoFacade.edit(p);
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    periodoFacade.editData(p, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PeriodoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }

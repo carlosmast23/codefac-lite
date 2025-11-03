@@ -45,13 +45,10 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
         return i;
     }*/
     
-    public void editar(Impuesto i)
-    {
-        impuestoFacade.edit(i);
-    }
+
     
     public void eliminar(Impuesto i)
-    {
+    {                
         impuestoFacade.remove(i);
     }
     

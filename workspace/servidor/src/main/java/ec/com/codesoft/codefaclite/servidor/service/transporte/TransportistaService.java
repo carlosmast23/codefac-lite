@@ -7,12 +7,14 @@ package ec.com.codesoft.codefaclite.servidor.service.transporte;
 
 import ec.com.codesoft.codefaclite.servidor.facade.BodegaFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.transporte.TransportistaFacade;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.transporte.TransportistaServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,13 +47,21 @@ public class TransportistaService extends ServiceAbstract<Transportista, Transpo
         return t;
     }*/
 
-    public void editar(Transportista t) {
-        this.transportistaFacade.edit(t);
-    }
 
     public void eliminar(Transportista t) {
-        t.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        this.transportistaFacade.edit(t);
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    t.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    facade.editData(t,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(TransportistaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     

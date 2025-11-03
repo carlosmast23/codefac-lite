@@ -68,16 +68,24 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
         return pd;
     }
     
-    public void editar(PresupuestoDetalle p)
-    {
-        presupuestoDetalleFacade.edit(p);
-    }
+
     
     public void eliminar(PresupuestoDetalle p)
     {
-        //personaFacade.remove(p);
-        p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        editar(p);
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+
+                    //personaFacade.remove(p);
+                    p.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(p);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriIdentificacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
        
