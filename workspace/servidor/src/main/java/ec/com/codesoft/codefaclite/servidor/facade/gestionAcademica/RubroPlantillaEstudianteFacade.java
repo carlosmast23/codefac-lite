@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteInscrito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantilla;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaEstudiante;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 
@@ -22,7 +23,7 @@ public class RubroPlantillaEstudianteFacade extends AbstractFacade<RubroPlantill
         super(RubroPlantillaEstudiante.class);
     }
     
-    public List<EstudianteInscrito> getEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla)
+    public List<EstudianteInscrito> getEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla,EntityManager em)
     {
         //EstudianteInscrito ei;
         //RubroPlantillaEstudiante rpe;
@@ -32,7 +33,7 @@ public class RubroPlantillaEstudianteFacade extends AbstractFacade<RubroPlantill
                 
         String queryString=" SELECT ei EstudianteInscrito ei,RubroPlantillaEstudiante rpe  WHERE rpe.rubroPlantilla=?1 AND "+subQueryString+">0";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,rubroPlantilla);
         
         return query.getResultList();

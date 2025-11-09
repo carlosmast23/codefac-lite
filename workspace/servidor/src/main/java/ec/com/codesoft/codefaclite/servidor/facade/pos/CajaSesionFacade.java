@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaSessionEnum;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import jakarta.persistence.EntityManager;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -29,13 +30,13 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         super(CajaSession.class);
     }
     
-    public CajaSession obtenerUltimaCajaSession(Caja caja) 
+    public CajaSession obtenerUltimaCajaSession(Caja caja,EntityManager em) 
     {
         try
         {
             String stringQuery = "Select cs from CajaSession cs where cs.caja = ?1 and cs.estadoCierreCaja = ?2 order by cs.id desc";
 
-            Query query = nuevoEntityManager().createQuery(stringQuery);
+            Query query = em.createQuery(stringQuery);
             query.setParameter(1, caja);
             query.setParameter(2, CajaSessionEnum.FINALIZADO.getEstado());
             query.setMaxResults(1);
@@ -56,7 +57,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         //return null;
     }
     
-    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin,CajaEnum estado)
+    public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin,CajaEnum estado,EntityManager em)
     {
         try
         {
@@ -96,7 +97,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
 
 
             stringQuery += queryStringFecha+" ORDER BY cs.fechaHoraApertura DESC";
-            Query query = nuevoEntityManager().createQuery(stringQuery);
+            Query query = em.createQuery(stringQuery);
                         
             //query.setParameter(3, CajaSessionEnum.FINALIZADO.getEstado());
             
@@ -132,16 +133,16 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
         }
     }
     
-    public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(Integer puntoEmision, Usuario usuario) 
+    public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(Integer puntoEmision, Usuario usuario,EntityManager em) 
     {
         //TODO: Mejorar esta parte por que fallaba el metodo cuando tenia 2 objetos para comparar y el uno tenia un valor de null
-        List<CajaSession> resultado = obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(puntoEmision, usuario,1);
-        List<CajaSession> resultadoTmp = obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(puntoEmision, usuario,2);
+        List<CajaSession> resultado = obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(puntoEmision, usuario,1,em);
+        List<CajaSession> resultadoTmp = obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(puntoEmision, usuario,2,em);
         resultado.addAll(resultadoTmp);
         return resultado;
     }
     
-    public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(Integer puntoEmision, Usuario usuario,Integer numeroPuntoEmision) 
+    public List<CajaSession> obtenerCajaSessionPorPuntoEmisionYUsuarioFacadeGeneral(Integer puntoEmision, Usuario usuario,Integer numeroPuntoEmision,EntityManager em) 
     {
         //CajaSession u;
         //u.getCaja().getPuntoEmision().pun
@@ -163,7 +164,7 @@ public class CajaSesionFacade extends AbstractFacade<CajaSession> {
             consultaGeneral = consultaGeneral.replace("?#","2");
         }
         
-        Query query = nuevoEntityManager().createQuery(consultaGeneral);
+        Query query = em.createQuery(consultaGeneral);
         query.setParameter(1, usuario);
         query.setParameter(2, CajaSessionEnum.ACTIVO.getEstado());
         

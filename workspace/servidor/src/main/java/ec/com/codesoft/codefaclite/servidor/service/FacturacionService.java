@@ -144,29 +144,49 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public Factura buscarPorPremimpresoYEstado(Integer secuencial,BigDecimal puntoEstablecimiento,Integer  puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum) throws RemoteException
     {
-        return getFacade().buscarPorPremimpresoYEstadoFacade(secuencial, puntoEstablecimiento, puntoEmision, estadoEnum);
+        try {
+            return (Factura) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().buscarPorPremimpresoYEstadoFacade(secuencial, puntoEstablecimiento, puntoEmision, estadoEnum,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public Factura buscarPorNumeroOrdenActivo(Integer numeroOrden) throws RemoteException,ServicioCodefacException
     {
-         List<Factura> resultadoList=getFacade().buscarPorNumeroOrden(numeroOrden);
-        
-        if(resultadoList.size()>0)
-        {
-            return resultadoList.get(0);
-        }
-        return null;
+        return (Factura) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                List<Factura> resultadoList = getFacade().buscarPorNumeroOrden(numeroOrden,entityManager);
+
+                if (resultadoList.size() > 0) {
+                    return resultadoList.get(0);
+                }
+                return null;
+            }
+        });        
+         
     }
     
     public Factura buscarPorAutorizacion(String autorizacion) throws RemoteException,ServicioCodefacException
     {
-        List<Factura> resultadoList=getFacade().buscarPorAutorizacionFacade(autorizacion);
+        return (Factura) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                List<Factura> resultadoList = getFacade().buscarPorAutorizacionFacade(autorizacion,entityManager);
+
+                if (resultadoList.size() > 0) {
+                    return resultadoList.get(0);
+                }
+                return null;
+            }
+        });
         
-        if(resultadoList.size()>0)
-        {
-            return resultadoList.get(0);
-        }
-        return null;
     }
     
     /**
@@ -190,7 +210,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         
                         ComprobantesService servicioComprobante = new ComprobantesService();
                         servicioComprobante.setearSecuencialComprobanteSinTransaccion(liquidacionCompra,entityManager);           
-                        setearDatosClienteYDistribuidor(liquidacionCompra);
+                        setearDatosClienteYDistribuidor(liquidacionCompra,entityManager);
                         grabarDetallesFacturaSinTransaccion(liquidacionCompra,entityManager); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
                         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
                         imprimirLogFactura(liquidacionCompra, CrudEnum.CREAR);
@@ -226,13 +246,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         asignarVendedorProforma(proforma);
 
         
-        proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa(),proforma.getCodigoDocumentoEnum()).intValue());
+        proforma.setSecuencial(obtenerSecuencialProformas(proforma.getEmpresa(),proforma.getCodigoDocumentoEnum(),entityManager).intValue());
         proforma.setClaveAcceso(proforma.getSecuencial()+"");
         //proforma.setSecuencial(null); //Solo para probar la validacion de JPA
         proforma.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
 
         //proforma.setCodigoDocumento(DocumentoEnum.PROFORMA.getCodigo());
-        setearDatosClienteYDistribuidor(proforma);
+        setearDatosClienteYDistribuidor(proforma,entityManager);
         grabarDetallesFacturaSinTransaccion(proforma,entityManager); //Todo: Por el momento dejo comentando la proforma que se descuente del inventario
         //entityManager.flush(); //Hacer que el nuevo objeto tenga el id para retornar
         
@@ -485,7 +505,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * Estos datos se graban en la misma factura para poder hacer un reporte mas rapido y evitar hacer tantas consultas
      * @param proforma 
      */
-    private void setearDatosDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
+    private void setearDatosDistribuidor(Factura venta,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         //Si la proforma tiene una zona la grabo con los datos de la oficina del cliente
         if(venta.getSucursal()!=null && venta.getSucursal().getZona()!=null)
@@ -504,7 +524,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 RutaService rutaService=new RutaService();
                 Integer dia=UtilidadesFecha.obtenerDiaSemana(UtilidadesFecha.castDateUtilToSql(venta.getFechaEmision())); //Por el momento busca la ruta segun el día que esta generando la proforma o factura
                 DiaEnum diaEnum=DiaEnum.buscarPorNumero(dia);
-                Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(venta.getVendedor(),venta.getSucursal(),diaEnum);
+                Ruta ruta=rutaService.consultarRutaActivaPorVendedorYCliente(venta.getVendedor(),venta.getSucursal(),diaEnum,em);
                 if(ruta!=null)
                 {
                     venta.setRutaId(ruta.getId());
@@ -546,7 +566,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 proforma.setFechaUltimaEdicion(UtilidadesFecha.getFechaHoyTimeStamp());
                 proforma.setUsuarioUltimaEdicion(proforma.getUsuario());
                 
-                setearDatosClienteYDistribuidor(proforma);
+                setearDatosClienteYDistribuidor(proforma,entityManager);
                 entityManager.merge(proforma);                
                 
                 eliminarDetalles(facturaDetalleService.buscarPorFactura(proforma,entityManager), proforma.getDetalles(),entityManager);
@@ -565,7 +585,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * Metodo que permite setear los datos del cliente en la venta para poder datos estaticos para realizar control de la venta
      * @param venta 
      */
-    private void setearDatosClienteYDistribuidor(Factura venta) throws RemoteException, ServicioCodefacException
+    private void setearDatosClienteYDistribuidor(Factura venta,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         if(venta.getCliente()!=null)
         {
@@ -579,7 +599,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             venta.setTelefono(venta.getSucursal().getTelefonoCelular()); //todo: ver si hago un metodo para obtener los telefonos 
         }
         
-        setearDatosDistribuidor(venta);
+        setearDatosDistribuidor(venta,em);
     }
     
     private void setearDatosPorDefecto(Factura factura,CarteraParametro carteraParametro,EntityManager entityManager) throws RemoteException, ServicioCodefacException
@@ -669,7 +689,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {   
                 
-                setearDatosClienteYDistribuidor(factura);
+                setearDatosClienteYDistribuidor(factura,entityManager);
                 
                 
                 //Validaciones iniciales de la factura
@@ -679,10 +699,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 setearDatosPorDefecto(factura,carteraParametro,entityManager);
                 
                 //Verificar promociones
-                verificarPromocionDosPorUno(factura);
+                verificarPromocionDosPorUno(factura,entityManager);
                 
                 //primero verificar la caja para ver si tiene permisos
-                agregarDatosParaCajaSession(factura,null);
+                agregarDatosParaCajaSession(factura,null,entityManager);
                 
                 //TODO: dejo esta parte por el momento porque si no funciona no se habilita para grabar las ventas
                 carteraParametro.pagarConCaja=true;
@@ -763,14 +783,14 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    private void verificarPromocionDosPorUno(Factura factura) throws RemoteException, ServicioCodefacException
+    private void verificarPromocionDosPorUno(Factura factura,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         DescuentoService descuentoService=new DescuentoService();
         
         List<FacturaDetalle> detalleList=new ArrayList<FacturaDetalle>();
         for (FacturaDetalle facturaDetalle : factura.getDetalles()) 
         {
-            Integer promoDosPorUno=descuentoService.consultarPromocionDosPorUno(facturaDetalle.getReferenciaId());
+            Integer promoDosPorUno=descuentoService.consultarPromocionDosPorUno(facturaDetalle.getReferenciaId(),em);
             if(promoDosPorUno!=null && promoDosPorUno>0)
             {
                 try {
@@ -1225,7 +1245,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
 
         //TODO:Ver si se mueve a la primera parte donde se setean los datos
         //Parece que no debo mover por que otros metodos recien desde este punto empiezan grabar
-        setearDatosClienteYDistribuidor(factura);    
+        setearDatosClienteYDistribuidor(factura,entityManager);    
         
         //TODO:Analizar mover a fuera , o pasar los metodos setear a este punto
         asignarVendedorAutomatico(factura);
@@ -1703,10 +1723,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     }
     
     
-    public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)
+    /*public List<Factura> consultaDialogo(String param,int limiteMinimo,int limiteMaximo)
     {
         return facturaFacade.queryDialog(param,limiteMinimo,limiteMaximo);        
-    }
+    }*/
 
     public void editar(Factura factura) throws ServicioCodefacException, RemoteException {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
@@ -1729,27 +1749,71 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor) throws java.rmi.RemoteException 
     {
-        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,documentoEnum2,sucursal,usuario,vendedor,null,false);
+        try {
+            return (List<Factura>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerFacturasReporte(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,documentoEnum2,sucursal,usuario,vendedor,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
+    }
+    
+    public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EntityManager em) throws java.rmi.RemoteException 
+    {
+        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,documentoEnum2,sucursal,usuario,vendedor,null,false,em);
     }
     
     public List<Factura> obtenerFacturasReporte(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException 
     {
-        return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,null,sucursal,usuario,vendedor,enviadoGuiaRemision,quitarVentasAnuladasNCTotal);
+        try {
+            return (List<Factura>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return facturaFacade.lista(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,null,sucursal,usuario,vendedor,enviadoGuiaRemision,quitarVentasAnuladasNCTotal,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
     public BigDecimal obtenerFacturasReporteTotalVenta(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException 
     {
-        BigDecimal valor=facturaFacade.listaConTotalValor(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,vendedor,enviadoGuiaRemision);
-        if(valor==null)
-        {
-            valor=BigDecimal.ZERO;
+        try {
+            return (BigDecimal) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    BigDecimal valor = facturaFacade.listaConTotalValor(persona, fi, ff, estadEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum, sucursal, usuario, vendedor, enviadoGuiaRemision,entityManager);
+                    if (valor == null) {
+                        valor = BigDecimal.ZERO;
+                    }
+                    return valor;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return valor;
+        return null;
     }
     
     public Long obtenerFacturasReporteTamanio(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) throws java.rmi.RemoteException 
     {
-        return facturaFacade.listaConTamanio(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,vendedor,enviadoGuiaRemision);
+        try {
+            return (Long) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return facturaFacade.listaConTamanio(persona,fi,ff,estadEnum,consultarReferidos,referido,agrupadoReferido,puntoEmision,empresa,documentoEnum,sucursal,usuario,vendedor,enviadoGuiaRemision,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws RemoteException, ServicioCodefacException
@@ -1804,10 +1868,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }
     
-    public List<Factura> obtenerFacturasActivas()
+    /*public List<Factura> obtenerFacturasActivas()
     {
         return facturaFacade.getFacturaEnable();
-    }
+    }*/
     
     
     
@@ -1855,7 +1919,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         }
                         
                         //Crear un registro negativo en la caja session
-                        agregarDatosParaCajaSession(factura,SignoEnum.NEGATIVO);
+                        agregarDatosParaCajaSession(factura,SignoEnum.NEGATIVO,entityManager);
                         
                         imprimirLogFactura(factura, CrudEnum.ELIMINAR);
                     
@@ -1895,16 +1959,31 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     @Override
     public Long obtenerSecuencialProformas(Empresa empresa,DocumentoEnum documentoEnum) throws RemoteException
     {
-        Long secuencial=getFacade().getSecuencialProforma(empresa,documentoEnum);
+        try {
+            return (Long) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerSecuencialProformas(empresa, documentoEnum, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public Long obtenerSecuencialProformas(Empresa empresa,DocumentoEnum documentoEnum,EntityManager em) throws RemoteException
+    {
+        Long secuencial=getFacade().getSecuencialProforma(empresa,documentoEnum,em);
         return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
     }
     
-    @Override
+    /*@Override
     public Long obtenerSecuencialComanda(Empresa empresa) throws RemoteException
     {
         Long secuencial=getFacade().getSecuencialProforma(empresa,DocumentoEnum.COMANDA);
         return (secuencial!=null)?(secuencial+1):1; //Si no existe ningun valor por defecto retorna 1
-    }
+    }*/
     
     public void eliminarProforma(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException
     {
@@ -1919,12 +1998,24 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public List<Factura> consultarProformasReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado,DocumentoEnum.PROFORMA);
+        return (List<Factura>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado,DocumentoEnum.PROFORMA,entityManager);
+            }
+        });        
+        
     }
     
     public List<Factura> consultarComandaReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado,DocumentoEnum.COMANDA);
+        return (List<Factura>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarProformasReporteFacade(cliente, fechaInicial, fechaFinal, empresa,estado,DocumentoEnum.COMANDA,entityManager);
+            }
+        });
+        
     }
 
     /**
@@ -2016,10 +2107,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 return;
         }
         
-        if(getFacade().verificarFacturaActivaIngresadaConPedido(proforma))
-        {
+        //if(getFacade().verificarFacturaActivaIngresadaConPedido(proforma))
+        //{
             //throw new ServicioCodefacException("No se puede hacer más de 2 facturas con el mismo pedido");
-        }
+        //}
     }
     
     /**
@@ -2028,7 +2119,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      * @throws ServicioCodefacException
      * @throws RemoteException 
      */
-    public void agregarDatosParaCajaSession(ComprobanteVentaNotaCreditoAbstract factura,SignoEnum signoEnum) throws ServicioCodefacException, RemoteException
+    public void agregarDatosParaCajaSession(ComprobanteVentaNotaCreditoAbstract factura,SignoEnum signoEnum,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
         List<CajaPermiso> cajasPermisosList = cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario());
@@ -2072,7 +2163,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             puntoEmision=((Factura) factura).getPuntoEmision();
         }
         
-        cajaSession =cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(puntoEmision, factura.getUsuario());
+        cajaSession =cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(puntoEmision, factura.getUsuario(),em);
         
         if(cajaSession == null)
         {
@@ -2175,11 +2266,16 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
    public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto) throws RemoteException,ServicioCodefacException 
    {
-       
-       UtilidadReport reporte=new UtilidadReport("Reporte de Utilidades");
-       List<UtilidadResult> datosList= getFacade().consultaUtilidadFacade(fechaMenor,fechaMayor,categoriaProducto);       
-       reporte.setDetalleList(datosList);
-       
-       return reporte;
+       return (UtilidadReport) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+           @Override
+           public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                UtilidadReport reporte = new UtilidadReport("Reporte de Utilidades");
+               List<UtilidadResult> datosList = getFacade().consultaUtilidadFacade(fechaMenor, fechaMayor, categoriaProducto,entityManager);
+               reporte.setDetalleList(datosList);
+
+               return reporte;
+           }
+       });       
+      
    }
 }

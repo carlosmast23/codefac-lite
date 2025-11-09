@@ -65,19 +65,20 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getLetra());
             
             ObjetoMantenimientoService objetoMantenimientoService=new ObjetoMantenimientoService();
-            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-            List<ObjetoMantenimiento> resultadoList= objetoMantenimientoService.obtenerPorMap(mapParametros,entityManager);
-            if(resultadoList.size()>0)
-            {
-                System.out.println("DATO repetido con VIN: "+mantenimiento.getVehiculo().getVin());
-                continue;
-            }
-            
+            //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
             
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                    entityManager.persist(objetoMantenimiento);
+                    List<ObjetoMantenimiento> resultadoList = objetoMantenimientoService.obtenerPorMap(mapParametros, entityManager);
+                    if (resultadoList.size() > 0) {
+                        System.out.println("DATO repetido con VIN: " + mantenimiento.getVehiculo().getVin());
+                        //return;
+                    }
+                    else
+                    {
+                        entityManager.persist(objetoMantenimiento);
+                    }
                     
                 }
             });
@@ -119,7 +120,12 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
     
     public List<Mantenimiento> obtenerPendientesClasificarUbicacion(Empresa empresa) throws ServicioCodefacException, RemoteException 
     {
-        return getFacade().obtenerPendientesClasificarUbicacionFacade(empresa);
+        return (List<Mantenimiento>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().obtenerPendientesClasificarUbicacionFacade(empresa,entityManager);
+            }
+        });
         
     }
     
@@ -321,7 +327,7 @@ public class MantenimientoService extends ServiceAbstract<Mantenimiento, Manteni
             @Override
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException 
             {  
-                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,fechaFinExacto,todosTaller,taller,estadoEnum,marca,ubicacionEnum));
+                return convertirDatos(getFacade().consultarMantenimientoFacade(fechaInicio, fechaFin,fechaFinExacto,todosTaller,taller,estadoEnum,marca,ubicacionEnum,em));
             }
         });
     }

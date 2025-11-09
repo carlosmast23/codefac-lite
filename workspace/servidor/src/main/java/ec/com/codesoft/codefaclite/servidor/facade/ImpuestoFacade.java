@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import jakarta.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,15 +27,15 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
         super(Impuesto.class);
     }
 
-    public Impuesto getByName(String nombre) {
+    public Impuesto getByName(String nombre,EntityManager em) {
 
         String queryString = "SELECT i FROM Impuesto i WHERE i.nombre=?1";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,nombre); 
         return (Impuesto) query.getSingleResult();
     }
     
-    public Impuesto getByImpuestoVigente(String nombre)
+    /*public Impuesto getByImpuestoVigente(String nombre)
     {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -71,6 +72,6 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
             Logger.getLogger(ImpuestoFacade.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
+    }*/
 
 }

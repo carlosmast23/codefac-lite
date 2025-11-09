@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaPermiso;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -25,7 +26,7 @@ public class CajaFacade extends AbstractFacade<Caja>{
         super(Caja.class);
     }
     
-    public List<Caja> buscarCajasAutorizadasParaUsuario(Usuario usuario)
+    public List<Caja> buscarCajasAutorizadasParaUsuario(Usuario usuario,EntityManager em)
     {
         try
         {
@@ -33,7 +34,7 @@ public class CajaFacade extends AbstractFacade<Caja>{
             //cp.getCaja().setEstadoEnum(CajaEnum.ACTIVO);
             String queryString = "Select distinct(cp.caja) from CajaPermiso cp where cp.usuario = ?1 and cp.caja.estado=?2 and cp.estado=?2 ";
 
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1, usuario);
             query.setParameter(2, CajaEnum.ACTIVO.getEstado());
             List resultado=query.getResultList();

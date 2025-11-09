@@ -1,6 +1,5 @@
 
 import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
-import ec.com.codesoft.codefaclite.servidor.service.EmpresaService;
 import ec.com.codesoft.codefaclite.servidor.service.ParametroCodefacService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
@@ -41,27 +40,6 @@ public class TestGrabarFechaValidacion {
             EntityManager em = AbstractFacade.nuevoEntityManager();
             EntityTransaction et = em.getTransaction();
             
-            EmpresaService empresaService=new EmpresaService();
-            List<Empresa> empresasResultado=empresaService.obtenerTodos();
-            //Empresa empresa=empresaService.buscarPorIdentificacion("1724218951001");
-            Empresa empresa=empresasResultado.get(0);
-            
-            ParametroCodefacService servicioParametro=new ParametroCodefacService();
-            ParametroCodefac parametro=servicioParametro.getParametroByNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION, empresa);
-            if(parametro==null)
-            {
-                parametro=new ParametroCodefac();
-                parametro.setEmpresa(empresa);
-                parametro.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-                parametro.setValor(UtilidadesEncriptar.encriptar(fecha,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-                servicioParametro.grabar(parametro);
-            }else
-            {
-                parametro.setEmpresa(empresa);
-                parametro.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-                parametro.setValor(UtilidadesEncriptar.encriptar(fecha,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR));
-                servicioParametro.editar(parametro);
-            }
             
             LOG.log(Level.INFO,"Fecha Actualizada correctamente");
             em.close();
@@ -71,10 +49,7 @@ public class TestGrabarFechaValidacion {
             Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PersistenciaDuplicadaException ex) {
             Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ServicioCodefacException ex) {
-            Logger.getLogger(TestGrabarFechaValidacion.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 }

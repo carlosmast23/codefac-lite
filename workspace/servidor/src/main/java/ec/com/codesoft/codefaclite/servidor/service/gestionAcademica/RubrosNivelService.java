@@ -151,37 +151,38 @@ public class RubrosNivelService extends ServiceAbstract<RubrosNivel,RubrosNivelF
     
     public List<RubrosNivel> buscarPorPeriodoYMeses(Periodo periodo,CatalogoProducto catalogoProducto,List<RubroPlantillaMes> meses) throws RemoteException
     {
-        if(meses.size()>0)
-        {
-            return getFacade().findPorPeriodoYMeses(periodo, catalogoProducto, meses);
+        try {
+            return (List<RubrosNivel>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    if (meses.size() > 0) {
+                        return getFacade().findPorPeriodoYMeses(periodo, catalogoProducto, meses,entityManager);
+                    } else {
+                        return new ArrayList<RubrosNivel>();
+                    }
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubrosNivelService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        else
-        {
-            return new ArrayList<RubrosNivel>();
-        }
+        return new ArrayList<RubrosNivel>();
     }
     
     public void eliminarRubroNivel(RubrosNivel rubrosNivel) throws RemoteException,ServicioCodefacException
     {
-        //RubrosNivelService rubrosNivelService;
-        RubroEstudianteService servicio=new RubroEstudianteService();
-        Long cantidadRegistros=servicio.contarRubrosEstudiantePorRubroNivel(rubrosNivel);
-        if(cantidadRegistros==0)
-        {
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion(EntityManager entityManager) {
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException  {
+                RubroEstudianteService servicio = new RubroEstudianteService();
+                Long cantidadRegistros = servicio.contarRubrosEstudiantePorRubroNivel(rubrosNivel,entityManager);
+                if (cantidadRegistros == 0) {
                     rubrosNivel.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
                     entityManager.merge(rubrosNivel);
+                } else {
+                    throw new ServicioCodefacException("El rubro no se puede eliminar porque existen estudiantes asignados este valor");
                 }
-            });
-        
-        }
-        else
-        {
-            throw new ServicioCodefacException("El rubro no se puede eliminar porque existen estudiantes asignados este valor");
-        }       
-        
+            }
+        });
     }
 
     @Override

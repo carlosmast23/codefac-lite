@@ -21,7 +21,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         super(Usuario.class);
     }
     
-    @Deprecated //Metodo que comprara directamente las claves
+    /*@Deprecated //Metodo que comprara directamente las claves
     public Usuario login(String nick, String clave)
     {
         try
@@ -36,6 +36,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         {
             return null;
         }
-    }
+    }*/
     
 }

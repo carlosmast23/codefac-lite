@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -21,12 +22,12 @@ public class SriRetencionIvaFacade extends AbstractFacade<SriRetencionIva>{
         super(SriRetencionIva.class);
     }
 
-    public List<SriRetencionIva> obtenerTodosOrdenadoPorCodigoFacade() {
+    public List<SriRetencionIva> obtenerTodosOrdenadoPorCodigoFacade(EntityManager em) {
         //SriRetencionIva u;
         //u.getCodigo();
         try {            
             String queryString = "SELECT u FROM SriRetencionIva u order by u.codigo desc";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             return (List<SriRetencionIva>) query.getResultList();
         } catch (NoResultException e) {
             return null;

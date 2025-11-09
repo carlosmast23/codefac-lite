@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.DestinatarioGuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.NoResultException;
@@ -26,12 +27,12 @@ public class DestinatarioGuiaRemisionFacade extends AbstractFacade<DestinatarioG
     }
     
     
-    public List<DestinatarioGuiaRemision> obtenerGuiaRemision(Factura factura)
+    public List<DestinatarioGuiaRemision> obtenerGuiaRemision(Factura factura,EntityManager em)
     {
         List<DestinatarioGuiaRemision> resultado=new ArrayList<DestinatarioGuiaRemision>();
         try {            
             String queryString = "SELECT u FROM DestinatarioGuiaRemision u WHERE u.facturaReferencia=?1";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1, factura);
             
             //List<DestinatarioGuiaRemision> resultadoList= (List<DestinatarioGuiaRemision>) query.getResultList();

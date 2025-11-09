@@ -26,9 +26,10 @@ public class PermisoVentanaService extends ServiceAbstract<PermisoVentana,Permis
         super(PermisoVentanaFacade.class);
     }
     
-    public PermisoVentana crearPermisoVentanaConTodosPermisoSinTransaccion(Perfil perfil,String codigo)
+    public PermisoVentana crearPermisoVentanaConTodosPermisoSinTransaccion(Perfil perfil,String codigo,EntityManager em)
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+        
+        //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         PermisoVentana permisoVentana=new PermisoVentana();
         permisoVentana.setNombreClase(codigo);
         permisoVentana.setPerfil(perfil);
@@ -37,7 +38,7 @@ public class PermisoVentanaService extends ServiceAbstract<PermisoVentana,Permis
         permisoVentana.setPermisoEliminarEnum(EnumSiNo.SI);
         permisoVentana.setPermisoGrabarEnum(EnumSiNo.SI);
         permisoVentana.setPermisoImprimirEnum(EnumSiNo.SI);
-        entityManager.persist(permisoVentana);
+        em.persist(permisoVentana);
         return permisoVentana;
     }
 

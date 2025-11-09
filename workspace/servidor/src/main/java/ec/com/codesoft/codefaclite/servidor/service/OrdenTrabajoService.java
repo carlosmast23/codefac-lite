@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.EntityTransaction;
+import java.util.ArrayList;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
@@ -63,14 +64,12 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
     @Deprecated
     @Override
     public void grabarOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException, RemoteException {
-        try {
-            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-            entityManager.getTransaction().begin(); //Inicio de la transaccion
-            entityManager.persist(ordenTrabajo);
-            entityManager.getTransaction().commit();
-        } catch (Exception exc) {
-            exc.addSuppressed(exc);
-        }
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                entityManager.persist(ordenTrabajo);
+            }
+        });
     }
 
     /*@Override
@@ -103,7 +102,7 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
                 
                 //si se hizo una modificacion del CLIENTE, se cambia igual a los presupuestos para tener igual los datos en los demas lugares
                 PresupuestoService presupuestoService=new PresupuestoService();
-                List<Presupuesto> presupuestoList=presupuestoService.consultarPorOrdenTrabajo(ordenTrabajo);
+                List<Presupuesto> presupuestoList=presupuestoService.consultarPorOrdenTrabajo(ordenTrabajo,entityManager);
                 for (Presupuesto presupuesto : presupuestoList) 
                 {
                     presupuesto.setPersona(ordenTrabajo.getCliente());
@@ -135,7 +134,17 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
 
     @Override
     public List<OrdenTrabajoDetalle> consultarReporte(Date fechaInicial, Date fechaFinal, Departamento departamento, Empleado empleado,ObjetoMantenimiento objetoMantenimiento, OrdenTrabajoDetalle.EstadoEnum estado) throws RemoteException {
-        return getFacade().consultaReporteFacade(fechaInicial, fechaFinal, departamento, empleado,objetoMantenimiento ,estado);
+        try {
+            return (List<OrdenTrabajoDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().consultaReporteFacade(fechaInicial, fechaFinal, departamento, empleado,objetoMantenimiento ,estado,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(OrdenTrabajoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
 
     @Override
@@ -323,8 +332,8 @@ public class OrdenTrabajoService extends ServiceAbstract<OrdenTrabajo, OrdenTrab
         }
     }
     
-    public OrdenTrabajo consultarUltimaOTporObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+   /* public OrdenTrabajo consultarUltimaOTporObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
     { 
         return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento);
-    }
+    }*/
 }

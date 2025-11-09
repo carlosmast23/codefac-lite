@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.EstudianteServiceIf;
 import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +39,32 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
     }
 
     public List<Estudiante> estudianteSinMatriculaPorPeriodo(Periodo periodo) throws RemoteException {
-        return estudianteFacade.getEstudiantesSinMatricula(periodo);
+        try {
+            return (List<Estudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return estudianteFacade.getEstudiantesSinMatricula(periodo,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
 
     public List<Estudiante> estudianteNuevosSinMatricula() throws RemoteException {
-        return estudianteFacade.getEstudiantesNuevos();
+        try {
+            return (List<Estudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return estudianteFacade.getEstudiantesNuevos(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
     public List<Estudiante> obtenerEstudiantesActivos() throws RemoteException
@@ -90,31 +111,30 @@ public class EstudianteService extends ServiceAbstract<Estudiante, EstudianteFac
     
 
     public void eliminarEstudiante(Estudiante e,ModoProcesarEnum modoProceso)  throws RemoteException ,ServicioCodefacException {
-        try {
-            EstudianteInscritoService service=new EstudianteInscritoService();
-            
-            //Solo cuando es modo normal realiza las validaciones
-            if(modoProceso.equals(ModoProcesarEnum.NORMAL))
-            {
-                Long cantidadEstudiantesInscritos=service.obtenerTamanioPorEstudiante(e);
-                if(cantidadEstudiantesInscritos>0)
-                {
-                    //Bota el la expecion pero comunica que tiene la opcion de ejecutar de forma forzada de nuevo
-                    throw new ServicioCodefacException("No se puede eliminar porque el estudiante esta inscrito",true);
+
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                EstudianteInscritoService service=null;
+                try {
+                    service = new EstudianteInscritoService();
+                } catch (RemoteException ex) {
+                    Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                //Solo cuando es modo normal realiza las validaciones
+                if (modoProceso.equals(ModoProcesarEnum.NORMAL)) {
+                    Long cantidadEstudiantesInscritos = service.obtenerTamanioPorEstudiante(e,entityManager);
+                    if (cantidadEstudiantesInscritos > 0) {
+                        //Bota el la expecion pero comunica que tiene la opcion de ejecutar de forma forzada de nuevo
+                        throw new ServicioCodefacException("No se puede eliminar porque el estudiante esta inscrito", true);
+                    }
+                }
+                
+                e.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                entityManager.merge(e);
             }
-            
-            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                @Override
-                public void transaccion(EntityManager entityManager) {
-                    e.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-                    entityManager.merge(e);
-                }
-            });
-           
-        } catch (RemoteException ex) {
-            Logger.getLogger(EstudianteService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        });
     }
 
     @Override

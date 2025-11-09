@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 
@@ -24,12 +25,12 @@ public class IngresoCajaFacade extends AbstractFacade<IngresoCaja>
         super(IngresoCaja.class);
     }
     
-    public List<IngresoCaja> consultarPorCajaSession(CajaSession cajaSession)
+    public List<IngresoCaja> consultarPorCajaSession(CajaSession cajaSession,EntityManager em)
     {
         //IngresoCaja i;
         //i.getCajaSession().
         String queryString=" SELECT i FROM IngresoCaja i WHERE i.cajaSession=?1 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, cajaSession);
         List resultadoList = query.getResultList();
         return resultadoList;

@@ -48,62 +48,66 @@ public class RubroPlantillaService extends ServiceAbstract<RubroPlantilla,RubroP
     
     public void grabarConDetalles(RubroPlantilla rubroPlantilla) throws RemoteException
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        
-        rubroPlantilla.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-        List<RubroPlantillaEstudiante> detalles = rubroPlantilla.getDetalles();
-
-        for (RubroPlantillaEstudiante detalle : detalles) {
-            //Si no tiene id se debe grabar porque no eixste
-            if (detalle.getId() == null) {
-                entityManager.persist(detalle);
-            }
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    rubroPlantilla.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                    List<RubroPlantillaEstudiante> detalles = rubroPlantilla.getDetalles();
+                    
+                    for (RubroPlantillaEstudiante detalle : detalles) {
+                        //Si no tiene id se debe grabar porque no eixste
+                        if (detalle.getId() == null) {
+                            entityManager.persist(detalle);
+                        }
+                    }
+                    
+                    entityManager.persist(rubroPlantilla);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroPlantillaService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        entityManager.persist(rubroPlantilla);
-        
-        transaccion.commit();
-
+                
     }
     
     
     public void editarConDetalles(RubroPlantilla entity,List<RubroPlantillaEstudiante> detallesEliminar) throws java.rmi.RemoteException
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion=getTransaccion();
-        transaccion.begin();
-        
-        List<RubroPlantillaEstudiante> detalles=entity.getDetalles();
-        
-        for (RubroPlantillaEstudiante detalle : detalles) {
-            //Si no tiene id se debe grabar porque no eixste
-            if(detalle.getId()==null)
-            {
-                entityManager.persist(detalle);
-            }
-            else
-            {
-                entityManager.merge(detalle);
-            }
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    List<RubroPlantillaEstudiante> detalles = entity.getDetalles();
+                    
+                    for (RubroPlantillaEstudiante detalle : detalles) {
+                        //Si no tiene id se debe grabar porque no eixste
+                        if (detalle.getId() == null) {
+                            entityManager.persist(detalle);
+                        } else {
+                            entityManager.merge(detalle);
+                        }
+                    }
+                    
+                    //Eliminar fisicamente los detalles
+                    for (RubroPlantillaEstudiante detalle : detallesEliminar) {
+                        
+                        //Primero se funciona el objeto con la base antes de borrar
+                        detalle = entityManager.merge(detalle);
+                        entityManager.remove(detalle);
+                        detalles.remove(detalle);
+                        //detalles.get(0).set
+                        
+                    }
+                    entity.setDetalles(detalles);
+                    
+                    entityManager.merge(entity);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroPlantillaService.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //Eliminar fisicamente los detalles
-        for (RubroPlantillaEstudiante detalle : detallesEliminar) {
-            
-            //Primero se funciona el objeto con la base antes de borrar
-            detalle=entityManager.merge(detalle);
-            entityManager.remove(detalle);
-            detalles.remove(detalle);
-            //detalles.get(0).set
-            
-        }
-        entity.setDetalles(detalles);
-        
-        entityManager.merge(entity);
-        
-        transaccion.commit();
     }
 
     @Override

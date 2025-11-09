@@ -94,7 +94,7 @@ public class MarcaProductoService extends ServiceAbstract<MarcaProducto,MarcaPro
         return (List<MarcaProducto>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
-                return getFacade().obtenerActivosPorEmpresa(empresa);
+                return getFacade().obtenerActivosPorEmpresa(empresa,em);
             }
         });
     }

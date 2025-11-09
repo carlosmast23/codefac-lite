@@ -855,11 +855,23 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
    
     public EnumSiNo getActualizarPrecioEnum() 
     {
+        if (actualizarPrecio == null || actualizarPrecio.isEmpty()) {
+            return null; // o un default como EnumSiNo.NO
+        }
+        
         return EnumSiNo.valueOf(actualizarPrecio);
     }
 
     public void setActualizarPrecioEnum(EnumSiNo actualizarPrecioEnum) {
-        this.actualizarPrecio = actualizarPrecioEnum.getLetra();
+        
+        if (actualizarPrecioEnum == null) 
+        {
+            this.actualizarPrecio = null;
+        } 
+        else 
+        {
+            this.actualizarPrecio = actualizarPrecioEnum.getLetra();
+        }
     }
 
 
@@ -1177,7 +1189,7 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         return UtilidadesImpuestos.agregarValorIva(tarifa, valorUnitario);
     }
     
-    public BigDecimal getTarifaIva()
+    /*public BigDecimal getTarifaIva()
     {
         if(catalogoProducto==null || catalogoProducto.getIva()==null)
         {
@@ -1202,6 +1214,45 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         //System.out.println(catalogoProducto.getIva().getTarifa());
         //return new BigDecimal(catalogoProducto.getIva().getTarifa().toString());
         return new BigDecimal(catalogoProducto.getIva().getTarifa()+"");
+    }*/
+       public BigDecimal getTarifaIva() {
+        try {
+            // ⚠️ Verifica primero si el catálogo o el IVA están nulos
+            if (catalogoProducto == null) {
+                Logger.getLogger(Producto.class.getName()).log(Level.WARNING,
+                        "Producto id=" + idProducto + ", nombre=" + nombre
+                        + " sin catalogoProducto asignado");
+                return BigDecimal.ZERO;
+            }
+
+            if (catalogoProducto.getIva() == null) {
+                Logger.getLogger(Producto.class.getName()).log(Level.WARNING,
+                        "Producto id=" + idProducto + ", nombre=" + nombre
+                        + " con catalogo id=" + (catalogoProducto != null ? catalogoProducto.getId() : "null")
+                        + " tiene IVA NULL");
+                return BigDecimal.ZERO;
+            }
+
+            // ⚠️ Si el IVA existe pero su tarifa es nula, devolver porcentaje o 0
+            if (catalogoProducto.getIva().getTarifa() == null) {
+                Logger.getLogger(Producto.class.getName()).log(Level.WARNING,
+                        "Producto id=" + idProducto + ", nombre=" + nombre
+                        + " con catalogo id=" + catalogoProducto.getId()
+                        + " tiene TARIFA NULL");
+                return catalogoProducto.getIva().getPorcentaje() != null
+                        ? catalogoProducto.getIva().getPorcentaje()
+                        : BigDecimal.ZERO;
+            }
+
+            // ✅ Caso normal
+            return new BigDecimal(String.valueOf(catalogoProducto.getIva().getTarifa()));
+
+        } catch (Exception e) {
+            Logger.getLogger(Producto.class.getName()).log(Level.SEVERE,
+                    "Error obteniendo tarifa IVA para producto id=" + idProducto
+                    + ", nombre=" + nombre + ": " + e.getMessage(), e);
+            return BigDecimal.ZERO;
+        }
     }
     
     public BigDecimal getPrecioDistribuidorConIva() {

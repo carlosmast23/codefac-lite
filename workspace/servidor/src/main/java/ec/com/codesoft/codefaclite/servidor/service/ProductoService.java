@@ -50,6 +50,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesExpresionesRegulares;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesCodigos;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -79,6 +80,8 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     private SegmentoProductoService segmentoProductoService=new SegmentoProductoService();
     private CasaComercialService casaComercialService=new CasaComercialService();
     private MarcaProductoService marcaProductoService=new MarcaProductoService();
+    private UtilidadesService utilidadesService=new UtilidadesService();
+    private ProductoPresentacionDetalleService productoPresentacionDetalleService=new ProductoPresentacionDetalleService();
     
     public ProductoService() throws RemoteException
     {
@@ -93,15 +96,26 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public ProductoPresentacionDetalle buscarProductoPorPresentacion(PresentacionProducto presentacion,Producto producto) throws RemoteException,ServicioCodefacException
     {
-        Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
-        return getFacade().buscarProductoPorPresentacionFacade(presentacion, productoPrincipal);
+        return (ProductoPresentacionDetalle) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Producto productoPrincipal = buscarProductoEmpaquePrincipal(producto,entityManager);
+                return getFacade().buscarProductoPorPresentacionFacade(presentacion, productoPrincipal,entityManager);
+            }
+        });
         
     }
     
     public ProductoPresentacionDetalle buscarProductoPorPresentacionCodigo(String presentacionCodigo,Producto producto) throws RemoteException,ServicioCodefacException
     {
-        Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
-        return getFacade().buscarProductoPorPresentacionCodigoFacade(presentacionCodigo, producto);
+        return (ProductoPresentacionDetalle) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().buscarProductoPorPresentacionCodigoFacade(presentacionCodigo, producto,entityManager);
+            }
+        });
+        //Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
+        
         
     }
     
@@ -115,12 +129,24 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
      * //TODO: Por el momento va a buscar siempre el que tenga la mayor cantidad en la presentacion
      * @return 
      */
+    
     public Producto buscarProductoDefectoCompras( Producto producto)throws RemoteException,ServicioCodefacException
     {
+        return (Producto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return buscarProductoDefectoCompras(producto, entityManager);
+            }
+        });
+    }
+    
+    public Producto buscarProductoDefectoCompras( Producto producto,EntityManager em)throws RemoteException,ServicioCodefacException
+    {
+        
         ProductoPresentacionDetalle presentacionDetalle=null;
         
         //Solo se puede buscar presentaciones desde el producto original
-        Producto productoOriginal=buscarProductoEmpaquePrincipal(producto);
+        Producto productoOriginal=buscarProductoEmpaquePrincipal(producto,em);
         //Producto productoOriginal= producto.buscarPresentacionDetalleProducto().getProductoOriginal();
         
         //Si no encuentra el producto principal puede ser que estaba eliminado o mal enlazado y retorna 
@@ -144,7 +170,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         } //Luego verifica por defecto la presentacion de mayor cantidad
         else 
         {
-            List<ProductoPresentacionDetalle> presentacionList=this.buscarPresentacionesPorProducto(productoOriginal);
+            List<ProductoPresentacionDetalle> presentacionList=this.buscarPresentacionesPorProducto(productoOriginal,em);
             if(presentacionList.size()>0)
             {
                 presentacionDetalle = UtilidadesLista.obtenerDatoMayor(presentacionList, new Comparator<ProductoPresentacionDetalle>() {
@@ -167,11 +193,21 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         return presentacionDetalle.getProductoEmpaquetado();
     }
     
-    public  List<ProductoPresentacionDetalle> buscarPresentacionesPorProducto(Producto producto) throws RemoteException,ServicioCodefacException
+    public  List<ProductoPresentacionDetalle> buscarPresentacionesPorProducto(Producto producto,EntityManager em) throws RemoteException,ServicioCodefacException
     {
         //Producto productoPrincipal= buscarProductoEmpaquePrincipal(producto);
-        return getFacade().buscarPresentacionesPorProductoFacade(producto);
+        return getFacade().buscarPresentacionesPorProductoFacade(producto,em);
         
+    }
+    
+    public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
+    {
+        return (Producto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return buscarProductoEmpaquePrincipal(producto, entityManager);
+            }
+        });
     }
     
     /**
@@ -181,12 +217,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public Producto buscarProductoEmpaquePrincipal(Producto producto) throws RemoteException,ServicioCodefacException
+    public Producto buscarProductoEmpaquePrincipal(Producto producto,EntityManager em) throws RemoteException,ServicioCodefacException
     {
         //Solo buscar el producto principal cuando estoy buscando desde un empaque
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
         {
-            return getFacade().buscarProductoEmpaquePrincipal(producto);
+            return getFacade().buscarProductoEmpaquePrincipal(producto,em);
         }        
         
         
@@ -214,13 +250,26 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public List<Producto> reporteProducto(Producto producto,Boolean pendienteActualizarPrecio) throws RemoteException,ServicioCodefacException
     {
-        return  getFacade().reporteProductoFacade(producto,pendienteActualizarPrecio);
+        return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return  getFacade().reporteProductoFacade(producto,pendienteActualizarPrecio,entityManager);
+            }
+        });
+        
     }
     
     public List<PresentacionProducto> obtenerPresentacionesProducto(Producto producto) throws RemoteException,ServicioCodefacException
     {
-        Producto productoPrincipal=buscarProductoEmpaquePrincipal(producto);
-        return  getFacade().obtenerPresentacionesProductoFacade(productoPrincipal);
+        return (List<PresentacionProducto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Producto productoPrincipal = buscarProductoEmpaquePrincipal(producto,entityManager);
+                return getFacade().obtenerPresentacionesProductoFacade(productoPrincipal,entityManager);
+            }
+        });
+        
+        
     }
     
     private void generarCodigoProducto(Producto producto) throws RemoteException,ServicioCodefacException
@@ -484,87 +533,82 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 
                 if(presentacionDetalle.getId()==null || presentacionDetalle.getId()<0)
                 {                    
-                    try {
-                        presentacionDetalle.setId(null);
-                        Producto productoEmpaquetado =null;
-                        if(presentacionDetalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
-                        {
-                            productoEmpaquetado=producto;
-                        }
-                        else
-                        {
-                            //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
-                            productoEmpaquetado = (Producto) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(presentacionDetalle.getProductoOriginal());
-                            //productoEmpaquetado.setValorUnitario(null);
-                            if(CrudEnum.EDITAR.equals(crudEnum))
-                            {
-                                productoEmpaquetado.setPrecioDistribuidor(null);
-                                productoEmpaquetado.setPrecioTarjeta(null);
-                                productoEmpaquetado.setPvp4(null);
-                                productoEmpaquetado.setPvp5(null);
-                                productoEmpaquetado.setPvp6(null);                                
-                            }
-                            
-                            productoEmpaquetado.setIdProducto(null);
-                            //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
-                            productoEmpaquetado.setDetallesEnsamble(null);
-                            productoEmpaquetado.setPresentacionList(null);
-                            productoEmpaquetado.setProductoProveedorList(null);
-                            /*productoEmpaquetado.setTipoProducto(null);
-                            productoEmpaquetado.setSegmentoProducto(null);
-                            productoEmpaquetado.setCasaComercial(null);*/                        
-                            productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
-                            //productoEmpaquetado.setPresentacionList(productoPresentacionList);
-                                                    
-                            //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
-                            if (presentacionDetalle.getPvpTmp() == null) 
-                            {
-                                //TODO: Unificar en un solo metodo con los datos de abajo
-                                /*productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
-                                if(productoEmpaquetado.getPrecioDistribuidor()!=null)
-                                {
-                                    productoEmpaquetado.setPrecioDistribuidor(productoEmpaquetado.getPrecioDistribuidor().multiply(presentacionDetalle.getCantidad()));
-                                }
-                                
-                                if(productoEmpaquetado.getPrecioTarjeta()!=null)
-                                {
-                                    productoEmpaquetado.setPrecioTarjeta(productoEmpaquetado.getPrecioTarjeta().multiply(presentacionDetalle.getCantidad()));
-                                }
-                                
-                                if(productoEmpaquetado.getPvp4()!=null)
-                                {
-                                    productoEmpaquetado.setPvp4(productoEmpaquetado.getPvp4().multiply(presentacionDetalle.getCantidad()));
-                                }
-                                
-                                if(productoEmpaquetado.getPvp5()!=null)
-                                {
-                                    productoEmpaquetado.setPvp5(productoEmpaquetado.getPvp5().multiply(presentacionDetalle.getCantidad()));
-                                }
-                                
-                                if(productoEmpaquetado.getPvp6()!=null)
-                                {
-                                    productoEmpaquetado.setPvp6(productoEmpaquetado.getPvp6().multiply(presentacionDetalle.getCantidad()));
-                                }*/
-                                recalcularPreciosEmpaques(productoEmpaquetado,presentacionDetalle.getProductoOriginal(),presentacionDetalle);
-                                
-                            } else {
-                                productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
-                            }
-                            
-                            if(!UtilidadesTextos.verificarNullOVacio(presentacionDetalle.getCodigoTmp()))
-                            {
-                                productoEmpaquetado.setCodigoPersonalizado(presentacionDetalle.getCodigoTmp());
-                            }
-
-                            entityManager.persist(productoEmpaquetado);
-                            entityManager.flush();                            
-                        }
-                        
-                        
-                        presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);                        
-                    } catch (RemoteException ex) {
-                        Logger.getLogger(ProductoService.class.getName()).log(Level.SEVERE, null, ex);
+                    presentacionDetalle.setId(null);
+                    Producto productoEmpaquetado =null;
+                    if(presentacionDetalle.getTipoEnum().equals(ProductoPresentacionDetalle.TipoPresentacionEnum.ORIGINAL))
+                    {
+                        productoEmpaquetado=producto;
                     }
+                    else
+                    {
+                        //Saco una copia del producto original para crear el producto empaqueteado con sus propias caracteristicas
+                        //productoEmpaquetado = (Producto) utilidadesService.mergeEntity(presentacionDetalle.getProductoOriginal(),entityManager);
+                        productoEmpaquetado = (Producto) UtilidadVarios.clonarEntidad(presentacionDetalle.getProductoOriginal());
+                        //productoEmpaquetado.setValorUnitario(null);
+                        if(CrudEnum.EDITAR.equals(crudEnum))
+                        {
+                            productoEmpaquetado.setPrecioDistribuidor(null);
+                            productoEmpaquetado.setPrecioTarjeta(null);
+                            productoEmpaquetado.setPvp4(null);
+                            productoEmpaquetado.setPvp5(null);
+                            productoEmpaquetado.setPvp6(null);
+                        }
+
+                        productoEmpaquetado.setIdProducto(null);
+                        //Eliminar los detalles por que puede dar referencia un objecto que ya estaba previamente grabado
+                        productoEmpaquetado.setDetallesEnsamble(null);
+                        productoEmpaquetado.setPresentacionList(null);
+                        productoEmpaquetado.setProductoProveedorList(null);
+                        /*productoEmpaquetado.setTipoProducto(null);
+                        productoEmpaquetado.setSegmentoProducto(null);
+                        productoEmpaquetado.setCasaComercial(null);*/
+                        productoEmpaquetado.setTipoProductoEnum(TipoProductoEnum.EMPAQUE);
+                        //productoEmpaquetado.setPresentacionList(productoPresentacionList);
+                        
+                        //productoEmpaquetado.setPresentacion(presentacionDetalle.getPresentacionProducto());
+                        if (presentacionDetalle.getPvpTmp() == null)
+                        {
+                            //TODO: Unificar en un solo metodo con los datos de abajo
+                            /*productoEmpaquetado.setValorUnitario(productoEmpaquetado.getValorUnitario().multiply(presentacionDetalle.getCantidad()));
+                            if(productoEmpaquetado.getPrecioDistribuidor()!=null)
+                            {
+                            productoEmpaquetado.setPrecioDistribuidor(productoEmpaquetado.getPrecioDistribuidor().multiply(presentacionDetalle.getCantidad()));                                
+                            }
+                            
+                            if(productoEmpaquetado.getPrecioTarjeta()!=null) 
+                            {
+                            productoEmpaquetado.setPrecioTarjeta(productoEmpaquetado.getPrecioTarjeta().multiply(presentacionDetalle.getCantidad()));
+                            }
+                            
+                            if(productoEmpaquetado.getPvp4()!=null)
+                            {
+                            productoEmpaquetado.setPvp4(productoEmpaquetado.getPvp4().multiply(presentacionDetalle.getCantidad()));
+                            }
+                            
+                            if(productoEmpaquetado.getPvp5()!=null)
+                            {                            
+                            productoEmpaquetado.setPvp5(productoEmpaquetado.getPvp5().multiply(presentacionDetalle.getCantidad()));
+                            }
+                            
+                            if(productoEmpaquetado.getPvp6()!=null)
+                            {
+                            productoEmpaquetado.setPvp6(productoEmpaquetado.getPvp6().multiply(presentacionDetalle.getCantidad()));
+                            }*/
+                            recalcularPreciosEmpaques(productoEmpaquetado,presentacionDetalle.getProductoOriginal(),presentacionDetalle);
+                            
+                        } else {
+                            productoEmpaquetado.setValorUnitario(presentacionDetalle.getPvpTmp());
+                        }
+                        
+                        if(!UtilidadesTextos.verificarNullOVacio(presentacionDetalle.getCodigoTmp()))
+                        {
+                            productoEmpaquetado.setCodigoPersonalizado(presentacionDetalle.getCodigoTmp());
+                        }
+                        
+                        entityManager.persist(productoEmpaquetado);
+                        entityManager.flush();
+                    }
+                    presentacionDetalle.setProductoEmpaquetado(productoEmpaquetado);
                                         
                     entityManager.persist(presentacionDetalle);
                     entityManager.flush();
@@ -630,7 +674,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                         
         List<ProductoActividad> actividadList = producto.getActividadList();        
         if (actividadList != null) {
-            List<ProductoActividad> originalList= buscarProductoActividadPorProducto(producto);
+            List<ProductoActividad> originalList= buscarProductoActividadPorProducto(producto,entityManager);
             //List<ProductoComponenteDetalle> originalList = buscarComponentePorProducto(producto);
             List<ProductoActividad> eliminarList = UtilidadesLista.restarListas(originalList, actividadList);
 
@@ -644,7 +688,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     private void eliminarEmpaques(Producto producto,List<ProductoPresentacionDetalle> productoPresentacionList,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         //Detalle Original
-        List<ProductoPresentacionDetalle> detallesOriginales= ServiceFactory.getFactory().getProductoPresentacionDetalleServiceIf().buscarPorProducto(producto);
+        List<ProductoPresentacionDetalle> detallesOriginales= productoPresentacionDetalleService.buscarPorProducto(producto,entityManager);
         
         for (ProductoPresentacionDetalle detalle : detallesOriginales) 
         {
@@ -817,7 +861,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //TODO: toca revisar esa logica por que sideberia validar por que si modifica otro codigo conocido puede crear conflicto
                 if(!p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
                 {
-                    return buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa());
+                    return buscarProductoActivoPorCodigo(p.getCodigoPersonalizado(),p.getEmpresa(),em);
                 }
                 return null;
             }
@@ -837,7 +881,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         },em);
         
         //Validar advertencia de nombres iguales
-        advertenciaDatosProducto(p, estadoEnum, modoProcesar);
+        advertenciaDatosProducto(p, estadoEnum, modoProcesar,em);
 
         ///////////////////////////////////////////////////////////////////////
         ///             HACER UNAS CORRECIONES ANTES DE GRABAR
@@ -871,7 +915,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
     }
     
-    private void advertenciaDatosProducto(Producto p,CrudEnum crudEnum,ModoProcesarEnum modoProcesar) throws java.rmi.RemoteException,ServicioCodefacException
+    private void advertenciaDatosProducto(Producto p,CrudEnum crudEnum,ModoProcesarEnum modoProcesar,EntityManager em) throws java.rmi.RemoteException,ServicioCodefacException
     {
         //Si se requiere procesar en modo forzado ya no hago mas validaciones
         if(modoProcesar.equals(ModoProcesarEnum.FORZADO))
@@ -894,7 +938,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 //TODO: toca revisar esa logica por que sideberia validar por que si modifica otro codigo conocido puede crear conflicto
                 if(!p.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
                 {
-                    return buscarProductoActivoPorNombre(p.getNombre(),p.getEmpresa());
+                    return buscarProductoActivoPorNombre(p.getNombre(),p.getEmpresa(),em);
                 }
                 return null;
             }
@@ -1003,14 +1047,14 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
 
     }
     
-    public List<ProductoActividad> buscarProductoActividadPorProducto(Producto producto) throws RemoteException, ServicioCodefacException
+    public List<ProductoActividad> buscarProductoActividadPorProducto(Producto producto,EntityManager em) throws RemoteException, ServicioCodefacException
     {
-        return getFacade().buscarActividadPorProducto(producto);
+        return getFacade().buscarActividadPorProducto(producto,em);
     }
     
-    public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto) throws RemoteException, ServicioCodefacException
+    public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto,EntityManager em) throws RemoteException, ServicioCodefacException
     {
-        return getFacade().buscarComponentePorProducto(producto);
+        return getFacade().buscarComponentePorProducto(producto,em);
     }
     
     private void eliminarComponentes(Producto producto,EntityManager entityManager) throws RemoteException, ServicioCodefacException
@@ -1018,7 +1062,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         List<ProductoComponenteDetalle> componenteList=producto.getComponenteList();
         if(componenteList!=null)
         {
-            List<ProductoComponenteDetalle> originalList= buscarComponentePorProducto(producto);
+            List<ProductoComponenteDetalle> originalList= buscarComponentePorProducto(producto,entityManager);
             List<ProductoComponenteDetalle> eliminarList= UtilidadesLista.restarListas(originalList, componenteList);
             
             for (ProductoComponenteDetalle productoComponenteDetalle : eliminarList) {
@@ -1160,15 +1204,32 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public Producto buscarProductoActivoPorCodigo(String codigo,Boolean consultarPresentacion,Empresa empresa) throws ServicioCodefacException, RemoteException
     {
-        return getFacade().buscarProductoActivoPorCodigoFacade(codigo,null,empresa,consultarPresentacion);
+        return (Producto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().buscarProductoActivoPorCodigoFacade(codigo,null,empresa,consultarPresentacion,entityManager);
+            }
+        });
+        
     }
     
-    public Producto buscarProductoActivoPorNombre(String nombre,Empresa empresa) throws ServicioCodefacException, RemoteException
+    public Producto buscarProductoActivoPorNombre(String nombre,Empresa empresa,EntityManager em) throws ServicioCodefacException, RemoteException
     {
-        return getFacade().buscarProductoActivoPorCodigoFacade(null, nombre,empresa,false);
+        return getFacade().buscarProductoActivoPorCodigoFacade(null, nombre,empresa,false,em);
     }
     
     public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa) throws ServicioCodefacException, RemoteException
+    {
+        return (Producto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return buscarProductoActivoPorCodigo(codigo, empresa, entityManager);
+            }
+        });
+    
+    }
+    
+    public Producto buscarProductoActivoPorCodigo(String codigo,Empresa empresa,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         //Producto p;
         //p.getCodigoPersonalizado();
@@ -1191,7 +1252,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         {
             return productos.get(0);
         }*/
-        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, null,empresa,false);
+        return getFacade().buscarProductoActivoPorCodigoFacade(codigo, null,empresa,false,em);
         
     }
                 
@@ -1509,7 +1570,13 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     
     public List<TopProductoRespuesta> topProductosMasVendidosService() throws ServicioCodefacException, RemoteException
     {
-        return getFacade().topProductosMasVendidosFacade();
+        return (List<TopProductoRespuesta>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().topProductosMasVendidosFacade(entityManager);
+            }
+        });
+        
     }
     
     

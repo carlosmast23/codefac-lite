@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -22,7 +23,7 @@ public class PerfilFacade extends AbstractFacade<Perfil>{
         super(Perfil.class);
     }
     
-    public List<Perfil> getPerfilesByUsuario(Usuario usuario)
+    public List<Perfil> getPerfilesByUsuario(Usuario usuario,EntityManager em)
     {
         try
         {
@@ -33,7 +34,7 @@ public class PerfilFacade extends AbstractFacade<Perfil>{
             //"SELECT c1, c2 FROM Country c1 INNER JOIN c1.neighbors c2";
             
             String queryString = "SELECT p FROM PerfilUsuario pu INNER JOIN pu.perfil p WHERE pu.usuario=?1";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1,usuario);
             return (List<Perfil>) query.getResultList();
         }

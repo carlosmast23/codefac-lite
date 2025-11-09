@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.service.pos;
 
 import ec.com.codesoft.codefaclite.servidor.facade.pos.IngresoCajaFacade;
 import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccion;
+import ec.com.codesoft.codefaclite.servidor.service.MetodoInterfaceTransaccionResultado;
 import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
@@ -57,7 +58,13 @@ public class IngresoCajaService extends ServiceAbstract<IngresoCaja, IngresoCaja
     
     public List<IngresoCaja> consultarPorCajaSession(CajaSession cajaSession) throws ServicioCodefacException, RemoteException 
     {
-        return getFacade().consultarPorCajaSession(cajaSession);
+        return (List<IngresoCaja>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarPorCajaSession(cajaSession,entityManager);
+            }
+        });
+        
     }
     
 }

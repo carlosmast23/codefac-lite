@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
@@ -33,12 +34,12 @@ public class CompraFacade extends AbstractFacade<Compra>{
         super(Compra.class);
     }
     
-    public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
+    public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa,EntityManager em)
     {
-        return (BigDecimal) obtenerCompraReporteAbstract(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa, TipoConsultaEnum.VALOR_TOTAL).getSingleResult();
+        return (BigDecimal) obtenerCompraReporteAbstract(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa, TipoConsultaEnum.VALOR_TOTAL,em).getSingleResult();
     }
     
-    public Query obtenerCompraReporteAbstract(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa,TipoConsultaEnum tipoConsultaEnum)
+    public Query obtenerCompraReporteAbstract(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa,TipoConsultaEnum tipoConsultaEnum,EntityManager em)
     {        
         String cliente = "";
         String fecha = "";
@@ -89,7 +90,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         try {
             String queryString = selectStr+ " FROM Compra u WHERE u.empresa=?7 and " + cliente + fecha + documento + tipoDocumento+estadoEnumQuery;
             System.out.println("Script: "+queryString);
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             if (proveedor != null) 
             {
                 query.setParameter(1, proveedor);
@@ -126,9 +127,9 @@ public class CompraFacade extends AbstractFacade<Compra>{
         }    
     }
     
-    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
+    public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa,EntityManager em)
     {        
-        return obtenerCompraReporteAbstract(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa, TipoConsultaEnum.DATOS).getResultList();
+        return obtenerCompraReporteAbstract(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa, TipoConsultaEnum.DATOS,em).getResultList();
         /*String cliente = "";
         String fecha = "";
         String documento = "";
@@ -204,11 +205,11 @@ public class CompraFacade extends AbstractFacade<Compra>{
         }    */
     }
     
-     public List<Compra> getCompraRetencionDisenable() {
+     public List<Compra> getCompraRetencionDisenable(EntityManager em) {
         try {
             
             String queryString = "SELECT u FROM Compra u WHERE u.estadoRetencion=?1";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1, Compra.RetencionEnumCompras.NO_EMITIDO.getEstado());
             return (List<Compra>) query.getResultList();
         } catch (NoResultException e) {
@@ -216,7 +217,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         }
     }
      
-    public Boolean verificarCompraRepetida(Compra compra) {
+    public Boolean verificarCompraRepetida(Compra compra,EntityManager em) {
         try {
             /*Compra compra;
             compra.getProveedor();
@@ -225,7 +226,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
             compra.getPuntoEstablecimiento();*/
             
             String queryString = "SELECT count(u.id) FROM Compra u WHERE u.proveedor=?1 and u.secuencial=?2 and u.puntoEmision=?3 and u.puntoEstablecimiento=?4 and u.estado<>?5 ";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1,compra.getProveedor());
             query.setParameter(2,compra.getSecuencial());
             query.setParameter(3,compra.getPuntoEmision());
@@ -249,7 +250,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
      * @param puntoEstablecimiento
      * @return 
      */
-    public Integer obtenerMaximoCodigoPorDocumento(Integer puntoEmision,BigDecimal puntoEstablecimiento,DocumentoEnum documentoEnum,Empresa empresa)
+    public Integer obtenerMaximoCodigoPorDocumento(Integer puntoEmision,BigDecimal puntoEstablecimiento,DocumentoEnum documentoEnum,Empresa empresa,EntityManager em)
     {   
         //Compra compra;
         //compra.getEmpresa();
@@ -261,7 +262,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         //c.getSecuencial()
         
         String queryString="SELECT MAX( CAST (c.secuencial AS BIGINT )) FROM Compra c WHERE c.puntoEmision=?1 AND c.puntoEstablecimiento=?2 AND c.codigoDocumento=?3 AND c.empresa=?4 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,puntoEmision);
         query.setParameter(2,puntoEstablecimiento);
         query.setParameter(3,documentoEnum.getCodigo());
@@ -275,7 +276,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         return 1;        
     }
     
-    public List<Producto> obtenerProductosActualizarPrecios(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<Producto> obtenerProductosActualizarPrecios(Compra compra,EntityManager em) throws ServicioCodefacException,java.rmi.RemoteException
     {
         //Compra compra;
         //compra.getDetalles().
@@ -283,7 +284,7 @@ public class CompraFacade extends AbstractFacade<Compra>{
         //compradetalle.getProductoProveedor().getProducto();
         
         String queryString="SELECT cd.productoProveedor.producto FROM Compra u LEFT JOIN u.detalles cd  WHERE u=?1 AND cd.productoProveedor.producto.actualizarPrecio=?2 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,compra);
         query.setParameter(2,EnumSiNo.SI.getLetra());
         return query.getResultList();

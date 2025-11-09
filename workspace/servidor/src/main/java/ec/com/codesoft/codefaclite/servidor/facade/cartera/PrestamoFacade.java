@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Prestamo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.PrestamoCuota;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -25,14 +26,14 @@ public class PrestamoFacade extends AbstractFacade<Prestamo> {
         super(Prestamo.class);
     }
     
-    public List<PrestamoCuota> buscarCuotasPorPrestamo(Prestamo prestamo){
+    public List<PrestamoCuota> buscarCuotasPorPrestamo(Prestamo prestamo,EntityManager em){
                 
         try {
             //PrestamoCuota pc;
             //pc.getPrestamo()
             //pc.getNumeroCuota()
             String queryString = "SELECT u FROM PrestamoCuota u WHERE u.prestamo<>?1 ORDER BY u.numeroCuota ";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1, prestamo);
             //query.setParameter(2, Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
             //query.setParameter(3, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());

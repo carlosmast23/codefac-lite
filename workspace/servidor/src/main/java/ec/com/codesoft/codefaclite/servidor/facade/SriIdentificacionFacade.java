@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriIdentificacion;
+import jakarta.persistence.EntityManager;
 import java.sql.Date;
 import java.util.List;
 import jakarta.persistence.Query;
@@ -21,10 +22,10 @@ public class SriIdentificacionFacade extends AbstractFacade<SriIdentificacion> {
         super(SriIdentificacion.class);
     }
     
-    public List<SriIdentificacion> getSriIdentificacionByTipoTransaccion(String tipo)
+    public List<SriIdentificacion> getSriIdentificacionByTipoTransaccion(String tipo,EntityManager em)
     {
         String queryString = "SELECT e FROM SriIdentificacion e WHERE ?1=e.tipoTransaccion";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, tipo);
         return (List<SriIdentificacion>) query.getResultList();
     }

@@ -29,13 +29,13 @@ public class ParametroCodefacFacade extends AbstractFacade<ParametroCodefac>
         super(ParametroCodefac.class);
     }
     
-    public List<ParametroCodefac> getParametrosMapByEmpresa(Empresa empresa) 
+    public List<ParametroCodefac> getParametrosMapByEmpresa(Empresa empresa,EntityManager em) 
     {
         //ParametroCodefac parametroCodefac;
         //parametroCodefac.getEmpresa()
         String queryString = "SELECT p FROM ParametroCodefac p WHERE p.empresa=?1 ";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,empresa); 
         query.setFlushMode(FlushModeType.COMMIT);
         return query.getResultList();

@@ -78,30 +78,45 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
 
     public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException
     {
-        //CategoriaProducto categoria;
-        //categoria.getDescripcion();
-        //categoria.getEmpresa();
-        //categoria.getEstado();
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        return getFacade().findByMap(mapParametros,"nombre",entityManager);
+        try {
+            ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                    mapParametros.put("empresa", empresa);
+                    //EntityManager entityManager = AbstractFacade.nuevoEntityManager();
+                    return getFacade().findByMap(mapParametros, "nombre", entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CategoriaProductoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+      
     }
     
     public CategoriaProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        Map<String,Object> mapParametros=new HashMap<String,Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        mapParametros.put("empresa", empresa);
-        mapParametros.put("nombre",nombre);
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        List<CategoriaProducto> resultados=getFacade().findByMap(mapParametros,"nombre",entityManager);
-        if(resultados.size()>0)
-        {
-            return resultados.get(0);
-        }
-        return null;
+        
+        return (CategoriaProducto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapParametros = new HashMap<String, Object>();
+                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+                mapParametros.put("empresa", empresa);
+                mapParametros.put("nombre", nombre);
+                //EntityManager entityManager = AbstractFacade.nuevoEntityManager();
+                List<CategoriaProducto> resultados = getFacade().findByMap(mapParametros, "nombre", entityManager);
+                if (resultados.size() > 0) {
+                    return resultados.get(0);
+                }
+                return null;
+            }
+        });
+        
+        
     }
     
     

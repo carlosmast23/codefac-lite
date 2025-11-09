@@ -35,7 +35,7 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     
     public void matriculaEstudianteByList(List<EstudianteInscrito> estudiantesPorMatricular) throws RemoteException;
     
-    public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes) throws RemoteException;
+    //public void matricularEstudiantesByMap(Map<NivelAcademico,List<Estudiante>> mapEstudiantes) throws RemoteException;
     
     public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) throws java.rmi.RemoteException;
     
@@ -45,7 +45,7 @@ public interface EstudianteInscritoServiceIf extends ServiceAbstractIf<Estudiant
     
     public void eliminarEstudiantesInscrito(List<EstudianteInscrito> estudiantesEliminar) throws RemoteException;
     
-    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException;
+    //public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico) throws RemoteException;
     
     public List<Object[]> consultarRepresentanteConEstudiantesYCursos() throws RemoteException;
     

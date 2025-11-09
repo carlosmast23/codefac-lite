@@ -388,6 +388,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 factura = (Factura) ServiceFactory.getFactory().getUtilidadesServiceIf().mergeEntity(proforma);
             } catch (RemoteException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ServicioCodefacException ex) {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }            
         }
         else

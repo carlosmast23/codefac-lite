@@ -57,7 +57,7 @@ public interface RubroEstudianteServiceIf extends ServiceAbstractIf<RubroEstudia
 
     public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws java.rmi.RemoteException;
     
-    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException;
+    //public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException;
     
     public void actualizarRubrosEstudiante(List<RubroEstudiante> rubroEstudiantes) throws RemoteException;
     

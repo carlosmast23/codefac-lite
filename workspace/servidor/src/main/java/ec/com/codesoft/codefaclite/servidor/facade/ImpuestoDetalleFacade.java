@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Impuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
+import jakarta.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 import jakarta.persistence.Query;
@@ -22,7 +23,7 @@ public class ImpuestoDetalleFacade extends AbstractFacade<ImpuestoDetalle>
         super(ImpuestoDetalle.class);
     }
     
-     public List<ImpuestoDetalle> getImpuestoVigenteByName(String nombre)
+     public List<ImpuestoDetalle> getImpuestoVigenteByName(String nombre,EntityManager em)
     {
         
         /*Impuesto i;
@@ -43,7 +44,7 @@ public class ImpuestoDetalleFacade extends AbstractFacade<ImpuestoDetalle>
                 + "((?1>=id.fechaInicio and ?1<=id.fechaFin) or id.fechaFin is null) and "
                 + "i.nombre=?2 "
                 + "ORDER BY id.tarifa asc ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,fechaHoy);
         query.setParameter(2,nombre);
         return query.getResultList();

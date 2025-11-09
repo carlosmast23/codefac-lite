@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,34 +32,34 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         super(EstudianteInscrito.class);
     }
     
-    public Long obtenerTamanioEstudiatesInscritosPorEstudiante(Estudiante estudiante) 
+    public Long obtenerTamanioEstudiatesInscritosPorEstudiante(Estudiante estudiante,EntityManager em) 
     {
 
         EstudianteInscrito estudianteInscrito = new EstudianteInscrito();
         estudianteInscrito.getNivelAcademico();
         String queryString = "SELECT count(1) FROM EstudianteInscrito u WHERE u.estado=?1 and u.estudiante=?2 ";
 
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, estudiante);
         return (Long) query.getSingleResult();
 
     }
     
-    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico)
+    public Long obtenerTamanioEstudiatesInscritosPorCurso(NivelAcademico nivelAcademico,EntityManager em)
     {
         EstudianteInscrito estudianteInscrito=new EstudianteInscrito();
         estudianteInscrito.getNivelAcademico();
         String queryString="SELECT count(1) FROM EstudianteInscrito u WHERE u.estado=?1 and u.nivelAcademico=?2 ";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, nivelAcademico);
         return (Long) query.getSingleResult();
         
     }
 
-    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo) {
+    public List<EstudianteInscrito> obtenerEstudiantesInscritos(NivelAcademico nivel,Periodo periodo,EntityManager em) {
         EstudianteInscrito estudianteInscrito;
         //estudianteInscrito.getEstudiante().getApellidos();
         //estudianteInscrito.getEstudiante().getNombres();
@@ -84,7 +85,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
             queryString+=" order by u.nivelAcademico.nivel.orden asc,u.nivelAcademico, u.estudiante.apellidos asc,u.estudiante.nombres asc";
             
             System.out.println(queryString);
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
             
             if(periodo!=null)
@@ -103,7 +104,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         }
     }
     
-    public List<Object[]> consultarRepresentanteConEstudiantesYCursosFacade(Periodo periodoActivo)
+    public List<Object[]> consultarRepresentanteConEstudiantesYCursosFacade(Periodo periodoActivo,EntityManager em)
     {
         //Estudiante e;
         //e.getEstado();
@@ -129,7 +130,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
         System.out.println(queryString);
         //getEntityManager().createNativeQuery(queryString)
-        Query query = nuevoEntityManager().createNativeQuery(queryString);
+        Query query = em.createNativeQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3, GeneralEnumEstado.ACTIVO.getEstado());
@@ -147,7 +148,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
     }
     
-    public List<EstudianteInscrito> buscarPorNivelAcademicoFacade(Periodo periodo, NivelAcademico nivel) throws ServicioCodefacException, java.rmi.RemoteException {
+    public List<EstudianteInscrito> buscarPorNivelAcademicoFacade(Periodo periodo, NivelAcademico nivel,EntityManager em) throws ServicioCodefacException, java.rmi.RemoteException {
         /*EstudianteInscrito ei;
         ei.getNivelAcademico().getNombre()t
         ei.getEstudiante().getApellidos();
@@ -166,7 +167,7 @@ public class EstudianteInscritoFacade extends AbstractFacade<EstudianteInscrito>
         
         String queryString = "SELECT u FROM EstudianteInscrito u WHERE u.estado=?1  " + wherePeriodo +" ORDER BY u.nivelAcademico.nivel.orden asc ,u.nivelAcademico.nombre, u.estudiante.apellidos , u.estudiante.nombres ";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
          
         if(nivel!=null)

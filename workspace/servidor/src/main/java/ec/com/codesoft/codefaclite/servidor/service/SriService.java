@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,8 +124,17 @@ public class SriService extends ServiceAbstract<SriFormaPago,SriFormaPagoFacade>
      */
     public List<SriIdentificacion> obtenerIdentificaciones(String tipo) throws java.rmi.RemoteException
     {
-
-        return sriIdentificacionFacade.getSriIdentificacionByTipoTransaccion(tipo);
+        try {
+            return (List<SriIdentificacion>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return sriIdentificacionFacade.getSriIdentificacionByTipoTransaccion(tipo,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
 }

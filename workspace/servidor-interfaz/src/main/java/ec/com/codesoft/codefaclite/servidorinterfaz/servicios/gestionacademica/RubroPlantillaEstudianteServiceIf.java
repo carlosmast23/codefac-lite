@@ -17,5 +17,5 @@ import java.util.List;
  * @author Carlos
  */
 public interface RubroPlantillaEstudianteServiceIf extends ServiceAbstractIf<RubroPlantillaEstudiante>{
-    public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla) throws RemoteException;
+    //public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla) throws RemoteException;
 }

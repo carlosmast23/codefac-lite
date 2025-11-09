@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.EstudianteI
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.NivelAcademico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -26,7 +27,7 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
         super(Estudiante.class);
     }
     
-    public List<Estudiante> getEstudiantesSinMatricula(Periodo periodo)
+    public List<Estudiante> getEstudiantesSinMatricula(Periodo periodo,EntityManager em)
     {
         try {
             //Estudiante e;
@@ -37,7 +38,7 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
             String queryString = "SELECT e FROM Estudiante e where "
                     + "( SELECT COUNT(ei.id) FROM EstudianteInscrito ei WHERE ei.estudiante=e AND ei.nivelAcademico.periodo=?1 ) "
                     + "=0";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1,periodo);
             return (List<Estudiante>) query.getResultList();
         } catch (NoResultException e) {
@@ -45,13 +46,13 @@ public class EstudianteFacade extends AbstractFacade<Estudiante>{
         }
     }
     
-    public List<Estudiante> getEstudiantesNuevos()
+    public List<Estudiante> getEstudiantesNuevos(EntityManager em)
     {
         try {
             String queryString = "SELECT e FROM Estudiante e where "
                     + "( SELECT COUNT(ei.id) FROM EstudianteInscrito ei WHERE ei.estudiante=e and ei.estado=?1) "
                     + "=0";
-            Query query = nuevoEntityManager().createQuery(queryString);            
+            Query query = em.createQuery(queryString);            
             query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
             return (List<Estudiante>) query.getResultList();
         } catch (NoResultException e) {

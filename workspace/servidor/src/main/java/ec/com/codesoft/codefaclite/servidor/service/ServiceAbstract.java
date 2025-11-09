@@ -69,10 +69,10 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
     /**
      * Obtiene un transaccion para trabar con el entity manager
      */
-    public EntityTransaction getTransaccion()
+    /*public EntityTransaction getTransaccion()
     {
         return AbstractFacade.nuevoEntityManager().getTransaction();
-    }
+    }*/
  
     public ServiceAbstract(Class<Facade> clase) throws java.rmi.RemoteException
     {
@@ -300,7 +300,76 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         });
     }
     
-    private Object ejecutarTransaccionGenerico(TransaccionIf interfaz) throws ServicioCodefacException
+    private Object ejecutarTransaccionGenerico(TransaccionIf interfaz) throws ServicioCodefacException {
+        Object resultadoTransaccion = null;
+        EntityManager entityManager = null;
+        EntityTransaction transaccion = null;
+
+        try {
+            entityManager = AbstractFacade.nuevoEntityManager();
+            transaccion = entityManager.getTransaction();
+
+            // Iniciar nueva transacción
+            transaccion.begin();
+
+            // Ejecutar la lógica de negocio
+            resultadoTransaccion = interfaz.transaccionGenerica(entityManager);
+
+            // Forzar sincronización con la base
+            entityManager.flush();
+
+            // Confirmar la transacción
+            transaccion.commit();
+
+            return resultadoTransaccion;
+
+        } catch (Exception e) {
+            // Si hay una transacción activa, revertirla
+            if (transaccion != null && transaccion.isActive()) {
+                try {
+                    transaccion.rollback();
+                } catch (Exception rbEx) {
+                    Logger.getLogger(ServiceAbstract.class.getName())
+                            .log(Level.WARNING, "Error al hacer rollback", rbEx);
+                }
+            }
+
+            // Clasificar el tipo de error para lanzar excepciones más claras
+            if (e instanceof ServicioCodefacException) {
+                throw (ServicioCodefacException) e;
+            } else if (e instanceof PersistenceException) {
+                Logger.getLogger(ServiceAbstract.class.getName())
+                        .log(Level.SEVERE, "Error de persistencia", e);
+
+                ExcepcionDataBaseEnum exTipo = UtilidadesExcepciones.analizarExcepcionDataBase((PersistenceException) e);
+                switch (exTipo) {
+                    case CLAVE_DUPLICADO:
+                        throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
+                    default:
+                        throw new ServicioCodefacException(
+                                ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje() + "\nCausa: " + e.getMessage());
+                }
+            } else if (e instanceof RemoteException) {
+                throw new ServicioCodefacException("Error de conexión con el servidor");
+            } else if (e instanceof NullPointerException) {
+                throw new ServicioCodefacException("Problema con variable nula\n\n" + e.getMessage());
+            } else {
+                throw new ServicioCodefacException("Error general: " + e.getMessage());
+            }
+
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                try {
+                    entityManager.close();
+                } catch (Exception closeEx) {
+                    Logger.getLogger(ServiceAbstract.class.getName())
+                            .log(Level.WARNING, "Error cerrando EntityManager", closeEx);
+                }
+            }
+        }
+    }
+    
+    /*private Object ejecutarTransaccionGenerico(TransaccionIf interfaz) throws ServicioCodefacException
     {
         EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         EntityTransaction transaccion = entityManager.getTransaction();
@@ -441,7 +510,9 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         }
         return resultadoTransaccion;
         
-    }
+    }*/
+    
+    
 
     protected Facade getFacade()
     {

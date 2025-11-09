@@ -29,6 +29,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespu
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -51,13 +52,13 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         super(Kardex.class);
     }
     
-    public Kardex buscarKardexConCostoFacade(Producto producto)
+    public Kardex buscarKardexConCostoFacade(Producto producto,EntityManager em)
     {
         //Kardex k;
         //k.getEstado();
         //k.getCostoPromedio()>0
         String queryString="SELECT k FROM Kardex k WHERE k.producto=?1 AND k.estado=?2 AND k.costoPromedio>0 ORDER BY k.id DESC ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, producto);
         query.setParameter(2, GeneralEnumEstado.ACTIVO.getEstado());
         List<Kardex> kardexList= query.getResultList();
@@ -69,7 +70,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
     }
     
-    public Kardex buscarKardexMenorPorLote(Producto producto,Bodega bodega) throws java.rmi.RemoteException
+    public Kardex buscarKardexMenorPorLote(Producto producto,Bodega bodega,EntityManager em) throws java.rmi.RemoteException
     {
         //Kardex k;
         //k.getStock();
@@ -79,7 +80,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 + "WHERE k.producto=?1 AND k.bodega=?2 AND k.stock>0 "
                 + "ORDER BY k.lote.fechaVencimiento asc ";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1,producto);
         query.setParameter(2,bodega);
         query.setMaxResults(1);
@@ -94,7 +95,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
     }
     
-    public Kardex buscarPorProductoFacade(Producto producto)
+    public Kardex buscarPorProductoFacade(Producto producto,EntityManager em)
     {
         //Kardex k;
         //k.getFechaModificacion():
@@ -103,7 +104,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 + "WHERE k.producto=?1 "
                 + "ORDER BY k.fechaModificacion desc ";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, producto);
         //query.setMaxResults(1);
         List<Kardex> kardexList= query.getResultList();
@@ -121,7 +122,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         return null;
     }
 
-    public List<Object[]> obtenerConsultaSaldoAnterior(Date fechaCorte, Producto producto, Bodega bodega) {
+    public List<Object[]> obtenerConsultaSaldoAnterior(Date fechaCorte, Producto producto, Bodega bodega,EntityManager em) {
         //KardexDetalle kd;
         //kd.getKardex().getBodega();
         //kd.getKardex().getProducto();
@@ -131,7 +132,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 + "WHERE kd.fechaIngreso<?1 and kd.kardex.bodega=?2 and kd.kardex.producto=?3 "
                 + "group by kd.codigoTipoDocumento ";
 
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, fechaCorte);
         query.setParameter(2, bodega);
         query.setParameter(3, producto);
@@ -140,7 +141,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     }
 
-    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega,Lote lote, Integer cantidadMovimientos,Boolean psicotropico) {
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega,Lote lote, Integer cantidadMovimientos,Boolean psicotropico,EntityManager em) {
         try {
             //KardexDetalle kd;
             //kd.getKardex().getProducto().getPsicotropico();
@@ -186,7 +187,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             //Agregar orden y un limite de la consulta
             //queryString+=" order by kd.id desc ";
             System.out.println(queryString);
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
 
             //if (cantidadMovimientos != null) {
             //    query.setMaxResults(cantidadMovimientos);
@@ -223,7 +224,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     }
     
     //TODO: Por el momento no toma en cuenta problemas con lotes que tengan negativos por que puede afectar en los calculos
-    public Long consultarStockMinimoCantidadFacade(Empresa empresa)  throws java.rmi.RemoteException
+    public Long consultarStockMinimoCantidadFacade(Empresa empresa,EntityManager em)  throws java.rmi.RemoteException
     {
         //Producto producto;
         //producto.getCantidadMinima()
@@ -233,14 +234,14 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //b.getStockMinimoAdvertencia()
         //String queryString = " SELECT COUNT(k) FROM Kardex k WHERE (k.producto.estado<>?4 ) AND k.stock<k.producto.cantidadMinima AND k.bodega.stockMinimoAdvertencia=?5  ";               
         String queryString = "SELECT  COUNT(*) FROM ( SELECT P.ID_PRODUCTO FROM KARDEX k INNER JOIN PRODUCTO P ON k.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID=k.BODEGA_ID WHERE B.STOCK_MINIMO_ADVERTENCIA='s' AND UPPER(P.ESTADO) !=UPPER('e') AND P.MANEJAR_INVENTARIO='s' AND P.TIPO_PRODUCTO_COD='p' AND K.ESTADO='A' GROUP BY P.ID_PRODUCTO,P.CANTIDAD_MINIMA HAVING SUM((k.STOCK+ABS(k.STOCK))/2)<=P.CANTIDAD_MINIMA ) e";               
-        Query query = nuevoEntityManager().createNativeQuery(queryString);
+        Query query = em.createNativeQuery(queryString);
         query.setParameter(4,GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(5,EnumSiNo.SI.getLetra());
         Number totalMinimo= (Number) query.getSingleResult();
         return Long.parseLong(totalMinimo+"");
     }
 
-    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria,String nombre,String codigo,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockMinimoFacade(Bodega bodega,CategoriaProducto categoria,String nombre,String codigo,KardexOrdenarEnum ordenEnum,EntityManager em) throws java.rmi.RemoteException {
 
         /*Producto p;
         p.getManejarInventario():*/
@@ -302,7 +303,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             }
         }
         
-        Query query = nuevoEntityManager().createQuery(queryString);        
+        Query query = em.createQuery(queryString);        
         
         query.setParameter(99,EnumSiNo.SI.getLetra());
         
@@ -401,29 +402,29 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         return resultadoList;
     }
     
-    private List<Object[]> consultaSinStock(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException
+    private List<Object[]> consultaSinStock(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoUbicacionEnum tipoUbicacionEnum,EntityManager em) throws java.rmi.RemoteException
     {
-        List<Object[]> resultadoConStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum);
-        List<Object[]> resultadoSinStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.SIN_STOCK, tipoUbicacionEnum);
+        List<Object[]> resultadoConStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum,em);
+        List<Object[]> resultadoSinStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.SIN_STOCK, tipoUbicacionEnum,em);
         return ajustarResultadosSinStock(resultadoConStock, resultadoSinStock);
     }
     
-    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException
+    public List<Object[]> consultarStockFacade(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum,EntityManager em) throws java.rmi.RemoteException
     {
         if(tipoStockEnum.equals(TipoStockEnum.CON_STOCK))
         {
-            return consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum);
+            return consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum,em);
         }
         else if(tipoStockEnum.equals(TipoStockEnum.SIN_STOCK))
         {
-            return  consultaSinStock(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, tipoUbicacionEnum);
+            return  consultaSinStock(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, tipoUbicacionEnum,em);
                         
             //return reducirResultadoSinStock(consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.SIN_STOCK, tipoUbicacionEnum));
         }
         else
         {
-            List<Object[]> resultadoConStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum);
-            List<Object[]> resultadoSinStock=consultaSinStock(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, tipoUbicacionEnum);
+            List<Object[]> resultadoConStock=consultarStockFacadeGeneral(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, TipoStockEnum.CON_STOCK, tipoUbicacionEnum,em);
+            List<Object[]> resultadoSinStock=consultaSinStock(bodega, nombreProducto, codigoProducto, categoria, tipo, segmento, empresa, ordenEnum, tipoUbicacionEnum,em);
             
             resultadoConStock.addAll(resultadoSinStock);
             return resultadoConStock;
@@ -438,7 +439,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public List<Object[]> consultarStockFacadeGeneral(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum) throws java.rmi.RemoteException {
+    public List<Object[]> consultarStockFacadeGeneral(Bodega bodega,String nombreProducto,String codigoProducto,CategoriaProducto categoria,TipoProducto tipo,SegmentoProducto segmento, Empresa empresa,KardexOrdenarEnum ordenEnum,TipoStockEnum tipoStockEnum,TipoUbicacionEnum tipoUbicacionEnum,EntityManager em) throws java.rmi.RemoteException {
         //Producto p;
         //p.getManejarInventario;
         
@@ -546,7 +547,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         String whereTipoProducto=" AND ( k.producto.tipoProductoCodigo=?12 OR k.producto.tipoProductoCodigo=?13 ) ";
         
         String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+orderBy;
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         
         
         query.setParameter(6,GeneralEnumEstado.ACTIVO.getEstado());
@@ -618,31 +619,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
     
     //Metodo temporal para no mostrar los productos on stock cero en el reporte de inventairo
     //TODO: Ver como mejorar
+    /*
     @Deprecated
     private List<Object[]> eliminarProductosPorLote(List<Object[]> resultadoList,Empresa empresa)
     {
         try {
-            //ordenar por producto y por nombre para no afectar en el orden final del resultado
-            /*UtilidadesLista.ordenarLista(resultadoList,new Comparator<Object[]>() {
-                @Override
-                public int compare(Object[] o1, Object[] o2) {
-                    Producto producto = (Producto) o1[0];
-                    BigDecimal cantidad = (BigDecimal) o1[1];
-                    
-                    Producto producto2 = (Producto) o2[0];
-                    BigDecimal cantidad2 = (BigDecimal) o2[1];
-                    
-                    int comparador=producto.getNombre().compareTo(producto2.getNombre());
-                    
-                    if(comparador==0)
-                    {
-                        comparador= cantidad.compareTo(cantidad2);
-                    }
-                    return comparador;
-                    
-                }
-            });*/
-                       
+                                   
             if(ServiceFactory.getFactory().getLoteSeviceIf().existenLotesIngresados(empresa))
             {
                 List<Object[]> resultadoNuevo=new ArrayList<Object[]>();
@@ -681,86 +663,11 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         return resultadoList;
     }
-    
-    /*
-    private Boolean existeProductoKardexList(List<KardexDetalle> detalles, Producto producto)
-    {
-        for (KardexDetalle detalle : detalles) 
-        {
-            if(detalle.getKardex().getProducto().equals(producto))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    */
 
-    
-    //TODO: metodo temporal ver como optimizar este asunto
-    @Deprecated
-    private List<KardexDetalle> eliminarKardexPorLotes( List<KardexDetalle> detalles)
-    {
-        List<KardexDetalle> resultadoList=new ArrayList<KardexDetalle>();
-        try 
-        {      
-            
-            if(ServiceFactory.getFactory().getLoteSeviceIf().obtenerTodos().size()>0)
-            {
-                //Ordenar primero por los valores mayores para que siempre se agregue aunque sea una sola vez el kardex de un producto con valores positivos
-                UtilidadesLista.ordenarLista(detalles,new Comparator<KardexDetalle>() {
-                    @Override
-                    public int compare(KardexDetalle o1, KardexDetalle o2) {
-                        return o1.getKardex().getStock().compareTo(o1.getKardex().getStock());
-                    }
-                });
-                
-                
-                for (KardexDetalle detalle : detalles) 
-                {
-                    
-                    if(!existeProductoKardexList(resultadoList, detalle.getKardex().getProducto()))
-                    {
-                        //Si no existe el producto agregado lo pongo una sola vez
-                        resultadoList.add(detalle);
-                    }
-                    else
-                    {
-                        //Solo agrego otro kardex si tiene un saldo positivo
-                        if(detalle.getKardex().getStock().compareTo(BigDecimal.ZERO)>0)
-                        {
-                            resultadoList.add(detalle);
-                        }
-                    }
-                }
-                
-            }
-            else //Este metodo se ejecuta cuando no estoy usando lotes y solo debo enviar el mismo resultado
-            {
-                resultadoList=detalles;
-            }
-        } 
-        catch (RemoteException ex) 
-        {
-            Logger.getLogger(KardexFacade.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return resultadoList;
-    }
-    
-    private Boolean existeProductoKardexList(List<KardexDetalle> detalles, Producto producto)
-    {
-        for (KardexDetalle detalle : detalles) 
-        {
-            if(detalle.getKardex().getProducto().equals(producto))
-            {
-                return true;
-            }
-        }
-        return false;
-    }*/
             
     
-    public List<KardexDetalle> consultarMovimientosTransferenciaFacade(java.util.Date fechaInicial, java.util.Date fechaFinal) throws java.rmi.RemoteException,ServicioCodefacException
+    public List<KardexDetalle> consultarMovimientosTransferenciaFacade(java.util.Date fechaInicial, java.util.Date fechaFinal,EntityManager em) throws java.rmi.RemoteException,ServicioCodefacException
     {
         //KardexDetalle kd;
         //kd.getKardex().getProducto().getNombre();
@@ -789,7 +696,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //Ordenar por nombre de producto
         queryString+=" ORDER BY kd.kardex.producto.nombre ";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         
@@ -814,7 +721,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @param fechaFinal
      * @return 
      */
-    public Map<Producto,BigDecimal> obtenerCantidadVentas(Date fechaInicio,Date fechaFinal,Sucursal sucursal)
+    public Map<Producto,BigDecimal> obtenerCantidadVentas(Date fechaInicio,Date fechaFinal,Sucursal sucursal,EntityManager em)
     {
         //KardexDetalle kd;
         //kd.getKardex().getProducto();
@@ -825,7 +732,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         /*kd.getCodigoTipoDocumentoEnum().VENTA
         kd.;*/
         String queryString="SELECT kd.kardex.producto,sum(kd.cantidad) FROM KardexDetalle kd WHERE kd.codigoTipoDocumento=?1 and kd.fechaIngreso>=?2 and kd.fechaIngreso<=?3 and kd.kardex.bodega.sucursal=?4 group by kd.kardex.producto ";        
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
                
         query.setParameter(1,TipoDocumentoEnum.VENTA_INVENTARIO);
         query.setParameter(2,fechaInicio);
@@ -857,10 +764,10 @@ public class KardexFacade extends AbstractFacade<Kardex> {
      * @param sucursal
      * @return 
      */
-    public Map<Producto,StockPromedioYCantidadRespuesta> obtenerStockComprasPromedioYCantidad(Date fechaInicio,Date fechaFinal,Sucursal sucursal)
+    public Map<Producto,StockPromedioYCantidadRespuesta> obtenerStockComprasPromedioYCantidad(Date fechaInicio,Date fechaFinal,Sucursal sucursal,EntityManager em)
     {
         String queryString="SELECT kd.kardex.producto,avg(kd.cantidad),count(kd.id) FROM KardexDetalle kd WHERE kd.codigoTipoDocumento=?1 and kd.fechaIngreso>=?2 and kd.fechaIngreso<=?3 and kd.kardex.bodega.sucursal=?4 group by kd.kardex.producto ";        
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
                
         query.setParameter(1,TipoDocumentoEnum.COMPRA_INVENTARIO);
         query.setParameter(2,fechaInicio);
@@ -887,7 +794,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         
     }
     
-    public List<Producto> obtenerListaProductosInventario(Empresa empresa)
+    public List<Producto> obtenerListaProductosInventario(Empresa empresa,EntityManager em)
     {
         Producto producto;
         //producto.getEstado();
@@ -895,7 +802,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //producto.setEmpresa(empresa);
                 
         String queryString="SELECT p FROM Producto p WHERE p.estado=?1 and p.manejarInventario=?2 and p.empresa=?3 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2,EnumSiNo.SI.getLetra());

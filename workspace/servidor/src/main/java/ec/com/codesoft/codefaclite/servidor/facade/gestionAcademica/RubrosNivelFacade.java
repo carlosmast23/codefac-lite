@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlantillaMes;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 import jakarta.persistence.Query;
@@ -25,7 +26,7 @@ public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
         super(RubrosNivel.class);
     }
 
-    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException {
+    public List<RubrosNivel> findPorPeriodoYMeses(Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses,EntityManager em) throws RemoteException {
 
         String stringQuery = "SELECT rn FROM RubrosNivel rn WHERE rn.catalogoProducto=?1 AND rn.periodo=?2 AND ";
 
@@ -55,7 +56,7 @@ public class RubrosNivelFacade extends AbstractFacade<RubrosNivel> {
         //Une los querys parciales y genera uno total
         stringQuery += stringQueryMeses;
 
-        Query query = nuevoEntityManager().createQuery(stringQuery);
+        Query query = em.createQuery(stringQuery);
         query.setParameter(1, catalogoProducto);
         query.setParameter(2, periodo);
 

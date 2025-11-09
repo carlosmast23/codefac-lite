@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 
@@ -22,14 +23,14 @@ public class ObjetoMantenimientoFacade extends AbstractFacade<ObjetoMantenimient
         super(ObjetoMantenimiento.class);
     }
     
-    public List<ObjetoMantenimiento> buscarPorVINFacade(Empresa empresa,String vin) throws ServicioCodefacException,java.rmi.RemoteException
+    public List<ObjetoMantenimiento> buscarPorVINFacade(Empresa empresa,String vin,EntityManager em) throws ServicioCodefacException,java.rmi.RemoteException
     {
         //ObjetoMantenimiento o;
         //o.getEstado();
         //o.getVin();
         
         String queryStr="SELECT u FROM ObjetoMantenimiento u WHERE u.vin LIKE ?1 AND u.estado=?2 ";
-        Query query = nuevoEntityManager().createQuery(queryStr);
+        Query query = em.createQuery(queryStr);
         query.setParameter(1,"%"+vin+"%");
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getLetra());
         return query.getResultList();

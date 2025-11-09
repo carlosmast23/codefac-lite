@@ -108,7 +108,7 @@ public interface ComprobanteServiceIf extends Remote {
     
     public List<String> solucionarProblemasEnvioComprobante(String carpetaActual,String claveAcceso,Empresa empresa) throws RemoteException, ServicioCodefacException;
     
-    public Integer getSecuencialUltimo(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException;
+    //public Integer getSecuencialUltimo(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException;
     
     public void generarRideComprobanteNoLegal(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante,ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException;
     

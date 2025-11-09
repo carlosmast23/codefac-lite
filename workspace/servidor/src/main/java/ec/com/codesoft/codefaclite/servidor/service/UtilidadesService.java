@@ -73,18 +73,28 @@ import static org.castor.mapping.AbstractMappingLoaderFactory.LOG;
  *
  * @author Carlos
  */
-public class UtilidadesService extends UnicastRemoteObject implements UtilidadesServiceIf {
+public class UtilidadesService extends ServiceAbstract<Object,UtilidadFacade> implements UtilidadesServiceIf {
 
     private static final Logger LOG = Logger.getLogger(UtilidadesService.class.getName());
     
     public UtilidadesService() throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+        super(UtilidadFacade.class);
     }
 
     //TODO: Verificar porque no esta funcionando este metodo
-    public Object mergeEntity(Object entity) throws java.rmi.RemoteException {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        return entityManager.merge(entity);
+    public Object mergeEntity(Object entity,EntityManager em) throws java.rmi.RemoteException {
+        //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+        return em.merge(entity);
+    }
+    
+    public Object mergeEntity(Object entity) throws java.rmi.RemoteException, ServicioCodefacException {
+        return ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                
+                return entityManager.merge(entity);
+            }
+        });
+        
     }
 
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map,TipoQueryEnum tipoQueryEnum, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException {
@@ -92,7 +102,7 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
             return (List<Object>) ServiceAbstract.ejecutarConsultaStatic(new MetodoInterfaceConsulta() {
                 @Override
                 public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
-                    return AbstractFacade.findStaticDialog(query, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
+                    return AbstractFacade.findStaticDialog(query, map,tipoQueryEnum, limiteMinimo, limiteMaximo,em);
                 }
             });
         } catch (ServicioCodefacException ex) {
@@ -107,7 +117,17 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     }*/
 
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException {
-        return AbstractFacade.findCountStaticDialog(query, map);
+        try {
+            return (Long) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return AbstractFacade.findCountStaticDialog(query, map,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(UtilidadesService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public Properties crearLicencia(Empresa empresa,Licencia licencia) throws RemoteException,ServicioCodefacException
@@ -572,8 +592,14 @@ public class UtilidadesService extends UnicastRemoteObject implements Utilidades
     
     public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk) throws RemoteException,ServicioCodefacException
     {
-        UtilidadFacade utilidadFacade=new UtilidadFacade();
-        return utilidadFacade.obtenerCodigoMaximoPorId(nombreTabla, nombreCampoPk);
+        return (Integer) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                UtilidadFacade utilidadFacade = new UtilidadFacade();
+                return utilidadFacade.obtenerCodigoMaximoPorId(nombreTabla, nombreCampoPk,entityManager);
+            }
+        });
+        
     }
     
     public String crearCodigoPorEmpresaYSucursalSinTransaccion(Sucursal sucursal,String codigoDocumento,String nombreTabla,EntityManager entityManager) throws RemoteException,ServicioCodefacException

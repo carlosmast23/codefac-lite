@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.RutaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DiaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 import jakarta.persistence.TemporalType;
@@ -26,7 +27,7 @@ public class RutaFacade extends AbstractFacade<Ruta> {
         super(Ruta.class);
     }
     
-    public List<Ruta> consultarRutaActivaPorVendedorYClienteFacade(Empleado vendedor,PersonaEstablecimiento clienteOficina,DiaEnum diaEnum)
+    public List<Ruta> consultarRutaActivaPorVendedorYClienteFacade(Empleado vendedor,PersonaEstablecimiento clienteOficina,DiaEnum diaEnum,EntityManager em)
     {
         /*Ruta ruta;
         ruta.getDiaVisita();
@@ -36,7 +37,7 @@ public class RutaFacade extends AbstractFacade<Ruta> {
         rutaDetalle.getEstablecimiento();*/
         
         String queryStr="SELECT r FROM RutaDetalle rd JOIN rd.ruta r WHERE r.estado=?1 and r.vendedor=?2 and rd.establecimiento=?3 and r.diaVisita=?4 ";
-        Query query=nuevoEntityManager().createQuery(queryStr);
+        Query query=em.createQuery(queryStr);
         query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2,vendedor);
         query.setParameter(3,clienteOficina);

@@ -47,7 +47,7 @@ public interface ParametroCodefacServiceIf extends ServiceAbstractIf<ParametroCo
     
     public void crearParametroPorDefectoEmpresaSinTrasaccion(Empresa empresa,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException;
     
-    public List ejecutarConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException;
+    //public List ejecutarConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException;
     
     public ParametroCodefac getParametroByNombreSinEmpresa(String nombre) throws java.rmi.RemoteException;
     

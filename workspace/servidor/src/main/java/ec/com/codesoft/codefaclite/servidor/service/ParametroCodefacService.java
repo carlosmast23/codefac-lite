@@ -56,7 +56,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
                     //ALERTA: REVISAR QUE ESTA LINEA DE CODIGO GENERA  EL SIGUIENTE LOG
                     //A signal was attempted before wait() on ConcurrencyManager. This normally means that an attempt was made to 
                     //commit or rollback a transaction before it was started, or to rollback a transaction twice.
-                    List<ParametroCodefac> parametros = getFacade().getParametrosMapByEmpresa(empresaIf);
+                    List<ParametroCodefac> parametros = getFacade().getParametrosMapByEmpresa(empresaIf,em);
                     for (ParametroCodefac parametro : parametros) {
                         parametrosCodefacMap.put(parametro.getNombre(), parametro);
                     }
@@ -290,28 +290,38 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     
     public List ejecutarConsultaNativaEnum(RecursoCodefacEnum queryEnum,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException
     {
-        InputStream inputStreamReporte= RecursoCodefac.SQL_CODEFAC.getResourceInputStream(queryEnum.getNombre());
-        String queryDatos= UtilidadesTextos.getStringFromInputStream(inputStreamReporte);
-        String[] queryList= queryDatos.split(";");
+        return (List) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                InputStream inputStreamReporte = RecursoCodefac.SQL_CODEFAC.getResourceInputStream(queryEnum.getNombre());
+                String queryDatos = UtilidadesTextos.getStringFromInputStream(inputStreamReporte);
+                String[] queryList = queryDatos.split(";");
+
+                List resultado = new ArrayList();
+                for (String string : queryList) {
+                    resultado.addAll(ejecutarConsultaNativa(string, tipoComandoEnum,entityManager));
+                }
+                return resultado;
+            }
+        });
         
-        List resultado=new ArrayList();
-        for (String string : queryList) 
-        {
-            resultado.addAll(ejecutarConsultaNativa(string,tipoComandoEnum));
-        }
-        return resultado;
     }
     
     public List ejecutarVariasConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException
     {
-        String[] queryList= queryStr.split(";");
+        return (List) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                String[] queryList = queryStr.split(";");
+
+                List resultado = new ArrayList();
+                for (String string : queryList) {
+                    resultado.addAll(ejecutarConsultaNativa(string, tipoComandoEnum,entityManager));
+                }
+                return resultado;
+            }
+        });
         
-        List resultado=new ArrayList();
-        for (String string : queryList) 
-        {
-            resultado.addAll(ejecutarConsultaNativa(string,tipoComandoEnum));
-        }
-        return resultado;
     }
     
     /**
@@ -321,12 +331,12 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
      * @throws RemoteException
      * @throws ServicioCodefacException 
      */
-    public List ejecutarConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum) throws RemoteException,ServicioCodefacException
+    public List ejecutarConsultaNativa(String queryStr,TipoComandoEnum tipoComandoEnum,EntityManager em) throws RemoteException,ServicioCodefacException
     {
         try
         {
-            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-            Query query=entityManager.createNativeQuery(queryStr);
+            //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+            Query query=em.createNativeQuery(queryStr);
                         
             //En el caso que no se mande un tipo de comando el sistema genera uno de manera Automatica
             if(tipoComandoEnum==null)

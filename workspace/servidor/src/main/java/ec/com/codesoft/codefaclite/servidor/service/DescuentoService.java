@@ -253,9 +253,9 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
         });
     }
     
-    public Integer consultarPromocionDosPorUno(Long productoId) throws ServicioCodefacException, RemoteException
+    public Integer consultarPromocionDosPorUno(Long productoId,EntityManager em) throws ServicioCodefacException, RemoteException
     {
-        List<DescuentoProductoDetalle> resultadoList=getFacade().consultarDescuentosPorProductoIdFacade(productoId);
+        List<DescuentoProductoDetalle> resultadoList=getFacade().consultarDescuentosPorProductoIdFacade(productoId,em);
         
         for (DescuentoProductoDetalle descuentoProductoDetalle : resultadoList) 
         {
@@ -274,24 +274,28 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
     
     public List<BigDecimal> consultarDescuentosPorProducto(Producto producto,Integer numeroPrecio) throws ServicioCodefacException, RemoteException
     {
-        List<DescuentoProductoDetalle> detalleDescuento= getFacade().consultarDescuentosPorProductoFacade(producto);
-        
-        List<BigDecimal> descuentoList=new ArrayList<BigDecimal>();
-        for (DescuentoProductoDetalle descuentoProductoDetalle : detalleDescuento) {
-            
-            //OPTIMIZAR ESTA PARTE PARA HACER DIRECTO EN LA CONSULTA
-            List<DescuentoCondicionPrecio> condicionList= descuentoProductoDetalle.getDescuento().getCondicionPrecioList();
-            for (DescuentoCondicionPrecio condicion : condicionList) 
-            {                
-                if(condicion.getNumeroPrecio()!=null && condicion.getNumeroPrecio().equals(numeroPrecio))
-                {
-                    descuentoList.add(condicion.getPorcentajeDescuento());
+        return (List<BigDecimal>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                
+                List<DescuentoProductoDetalle> detalleDescuento = getFacade().consultarDescuentosPorProductoFacade(producto,entityManager);
+
+                List<BigDecimal> descuentoList = new ArrayList<BigDecimal>();
+                for (DescuentoProductoDetalle descuentoProductoDetalle : detalleDescuento) {
+
+                    //OPTIMIZAR ESTA PARTE PARA HACER DIRECTO EN LA CONSULTA
+                    List<DescuentoCondicionPrecio> condicionList = descuentoProductoDetalle.getDescuento().getCondicionPrecioList();
+                    for (DescuentoCondicionPrecio condicion : condicionList) {
+                        if (condicion.getNumeroPrecio() != null && condicion.getNumeroPrecio().equals(numeroPrecio)) {
+                            descuentoList.add(condicion.getPorcentajeDescuento());
+                        }
+                    }
+
                 }
+
+                return descuentoList;
             }
-            
-        }
+        });
         
-        return descuentoList;
         
     }
  

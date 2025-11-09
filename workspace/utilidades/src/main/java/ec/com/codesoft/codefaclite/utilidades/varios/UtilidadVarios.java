@@ -19,11 +19,13 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.beanutils.BeanUtils;
 
 /**
  *TODO:Cambiar el nombre de esta clase y dale un solo objetico que es para temas de la tarjeta de Red
@@ -274,6 +276,34 @@ public abstract class UtilidadVarios {
         public void proceso();
     }
     
+    public static <T> T clonarEntidad(T original) {
+        try {
+            // Crear nueva instancia
+            T clon = (T) original.getClass().getDeclaredConstructor().newInstance();
+
+            // Copiar propiedades simples
+            BeanUtils.copyProperties(clon, original);
+
+            // Poner el ID en null (usa el nombre pasado, por defecto "id")
+            //Field idField = original.getClass().getDeclaredField(idFieldName);
+            //idField.setAccessible(true);
+            //idField.set(clon, null);
+
+            // Limpiar colecciones que puedan generar errores
+            for (Field f : original.getClass().getDeclaredFields()) {
+                if (Collection.class.isAssignableFrom(f.getType())) {
+                    f.setAccessible(true);
+                    f.set(clon, new ArrayList<>()); // evitar copiar listas compartidas
+                }
+            }
+
+            return clon;
+        } catch (Exception e) {
+            throw new RuntimeException("Error al clonar entidad: " + e.getMessage(), e);
+        }
+    }
+
+    @Deprecated
     public static void copiarObjetos(Object origen, Object destino) {
         try {
             Class<?> claseOrigen = origen.getClass();

@@ -10,7 +10,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ImpuestoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ConstrainViolationExceptionSQL;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.ImpuestoFacade;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoServiceIf;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,20 +49,26 @@ public class ImpuestoService extends ServiceAbstract<Impuesto, ImpuestoFacade> i
     
 
     
-    public void eliminar(Impuesto i)
-    {                
-        impuestoFacade.remove(i);
-    }
     
     public Impuesto obtenerImpuestoPorCodigo(String nombre)
     {
-        return impuestoFacade.getByName(nombre);
+        try {
+            return (Impuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return impuestoFacade.getByName(nombre,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ImpuestoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    public Impuesto obtenerImpuestoPorVigencia(String nombre)
+    /*public Impuesto obtenerImpuestoPorVigencia(String nombre)
     {
         return impuestoFacade.getByImpuestoVigente(nombre);
-    }
+    }*/
     
     /*public List<Impuesto> obtenerTodos()
     {

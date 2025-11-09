@@ -101,6 +101,16 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
         return true;
     }
     
+    public LoginRespuesta login(String nick,String clave,Empresa empresa,Boolean modoForzado) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        return (LoginRespuesta) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return login(nick, clave, empresa, modoForzado,entityManager);
+            }
+        });
+    }
+    
     /**
      * Metodo que me permite verificar si el usuario puede acceder al sistema tanto por credenciales o por otro motivo
      * @param nick
@@ -110,7 +120,7 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
      * @throws java.rmi.RemoteException
      * @throws ServicioCodefacException 
      */
-    public LoginRespuesta login(String nick,String clave,Empresa empresa,Boolean modoForzado) throws java.rmi.RemoteException,ServicioCodefacException
+    public LoginRespuesta login(String nick,String clave,Empresa empresa,Boolean modoForzado,EntityManager em) throws java.rmi.RemoteException,ServicioCodefacException
     {
         LoginRespuesta loginRespuesta=new LoginRespuesta();
         
@@ -163,8 +173,8 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
                 Usuario usuarioRoot = null; //variable para consultar la variable root
                 try {
                     UsuarioServicio usuarioServicio=new UsuarioServicio();
-                    EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-                    usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros,entityManager).get(0);//obtiene el usuario root de la base de datos 
+                    //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+                    usuarioRoot = usuarioServicio.obtenerPorMap(mapParametros,em).get(0);//obtiene el usuario root de la base de datos 
                     usuarioRoot.isRoot = true;
                     usuarioRoot.setEmpresa(empresa); //Seteo con el nombre de la empresa que vayan a usar
                 } catch (RemoteException ex) {
@@ -301,12 +311,18 @@ public class UsuarioServicio extends ServiceAbstract<Usuario,UsuarioFacade> impl
     }
     
     public void eliminar(Usuario entity) throws java.rmi.RemoteException {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion=getTransaccion();
-        transaccion.begin();
-        entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        entityManager.merge(entity);
-        transaccion.commit();
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entity);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(UsuarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public Usuario cambiarClave(Usuario usuario,String claveAnterior,String claveNueva) throws java.rmi.RemoteException, ServicioCodefacException

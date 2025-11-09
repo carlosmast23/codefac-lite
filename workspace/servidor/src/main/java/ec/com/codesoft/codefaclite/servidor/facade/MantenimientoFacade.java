@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.MantenimientoResult;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,17 +37,17 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         super(Mantenimiento.class);
     }
     
-    public List<Mantenimiento> obtenerPendientesClasificarUbicacionFacade(Empresa empresa) throws ServicioCodefacException, RemoteException 
+    public List<Mantenimiento> obtenerPendientesClasificarUbicacionFacade(Empresa empresa,EntityManager em) throws ServicioCodefacException, RemoteException 
     {
         //Mantenimiento mantenimiento;
         //mantenimiento.getUbicacion();
         String queryStr = " SELECT m FROM Mantenimiento m WHERE M.ubicacion IS NULL ";
-        Query query = nuevoEntityManager().createQuery(queryStr);
+        Query query = em.createQuery(queryStr);
         
         return query.getResultList();
     }
     
-    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Boolean todosTaller,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum) throws ServicioCodefacException, RemoteException
+    public List<Mantenimiento> consultarMantenimientoFacade(Date fechaInicio, Date fechaFin,Boolean fechaFinExacto,Boolean todosTaller,Taller taller,Mantenimiento.MantenimientoEnum estadoEnum,MarcaProducto marca,Mantenimiento.UbicacionEnum ubicacionEnum,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         //Mantenimiento m;
         //m.getTaller().getNombre();
@@ -113,7 +114,7 @@ public class MantenimientoFacade extends AbstractFacade<Mantenimiento>{
         
         String queryStr = " SELECT m FROM Mantenimiento m WHERE 1=1 "+fechaIngresoStr+fechaFinStr+estado+marcaStr+ubicacionEnumStr+tallerStr;
         Logger.getLogger(MantenimientoService.class.getName()).log(Level.INFO, queryStr);
-        Query query = nuevoEntityManager().createQuery(queryStr);
+        Query query = em.createQuery(queryStr);
         
         
         //query.setParameter(3,Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());

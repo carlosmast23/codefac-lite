@@ -64,17 +64,12 @@ public abstract class AbstractFacade<T>
      * @param entity 
      */
     public void editData(T entity,EntityManager em) {
-        //EntityTransaction tx= nuevoEntityManager().getTransaction();
-        //tx.begin();
-        em.merge(entity);
-        //tx.commit();
+        em.merge(entity);        
     }
 
-    public void remove(T entity) {
-        nuevoEntityManager().getTransaction().begin();
-        nuevoEntityManager().remove(nuevoEntityManager().merge(entity));
-        nuevoEntityManager().getTransaction().commit();
-    }
+    public void remove(T entity,EntityManager em) {        
+        em.remove(em.merge(entity));
+            }
 
     public T find(Object id,EntityManager entityManager) {
         return entityManager.find(entityClass, id);
@@ -85,16 +80,6 @@ public abstract class AbstractFacade<T>
         cq.select(cq.from(entityClass));
         return em.createQuery(cq).getResultList();
     }
-   
-    public List<T> findRange(int[] range) {
-        jakarta.persistence.criteria.CriteriaQuery cq = nuevoEntityManager().getCriteriaBuilder().createQuery();
-        cq.select(cq.from(entityClass));
-        jakarta.persistence.Query q = nuevoEntityManager().createQuery(cq);
-        q.setMaxResults(range[1] - range[0] + 1);
-        q.setFirstResult(range[0]);
-        return q.getResultList();
-    }
-    
     
     public List<T> findByMap(Map<String, Object> parametros,EntityManager entityManager)
     {
@@ -257,7 +242,8 @@ public abstract class AbstractFacade<T>
      * @param nombrePK
      * @return RETORNA VERDADERO SI ENCUENTRA CLAVES REPETIDAS
      */
-        
+       
+    @Deprecated
     /**
      * TODO: Ver como parametrizar el nombre del esquema que parece que siempre es el mismo nombre del usuario al momento de crear la base de datos
      * @param nombreTabla 
@@ -268,35 +254,37 @@ public abstract class AbstractFacade<T>
         queryString=queryString.replace("?1",nombreTabla);
         
         
-      
-        Query query = nuevoEntityManager().createNativeQuery(queryString);
-        List resultado=query.getResultList();        
+        EntityManager entityManager=nuevoEntityManager();
+        Query query = entityManager.createNativeQuery(queryString);
+        List resultado=query.getResultList();  
+        entityManager.close();
         System.out.println("resultado:"+resultado);
     }
     
     
-    public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo) {
-        Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
+    public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo,EntityManager em) {
+        Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo,em);
         return query.getResultList();
     }
     
-    public static Long findStaticSizeDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo) {
-        Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo);
+    public static Long findStaticSizeDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo,EntityManager em) {
+        Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo,em);
         return (Long) query.getSingleResult();
     }
     
-    public static Query ejecutarConsultaConParametros(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo)
+    public static Query ejecutarConsultaConParametros(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo,EntityManager em)
     {
+        //EntityManager entityManager=nuevoEntityManager();
         System.out.println("[Dialog]"+queryStr);
         Query query = null;
         
         if(tipoQueryEnum==null || tipoQueryEnum.equals(TipoQueryEnum.JPQL))
         {
-            query=nuevoEntityManager().createQuery(queryStr);
+            query=em.createQuery(queryStr);
         }
         else if(tipoQueryEnum.equals(tipoQueryEnum.NATIVO))
         {
-            query=nuevoEntityManager().createNativeQuery(queryStr);
+            query=em.createNativeQuery(queryStr);
         }
                 
         //Agregar los parametros del map al query
@@ -308,12 +296,14 @@ public abstract class AbstractFacade<T>
         
         query.setMaxResults(limiteMaximo);
         query.setFirstResult(limiteMinimo);
+        //entityManager.close();
         return query;
     }
     
     
-    public static Long findCountStaticDialog(String queryStr,Map<Integer,Object> map) {
-        Query query = nuevoEntityManager().createQuery(queryStr);
+    public static Long findCountStaticDialog(String queryStr,Map<Integer,Object> map,EntityManager em) {
+        //EntityManager entityManager=nuevoEntityManager();
+        Query query = em.createQuery(queryStr);
         //Agregar los parametros del map al query
         for (Map.Entry<Integer, Object> entry : map.entrySet()) {
             Integer key = entry.getKey();

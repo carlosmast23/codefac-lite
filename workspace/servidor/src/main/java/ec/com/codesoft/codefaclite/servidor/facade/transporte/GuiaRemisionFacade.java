@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Transportista;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
         super(GuiaRemision.class);
     }
     
-    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado, Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa) throws ServicioCodefacException, RemoteException    
+    public List<GuiaRemision> obtenerConsultaFacade(Date fechaInicial,Date fechaFinal,ComprobanteEntity.ComprobanteEnumEstado estado, Transportista transportista,Persona destinatario,String codigoProducto,Empresa empresa,EntityManager em) throws ServicioCodefacException, RemoteException    
     {
         //GuiaRemision guia;
         ///guia.getDestinatarios().get(0).getDetallesProductos().get(0).getDescripcion();
@@ -82,7 +83,7 @@ public class GuiaRemisionFacade extends AbstractFacade<GuiaRemision>{
          * ===================> SETEAR VALORES <=====================
          */
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
 
         if (fechaInicial != null) {
             query.setParameter(1,fechaInicial);

@@ -11,7 +11,10 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
 import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,7 +28,19 @@ public class SriRetencionRentaService extends ServiceAbstract<SriRetencionRenta,
     
     public List<SriRetencionRenta> obtenerTodosOrdenadoPorCodigo() throws RemoteException
     {
-        return getFacade().obtenerTodosOrdenadoPorCodigoFacade();
+        try {
+            return (List<SriRetencionRenta>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().obtenerTodosOrdenadoPorCodigoFacade(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriRetencionRentaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return new ArrayList();
+                
     }
 
     @Override

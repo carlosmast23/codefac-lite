@@ -11,6 +11,7 @@ package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
  */
 public class DetalleReporteData {
     private String codigo;
+    private String codigoAuxiliar;
     private String descripcion;
     private String cantidad;
     private String precio_unitario;
@@ -97,10 +98,13 @@ public class DetalleReporteData {
     public void setPresentacion(String presentacion) {
         this.presentacion = presentacion;
     }
-    
-    
-    
-    
-    
+
+    public String getCodigoAuxiliar() {
+        return codigoAuxiliar;
+    }
+
+    public void setCodigoAuxiliar(String codigoAuxiliar) {
+        this.codigoAuxiliar = codigoAuxiliar;
+    }
     
 }

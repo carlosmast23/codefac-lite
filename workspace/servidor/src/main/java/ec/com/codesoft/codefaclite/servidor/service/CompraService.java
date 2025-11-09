@@ -90,6 +90,7 @@ import java.util.logging.Logger;
  */
 public class CompraService extends ServiceAbstract<Compra,CompraFacade> implements CompraServiceIf{
     
+    private RetencionService retencionService = new RetencionService();
     CompraFacade compraFacade;
     CompraDetalleFacade compraDetalleFacade;
     
@@ -688,7 +689,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     @Override
     public void grabarCompra(Compra compra,CarteraParametro carteraParametro) throws ServicioCodefacException, RemoteException
     {
-        llenarDatosPorDefecto(compra);
+        
         
         
         ejecutarTransaccion(new MetodoInterfaceTransaccion() 
@@ -696,6 +697,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
             {
+                llenarDatosPorDefecto(compra,entityManager);
                 validarDatosCompra(compra,CrudEnum.CREAR,entityManager);
                 //TODO: por el momento dejo para pruebas
                 entityManager.flush();
@@ -748,7 +750,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 FacturacionService facturaService=new FacturacionService();
                 if(carteraParametro.pagarConCaja)
                 {
-                    facturaService.agregarDatosParaCajaSession(compra,null);
+                    facturaService.agregarDatosParaCajaSession(compra,null,entityManager);
                 }
                 
                 grabarCartera(compra,carteraParametro,entityManager); //Grabo la cartera desde de grabar la compra para tener el id de referencia que necesito en cartera
@@ -759,7 +761,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
         //TODO: Falta retornar el tipo de dato por ejemplo en los dialogos necesita obtener el nuevo dato modificado.
     }
     
-    private void llenarDatosPorDefecto(Compra compra) throws RemoteException, ServicioCodefacException
+    private void llenarDatosPorDefecto(Compra compra,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         //Para documento de nota de venta interna ingreso unos datos adicionales automaticos
         DocumentoEnum documentoEnum=compra.getCodigoDocumentoEnum();
@@ -782,7 +784,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
             
             if(compra.getSecuencial()==null || compra.getPuntoEmision().equals("000000000") )
             {
-                Integer secuencial=getFacade().obtenerMaximoCodigoPorDocumento(compra.getPuntoEmision(),compra.getPuntoEstablecimiento(),documentoEnum,compra.getEmpresa());
+                Integer secuencial=getFacade().obtenerMaximoCodigoPorDocumento(compra.getPuntoEmision(),compra.getPuntoEstablecimiento(),documentoEnum,compra.getEmpresa(),em);
                 compra.setSecuencial(secuencial);
             }
             
@@ -1074,8 +1076,8 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     private void eliminarRetencionCompraSinTransaccion(Compra compra,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
-        RetencionService retencionService = new RetencionService();
-        List<Retencion> retencionesAsociadas = retencionService.obtenerRetencionesPorCompra(compra);
+        
+        List<Retencion> retencionesAsociadas = retencionService.obtenerRetencionesPorCompra(compra,entityManager);
 
         if (retencionesAsociadas.size() == 0) {
             compra.setEstado(GeneralEnumEstado.ELIMINADO.getEstado()); //Cambiar el estado de la compra
@@ -1104,28 +1106,60 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     @Override
     public List<Compra> obtenerCompraReporte(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum de, TipoDocumentoEnum tde,GeneralEnumEstado estadoEnum,Empresa empresa) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        return compraFacade.obtenerCompraReporte(proveedor, fechaInicial, fechaFin, de, tde,estadoEnum,empresa);
+        return (List<Compra>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return compraFacade.obtenerCompraReporte(proveedor, fechaInicial, fechaFin, de, tde,estadoEnum,empresa,entityManager);
+            }
+        });
+        
     }    
     
     @Override
     public List<Compra> obtenerCompraDisenable()
     {
-        return compraFacade.getCompraRetencionDisenable();
+        try {
+            return (List<Compra>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return compraFacade.getCompraRetencionDisenable(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<Producto> obtenerProductosActualizarPrecios(Compra compra) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        return getFacade().obtenerProductosActualizarPrecios(compra);
+        return (List<Producto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().obtenerProductosActualizarPrecios(compra,entityManager);
+            }
+        });
+
     }
     
     public BigDecimal obtenerCompraReporteTotalValor(Persona proveedor, Date fechaInicial, Date fechaFin, DocumentoEnum documentoEnum, TipoDocumentoEnum tipoDocumentoEnum,GeneralEnumEstado estadoEnum,Empresa empresa)
     {
-        BigDecimal valor= getFacade().obtenerCompraReporteTotalValor(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa);
-        if(valor==null)
-        {
-            valor=BigDecimal.ZERO;
+        try {
+            return (BigDecimal) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    BigDecimal valor = getFacade().obtenerCompraReporteTotalValor(proveedor, fechaInicial, fechaFin, documentoEnum, tipoDocumentoEnum, estadoEnum, empresa,entityManager);
+                    if (valor == null) {
+                        valor = BigDecimal.ZERO;
+                    }
+                    return valor;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CompraService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return valor;
+        return null;
+
     }
     
     

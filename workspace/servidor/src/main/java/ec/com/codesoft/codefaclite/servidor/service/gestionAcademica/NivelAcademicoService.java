@@ -134,29 +134,24 @@ public class NivelAcademicoService extends ServiceAbstract<NivelAcademico, Nivel
 
     public void eliminarNivelAcademico(NivelAcademico n) throws RemoteException,ServicioCodefacException {
         
-        try {
-            EstudianteInscritoService servicio=new EstudianteInscritoService();
-            Long cantidadEstudiantesInscritos=servicio.obtenerTamanioEstudiatesInscritosPorCurso(n);
-            
-            //Si no existe ningun estudiante registrado entonces puede borrar los dato
-            if(cantidadEstudiantesInscritos==0)
-            {
-                ejecutarTransaccion(new MetodoInterfaceTransaccion() {
-                    @Override
-                    public void transaccion(EntityManager entityManager) {
-                        n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-                        entityManager.merge(n);
-                    }
-                });                
+
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                EstudianteInscritoService servicio = new EstudianteInscritoService();
+                Long cantidadEstudiantesInscritos = servicio.obtenerTamanioEstudiatesInscritosPorCurso(n,entityManager);
+                    
+                if (cantidadEstudiantesInscritos == 0) {
+
+                    n.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(n);
+                } else {
+                    throw new ServicioCodefacException("No se puede eliminar el curso porque existen datos registrados ");
+                }
+
             }
-            else
-            {
-                throw new ServicioCodefacException("No se puede eliminar el curso porque existen datos registrados ");
-            }
-           
-        } catch (RemoteException ex) {
-            Logger.getLogger(NivelAcademicoService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        });
+
        
     }
     

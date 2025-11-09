@@ -40,7 +40,7 @@ public class PrestamoService extends ServiceAbstract<Prestamo,PrestamoFacade> im
         return (List<PrestamoCuota>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
-                return getFacade().buscarCuotasPorPrestamo(prestamo);
+                return getFacade().buscarCuotasPorPrestamo(prestamo,em);
             }
         });
     }

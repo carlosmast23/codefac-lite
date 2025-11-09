@@ -17,5 +17,5 @@ import java.util.List;
  */
 public interface PresupuestoDetalleServiceIf extends ServiceAbstractIf<PresupuestoDetalle>
 {
-    public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto) throws ServicioCodefacException, RemoteException;
+    //public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto) throws ServicioCodefacException, RemoteException;
 }

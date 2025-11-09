@@ -65,14 +65,14 @@ public class UtilidadFacade extends AbstractFacade<Object>
      * @param nombreTabla
      * @return 
      */
-    public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk)
+    public Integer obtenerCodigoMaximoPorId(String nombreTabla,String nombreCampoPk,EntityManager em)
     {
         //String query=" Select ";
         String queryString = "SELECT MAX(u.:nombreCampo) FROM :nombreTabla u ";
         queryString=queryString.replace(":nombreCampo",nombreCampoPk);
         queryString=queryString.replace(":nombreTabla",nombreTabla);
         
-        Query query = nuevoEntityManager().createNativeQuery(queryString);
+        Query query = em.createNativeQuery(queryString);
         
         Object resultado=null;
         try

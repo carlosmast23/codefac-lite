@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.DashBoardData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
+import jakarta.persistence.EntityManager;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -36,7 +37,8 @@ public interface UtilidadesServiceIf extends Remote
      * @return
      * @throws java.rmi.RemoteException 
      */
-    public Object mergeEntity(Object entity) throws java.rmi.RemoteException;
+    public Object mergeEntity(Object entity) throws java.rmi.RemoteException, ServicioCodefacException;
+    public Object mergeEntity(Object entity,EntityManager em) throws java.rmi.RemoteException;
     public List<Object> consultaGeneralDialogos(String query, Map<Integer, Object> map,TipoQueryEnum tipoQueryEnum, int limiteMinimo, int limiteMaximo) throws java.rmi.RemoteException ;
     public Long consultaTamanioGeneralDialogos(String query, Map<Integer, Object> map) throws java.rmi.RemoteException;
     public boolean verificarConexionesServidor(Empresa empresa) throws java.rmi.RemoteException;

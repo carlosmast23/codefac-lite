@@ -62,9 +62,9 @@ public class RutaService extends ServiceAbstract<Ruta,RutaFacade> implements Rut
         });
     }
     
-    public Ruta consultarRutaActivaPorVendedorYCliente(Empleado vendedor,PersonaEstablecimiento clienteOficina,DiaEnum diaEnum) throws ServicioCodefacException, RemoteException
+    public Ruta consultarRutaActivaPorVendedorYCliente(Empleado vendedor,PersonaEstablecimiento clienteOficina,DiaEnum diaEnum,EntityManager em) throws ServicioCodefacException, RemoteException
     {
-        List<Ruta> resultado=getFacade().consultarRutaActivaPorVendedorYClienteFacade(vendedor, clienteOficina,diaEnum);
+        List<Ruta> resultado=getFacade().consultarRutaActivaPorVendedorYClienteFacade(vendedor, clienteOficina,diaEnum,em);
         if(resultado.size()>0)
         {
             return resultado.get(0);

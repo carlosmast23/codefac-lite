@@ -27,9 +27,9 @@ public class RubroPlantillaEstudianteService extends ServiceAbstract<RubroPlanti
         this.rubroPlantillaEstudianteFacade=new RubroPlantillaEstudianteFacade();
     }
     
-    public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla) throws RemoteException
+    /*public List<EstudianteInscrito> obtenerEstudiantesSinRegistrar(RubroPlantilla rubroPlantilla) throws RemoteException
     {        
         return this.rubroPlantillaEstudianteFacade.getEstudiantesSinRegistrar(rubroPlantilla);
-    }
+    }*/
     
 }

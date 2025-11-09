@@ -43,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
+import java.util.ArrayList;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -281,7 +282,17 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     @Override
     public List<Persona> buscarPorTipo(OperadorNegocioEnum tipoEnum, GeneralEnumEstado estado, Empresa empresa) throws java.rmi.RemoteException {
-        return getFacade().buscarPorTipoFacade(tipoEnum, estado, empresa);
+        try {
+            return (List<Persona>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().buscarPorTipoFacade(tipoEnum, estado, empresa,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
     }
 
     /**

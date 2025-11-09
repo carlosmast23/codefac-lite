@@ -105,6 +105,7 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
             DetalleReporteData data=new DetalleReporteData();
             data.setCantidad(detalleFacturaComprobante.getCantidad()+"");
             data.setCodigo(detalleFacturaComprobante.getCodigoPrincipal());
+            data.setCodigoAuxiliar(detalleFacturaComprobante.getCodigoAuxiliar());
             data.setDescripcion(detalleFacturaComprobante.getDescripcion());
             data.setPresentacion(detalleFacturaComprobante.getUnidadMedida());
             

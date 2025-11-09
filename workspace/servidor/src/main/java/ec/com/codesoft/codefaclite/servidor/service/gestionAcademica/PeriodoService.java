@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.PeriodoServiceIf;
 import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,7 +123,7 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                List<Periodo> periodos=obtenerPeriodosSinEliminar();
+                List<Periodo> periodos=obtenerPeriodosSinEliminar(entityManager);
                 for (Periodo periodo : periodos) 
                 {
                     if(periodoActivar.equals(periodo))
@@ -140,9 +141,24 @@ public class PeriodoService extends ServiceAbstract<Periodo, PeriodoFacade> impl
         });
     }
     
+    public List<Periodo> obtenerPeriodosSinEliminar(EntityManager em) throws RemoteException
+    {
+        return getFacade().getPeriodosSinEliminar(em);
+    }
+    
     public List<Periodo> obtenerPeriodosSinEliminar() throws RemoteException
     {
-        return getFacade().getPeriodosSinEliminar();
+        try {
+            return (List<Periodo>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerPeriodosSinEliminar(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PeriodoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
 
     public void eliminar(Periodo p) {

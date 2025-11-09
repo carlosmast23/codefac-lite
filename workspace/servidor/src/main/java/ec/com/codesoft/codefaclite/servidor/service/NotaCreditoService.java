@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.EntityTransaction;
+import java.util.ArrayList;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
@@ -70,9 +71,9 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         parametroCodefacService = new ParametroCodefacService();
     }
     
-    private void validarSaldoDisponibleNotaCredito(NotaCredito notaCredito) throws ServicioCodefacException
+    private void validarSaldoDisponibleNotaCredito(NotaCredito notaCredito,EntityManager em) throws ServicioCodefacException
     {
-        BigDecimal saldoAfectaNCHistorico=getFacade().buscarsSaldoAfectaNotasCredito(notaCredito.getFactura());
+        BigDecimal saldoAfectaNCHistorico=getFacade().buscarsSaldoAfectaNotasCredito(notaCredito.getFactura(),em);
         BigDecimal saldoAdectaNCTotal=saldoAfectaNCHistorico.add(notaCredito.getTotal());
         //Si el saldo de las notas de credito en el sistema es mayor que el valor de la nota de credito ya no permite generar más notas de credito
         if(saldoAdectaNCTotal.compareTo(notaCredito.getFactura().getTotal())>0)
@@ -81,7 +82,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         }
     }
     
-    private void validacion(NotaCredito notaCredito,CrudEnum tipo) throws ServicioCodefacException,  RemoteException
+    private void validacion(NotaCredito notaCredito,CrudEnum tipo,EntityManager em) throws ServicioCodefacException,  RemoteException
     {
         if(notaCredito.getFechaEmision()==null)
         {
@@ -107,7 +108,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         }
         else if(tipo.equals(CrudEnum.CREAR))
         {
-            validarSaldoDisponibleNotaCredito(notaCredito);
+            validarSaldoDisponibleNotaCredito(notaCredito,em);
         }
         
         
@@ -122,7 +123,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
 
                    //Validacion para evitar hacer notas de credito al consumidor final lo que no permite el Sri
 
-                validacion(entity, CrudEnum.EDITAR);
+                validacion(entity, CrudEnum.EDITAR,entityManager);
                
                 //notaCredito.setCodigoDocumento(DocumentoEnum.NOTA_CREDITO.getCodigo());
 
@@ -173,7 +174,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
-                validacion(notaCredito, CrudEnum.CREAR);
+                validacion(notaCredito, CrudEnum.CREAR,entityManager);
 
                    //Validacion para evitar hacer notas de credito al consumidor final lo que no permite el Sri
 
@@ -214,7 +215,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
                 grabarCarteraSinTransaccion(notaCredito,modoProcesarEnum,entityManager);
                 
                 FacturacionService facturaService=new FacturacionService();
-                facturaService.agregarDatosParaCajaSession(notaCredito,SignoEnum.NEGATIVO);
+                facturaService.agregarDatosParaCajaSession(notaCredito,SignoEnum.NEGATIVO,entityManager);
 
 
             }
@@ -458,9 +459,23 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     /*public List<NotaCredito> obtenerTodos() {
         return notaCreditoFacade.findAll();
     }*/
-
+    
     public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) throws RemoteException {
-        return notaCreditoFacade.lista(persona, fi, ff,estado,empresa);
+        try {
+            return (List<NotaCredito>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerNotasReporte(persona, fi, ff, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO, empresa, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(NotaCreditoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
+    }
+
+    public List<NotaCredito> obtenerNotasReporte(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa,EntityManager em) throws RemoteException {
+        return notaCreditoFacade.lista(persona, fi, ff,estado,empresa,em);
     }
 
     @Override

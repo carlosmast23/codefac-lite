@@ -95,7 +95,13 @@ public class TallerService extends ServiceAbstract<Taller,TallerFacade> implemen
     
     public List<TallerTarea> obtenerTareasPorTaller(Taller taller) throws ServicioCodefacException, RemoteException
     {        
-        return getFacade().obtenerTareasPorTallerFacade(taller);
+        return (List<TallerTarea>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().obtenerTareasPorTallerFacade(taller,entityManager);
+            }
+        });
+        
     }
     
 }

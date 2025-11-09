@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         super(NotaCredito.class);
     }
 
-    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa) {
+    public List<NotaCredito> lista(Persona persona, Date fi, Date ff,ComprobanteEntity.ComprobanteEnumEstado estado,Empresa empresa,EntityManager em) {
 
         String cliente = "", fecha = "",estadoStr="";
         if (persona != null) {
@@ -59,7 +60,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
                 
         try {
             String queryString = "SELECT u FROM NotaCredito u WHERE 1=1 AND u.empresa=?7 AND " + cliente + fecha +estadoStr;
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             
             if (persona != null) {
                 query.setParameter(1, persona);
@@ -92,7 +93,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
     
     //TODO: Usar consultas con metodos predefinidos
     @Deprecated
-    public BigDecimal buscarsSaldoAfectaNotasCredito(Factura factura)
+    public BigDecimal buscarsSaldoAfectaNotasCredito(Factura factura,EntityManager em)
     {
         /*NotaCredito nc;
         nc.getFactura();
@@ -100,7 +101,7 @@ public class NotaCreditoFacade extends AbstractFacade<NotaCredito> {
         nc.getTotal();*/
         
         String queryString="SELECT sum(nc.total) FROM NotaCredito nc WHERE nc.factura=?1 and ( nc.estado=?2 or nc.estado=?3 )";
-        Query query=AbstractFacade.nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,factura);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         query.setParameter(3,ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());

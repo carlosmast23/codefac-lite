@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidor.service.ServiceAbstract;
 import ec.com.codesoft.codefaclite.servidor.service.SriFormaPagoService;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
+import ec.com.codesoft.codefaclite.servidor.service.pos.CajaSesionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
@@ -80,6 +81,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     private CarteraCruceService carteraCruceService=new CarteraCruceService();
     private SriFormaPagoService sriFormaPagoService=new SriFormaPagoService();
     private ParametroCodefacService parametroCodefacService=new ParametroCodefacService();
+    private CajaSesionService cajaSesionService=new CajaSesionService();
     
     CarteraFacade carteraFacade;
     
@@ -88,10 +90,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         carteraFacade = new CarteraFacade();
     }
     
-    public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException
+    /*public List<CarteraCruce> consultarMovimientoCartera(Persona persona) throws java.rmi.RemoteException
     {
         return getFacade().getMovimientoCartera(persona);
-    }
+    }*/
     
     private void validarAbono(Cartera.TipoCarteraEnum tipoCartera,Cartera carteraAfectada,Sucursal sucursal,BigDecimal valorCruzar) throws ServicioCodefacException
     {
@@ -273,7 +275,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             return;
         }
         
-        CajaSession cajaSession = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario());
+        CajaSession cajaSession = cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario(),entityManager);
         
         if(cajaSession == null)
         {
@@ -1250,20 +1252,38 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * @throws RemoteException 
      */
     public List<Cartera> listaCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer,Integer secuencial) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCero(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento,diasPorVencer,secuencial);
+        
+        return (List<Cartera>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return carteraFacade.getCarteraSaldoCero(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento,diasPorVencer,secuencial,entityManager);
+            }
+        });
+        
     }
     
     public Long listaCarteraSaldoCeroTamanio(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException {
-        return carteraFacade.getCarteraSaldoCeroTamanio(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento,diasPorVencer);
+        
+        return (Long) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return carteraFacade.getCarteraSaldoCeroTamanio(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento,diasPorVencer,entityManager);
+            }
+        });        
     }
     
     public BigDecimal listaCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documento,Integer diasPorVencer) throws ServicioCodefacException, RemoteException {
-        BigDecimal valor=carteraFacade.getCarteraSaldoCeroValorTotal(persona,segundaReferenciaId,fi, ff,categoriaMenuEnum,tipoCartera,tipoSaldoEnum,tipoOrdenamientoEnum,carteraEstadoReporteEnum,sucursal,documento,diasPorVencer,null);
-        if(valor==null)
-        {
-            valor=BigDecimal.ZERO;
-        }
-        return valor;
+        return (BigDecimal) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                BigDecimal valor = carteraFacade.getCarteraSaldoCeroValorTotal(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documento, diasPorVencer, null,entityManager);
+                if (valor == null) {
+                    valor = BigDecimal.ZERO;
+                }
+                return valor;
+            }
+        });
+        
     }
     /*public List<Cartera> listaCartera(Empresa empresa,Date fechaInicial,Date fechaFinal,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,)
     {
@@ -1479,10 +1499,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 if(estudiante==null)
                 {
-                    return getFacade().obtenerCarteraPorCobrarFacade(cliente, empresa);
+                    return getFacade().obtenerCarteraPorCobrarFacade(cliente, empresa,em);
                 }else
                 {
-                    return getFacade().obtenerCarteraPorCobrarEstudianteFacade(estudiante, empresa);
+                    return getFacade().obtenerCarteraPorCobrarEstudianteFacade(estudiante, empresa,em);
                 }
                 
             }
@@ -1499,11 +1519,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 if(estudiante==null)
                 {
-                    return getFacade().obtenerSaldoDisponibleCruzarFacade(cliente, empresa);
+                    return getFacade().obtenerSaldoDisponibleCruzarFacade(cliente, empresa,em);
                 }
                 else
                 {
-                    return getFacade().obtenerSaldoDisponibleCruzarEstudianteFacade(estudiante, empresa);
+                    return getFacade().obtenerSaldoDisponibleCruzarEstudianteFacade(estudiante, empresa,em);
                 }
             }
         });

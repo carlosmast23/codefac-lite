@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ObjetoMantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         super(OrdenTrabajo.class);
     }
     
-    public List<OrdenTrabajoDetalle> consultaReporteFacade(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,ObjetoMantenimiento objetoMantenimiento ,OrdenTrabajoDetalle.EstadoEnum estado)
+    public List<OrdenTrabajoDetalle> consultaReporteFacade(Date fechaInicial, Date fechaFinal,Departamento  departamento,Empleado empleado,ObjetoMantenimiento objetoMantenimiento ,OrdenTrabajoDetalle.EstadoEnum estado,EntityManager em)
     {
         //OrdenTrabajoDetalle otd;
         //otd.getOrdenTrabajo().getObjetoMantenimiento()
@@ -70,7 +71,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         }
         
         
-        Query query = nuevoEntityManager().createQuery(queryStr);
+        Query query = em.createQuery(queryStr);
         
         
         if(fechaInicial!=null)
@@ -98,7 +99,7 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
         return query.getResultList();
     }
     
-    public OrdenTrabajo consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    /*public OrdenTrabajo consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
     {
         //OrdenTrabajo ot;
         //ot.getFechaIngreso();
@@ -118,6 +119,6 @@ public class OrdenTrabajoFacade extends AbstractFacade<OrdenTrabajo>
             return resultadoList.get(0);
         }
         return null;
-    }
+    }*/
     
 }

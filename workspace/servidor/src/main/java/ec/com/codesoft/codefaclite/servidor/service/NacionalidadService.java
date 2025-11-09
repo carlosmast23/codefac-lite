@@ -31,16 +31,20 @@ public class NacionalidadService extends ServiceAbstract<Nacionalidad, Nacionali
 
     @Override
     public Nacionalidad obtenerDefaultEcuador() throws ServicioCodefacException, RemoteException {
-        Map<String,Object> mapBusqueda=new HashMap<String, Object>();
-        mapBusqueda.put("iso",Nacionalidad.ISO_NACIONALIDAD_DEFECTO);
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
- 
-        List<Nacionalidad> nacionalidades=obtenerPorMap(mapBusqueda,entityManager);
-        if(nacionalidades.size()>0)
-        {
-            return nacionalidades.get(0);
-        }
-        return null;
+        
+        return (Nacionalidad) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Map<String, Object> mapBusqueda = new HashMap<String, Object>();
+                mapBusqueda.put("iso", Nacionalidad.ISO_NACIONALIDAD_DEFECTO);
+                List<Nacionalidad> nacionalidades = obtenerPorMap(mapBusqueda, entityManager);
+                if (nacionalidades.size() > 0) {
+                    return nacionalidades.get(0);
+                }
+                return null;
+            }
+        });
+        
         
     }
     

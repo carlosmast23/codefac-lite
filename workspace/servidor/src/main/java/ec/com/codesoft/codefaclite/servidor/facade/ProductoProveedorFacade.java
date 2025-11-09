@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 
@@ -25,13 +26,13 @@ public class ProductoProveedorFacade extends AbstractFacade<ProductoProveedor>{
     }
     
     
-    public List<ProductoProveedor> buscarProductoProveedorActivoFacade(Producto producto, Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException
+    public List<ProductoProveedor> buscarProductoProveedorActivoFacade(Producto producto, Persona proveedor,EntityManager em) throws ServicioCodefacException, java.rmi.RemoteException
     {
         //ProductoProveedor pp;
         //pp.getProducto();
         //pp.getProveedor();
         String queryStr=" SELECT pp FROM ProductoProveedor pp WHERE pp.producto=?1 AND pp.proveedor=?2 ";        
-        Query query=nuevoEntityManager().createQuery(queryStr);
+        Query query=em.createQuery(queryStr);
         query.setParameter(1, producto);
         query.setParameter(2, proveedor);
         

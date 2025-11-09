@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.Periodo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 
@@ -22,9 +23,9 @@ public class PeriodoFacade extends AbstractFacade<Periodo>{
         super(Periodo.class);
     }
     
-    public List<Periodo> getPeriodosSinEliminar() {
+    public List<Periodo> getPeriodosSinEliminar(EntityManager em) {
         String queryString = "SELECT u FROM Periodo u WHERE u.estado<>?1 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ELIMINADO.getEstado());
 
         return (List<Periodo>) query.getResultList();

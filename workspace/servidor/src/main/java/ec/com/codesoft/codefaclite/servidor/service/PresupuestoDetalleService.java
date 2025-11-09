@@ -41,31 +41,16 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
     
     public PresupuestoDetalle grabar(PresupuestoDetalle pd) throws ServicioCodefacException
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        try {
-            entityManager.persist(pd);
-            transaccion.commit();
-        } catch (PersistenceException ex)
-        {
-            if(transaccion.isActive())
-            {
-                transaccion.rollback();
+        return (PresupuestoDetalle) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                entityManager.persist(pd);
+                //entityManager.commit();
+                return pd;
             }
-            
-            ExcepcionDataBaseEnum excepcionEnum=UtilidadesExcepciones.analizarExcepcionDataBase(ex);
-            Logger.getLogger(PersonaService.class.getName()).log(Level.SEVERE, null, ex);
-            if(excepcionEnum.equals(ExcepcionDataBaseEnum.CLAVE_DUPLICADO))
-            {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.CLAVE_DUPLICADO.getMensaje());
-            }
-            else
-            {
-                throw new ServicioCodefacException(ExcepcionDataBaseEnum.DESCONOCIDO.getMensaje());
-            }            
-        }
-        return pd;
+        });
+        
+       
     }
     
 
@@ -89,14 +74,13 @@ public class PresupuestoDetalleService extends ServiceAbstract<PresupuestoDetall
     }
     
        
-    public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto) throws ServicioCodefacException, RemoteException
+    public List<PresupuestoDetalle> buscarPorPresupuesto(Presupuesto presupuesto,EntityManager em) throws ServicioCodefacException, RemoteException
     {
-        /*PresupuestoDetalle pd;
-        pd.getPresupuesto()*/
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
+
+        //EntityManager entityManager=AbstractFacade.nuevoEntityManager();
         Map<String,Object> mapParametros=new HashMap<String, Object>();
         mapParametros.put("presupuesto", presupuesto);
-        return this.obtenerPorMap(mapParametros,entityManager);
+        return this.obtenerPorMap(mapParametros,em);
     }
     
     

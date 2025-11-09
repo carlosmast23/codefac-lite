@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mantenimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MantenimientoTareaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 import jakarta.persistence.Query;
@@ -25,13 +26,13 @@ public class MantenimientoTareaDetalleFacade extends AbstractFacade<Mantenimient
         super(MantenimientoTareaDetalle.class);
     }
     
-    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleadoFacade(Empleado empleado) throws ServicioCodefacException, RemoteException 
+    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleadoFacade(Empleado empleado,EntityManager em) throws ServicioCodefacException, RemoteException 
     {
         //MantenimientoTareaDetalle mtd;
         //mtd.getMantenimiento().getFechaIngreso();
         
         String queryStr=" SELECT mtd FROM MantenimientoTareaDetalle mtd WHERE mtd.mantenimiento.estado<>?3 AND mtd.mantenimiento.estado<>?4 ORDER BY  mtd.mantenimiento.prioridad DESC, mtd.mantenimiento.fechaIngreso";
-        Query query = nuevoEntityManager().createQuery(queryStr);
+        Query query = em.createQuery(queryStr);
         //query.setParameter(1, empleado);
         //query.setParameter(2, MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
         query.setParameter(3, Mantenimiento.MantenimientoEnum.ELIMINADO.getLetra());

@@ -22,12 +22,12 @@ public class SriFormaPagoFacade extends AbstractFacade<SriFormaPago> {
         super(SriFormaPago.class);
     }
     
-    public List<SriFormaPago> getFormaPagoByDate(Date fecha)
+    /*public List<SriFormaPago> getFormaPagoByDate(Date fecha)
     {
         String queryString = "SELECT e FROM SriFormaPago e WHERE ?1>=e.fechaInicio AND ?1<=e.fechaFin";
         Query query = nuevoEntityManager().createQuery(queryString);
         query.setParameter(1, fecha);
         return (List<SriFormaPago>) query.getResultList();
-    }
+    }*/
     
 }

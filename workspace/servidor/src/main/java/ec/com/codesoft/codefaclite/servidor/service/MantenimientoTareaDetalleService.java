@@ -70,16 +70,21 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
         });
     }
     
+    public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleado(Empleado empleado,EntityManager em) throws ServicioCodefacException, RemoteException 
+    {
+    
+        return getFacade().obtenerTareasPendientesPorEmpleadoFacade(empleado,em);
+    }
+    
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorEmpleado(Empleado empleado) throws ServicioCodefacException, RemoteException 
     {
-        /*MantenimientoTareaDetalle mtd;
-        mtd.getMantenimiento().getEstado();
-        */
-        /*Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("operador", empleado);
-        mapParametros.put("estado",MantenimientoTareaDetalle.EstadoEnum.INICIADO.getLetra());
-        return getFacade().findByMap(mapParametros);*/
-        return getFacade().obtenerTareasPendientesPorEmpleadoFacade(empleado);
+        return (List<MantenimientoTareaDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return obtenerTareasPendientesPorEmpleado(empleado, entityManager);
+            }
+        });
+        
     }
     
     public List<MantenimientoTareaDetalle> obtenerTareasPendientesPorUsuario(Usuario usuario,EntityManager em) throws ServicioCodefacException, RemoteException 
@@ -87,7 +92,7 @@ public class MantenimientoTareaDetalleService extends ServiceAbstract<Mantenimie
         UsuarioServicio usuarioServicio=new UsuarioServicio();
         Usuario usuarioTemp= usuarioServicio.buscarPorId(usuario.getId(),em);
         
-        return obtenerTareasPendientesPorEmpleado(usuarioTemp.getEmpleado());
+        return obtenerTareasPendientesPorEmpleado(usuarioTemp.getEmpleado(),em);
     }
     
     

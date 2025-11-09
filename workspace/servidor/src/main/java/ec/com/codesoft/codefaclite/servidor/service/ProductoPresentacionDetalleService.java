@@ -27,17 +27,21 @@ public class ProductoPresentacionDetalleService extends ServiceAbstract<Producto
         super(ProductoPresentacionDetalleFacade.class);
     }
     
+    public List<ProductoPresentacionDetalle> buscarPorProducto(Producto producto,EntityManager em) throws ServicioCodefacException, RemoteException {
+
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("productoOriginal", producto);
+        return getFacade().findByMap(mapParametros, em);
+        
+    }
+    
     public List<ProductoPresentacionDetalle> buscarPorProducto(Producto producto) throws ServicioCodefacException, RemoteException {
         
         return (List<ProductoPresentacionDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() 
         {
             @Override
             public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                //ProductoPresentacionDetalle d;
-                //d.getProductoOriginal();
-                Map<String, Object> mapParametros = new HashMap<String, Object>();
-                mapParametros.put("productoOriginal", producto);
-                return getFacade().findByMap(mapParametros,entityManager);
+                return buscarPorProducto(producto, entityManager);
             }
         });
         

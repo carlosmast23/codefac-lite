@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.FechaCaducidadResult;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+import jakarta.persistence.EntityManager;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class LoteFacade extends AbstractFacade<Lote>{
         super(Lote.class);
     }
    
-    public Long verificarExistenLotes(Empresa empresa)
+    /*public Long verificarExistenLotes(Empresa empresa)
     {
         //Lote lote=n;
         String queryStr=" SELECT count(l.codigo) FROM Lote l WHERE l.estado=?1 and l.empresa=?2 ";
@@ -37,18 +38,18 @@ public class LoteFacade extends AbstractFacade<Lote>{
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, empresa);
         return (Long) query.getSingleResult();
-    }
+    }*/
     
-    public Integer reporteFechaCaducidadTotalFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia)
+    public Integer reporteFechaCaducidadTotalFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia,EntityManager em)
     {
-        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.TAMANIO);
+        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.TAMANIO,em);
         Object total= query.getSingleResult();
         return (Integer) total;
     }
     
-    public List<FechaCaducidadResult> reporteFechaCaducidadFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia)
+    public List<FechaCaducidadResult> reporteFechaCaducidadFacade(Sucursal sucursal,Bodega bodega,Date fechaReferencia,EntityManager em)
     {
-        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.DATOS);
+        Query query= reporteFechaCaducidadFacadeGeneral(sucursal, bodega, fechaReferencia, TipoConsultaEnum.DATOS,em);
         List<Object[]> resultadoOriginalList=query.getResultList();
         List<FechaCaducidadResult> resultadoList=new ArrayList<FechaCaducidadResult>();
         
@@ -62,7 +63,7 @@ public class LoteFacade extends AbstractFacade<Lote>{
         
     }
     
-    public Query  reporteFechaCaducidadFacadeGeneral(Sucursal sucursal,Bodega bodega,Date fechaReferencia,TipoConsultaEnum tipoConsultaEnum)
+    public Query  reporteFechaCaducidadFacadeGeneral(Sucursal sucursal,Bodega bodega,Date fechaReferencia,TipoConsultaEnum tipoConsultaEnum,EntityManager em)
     {
         String whereBodega="";
         if(bodega!=null)
@@ -86,7 +87,7 @@ public class LoteFacade extends AbstractFacade<Lote>{
         
         
         String queryString="SELECT "+resultadoQuery +" FROM KARDEX K INNER JOIN LOTE L ON K.LOTE_ID = L.ID INNER JOIN PRODUCTO P ON K.PRODUCTO_ID =P.ID_PRODUCTO INNER JOIN BODEGA B ON B.BODEGA_ID =K.BODEGA_ID WHERE P.ESTADO='A' AND B.ESTADO='A' AND K.ESTADO ='A' AND B.SUCURSAL_ID=?1 AND L.FECHA_VENCIMIENTO<?3 AND K.STOCK>0 "+whereBodega;
-        Query query = nuevoEntityManager().createNativeQuery(queryString);
+        Query query = em.createNativeQuery(queryString);
         query.setParameter(1,sucursal.getId());
         query.setParameter(3,fechaReferencia);
         

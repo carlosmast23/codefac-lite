@@ -5,6 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.servidor.service;
 
+import ec.com.codesoft.codefaclite.servidor.facade.AbstractFacade;
+import ec.com.codesoft.codefaclite.servidor.facade.AtsFacade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AirAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AnuladoAts;
 import ec.com.codesoft.codefaclite.servidorinterfaz.ats.jaxb.AtsJaxb;
@@ -46,6 +48,7 @@ import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
+import jakarta.persistence.EntityManager;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -65,10 +68,13 @@ import java.util.logging.Logger;
  *
  * @author Carlos
  */
-public class AtsService extends UnicastRemoteObject implements Serializable,AtsServiceIf {
+public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Serializable,AtsServiceIf {
 
+    private RetencionService retencionService=new RetencionService();
+    private NotaCreditoService notaCreditoService=new NotaCreditoService();
+    
     public AtsService() throws RemoteException {
-        super(ParametrosSistemaCodefac.PUERTO_COMUNICACION_RED);
+        super(AtsFacade.class);
     }
     
     private String formatearMes(Integer mes)
@@ -94,94 +100,92 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     
     public AtsJaxb consultarAts(TipoAtsEnum tipoAtsEnum,Integer anio, MesEnum mes,Empresa empresa,String numeroSucursal,boolean  comprasBool, boolean  ventasBool,boolean anuladosBool) throws  RemoteException,ServicioCodefacException
     {
-        List<String> alertas=new ArrayList<String>();
-        
-        AtsJaxb ats=new AtsJaxb();
-        ats.setAnio(anio);
-        ats.setCodigoOperativo("IVA"); //Todo: Por el momento dejo en IVA como en el ejemplo del SRI
-        ats.setIdInformante(empresa.getIdentificacion());        
-        
-        //Todo: Es el numero de establecimientos activos que voy a realizar el ats
-        SucursalService sucursalService=new SucursalService();
-        List<Sucursal> sucursales=sucursalService.consultarActivosPorEmpresa(empresa);
-        //ats.setNumEstabRuc(UtilidadesTextos.llenarCarateresIzquierda(sucursales.size()+"",3,"0")); 
-        ats.setNumEstabRuc("001");  //Todo: por el momento dejo seteado
-        ats.setRazonSocial(formatearRazonSocialAts(empresa.getRazonSocial()));
-        ats.setTipoIDInformante("R"); //Todo: Ver que opciones existen para ese campo
-        
-        
-        java.sql.Date fechaInicial=null;
-        java.sql.Date fechaFinal=null;
-        ////////////////////////////////////////////////////////////
-        if(tipoAtsEnum.equals(tipoAtsEnum.PRIMER_SEMESTRE))
-        {
-            ats.setRegimenMicroempresa("SI");
-            ats.setMes("06");
-            fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,0).getTime());
-            fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,5).getTime());            
-        }
-        else if(tipoAtsEnum.equals(tipoAtsEnum.SEGUNDO_SEMESTRE))
-        {
-            ats.setRegimenMicroempresa("SI");
-            ats.setMes("12");
-            fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,6).getTime());
-            fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,11).getTime());            
-        }
-        else if(tipoAtsEnum.equals(tipoAtsEnum.MENSUAL))
-        {
-            ats.setMes(formatearMes(mes.getNumero()));
-            fechaInicial=new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio,mes.getNumero()-1).getTime());
-            fechaFinal=new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio,mes.getNumero()-1).getTime());            
-        }
-        
-        
-        /**
-         * ===================> COMPRAS <==========================
-         */
-        if(comprasBool)
-        {
-            List<CompraAts> compras=consultarComprasAts(fechaInicial, fechaFinal,empresa,alertas);
-            ats.setCompras(compras);
-        }
-        
-        /**
-         * ===================> VENTAS <==========================
-         */
-        if(ventasBool)
-        {
-            List<VentaAts> ventas=consultarVentasAts(fechaInicial, fechaFinal,empresa);
-            ats.setVentas(ventas);
-            ats.calcularTotalVentas();
-            
-            /**
-             * ======================> TOTALES POR ESTABLECIMIENTO <===============================
-             */
-            //TODO: Analizar esta parte que esta diseñada solo para una sucursal
-            VentasEstablecimientoAts ventaEstablecimientoAts = new VentasEstablecimientoAts();
-            ventaEstablecimientoAts.setCodEstab(numeroSucursal);
-            ventaEstablecimientoAts.setIvaComp(BigDecimal.ZERO); //Solo aplicaba para cuando era iva de compensacion por el terremoto
-            ventaEstablecimientoAts.setVentasEstab(ats.getTotalVentas());
+        return (AtsJaxb) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+           
+                List<String> alertas = new ArrayList<String>();
 
-            List<VentasEstablecimientoAts> establecimientos = new ArrayList<VentasEstablecimientoAts>();
-            establecimientos.add(ventaEstablecimientoAts);
+                AtsJaxb ats = new AtsJaxb();
+                ats.setAnio(anio);
+                ats.setCodigoOperativo("IVA"); //Todo: Por el momento dejo en IVA como en el ejemplo del SRI
+                ats.setIdInformante(empresa.getIdentificacion());
 
-            ats.setVentasEstablecimiento(establecimientos);
-        }
-        
-        /**
-         * ===================> ANULADOS <==========================
-         */
-        if(anuladosBool)
-        {
-            //List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal,empresa);
-            List<AnuladoAts> anulados=consultarAnuladosSriAts(fechaInicial, fechaFinal,empresa);
-            ats.setAnuladosAts(anulados);
-        }
-        
-        //Agregar las alertas al resultado del ATS
-        ats.setAlertas(alertas);
-        
-        return ats;
+                //Todo: Es el numero de establecimientos activos que voy a realizar el ats
+                SucursalService sucursalService = new SucursalService();
+                List<Sucursal> sucursales = sucursalService.consultarActivosPorEmpresa(empresa);
+                //ats.setNumEstabRuc(UtilidadesTextos.llenarCarateresIzquierda(sucursales.size()+"",3,"0")); 
+                ats.setNumEstabRuc("001");  //Todo: por el momento dejo seteado
+                ats.setRazonSocial(formatearRazonSocialAts(empresa.getRazonSocial()));
+                ats.setTipoIDInformante("R"); //Todo: Ver que opciones existen para ese campo
+
+                java.sql.Date fechaInicial = null;
+                java.sql.Date fechaFinal = null;
+                ////////////////////////////////////////////////////////////
+                if (tipoAtsEnum.equals(tipoAtsEnum.PRIMER_SEMESTRE)) {
+                    ats.setRegimenMicroempresa("SI");
+                    ats.setMes("06");
+                    fechaInicial = new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio, 0).getTime());
+                    fechaFinal = new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio, 5).getTime());
+                } else if (tipoAtsEnum.equals(tipoAtsEnum.SEGUNDO_SEMESTRE)) {
+                    ats.setRegimenMicroempresa("SI");
+                    ats.setMes("12");
+                    fechaInicial = new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio, 6).getTime());
+                    fechaFinal = new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio, 11).getTime());
+                } else if (tipoAtsEnum.equals(tipoAtsEnum.MENSUAL)) {
+                    ats.setMes(formatearMes(mes.getNumero()));
+                    fechaInicial = new java.sql.Date(UtilidadesFecha.getPrimerDiaMes(anio, mes.getNumero() - 1).getTime());
+                    fechaFinal = new java.sql.Date(UtilidadesFecha.getUltimoDiaMes(anio, mes.getNumero() - 1).getTime());
+                }
+
+                /**
+                 * ===================> COMPRAS <==========================
+                 */
+                if (comprasBool) {
+                    List<CompraAts> compras = consultarComprasAts(fechaInicial, fechaFinal, empresa, alertas,entityManager);
+                    ats.setCompras(compras);
+                }
+
+                /**
+                 * ===================> VENTAS <==========================
+                 */
+                if (ventasBool) {
+                    List<VentaAts> ventas = consultarVentasAts(fechaInicial, fechaFinal, empresa,entityManager);
+                    ats.setVentas(ventas);
+                    ats.calcularTotalVentas();
+
+                    /**
+                     * ======================> TOTALES POR ESTABLECIMIENTO
+                     * <===============================
+                     */
+                    //TODO: Analizar esta parte que esta diseñada solo para una sucursal
+                    VentasEstablecimientoAts ventaEstablecimientoAts = new VentasEstablecimientoAts();
+                    ventaEstablecimientoAts.setCodEstab(numeroSucursal);
+                    ventaEstablecimientoAts.setIvaComp(BigDecimal.ZERO); //Solo aplicaba para cuando era iva de compensacion por el terremoto
+                    ventaEstablecimientoAts.setVentasEstab(ats.getTotalVentas());
+
+                    List<VentasEstablecimientoAts> establecimientos = new ArrayList<VentasEstablecimientoAts>();
+                    establecimientos.add(ventaEstablecimientoAts);
+
+                    ats.setVentasEstablecimiento(establecimientos);
+                }
+
+                /**
+                 * ===================> ANULADOS <==========================
+                 */
+                if (anuladosBool) {
+                    //List<AnuladoAts> anulados=consultarAnuladosAts(fechaInicial, fechaFinal,empresa);
+                    List<AnuladoAts> anulados = consultarAnuladosSriAts(fechaInicial, fechaFinal, empresa);
+                    ats.setAnuladosAts(anulados);
+                }
+
+                //Agregar las alertas al resultado del ATS
+                ats.setAlertas(alertas);
+
+                return ats;
+
+            }
+        });
         
     }
     
@@ -203,10 +207,21 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     }
     
     
-    private List<Retencion> consultarRetencionesSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
+    private List<Retencion> consultarRetencionesSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,EntityManager em)
     {        
         try {
-            return ServiceFactory.getFactory().getRetencionServiceIf().obtenerRetencionesSinDetalleReportes(null, fechaInicial, fechaFinal,null,null,null,estadoEnum, empresa);
+            return retencionService.obtenerRetencionesSinDetalleReportes(null, fechaInicial, fechaFinal,null,null,null,estadoEnum, empresa,em);
+        } catch (RemoteException ex) {
+            Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    private List<NotaCredito> consultarNotasCreditoSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,EntityManager em)
+    {
+        try {
+            
+            return notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal, estadoEnum, empresa,em);
         } catch (RemoteException ex) {
             Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -216,77 +231,83 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     private List<NotaCredito> consultarNotasCreditoSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
     {
         try {
-            return ServiceFactory.getFactory().getNotaCreditoServiceIf().obtenerNotasReporte(null, fechaInicial, fechaFinal, estadoEnum, empresa);
-        } catch (RemoteException ex) {
+            return (List<NotaCredito>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return consultarNotasCreditoSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.TODOS_SRI, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return new ArrayList();
+        
     }
     
     
     
     public List<AnuladoAts> consultarAnuladosSriAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
-    {        
-        List<AnuladoAts> anuladoList=new ArrayList<AnuladoAts>();
-        
-        //Consultar las FACTURAS anuladas
-        List<ComprobanteEntity> comprobantesList= (List<ComprobanteEntity>)(List<?>)consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI,DocumentoEnum.FACTURA);
-        
-        //Consulta las RETENCIONES anuladas
-        List<ComprobanteEntity> retencionesList=(List<ComprobanteEntity>)(List<?>)consultarRetencionesSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
-        comprobantesList.addAll(retencionesList);
-        
-        //Consultar las NOTAS DE CREDITO
-        List<ComprobanteEntity> notasCreditoList=(List<ComprobanteEntity>)(List<?>)consultarNotasCreditoSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
-        comprobantesList.addAll(notasCreditoList);
-        
-        //Consulta las LIQUIDACIONBES DE COMPRA
-        List<ComprobanteEntity> liquidacionCompraList= (List<ComprobanteEntity>)(List<?>)consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI,DocumentoEnum.LIQUIDACION_COMPRA);
-        comprobantesList.addAll(liquidacionCompraList);
-        
-        
-        for (ComprobanteEntity comprobanteEntity : comprobantesList) {
-            AnuladoAts anuladoAts= construirAnuladoAts(comprobanteEntity.getPreimpreso(),comprobanteEntity.getClaveAcceso(),comprobanteEntity.getCodigoDocumentoEnum());
-             
-            if(!UtilidadesTextos.verificarNullOVacio(anuladoAts.getAutorizacion()))
-            {
-                anuladoList.add(anuladoAts);
-            }             
-            else //Cuando NO TIENE AUTORIZACION no le agrego porque va a generar problemas en el ATS
-            {
-                Logger.getLogger(AtsService.class.getName()).log(Level.WARNING,"El documento con secuencial: "+anuladoAts.getSecuencialInicio()+" no tiene autorización ");
-            }
-        }
-        
-        return anuladoList;        
-    }
-    
-    //TODO: Ya no se usa por que se debe presentar los documentos anulados en el Sri no la Notas de credito
-    @Deprecated
-    public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
     {
-        List<AnuladoAts> anuladosAts=new ArrayList<AnuladoAts>();
-        NotaCreditoService notaCreditoService=new NotaCreditoService();
-        List<NotaCredito> notasCredito=notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,empresa);
+        return (List<AnuladoAts>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                List<AnuladoAts> anuladoList = new ArrayList<AnuladoAts>();
+
+                //Consultar las FACTURAS anuladas
+                List<ComprobanteEntity> comprobantesList = (List<ComprobanteEntity>) (List<?>) consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI, DocumentoEnum.FACTURA,entityManager);
+
+                List<ComprobanteEntity> retencionesList = (List<ComprobanteEntity>) (List<?>) consultarRetencionesSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI, entityManager);
+                comprobantesList.addAll(retencionesList);
+
+                //Consultar las NOTAS DE CREDITO
+                List<ComprobanteEntity> notasCreditoList = (List<ComprobanteEntity>) (List<?>) consultarNotasCreditoSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI);
+                comprobantesList.addAll(notasCreditoList);
+
+                //Consulta las LIQUIDACIONBES DE COMPRA
+                List<ComprobanteEntity> liquidacionCompraList = (List<ComprobanteEntity>) (List<?>) consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI, DocumentoEnum.LIQUIDACION_COMPRA,entityManager);
+                comprobantesList.addAll(liquidacionCompraList);
+
+                for (ComprobanteEntity comprobanteEntity : comprobantesList) {
+                    AnuladoAts anuladoAts = construirAnuladoAts(comprobanteEntity.getPreimpreso(), comprobanteEntity.getClaveAcceso(), comprobanteEntity.getCodigoDocumentoEnum());
+
+                    if (!UtilidadesTextos.verificarNullOVacio(anuladoAts.getAutorizacion())) {
+                        anuladoList.add(anuladoAts);
+                    } else //Cuando NO TIENE AUTORIZACION no le agrego porque va a generar problemas en el ATS
+                    {
+                        Logger.getLogger(AtsService.class.getName()).log(Level.WARNING, "El documento con secuencial: " + anuladoAts.getSecuencialInicio() + " no tiene autorización ");
+                    }
+                }
+
+                return anuladoList;
+            }
+
+            //TODO: Ya no se usa por que se debe presentar los documentos anulados en el Sri no la Notas de credito
+            /*@Deprecated
+            public List<AnuladoAts> consultarAnuladosAts(java.sql.Date fechaInicial, java.sql.Date fechaFinal, Empresa empresa) throws RemoteException, ServicioCodefacException {
+                List<AnuladoAts> anuladosAts = new ArrayList<AnuladoAts>();
+                NotaCreditoService notaCreditoService = new NotaCreditoService();
+                List<NotaCredito> notasCredito = notaCreditoService.obtenerNotasReporte(null, fechaInicial, fechaFinal, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO, empresa);
+
+                for (NotaCredito notaCredito : notasCredito) {
+                    AnuladoAts anuladoAts = new AnuladoAts();
+
+                    anuladoAts.setTipoComprobante("18"); //Todo: por defecto solo anulo el tipo 18 que supuestamente corresponde documentos autorizados electronicamente
+                    String preimpreso[] = notaCredito.getNumDocModificado().split("-");
+                    anuladoAts.setEstablecimiento(preimpreso[0]);
+                    anuladoAts.setPuntoEmision(preimpreso[1]);
+                    anuladoAts.setSecuencialInicio(Integer.parseInt(preimpreso[2]));
+                    anuladoAts.setSecuencialFin(Integer.parseInt(preimpreso[2]));
+                    anuladoAts.setAutorizacion(notaCredito.getClaveAcceso()); //Todo: Verifica si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura
+                    anuladosAts.add(anuladoAts);
+                }
+                return anuladosAts;
+            }*/
+        });        
         
-        for (NotaCredito notaCredito : notasCredito) 
-        {
-            AnuladoAts anuladoAts=new AnuladoAts();
-            
-            anuladoAts.setTipoComprobante("18"); //Todo: por defecto solo anulo el tipo 18 que supuestamente corresponde documentos autorizados electronicamente
-            String preimpreso[]=notaCredito.getNumDocModificado().split("-");
-            anuladoAts.setEstablecimiento(preimpreso[0]);
-            anuladoAts.setPuntoEmision(preimpreso[1]);
-            anuladoAts.setSecuencialInicio(Integer.parseInt(preimpreso[2]));
-            anuladoAts.setSecuencialFin(Integer.parseInt(preimpreso[2]));
-            anuladoAts.setAutorizacion(notaCredito.getClaveAcceso()); //Todo: Verifica si este dato es el de la nota de credito o la factura que elimina , pero si son algunas no tiene sentido que sea el de la factura
-            anuladosAts.add(anuladoAts);
-        }
-        return anuladosAts;
     }
    
     
-    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,List<String> alertas) throws  RemoteException,ServicioCodefacException
+    public List<CompraAts> consultarComprasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,List<String> alertas,EntityManager em) throws  RemoteException,ServicioCodefacException
     {
         SriRetencionService sriRetencionService=new SriRetencionService();
         SriRetencion sriRetencionIva=sriRetencionService.consultarPorNombre(SriRetencion.NOMBRE_RETENCION_IVA);//Variable que necesito para las retenciones
@@ -316,7 +337,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
                 continue;
             }
             
-            CompraAts compraAts= crearCompraAts(compra, sriRetencionIva, sriRetencionRenta,alertas);
+            CompraAts compraAts= crearCompraAts(compra, sriRetencionIva, sriRetencionRenta,alertas,em);
             if (validarCompraAts(compraAts, alertas)) 
             {
                 comprasAts.add(compraAts);
@@ -327,10 +348,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
-    public CompraAts crearCompraAts(Compra compra,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas) throws RemoteException, ServicioCodefacException
+    public CompraAts crearCompraAts(Compra compra,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas,EntityManager em) throws RemoteException, ServicioCodefacException
     {
        CompraAts compraAts=crearCompraAtsInfoGeneral(compra);
-       compraAtsDatosAdicionales(compra, compraAts, sriRetencionIva, sriRetencionRenta, alertas);
+       compraAtsDatosAdicionales(compra, compraAts, sriRetencionIva, sriRetencionRenta, alertas,em);
        return compraAts;
     }
     
@@ -445,14 +466,14 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return compraAts;
     }
     
-    public void compraAtsDatosAdicionales(Compra compra,CompraAts compraAts,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas) throws RemoteException, ServicioCodefacException
+    public void compraAtsDatosAdicionales(Compra compra,CompraAts compraAts,SriRetencion sriRetencionIva,SriRetencion sriRetencionRenta,List<String> alertas,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         if(compra.getSecuencial()==11)
         {
             System.out.println("revisando ...");
         }
         
-        Map<BigDecimal, BigDecimal> mapRetenciones = consultarRetencionesIva(compra, sriRetencionIva);
+        Map<BigDecimal, BigDecimal> mapRetenciones = consultarRetencionesIva(compra, sriRetencionIva,em);
         ///=======> DATOS DE LAS RETENCIONES <============///
         compraAts.setValRetBien10(obtenerValorMapRetenciones(mapRetenciones, 10).setScale(2, RoundingMode.HALF_UP)); //10% TODO:completar
         compraAts.setValRetServ20(obtenerValorMapRetenciones(mapRetenciones, 20).setScale(2, RoundingMode.HALF_UP)); //20% TODO:completar
@@ -465,7 +486,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         if (!compra.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO)) {
 
             
-            List<RetencionDetalle> retencionesRenta = consultarRetencionesRenta(compra, sriRetencionRenta);
+            List<RetencionDetalle> retencionesRenta = consultarRetencionesRenta(compra, sriRetencionRenta,em);
             List<AirAts> retencionesAts = new ArrayList<AirAts>();
             for (RetencionDetalle retencionRenta : retencionesRenta) {
                 AirAts retencionRentaAts = new AirAts();
@@ -730,10 +751,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
     }
     
     
-    private List<RetencionDetalle> consultarRetencionesRenta(Compra compra,SriRetencion sriRetencion) throws RemoteException
+    private List<RetencionDetalle> consultarRetencionesRenta(Compra compra,SriRetencion sriRetencion,EntityManager em) throws RemoteException
     {
         RetencionService retencionService=new RetencionService();
-        return retencionService.obtenerRetencionesRentaPorCompra(compra,sriRetencion);
+        return retencionService.obtenerRetencionesRentaPorCompra(compra,sriRetencion,em);
     }
     
     private BigDecimal obtenerValorMapRetenciones(Map<BigDecimal,BigDecimal> mapRetenciones,Integer porcentaje)
@@ -748,10 +769,10 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return valorRetencion;
     }
     
-    private Map<BigDecimal,BigDecimal> consultarRetencionesIva(Compra compra,SriRetencion sriRetencion) throws RemoteException
+    private Map<BigDecimal,BigDecimal> consultarRetencionesIva(Compra compra,SriRetencion sriRetencion,EntityManager em) throws RemoteException
     {
         RetencionService retencionService=new RetencionService();
-        List<Object[]> retencionesLista=retencionService.obtenerRetencionesIvaPorCompra(compra,sriRetencion);
+        List<Object[]> retencionesLista=retencionService.obtenerRetencionesIvaPorCompra(compra,sriRetencion,em);
         Map<BigDecimal,BigDecimal> mapValoresRetenciones=new HashMap<BigDecimal, BigDecimal>();
         
         for (Object[] objects : retencionesLista) {
@@ -763,12 +784,12 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         
     }
     
-    private List<Factura> consultaVentasLiquidacionCompraSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado enumEstado,DocumentoEnum documentoEnum)
+    private List<Factura> consultaVentasLiquidacionCompraSistema(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado enumEstado,DocumentoEnum documentoEnum,EntityManager em)
     {
         try {
             FacturacionService facturacionService=new FacturacionService();
             //facturacionService.obtenerFacturasReporte(persona, fechaFinal, fechaFinal, enumEstado, Boolean.TRUE, referido, Boolean.TRUE, puntoEmision, empresa, documentoEnum, documentoEnum, sucursal, usuario)
-            List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,enumEstado,false,null,false,null,empresa,documentoEnum,null,null,null,null);
+            List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,enumEstado,false,null,false,null,empresa,documentoEnum,null,null,null,null,em);
             return facturas;
         } catch (RemoteException ex) {
             Logger.getLogger(AtsService.class.getName()).log(Level.SEVERE, null, ex);
@@ -800,7 +821,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
         return total.setScale(2, RoundingMode.HALF_UP);
     }
     
-    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa) throws  RemoteException,ServicioCodefacException
+    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,EntityManager em) throws  RemoteException,ServicioCodefacException
     {
         //FacturacionService facturacionService=new FacturacionService();
         /**
@@ -808,7 +829,7 @@ public class AtsService extends UnicastRemoteObject implements Serializable,AtsS
          * Pero si deberia trear otros documentos que nos sean facturas tener pendiente
          */
         //List<Factura> facturas=facturacionService.obtenerFacturasReporte(null,fechaInicial,fechaFinal,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,false,null,false,null,empresa,DocumentoEnum.FACTURA,null,null);
-        List<Factura> facturas=consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,DocumentoEnum.FACTURA);
+        List<Factura> facturas=consultaVentasLiquidacionCompraSistema(fechaInicial, fechaFinal, empresa, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,DocumentoEnum.FACTURA,em);
         
         Map<String,VentaAts> mapVentas=new HashMap<String,VentaAts>();
         

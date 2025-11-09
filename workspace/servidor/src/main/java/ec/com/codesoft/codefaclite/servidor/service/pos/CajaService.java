@@ -18,6 +18,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.pos.CajaServiceIf;
 import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,17 @@ public class CajaService extends ServiceAbstract<Caja,CajaFacade> implements Caj
 
     @Override
     public List<Caja> buscarCajasAutorizadasPorUsuario(Usuario usuario) throws RemoteException {
-        return this.cajaFacade.buscarCajasAutorizadasParaUsuario(usuario);
+        try {
+            return (List<Caja>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return cajaFacade.buscarCajasAutorizadasParaUsuario(usuario,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
     @Override

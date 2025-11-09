@@ -229,7 +229,7 @@ public class GuiaRemisionService extends ServiceAbstract<GuiaRemision,GuiaRemisi
         return (List<GuiaRemision>) ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
-                return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado,transportista,destinatario,codigoProducto,empresa);
+                return getFacade().obtenerConsultaFacade(fechaInicial, fechaFinal,estado,transportista,destinatario,codigoProducto,empresa,em);
             }
         });
                 

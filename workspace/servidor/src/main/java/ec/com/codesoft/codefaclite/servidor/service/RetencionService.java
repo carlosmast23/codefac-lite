@@ -62,7 +62,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
              @Override
              public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                validarRetencion(entity,CrudEnum.EDITAR);
+                validarRetencion(entity,CrudEnum.EDITAR,entityManager);
                 entityManager.merge(entity);
              }             
          });
@@ -73,11 +73,11 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     @Override
     public void editar(Retencion entity) throws ServicioCodefacException, RemoteException 
     {
-        validarRetencion(entity,CrudEnum.EDITAR);
+        
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                
+                validarRetencion(entity,CrudEnum.EDITAR,entityManager);
                 //Editado la retencion directamente
                 entityManager.merge(entity);
             }
@@ -90,7 +90,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 
-                validarRetencion(entity,CrudEnum.CREAR);
+                validarRetencion(entity,CrudEnum.CREAR,entityManager);
                 
                 
                 //Verificar si es una retencion libre o tiene una referencia
@@ -160,7 +160,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,ModoProcesarEnum.NORMAL,entityManager);
     }
     
-    private void validarRetencion(Retencion retencion,CrudEnum crudEnum) throws ServicioCodefacException, RemoteException
+    private void validarRetencion(Retencion retencion,CrudEnum crudEnum,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         
         if(retencion.getDetalles()==null|| retencion.getDetalles().size()==0)
@@ -187,7 +187,7 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         if(crudEnum.equals(CrudEnum.CREAR))
         {
             //Validar que no existan retenciones activas aplicadas a la misma compra+
-            Retencion retencionExistente=obtenerRetencionPorPreimpresoyProveedor(retencion.getPreimpresoDocumento(),retencion.getProveedor());
+            Retencion retencionExistente=obtenerRetencionPorPreimpresoyProveedor(retencion.getPreimpresoDocumento(),retencion.getProveedor(),em);
             if(retencionExistente!=null)
             {
                 throw new ServicioCodefacException("La compra ya fue aplicada la retención en el comprobante "+retencionExistente.getPreimpreso());
@@ -256,29 +256,39 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         }
     }
     
-    public List<Object[]> obtenerRetencionesIvaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException
+    public List<Object[]> obtenerRetencionesIvaPorCompra(Compra compra,SriRetencion sriRetencion,EntityManager em)throws RemoteException
     {
-        return retencionFacade.obtenerRetencionesIvaPorCompraFacade(compra,sriRetencion);
+        return retencionFacade.obtenerRetencionesIvaPorCompraFacade(compra,sriRetencion,em);
         //compra.getSecuencial();
     }
     
-    public List<RetencionDetalle> obtenerRetencionesRentaPorCompra(Compra compra,SriRetencion sriRetencion)throws RemoteException
+    public List<RetencionDetalle> obtenerRetencionesRentaPorCompra(Compra compra,SriRetencion sriRetencion,EntityManager em)throws RemoteException
     {
-        return retencionFacade.obtenerRetencionesRentaPorCompraFacade(compra,sriRetencion);
+        return retencionFacade.obtenerRetencionesRentaPorCompraFacade(compra,sriRetencion,em);
         //compra.getSecuencial();
     }
     
     @Override
     public List<RetencionDetalle> obtenerRetencionesReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) throws RemoteException {
-        //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
-        return retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa);
+        try {
+            //return retencionFacade.lista(persona, fi, ff, iva, renta,tipo);
+            return (List<RetencionDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RetencionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
     //TODO: Mejorar para obtener todos los datos de una sola consulta y evitar estar construyendo
-    @Override
-    public List<Retencion> obtenerRetencionesSinDetalleReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa) throws RemoteException {
+    
+    public List<Retencion> obtenerRetencionesSinDetalleReportes(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta, SriRetencion sriRetencion,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Empresa empresa,EntityManager em) throws RemoteException {
         
-        List<RetencionDetalle> retencionDetalleList=retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa);
+        List<RetencionDetalle> retencionDetalleList=retencionFacade.obtenerRetencionesReportesFacade(persona, fi, ff, iva, renta,sriRetencion,estadoEnum,empresa,em);
         List<Retencion> retencionList=new ArrayList<Retencion>();
         for (RetencionDetalle retencionDetalle : retencionDetalleList)
         {
@@ -292,19 +302,19 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
         
     }
     
-    public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
+    /*public List<Object[]> obtenerRetencionesCodigo(Persona persona, Date fi, Date ff, SriRetencionIva iva, SriRetencionRenta renta,String tipo) {
         return retencionFacade.retencionesCodigo(persona, fi, ff, iva, renta, tipo);
-    }
+    }*/
     
-    @Override
-    public List<Retencion> obtenerRetencionesPorCompra(Compra compra) throws ServicioCodefacException, RemoteException
+    //@Override
+    public List<Retencion> obtenerRetencionesPorCompra(Compra compra,EntityManager em) throws ServicioCodefacException, RemoteException
     {
-        return getFacade().obtenerRetencionesPorCompraFacade(compra);
+        return getFacade().obtenerRetencionesPorCompraFacade(compra,em);
     }
 
-    public Retencion obtenerRetencionPorPreimpresoyProveedor(String preimpresoCompra, Persona persona)
+    public Retencion obtenerRetencionPorPreimpresoyProveedor(String preimpresoCompra, Persona persona,EntityManager em)
     {
-        List<Retencion> resultado= getFacade().obtenerRetencionPorPreimpresoyProveedor(preimpresoCompra, persona);
+        List<Retencion> resultado= getFacade().obtenerRetencionPorPreimpresoyProveedor(preimpresoCompra, persona,em);
         if(resultado.size()>0)
         {
             return resultado.get(0);

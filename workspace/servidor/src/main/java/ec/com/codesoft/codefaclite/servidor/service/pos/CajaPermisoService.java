@@ -86,7 +86,17 @@ public class CajaPermisoService extends ServiceAbstract<CajaPermiso, CajaPermiso
     @Override
     public List<Usuario> buscarUsuariosPorSucursalYLigadosACaja(Sucursal sucursal, Caja caja)
     {
-        return cajaPermisoFacade.buscarUsuariosPorSucursalYLigadosAUnaCaja(sucursal, caja);
+        try {
+            return (List<Usuario>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return cajaPermisoFacade.buscarUsuariosPorSucursalYLigadosAUnaCaja(sucursal, caja,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaPermisoService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
         
     }
 

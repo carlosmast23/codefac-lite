@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ImpuestoDetalleSer
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesMap;
 import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +48,6 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
         return i;
     } */   
     
-    public void eliminar(ImpuestoDetalle i) throws java.rmi.RemoteException
-    {
-        impuestoDetalleFacade.remove(i);
-    }
     
     public List<ImpuestoDetalle> buscarImpuestoDetallePorMap(Map<String,Object> map) throws java.rmi.RemoteException
     {
@@ -69,7 +66,18 @@ public class ImpuestoDetalleService extends ServiceAbstract<ImpuestoDetalle,Impu
     
     public List<ImpuestoDetalle> obtenerIvaVigente() throws java.rmi.RemoteException
     {
-        return impuestoDetalleFacade.getImpuestoVigenteByName(Impuesto.IVA);
+        try {
+            return (List<ImpuestoDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return impuestoDetalleFacade.getImpuestoVigenteByName(Impuesto.IVA,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ImpuestoDetalleService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
+        
     }
     
     public Map<Integer,ImpuestoDetalle> obtenerTodosMap() throws java.rmi.RemoteException,ServicioCodefacException

@@ -16,6 +16,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroPlanti
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubrosNivel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -33,7 +34,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         super(RubroEstudiante.class);
     }
 
-    public List<RubroEstudiante> findRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) {
+    public List<RubroEstudiante> findRubrosEstudiantesPorRubros(List<RubrosNivel> rubros,EntityManager em) {
 
         //RubroEstudiante re;
         //re.getSaldo()
@@ -52,7 +53,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             queryString += ")";
         }
 
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         
         query.setParameter(9000, GeneralEnumEstado.ELIMINADO.getEstado());
         query.setParameter(9001, GeneralEnumEstado.ANULADO.getEstado());
@@ -67,7 +68,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
 
     }
 
-    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo) {
+    public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo,EntityManager em) {
         //RubroEstudiante rubroEstudiante;
         //rubroEstudiante.getEstudianteInscrito().getNivelAcademico().getPeriodo();
             
@@ -80,7 +81,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         try {
             String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado=?3 and u.estudianteInscrito.nivelAcademico.periodo=?2 AND " + academico;
             //String queryString = "SELECT u FROM RubroEstudiante u " ;
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(2,periodo);
             query.setParameter(3,GeneralEnumEstado.ACTIVO.getEstado());
             
@@ -93,7 +94,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         }
     }
 
-    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) 
+    public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin,EntityManager em) 
     {
         //RubroEstudiante rubroEstudiante;
         //rubroEstudiante.getFechaGenerado();
@@ -121,7 +122,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
             
             queryString+=queryStringFecha+" GROUP BY u.estudianteInscrito.nivelAcademico,u.rubroNivel";
             
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(2,GeneralEnumEstado.ELIMINADO.getEstado());
             query.setParameter(3,GeneralEnumEstado.ANULADO.getEstado());
             
@@ -147,10 +148,10 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         }
     }
 
-    public List<RubroEstudiante> getRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException {
+    public List<RubroEstudiante> getRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum,EntityManager em) throws RemoteException {
 
         String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estadoFactura=?3 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
 
         query.setParameter(1, GeneralEnumEstado.ANULADO.getEstado());
         query.setParameter(2, GeneralEnumEstado.ELIMINADO.getEstado());
@@ -160,10 +161,10 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
 
     }
 
-    public List<RubroEstudiante> getRubrosActivosPorEstudiante(EstudianteInscrito estudianteInscrito) throws RemoteException {
+    public List<RubroEstudiante> getRubrosActivosPorEstudiante(EstudianteInscrito estudianteInscrito,EntityManager em) throws RemoteException {
 
         String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estado!=?1 and u.estado!=?2 and u.estudianteInscrito=?3 and u.saldo>0";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
 
         query.setParameter(1, GeneralEnumEstado.ANULADO.getEstado());
         query.setParameter(2, GeneralEnumEstado.ELIMINADO.getEstado());
@@ -172,7 +173,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         return query.getResultList();
     }
 
-    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito estudiante, Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException {
+    public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito estudiante, Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses,EntityManager em) throws RemoteException {
         String cat, qmes = "";
         if (catalogoProducto != null) {
             cat = "rn.catalogoProducto=?2";
@@ -220,7 +221,7 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
 
         try {
             String queryString = "SELECT u FROM RubroEstudiante u WHERE (u.estado <> ?4 AND u.estado <> ?5 AND u.saldo > 0) AND " + academico + " AND " + qmes;
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             //System.err.println("QUERY--->" + query.toString());
             if (estudiante != null) {
                 query.setParameter(1, estudiante);
@@ -237,19 +238,19 @@ public class RubroEstudianteFacade extends AbstractFacade<RubroEstudiante> {
         }
     }
     
-    public Long contarRubrosEstudiantePorRubroNivelFacade(RubrosNivel rubroNivel)
+    public Long contarRubrosEstudiantePorRubroNivelFacade(RubrosNivel rubroNivel,EntityManager em)
     {
         String queryString = "SELECT count(1) FROM RubroEstudiante u WHERE u.estado=?1 and u.rubroNivel=?2 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2,rubroNivel);
         return (Long) query.getSingleResult();
     }
     
-    public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturarFacade(EstudianteInscrito estudianteInscrito) throws RemoteException
+    public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturarFacade(EstudianteInscrito estudianteInscrito,EntityManager em) throws RemoteException
     {
         String queryString = "SELECT u FROM RubroEstudiante u WHERE u.estudianteInscrito=?1 and u.estadoFactura<>?2 and u.estado=?3 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, estudianteInscrito);
         query.setParameter(2,RubroEstudiante.FacturacionEstadoEnum.FACTURADO.getLetra());
         query.setParameter(3,GeneralEnumEstado.ACTIVO.getEstado());        

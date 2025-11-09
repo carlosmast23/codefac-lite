@@ -45,6 +45,7 @@
 	<parameter name="pl_rimpe" class="java.lang.String"/>
 	<parameter name="iva_porcentaje" class="java.lang.String"/>
 	<parameter name="subtotal_cero" class="java.lang.String"/>
+	<parameter name="obligado_contabilidad" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -66,14 +67,17 @@
 				<subreportParameter name="pl_telefonos">
 					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportParameter name="pl_nombre_empresa">
-					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="pl_titulo">
 					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="pl_fecha_hora">
 					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="obligado_contabilidad">
+					<subreportParameterExpression><![CDATA[$P{obligado_contabilidad}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pl_usuario">
 					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>

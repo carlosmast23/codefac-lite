@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Taller;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TallerTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Zona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 import jakarta.persistence.Query;
@@ -23,7 +24,7 @@ public class TallerFacade extends AbstractFacade<Taller> {
         super(Taller.class);
     }
     
-    public List<TallerTarea> obtenerTareasPorTallerFacade(Taller taller)
+    public List<TallerTarea> obtenerTareasPorTallerFacade(Taller taller,EntityManager em)
     {
         //TallerTarea t;
         //t.getTaller();
@@ -31,7 +32,7 @@ public class TallerFacade extends AbstractFacade<Taller> {
         
         String queryString = "SELECT u FROM TallerTarea u WHERE u.taller=?1";
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, taller);
         return query.getResultList();
     }

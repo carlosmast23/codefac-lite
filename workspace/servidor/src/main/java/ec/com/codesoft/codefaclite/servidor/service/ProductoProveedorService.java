@@ -57,7 +57,13 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
         mapParametros.put("producto", producto);
         mapParametros.put("proveedor", proveedor);
         this.getFacade().*/
-        return getFacade().buscarProductoProveedorActivoFacade(producto, proveedor);
+        return (List<ProductoProveedor>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().buscarProductoProveedorActivoFacade(producto, proveedor,entityManager);
+            }
+        });
+        
     }
 
     public List<ProductoProveedor> buscarPorProveedorActivo(Persona proveedor) throws ServicioCodefacException, java.rmi.RemoteException {
@@ -105,7 +111,7 @@ public class ProductoProveedorService extends ServiceAbstract<ProductoProveedor,
                     Producto producto = new Producto();
                     ProductoService productoService = new ProductoService();
 
-                    producto = productoService.buscarProductoDefectoCompras(resultadoList.get(0).getProducto());
+                    producto = productoService.buscarProductoDefectoCompras(resultadoList.get(0).getProducto(),entityManager);
 
                     //Validar si el producto es un ensamble tengo que verificar si el producto original existe y esta activo
                     if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) {

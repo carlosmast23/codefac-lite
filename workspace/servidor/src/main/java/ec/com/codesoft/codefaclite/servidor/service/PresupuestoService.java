@@ -67,6 +67,7 @@ import org.eclipse.jdt.internal.compiler.ast.Literal;
 public class PresupuestoService extends ServiceAbstract<Presupuesto, PresupuestoFacade> implements PresupuestoServiceIf
 {
     private PresupuestoFacade presupuestoFacade;
+    private PresupuestoDetalleService presupuestoDetalleService=new PresupuestoDetalleService();
 
     public PresupuestoService() throws RemoteException 
     {
@@ -133,7 +134,8 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     public void editarReservaProductos(Presupuesto p,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Editar los presupuestos
-        List<PresupuestoDetalle> detallesAnteriorList=ServiceFactory.getFactory().getPresupuestoDetalleServiceIf().buscarPorPresupuesto(p);
+        
+        List<PresupuestoDetalle> detallesAnteriorList=presupuestoDetalleService.buscarPorPresupuesto(p,entityManager);
         for (PresupuestoDetalle presupuestoDetalle : p.getPresupuestoDetalles()) 
         {
             
@@ -366,31 +368,62 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     }
     
         
-    public List<OrdenTrabajoDetalle> listarOrdenesTrabajo(OrdenTrabajo ordenTrabajo)
+    public List<OrdenTrabajoDetalle> listarOrdenesTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        return presupuestoFacade.listarOrdenTrabajo(ordenTrabajo);
+        return (List<OrdenTrabajoDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return presupuestoFacade.listarOrdenTrabajo(ordenTrabajo,entityManager);
+            }
+        });
     }
     
     public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal,Persona cliente,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        return getFacade().consultarPresupuestos(fechaInicial, fechaFinal, cliente,codigoObjetoMantenimiento,estadoEnum);
+       return  (List<Presupuesto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarPresupuestos(fechaInicial, fechaFinal, cliente,codigoObjetoMantenimiento,estadoEnum,entityManager);
+            }
+        });
+        
     }
     
     public List<Presupuesto> consultarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo) throws ServicioCodefacException,RemoteException
     {
-        List<Presupuesto> presupuestoList=getFacade().buscarPorOrdenTrabajoFacade(ordenTrabajo);
-             
+        return (List<Presupuesto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return consultarPorOrdenTrabajo(ordenTrabajo, entityManager);
+            }
+        });
+    }
+    
+    public List<Presupuesto> consultarPorOrdenTrabajo(OrdenTrabajo ordenTrabajo,EntityManager em) throws ServicioCodefacException,RemoteException
+    {
+        List<Presupuesto> presupuestoList=getFacade().buscarPorOrdenTrabajoFacade(ordenTrabajo,em);             
         return presupuestoList;
     }
     
     public List<PresupuestoDetalleActividad> consultarActividadPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException
     {
-        return getFacade().consultarActividadesPorEmpleado(empleado,null);
+        return (List<PresupuestoDetalleActividad>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarActividadesPorEmpleado(empleado,null,entityManager);
+            }
+        });
+        
     }
     
     public List<PresupuestoDetalleActividad> consultarActividadesPendientesPresupuesto(Empleado empleado) throws ServicioCodefacException,RemoteException
     {
-        return getFacade().consultarActividadesPorEmpleado(empleado,true);
+        return (List<PresupuestoDetalleActividad>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarActividadesPorEmpleado(empleado,true,entityManager);
+            }
+        });        
     }
     
     
@@ -419,38 +452,47 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
     
     public Presupuesto consultarUltimaPorObjectoMantenimiento(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
     { 
-        return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento);
+        return (Presupuesto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarUltimaOTporObjectoMantenimientoFacade(objetoMantenimiento,entityManager);
+            }
+        });
+        
     }
     
     public ReportDataAbstract<ActividadPresupuestoData> consultarActividadesPresupuesto(Date fechaInicial, Date fechaFinal,Persona cliente,Usuario usuario,String codigoObjetoMantenimiento,Presupuesto.EstadoEnum estadoEnum) throws ServicioCodefacException, RemoteException
     {
-        ReportDataAbstract<ActividadPresupuestoData> reporte=new ActividadPresupuestoReport("Actividades Presupuesto");
-        
-        List<PresupuestoDetalleActividad> resultadoList=getFacade().consultarActividades(fechaInicial, fechaFinal, cliente,usuario,codigoObjetoMantenimiento,estadoEnum);        
-        for (PresupuestoDetalleActividad detalle : resultadoList) 
-        {
-            ActividadPresupuestoData data=new ActividadPresupuestoData();
-            Presupuesto presupuesto=detalle.getPresupuestoDetalle().getPresupuesto();
-            
-            String usuarioNick="";
-            if(detalle.getUsuario()!=null)
-            {
-                usuarioNick=detalle.getUsuario().getNick();
+        return (ReportDataAbstract<ActividadPresupuestoData>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                ReportDataAbstract<ActividadPresupuestoData> reporte = new ActividadPresupuestoReport("Actividades Presupuesto");
+
+                List<PresupuestoDetalleActividad> resultadoList = getFacade().consultarActividades(fechaInicial, fechaFinal, cliente, usuario, codigoObjetoMantenimiento, estadoEnum,entityManager);
+                for (PresupuestoDetalleActividad detalle : resultadoList) {
+                    ActividadPresupuestoData data = new ActividadPresupuestoData();
+                    Presupuesto presupuesto = detalle.getPresupuestoDetalle().getPresupuesto();
+
+                    String usuarioNick = "";
+                    if (detalle.getUsuario() != null) {
+                        usuarioNick = detalle.getUsuario().getNick();
+                    }
+
+                    data.setUsuario(usuarioNick);
+                    data.setCodigoOrdenTrabajo(detalle.getPresupuestoDetalle().getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getId() + "");
+                    data.setTarea(detalle.getProductoActividad().getNombre());
+                    data.setServicio(detalle.getPresupuestoDetalle().getProducto().getNombre());
+
+                    String fechaFormato = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(presupuesto.getFechaPresupuesto());
+                    data.setFecha(fechaFormato);
+                    data.setTerminado(detalle.getTerminadoEnum().getNombre());
+
+                    reporte.agregarDetalle(data);
+                }
+                return reporte;
             }
-            
-            data.setUsuario(usuarioNick);
-            data.setCodigoOrdenTrabajo(detalle.getPresupuestoDetalle().getPresupuesto().getOrdenTrabajoDetalle().getOrdenTrabajo().getId()+"");            
-            data.setTarea(detalle.getProductoActividad().getNombre());
-            data.setServicio(detalle.getPresupuestoDetalle().getProducto().getNombre());
-            
-            
-            String fechaFormato=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(presupuesto.getFechaPresupuesto());            
-            data.setFecha(fechaFormato);
-            data.setTerminado(detalle.getTerminadoEnum().getNombre());
-            
-            reporte.agregarDetalle(data);
-        }
-        return reporte;
+        });
+        
     }
     
 }

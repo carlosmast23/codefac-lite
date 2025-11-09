@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
@@ -24,12 +25,12 @@ public class EmpresaFacade extends AbstractFacade<Empresa>
         super(Empresa.class);
     }
     
-    public List<Empresa> obtenerTodosActivosFacade(OrdenarEnum ordenarEnum)
+    public List<Empresa> obtenerTodosActivosFacade(OrdenarEnum ordenarEnum,EntityManager em)
     {
         try
         {   
             String queryString = "SELECT e FROM Empresa e WHERE e.estado=?1 ORDER BY e.orden "+ ordenarEnum.getValor();
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1,GeneralEnumEstado.ACTIVO.getEstado());
             return (List<Empresa>) query.getResultList();
         }

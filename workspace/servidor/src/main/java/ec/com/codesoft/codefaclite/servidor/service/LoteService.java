@@ -161,14 +161,14 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         entityManager.merge(entity);
     }
     
-    public boolean existenLotesIngresados(Empresa empresa) throws ServicioCodefacException, RemoteException 
+    /*public boolean existenLotesIngresados(Empresa empresa) throws ServicioCodefacException, RemoteException 
     {
         if(getFacade().verificarExistenLotes(empresa)>0)
         {
             return true;
         }
         return false;
-    }
+    }*/
 
     @Override
     public void eliminar(Lote entity) throws ServicioCodefacException, RemoteException {
@@ -185,34 +185,45 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
     
     public ReportDataAbstract reporteFechaCaducidad(Sucursal sucursal,Bodega bodega,Date fechaReferencia) throws ServicioCodefacException, RemoteException 
     {
-        List<FechaCaducidadResult> resultDataList=getFacade().reporteFechaCaducidadFacade(sucursal, bodega,fechaReferencia);
+        return (ReportDataAbstract) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                List<FechaCaducidadResult> resultDataList = getFacade().reporteFechaCaducidadFacade(sucursal, bodega, fechaReferencia,entityManager);
+
+                List<FechaCaducidadData> reporteDataList = new ArrayList<FechaCaducidadData>();
+
+                for (FechaCaducidadResult dato : resultDataList) {
+                    // TODO: Ver si esta parte convertir debe estar en la clase para no hacer tanto codigo que no correcponde
+                    DateFormat dateFormat = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA;
+                    FechaCaducidadData fechaCaducidadData = new FechaCaducidadData(
+                            dato.getCodigoPersonalizado(),
+                            dato.getNombreBodega(),
+                            dato.getCodigoLote(),
+                            dato.getNombreProducto(),
+                            dateFormat.format(dato.getFechaCaducidad()),
+                            dato.getStock().setScale(2, RoundingMode.HALF_UP).toString(),
+                            dato.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
+                    reporteDataList.add(fechaCaducidadData);
+                }
+
+                ReporteFechaCaducidadReport reporte = new ReporteFechaCaducidadReport("Productos por Caducar");
+                reporte.setDetalleList(reporteDataList);
+                return reporte;
+            }
+        });
         
-        List<FechaCaducidadData> reporteDataList=new ArrayList<FechaCaducidadData>();
-        
-        for (FechaCaducidadResult dato : resultDataList) 
-        {
-            // TODO: Ver si esta parte convertir debe estar en la clase para no hacer tanto codigo que no correcponde
-            DateFormat dateFormat= ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA;
-            FechaCaducidadData fechaCaducidadData=new FechaCaducidadData(
-                    dato.getCodigoPersonalizado(), 
-                    dato.getNombreBodega(), 
-                    dato.getCodigoLote(), 
-                    dato.getNombreProducto(), 
-                    dateFormat.format(dato.getFechaCaducidad()), 
-                    dato.getStock().setScale(2, RoundingMode.HALF_UP).toString(), 
-                    dato.getValorUnitario().setScale(2, RoundingMode.HALF_UP).toString());
-           reporteDataList.add(fechaCaducidadData);
-        }
-        
-        ReporteFechaCaducidadReport reporte=new ReporteFechaCaducidadReport("Productos por Caducar");
-        reporte.setDetalleList(reporteDataList);    
-        return reporte;
     }
     
     public Integer reporteFechaCaducidadTotal(Sucursal sucursal,Bodega bodega,Date fechaReferencia) throws ServicioCodefacException, RemoteException 
     {
-        Integer total=getFacade().reporteFechaCaducidadTotalFacade(sucursal, bodega, fechaReferencia);
-        return total;
+        return (Integer) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                Integer total=getFacade().reporteFechaCaducidadTotalFacade(sucursal, bodega, fechaReferencia,entityManager);
+                return total;
+            }
+        });
+        
     }
 
     

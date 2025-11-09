@@ -44,13 +44,13 @@ public class PersonaFacade extends AbstractFacade<Persona>
         return numberA - numberB;
     }
     
-    public List<Persona> buscarPorTipoFacade(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado,Empresa empresa)
+    public List<Persona> buscarPorTipoFacade(OperadorNegocioEnum tipoEnum,GeneralEnumEstado estado,Empresa empresa,EntityManager em)
     {
         //Persona persona;
         //persona.getEmpresa();
         ////persona.getTipo();
         String queryString = "SELECT p FROM Persona p WHERE (p.tipo=?1 or p.tipo=?2 ) and p.estado=?3 and p.empresa=?4";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         
         query.setParameter(1,OperadorNegocioEnum.AMBOS.getLetra());
         query.setParameter(2,tipoEnum.getLetra());

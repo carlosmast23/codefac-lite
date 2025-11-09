@@ -57,12 +57,18 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
 
     public void eliminar(RubroEstudiante entity) throws java.rmi.RemoteException
     {        
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        entityManager.merge(entity);
-        transaccion.commit();        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     public List<RubroEstudiante> obtenerRubroMatriculaPorEstudianteInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException
@@ -85,10 +91,10 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
         return null;
     }
     
-    public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
+    /*public List<RubroEstudiante> obtenerRubrosActivosPorEstudianteYEstadoFacturado(RubroEstudiante.FacturacionEstadoEnum estadoFacturadoEnum) throws RemoteException
     {
         return getFacade().getRubrosActivosPorEstudianteYEstadoFacturado(estadoFacturadoEnum);
-    }
+    }*/
 
     /**
      * Obtener rubros activos por estudiante que aun no han sido pagados
@@ -97,26 +103,61 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
      * @throws RemoteException 
      */
     public List<RubroEstudiante> obtenerRubrosActivosPorEstudiantesInscrito(EstudianteInscrito estudianteInscrito) throws RemoteException {
-        return getFacade().getRubrosActivosPorEstudiante(estudianteInscrito);
+        
+        try {
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().getRubrosActivosPorEstudiante(estudianteInscrito,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
+        
+    }
+    
+    public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros,EntityManager em) throws RemoteException {
+        return getFacade().findRubrosEstudiantesPorRubros(rubros,em);
     }
 
     public List<RubroEstudiante> obtenerRubrosEstudiantesPorRubros(List<RubrosNivel> rubros) throws RemoteException {
-        return getFacade().findRubrosEstudiantesPorRubros(rubros);
+        
+        try {
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerRubrosEstudiantesPorRubros(rubros, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
 
     public void eliminarRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
-            //Solo elimina los rubros de los que esten sin facturar
-            if (rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR)) {
-                rubrosEstudiante.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-                rubrosEstudiante = entityManager.merge(rubrosEstudiante);
-                entityManager.remove(rubrosEstudiante);
-            }
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    for (RubroEstudiante rubrosEstudiante : rubrosEstudiantes) {
+                        //Solo elimina los rubros de los que esten sin facturar
+                        if (rubrosEstudiante.getEstadoFacturaEnum().equals(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR)) {
+                            rubrosEstudiante.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                            rubrosEstudiante = entityManager.merge(rubrosEstudiante);
+                            entityManager.remove(rubrosEstudiante);
+                        }
+                    }
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        transaccion.commit();
+        
+        
     }
     
     public void eliminarMesRubroPlantilla(RubroPlantillaMes rubroPlantillaMes) throws RemoteException, ServicioCodefacException
@@ -142,7 +183,7 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
                     rubrosNivelList.add(rubroNivel);
                     
                     //Obtener todos los rubrosEstudiantes vinculados al rubro nivel creado por la plantilla
-                    List<RubroEstudiante> rubrosEstudiante=servicio.obtenerRubrosEstudiantesPorRubros(rubrosNivelList);
+                    List<RubroEstudiante> rubrosEstudiante=servicio.obtenerRubrosEstudiantesPorRubros(rubrosNivelList,entityManager);
                     
                     for (RubroEstudiante rubroEstudiante : rubrosEstudiante) {
                         
@@ -368,47 +409,93 @@ public class RubroEstudianteService extends ServiceAbstract<RubroEstudiante, Rub
     }
 
     public void crearRubrosEstudiantes(List<RubroEstudiante> rubrosEstudiantes) throws RemoteException {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaccion = getTransaccion();
-        transaccion.begin();
-        for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
-            //Solo valido que creen rubros que no exitan es decir que no tengan id
-            if(rubroEstudiante.getId()==null)
-            {
-                rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-                rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
-                rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
-                entityManager.persist(rubroEstudiante);
-            }
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    for (RubroEstudiante rubroEstudiante : rubrosEstudiantes) {
+                        //Solo valido que creen rubros que no exitan es decir que no tengan id
+                        if (rubroEstudiante.getId() == null) {
+                            rubroEstudiante.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                            rubroEstudiante.setFechaGenerado(UtilidadesFecha.getFechaHoy());
+                            rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
+                            entityManager.persist(rubroEstudiante);
+                        }
+                    }
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        entityManager.flush();
-        transaccion.commit();
-
+        
     }
 
     @Override
     public List<RubroEstudiante> obtenerDeudasEstudiante(Estudiante estudiante,Periodo periodo) throws RemoteException {
-        return rubroEstudianteFacade.obtenerDeudasEstudiante(estudiante,periodo);
+        try {
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return rubroEstudianteFacade.obtenerDeudasEstudiante(estudiante,periodo,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
 
     @Override
     public List<Object[]> obtenerRubroPeriodoGrupo(Periodo periodo,Date fechaInicio,Date fechaFin) throws RemoteException {
-        return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo,fechaInicio,fechaFin);
+        
+        try {
+            return (List<Object[]>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return rubroEstudianteFacade.obtenerRubroPeriodoGrupo(periodo,fechaInicio,fechaFin,entityManager);
+                }        
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
 
     public List<RubroEstudiante> buscarRubrosMes(EstudianteInscrito est,Periodo periodo, CatalogoProducto catalogoProducto, List<RubroPlantillaMes> meses) throws RemoteException 
     {
-        return rubroEstudianteFacade.buscarRubrosMes(est,periodo, catalogoProducto, meses);
+        try {
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return rubroEstudianteFacade.buscarRubrosMes(est,periodo, catalogoProducto, meses,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
     
-    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel) throws RemoteException
+    public Long contarRubrosEstudiantePorRubroNivel(RubrosNivel rubroNivel,EntityManager em) throws RemoteException
     {
-        return getFacade().contarRubrosEstudiantePorRubroNivelFacade(rubroNivel);
+        return getFacade().contarRubrosEstudiantePorRubroNivelFacade(rubroNivel,em);
     }
     
     public List<RubroEstudiante> consultarPorEstudianteInscritoSinFacturar(EstudianteInscrito estudianteInscrito) throws RemoteException
     {
-        return getFacade().consultarPorEstudianteInscritoSinFacturarFacade(estudianteInscrito);
+        try {
+            return (List<RubroEstudiante>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().consultarPorEstudianteInscritoSinFacturarFacade(estudianteInscrito,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(RubroEstudianteService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
+        
     }
     
     public List<RubroEstudiante> buscarPorEstudianteInscritoYRubroNivel(EstudianteInscrito estudianteInscrito, RubrosNivel rubroNivel) throws ServicioCodefacException, RemoteException {

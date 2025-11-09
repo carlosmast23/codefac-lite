@@ -178,11 +178,18 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
     
     public List<Empresa> obtenerTodosActivos(OrdenarEnum ordenarEnum) throws RemoteException
     {
-        /*getFacade().
-        Map<String,Object> mapParametros=new HashMap<String, Object>();
-        mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-        List<Empresa> empresas=getFacade().findByMap(mapParametros);*/
-        return getFacade().obtenerTodosActivosFacade(ordenarEnum);
+        try {
+            return (List<Empresa>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return getFacade().obtenerTodosActivosFacade(ordenarEnum,entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(EmpresaService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<Empresa>();
+        
         
     }
     
@@ -364,7 +371,7 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
                 crearProductoDefectoSinTransaccion(empresa,Integer.parseInt(ParametrosSistemaCodefac.IVA_DEFECTO),entityManager);
                 
                 //Grabar una bodega por defecto
-                crearBodegaPorDefecto(sucursal);
+                crearBodegaPorDefecto(sucursal,entityManager);
                 
                 //Generar la licencia
                 if(!crearLicencia(empresa, licenciaCorreo,ParametrosSistemaCodefac.DIRECTORIO_RECURSOS_DEFECTO))
@@ -379,12 +386,12 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         
     }
     
-    private void crearBodegaPorDefecto(Sucursal sucursal) throws RemoteException, ServicioCodefacException
+    private void crearBodegaPorDefecto(Sucursal sucursal,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         BodegaService bodegaService=new BodegaService();
         Bodega bodegaDefecto=bodegaService.crearBodegaDefectoSinTransaccion(sucursal);
-        EntityManager entityManager= AbstractFacade.nuevoEntityManager();
-        bodegaService.grabarSinTransaccion(bodegaDefecto,entityManager);
+        //EntityManager entityManager= AbstractFacade.nuevoEntityManager();
+        bodegaService.grabarSinTransaccion(bodegaDefecto,em);
     }
     
     private void crearProductoDefectoSinTransaccion(Empresa empresa,Integer ivaDefecto,EntityManager entityManager) throws RemoteException, ServicioCodefacException

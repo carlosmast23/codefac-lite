@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
@@ -50,7 +51,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         super(Factura.class);
     }
 
-    public Query listaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum,Boolean quitarVentasAnuladasNCTotal) {
+    public Query listaQuery(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,TipoConsultaEnum tipoConsultaEnum,Boolean quitarVentasAnuladasNCTotal,EntityManager em) {
         String cliente = "", fecha = "", estadoFactura = "",filtrarReferidos="",ordenarAgrupado="",filtrarSucursal="", usuarioId="",enviadoGuiaRemisionStr="",vendedorStr="",afectaNotaCreditoTotalStr="";
         
         if(vendedor!=null)
@@ -163,7 +164,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         String queryString = selectStr+"FROM Factura u WHERE u.empresa=?7 and ( u.codigoDocumento=?6 "+documentoEnum2Str+"  ) and  " + cliente + usuarioId + fecha + estadoFactura + filtrarReferidos + filtroPuntoEmision + filtrarSucursal + enviadoGuiaRemisionStr + vendedorStr+afectaNotaCreditoTotalStr+orderByStr;
                 
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
 
         if (persona != null) {
             query.setParameter(1, persona);
@@ -235,33 +236,33 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     }
 
     
-    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) {
+    public List<Factura> lista(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,DocumentoEnum documentoEnum2,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal,EntityManager em) {
         try {
-            Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,documentoEnum2, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS,quitarVentasAnuladasNCTotal);
+            Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,documentoEnum2, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.DATOS,quitarVentasAnuladasNCTotal,em);
             return query.getResultList();
         } catch (NoResultException e) {
             return null;
         }
     }
     
-    public Long listaConTamanio(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
+    public Long listaConTamanio(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,EntityManager em) 
     {
-        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,null, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO,false);
+        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,null, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.TAMANIO,false,em);
         return (Long) query.getSingleResult();
     }
     
-    public BigDecimal listaConTotalValor(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision) 
+    public BigDecimal listaConTotalValor(PersonaEstablecimiento persona, Date fi, Date ff, ComprobanteEntity.ComprobanteEnumEstado estadoEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,EntityManager em) 
     {
-        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,null, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.VALOR_TOTAL,false);
+        Query query=listaQuery(persona, fi, ff, estadoEnum, consultarReferidos, referido, agrupadoReferido, puntoEmision, empresa, documentoEnum,null, sucursal, usuario, vendedor, enviadoGuiaRemision, TipoConsultaEnum.VALOR_TOTAL,false,em);
         return (BigDecimal) query.getSingleResult();
     }
    
 
-    public List<Factura> getFacturaEnable() {
+    public List<Factura> getFacturaEnable(EntityManager em) {
         try {
             
             String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estadoNotaCredito<>?2 AND u.estado<>?3";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
             query.setParameter(2, Factura.EstadoNotaCreditoEnum.ANULADO_PARCIAL.getEstado());
             query.setParameter(3, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
@@ -271,11 +272,11 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }
 
-    public List<Factura> queryDialog(String param, int limiteMinimo, int limiteMaximo) {
+    public List<Factura> queryDialog(String param, int limiteMinimo, int limiteMaximo,EntityManager em) {
         String queryString = "SELECT u FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.estado<>?3 ";
         queryString += "AND ( f.cliente.razonSocial like ?1 )";
 
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, param);
         query.setMaxResults(limiteMaximo);
         query.setFirstResult(limiteMinimo);
@@ -283,12 +284,12 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 
     }
     
-    public Boolean verificarFacturaActivaIngresadaConPedido(Factura proforma)
+    public Boolean verificarFacturaActivaIngresadaConPedido(Factura proforma,EntityManager em)
     {
         //Factura f;
         //f.getProforma().
         String queryString = "SELECT count(u) FROM Factura u WHERE u.estado<>?1 AND u.estado<>?2 AND u.proforma=?3  ";
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             query.setParameter(1, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado());
             query.setParameter(2, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI.getEstado());
             query.setParameter(3, proforma);
@@ -300,14 +301,14 @@ public class FacturaFacade extends AbstractFacade<Factura> {
             return false;
     }
     
-      public Long getSecuencialProforma(Empresa empresa,DocumentoEnum documentoEnum) 
+      public Long getSecuencialProforma(Empresa empresa,DocumentoEnum documentoEnum,EntityManager em) 
       {
         try {
             //Factura f;
             //f.getEmpresa();
             String queryString="SELECT MAX(CAST (F.SECUENCIAL AS BIGINT)) FROM FACTURA F WHERE F.EMPRESA_ID=?2 AND F.CODIGO_DOCUMENTO=?1"; //TODO: Por el momento dejo una consulta nativa porque tengo un problema al evaluar el secuencial que en la base de datos esta como string pero esta mapeado como entero y al hacer casting en jpql el compilador se confunde
             //String queryString = "SELECT max( CAST(u.secuencial CHAR(64))  ) FROM Factura u WHERE  u.codigoDocumento=?1";
-            Query query = nuevoEntityManager().createNativeQuery(queryString);
+            Query query = em.createNativeQuery(queryString);
             //query.setParameter(1, DocumentoEnum.PROFORMA.getCodigo());
             query.setParameter(1, documentoEnum.getCodigo());
             query.setParameter(2,empresa.getId());
@@ -326,7 +327,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         }
     }
       
-      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado,DocumentoEnum documentoEnum) 
+      public List<Factura> consultarProformasReporteFacade(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado,DocumentoEnum documentoEnum,EntityManager em) 
       {
           Factura factura;
           
@@ -352,7 +353,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           }
                     
           //String queryString="SELECT F FROM FACTURA F WHERE F.CODIGO_DOCUMENTO=?1 AND F.cliente=?2";
-          Query query=nuevoEntityManager().createQuery(queryString);
+          Query query=em.createQuery(queryString);
           //query.setParameter(1,DocumentoEnum.PROFORMA.getCodigo());
           query.setParameter(1,documentoEnum.getCodigo());
           
@@ -379,7 +380,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
       }
       
       
-      public Factura buscarPorPremimpresoYEstadoFacade(Integer secuencial,BigDecimal puntoEstablecimiento,Integer puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum)
+      public Factura buscarPorPremimpresoYEstadoFacade(Integer secuencial,BigDecimal puntoEstablecimiento,Integer puntoEmision,ComprobanteEntity.ComprobanteEnumEstado estadoEnum,EntityManager em)
       {
           /*Factura f;
           f.getSecuencial();
@@ -389,7 +390,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           
           String queryString="SELECT F FROM Factura F WHERE F.secuencial=?1 AND F.puntoEmision=?2 AND F.puntoEstablecimiento=?3 AND F.estado=?4 ";
           
-          Query query=nuevoEntityManager().createQuery(queryString);
+          Query query=em.createQuery(queryString);
           
           query.setParameter(1,secuencial);
           query.setParameter(2,puntoEmision);
@@ -405,28 +406,28 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           }
       }
       
-    public List<Factura> buscarPorAutorizacionFacade(String autorizacion) throws RemoteException,ServicioCodefacException
+    public List<Factura> buscarPorAutorizacionFacade(String autorizacion,EntityManager em) throws RemoteException,ServicioCodefacException
     {
         //Factura f;
         //f.getClaveAcceso();
         String queryString=" SELECT f FROM Factura f WHERE f.claveAcceso=?1 ";
-        Query query=nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,autorizacion);
         return query.getResultList();
     }
     
-    public List<Factura> buscarPorNumeroOrden(Integer numeroOrden) throws RemoteException,ServicioCodefacException
+    public List<Factura> buscarPorNumeroOrden(Integer numeroOrden,EntityManager em) throws RemoteException,ServicioCodefacException
     {
         /*Factura f;
         f.getEs*/
         String queryString=" SELECT f FROM Factura f WHERE f.numeroOrden=?1 AND f.estado=?2 ORDER BY f.id ";
-        Query query=nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,numeroOrden);
         query.setParameter(2,ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
         return query.getResultList();
     }
       
-      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto)
+      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto,EntityManager em)
       {
           //Factura f;
           //f.getEstadoEnum().AUTORIZADO
@@ -461,7 +462,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
 "			FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS UTILIDAD \n" +
 "		FROM FACTURA_DETALLE FD	INNER JOIN FACTURA F ON F.ID =FD.FACTURA_ID WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado+whereDocumentos ;
       
-          Query query=nuevoEntityManager().createNativeQuery(queryString);
+          Query query=em.createNativeQuery(queryString);
           Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);
           
           if(fechaMayor!=null)

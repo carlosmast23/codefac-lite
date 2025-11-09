@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioC
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.EntityManager;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
@@ -32,21 +33,21 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         super(Presupuesto.class);
     }
 
-    public List<OrdenTrabajoDetalle> listarOrdenTrabajo(OrdenTrabajo ordenTrabajo) {
+    public List<OrdenTrabajoDetalle> listarOrdenTrabajo(OrdenTrabajo ordenTrabajo,EntityManager em) {
         String queryString = " Select DISTINCT (otd) From Presupuesto p INNER JOIN p.ordenTrabajoDetalle otd where otd.ordenTrabajo = ?1";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, ordenTrabajo);
         return query.getResultList();
     }
     
-    public List<Presupuesto> buscarPorOrdenTrabajoFacade(OrdenTrabajo ordenTrabajo) {
+    public List<Presupuesto> buscarPorOrdenTrabajoFacade(OrdenTrabajo ordenTrabajo,EntityManager em) {
         String queryString = " Select DISTINCT (p) From Presupuesto p INNER JOIN p.ordenTrabajoDetalle otd where otd.ordenTrabajo = ?1  ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, ordenTrabajo);
         return query.getResultList();
     }
 
-    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal, Persona cliente,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum) 
+    public List<Presupuesto> consultarPresupuestos(Date fechaInicial, Date fechaFinal, Persona cliente,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum,EntityManager em) 
     {
         //Presupuesto presupuesto;
         //presupuesto.getOrdenTrabajoDetalle().getOrdenTrabajo().getObjetoMantenimiento().getCodigo();
@@ -75,7 +76,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
             queryString+=" AND p.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento.codigo=?5 "; 
         }
 
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
 
         if (fechaInicial != null) {
             query.setParameter(1, fechaInicial);
@@ -100,7 +101,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
     
-    public List<PresupuestoDetalleActividad> consultarActividades(Date fechaInicial, Date fechaFinal, Persona cliente,Usuario usuario,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum) 
+    public List<PresupuestoDetalleActividad> consultarActividades(Date fechaInicial, Date fechaFinal, Persona cliente,Usuario usuario,String codigoObjetoMantenimiento, Presupuesto.EstadoEnum estadoEnum,EntityManager em) 
     {
         //PresupuestoDetalleActividad p;
         //p.getUsuario()
@@ -138,7 +139,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
             queryString+=" AND p.presupuestoDetalle.presupuesto.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento.codigo=?5 "; 
         }
 
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
 
         if (fechaInicial != null) {
             query.setParameter(1, fechaInicial);
@@ -168,7 +169,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
     
-    public List<PresupuestoDetalleActividad> consultarActividadesPorEmpleado(Empleado empleado,Boolean actividadesPendientes)
+    public List<PresupuestoDetalleActividad> consultarActividadesPorEmpleado(Empleado empleado,Boolean actividadesPendientes,EntityManager em)
     {
         //Presupuesto p;
         //p.getEstadoEnum()
@@ -190,7 +191,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         
         String queryString = " Select DISTINCT p FROM PresupuestoDetalleActividad p WHERE p.presupuestoDetalle.presupuesto.estado<>?2 "+whereActividadesPendiente+whereEmpleado;
         
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         
         if(empleado!=null)
         {
@@ -207,7 +208,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         return query.getResultList();
     }
     
-    public Presupuesto consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento) throws ServicioCodefacException, RemoteException
+    public Presupuesto consultarUltimaOTporObjectoMantenimientoFacade(ObjetoMantenimiento objetoMantenimiento,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         //Presupuesto p;
         //p.getFechaCreacion()
@@ -217,7 +218,7 @@ public class PresupuestoFacade extends AbstractFacade<Presupuesto> {
         //ot.getEstado();
         //ot.getObjetoMantenimiento()
         String queryStr="SELECT u FROM Presupuesto u WHERE u.ordenTrabajoDetalle.ordenTrabajo.objetoMantenimiento = ?1 AND u.estado<> ?2 ORDER BY u.fechaCreacion desc ";
-        Query query = nuevoEntityManager().createQuery(queryStr);
+        Query query = em.createQuery(queryStr);
         
         query.setParameter(1, objetoMantenimiento);
         query.setParameter(2, OrdenTrabajo.EstadoEnum.ELIMINADO.getEstado());

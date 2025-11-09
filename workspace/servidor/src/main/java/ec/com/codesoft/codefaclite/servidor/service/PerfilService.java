@@ -51,50 +51,70 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     
     public Perfil grabar(Perfil entity) throws ServicioCodefacException,java.rmi.RemoteException
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaction=getTransaccion();
-        transaction.begin();
-        entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
-        entityManager.persist(entity);
-        transaction.commit();
-        return entity;
+        return (Perfil) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                entity.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
+                entityManager.persist(entity);                
+                return entity;
+            }
+        });        
+        
     }
     
     public void eliminar(Perfil entity) throws java.rmi.RemoteException
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        EntityTransaction transaction=getTransaccion();
-        transaction.begin();        
-        entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
-        entityManager.merge(entity);
-        transaction.commit();
+        
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    entity.setEstado(GeneralEnumEstado.ELIMINADO.getEstado());
+                    entityManager.merge(entity);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(SriIdentificacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
     
     public void editar(Perfil entity)
     {
         try {
-            EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-            EntityTransaction transaction=getTransaccion();
-            transaction.begin();
-            
-            Perfil perfilSinModificar = buscarPorId(entity.getId(),entityManager);
-            for (PermisoVentana permisoVentana : perfilSinModificar.getVentanasPermisos()) {
-                //Comprabar si algun objeto fue eliminado
-                if (!entity.getVentanasPermisos().contains(permisoVentana)) {
-                    entityManager.remove(permisoVentana);
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Perfil perfilSinModificar = buscarPorId(entity.getId(), entityManager);
+                    for (PermisoVentana permisoVentana : perfilSinModificar.getVentanasPermisos()) {
+                        //Comprabar si algun objeto fue eliminado
+                        if (!entity.getVentanasPermisos().contains(permisoVentana)) {
+                            entityManager.remove(permisoVentana);
+                        }
+                    }
+
+                    entityManager.merge(entity);
                 }
-            }            
-            
-            entityManager.merge(entity);
-            transaction.commit();
-        } catch (RemoteException ex) {
+            });
+        } catch (ServicioCodefacException ex) {
             Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }        
+     
     }
     
     public List<Perfil> obtenerPerfilesPorUsuario(Usuario usuario)
     {
-        return this.perfilFacade.getPerfilesByUsuario(usuario);
+        try {
+            return (List<Perfil>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return perfilFacade.getPerfilesByUsuario(usuario, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     /**
@@ -319,26 +339,35 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
     
     private void crearPerfilAbstract(Empresa empresa,String nombrePerfil,VentanaEnum[] ventanaList) throws RemoteException
     {
-        EntityManager entityManager=AbstractFacade.nuevoEntityManager();
-        Perfil perfilDefecto = new Perfil();
-        perfilDefecto.setDescripcion(nombrePerfil);
-        perfilDefecto.setEmpresa(empresa);
-        perfilDefecto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
-        //perfilDefecto.setNombre(Perfil.PERFIL_DEFECTO);
-        perfilDefecto.setNombre(nombrePerfil);
-        
-        entityManager.persist(perfilDefecto);
-
-        PermisoVentanaService permisoService = new PermisoVentanaService();
-        List<PermisoVentana> ventanas = new ArrayList<PermisoVentana>();
-        
-        for (VentanaEnum ventanaEnum : ventanaList) 
-        {
-            ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto, ventanaEnum.getCodigo()));
+        try {
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    Perfil perfilDefecto = new Perfil();
+                    perfilDefecto.setDescripcion(nombrePerfil);
+                    perfilDefecto.setEmpresa(empresa);
+                    perfilDefecto.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                    //perfilDefecto.setNombre(Perfil.PERFIL_DEFECTO);
+                    perfilDefecto.setNombre(nombrePerfil);
+                    
+                    entityManager.persist(perfilDefecto);
+                    
+                    PermisoVentanaService permisoService = new PermisoVentanaService();
+                    List<PermisoVentana> ventanas = new ArrayList<PermisoVentana>();
+                    
+                    for (VentanaEnum ventanaEnum : ventanaList) {
+                        ventanas.add(permisoService.crearPermisoVentanaConTodosPermisoSinTransaccion(perfilDefecto, ventanaEnum.getCodigo(),entityManager));
+                    }
+                    
+                    perfilDefecto.setVentanasPermisos(ventanas);
+                    entityManager.merge(perfilDefecto);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(PerfilService.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         
-        perfilDefecto.setVentanasPermisos(ventanas);
-        entityManager.merge(perfilDefecto);
         
     }
     

@@ -42,12 +42,12 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         super(Cartera.class);
     }
     
-    public BigDecimal getCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer,Integer secuencial)
+    public BigDecimal getCarteraSaldoCeroValorTotal(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer,Integer secuencial,EntityManager em)
     {
-        return (BigDecimal) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.VALOR_TOTAL,diasPorVencer,secuencial).getSingleResult();
+        return (BigDecimal) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.VALOR_TOTAL,diasPorVencer,secuencial,em).getSingleResult();
     }
     
-    public Query getCarteraSaldoCeroAbstract(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,TipoConsultaEnum tipoConsultaEnum,Integer diasPorVencer,Integer secuencial)
+    public Query getCarteraSaldoCeroAbstract(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,TipoConsultaEnum tipoConsultaEnum,Integer diasPorVencer,Integer secuencial,EntityManager em)
     {
         String cliente = "";
         String fecha = "";
@@ -175,7 +175,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         try {
             String queryString = selectStr+" FROM Cartera c WHERE " + cliente + fecha + saldo +whereTipoCarteraVencida+whereDocumento+whereSegundaReferencia+whereSecuencial+whereDocumentos+whereSucursal+" AND c.tipoCartera=?4 AND c.estado=?5  "+orderBy;            
             //System.out.println("QUERY==> "+queryString);
-            Query query = nuevoEntityManager().createQuery(queryString);
+            Query query = em.createQuery(queryString);
             if (persona != null) {
                 query.setParameter(1, persona);
             }
@@ -226,14 +226,14 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }
     }
       
-    public List<Cartera> getCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer,Integer secuencial)
+    public List<Cartera> getCarteraSaldoCero(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer,Integer secuencial,EntityManager em)
     {
-        return getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.DATOS,diasPorVencer,secuencial).getResultList();
+        return getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.DATOS,diasPorVencer,secuencial,em).getResultList();
     }
     
-    public Long getCarteraSaldoCeroTamanio(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer)
+    public Long getCarteraSaldoCeroTamanio(Persona persona,Long segundaReferenciaId, Date fi, Date ff,DocumentoCategoriaEnum categoriaMenuEnum,Cartera.TipoCarteraEnum tipoCartera,Cartera.TipoSaldoCarteraEnum tipoSaldoEnum,Cartera.TipoOrdenamientoEnum tipoOrdenamientoEnum,CarteraEstadoReporteEnum carteraEstadoReporteEnum,Sucursal sucursal,DocumentoEnum documentoEnum,Integer diasPorVencer,EntityManager em)
     {
-        return (Long) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.TAMANIO,diasPorVencer,null).getSingleResult();
+        return (Long) getCarteraSaldoCeroAbstract(persona, segundaReferenciaId, fi, ff, categoriaMenuEnum, tipoCartera, tipoSaldoEnum, tipoOrdenamientoEnum, carteraEstadoReporteEnum, sucursal, documentoEnum, TipoConsultaEnum.TAMANIO,diasPorVencer,null,em).getSingleResult();
     }
     
     private String obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum documentoCategoria,String alias)
@@ -255,13 +255,13 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         //DocumentoCategoriaEnum documentoCategoria
     }
     
-    public List<CarteraCruce> getMovimientoCartera(Persona persona)
+    public List<CarteraCruce> getMovimientoCartera(Persona persona,EntityManager em)
     {
         //CarteraCruce cc;
         //c.getCarteraAfectada().getPersona();
         
         String queryString = "SELECT u FROM CarteraCruce u WHERE u.carteraAfectada.persona=?1 ";
-        Query query = nuevoEntityManager().createQuery(queryString);
+        Query query = em.createQuery(queryString);
         query.setParameter(1, persona);
         return query.getResultList();
         
@@ -354,13 +354,13 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         }
     }
     
-    public List<Cartera> obtenerCarteraPorCobrarFacade(Persona cliente,Empresa empresa)
+    public List<Cartera> obtenerCarteraPorCobrarFacade(Persona cliente,Empresa empresa,EntityManager em)
     {
         /*Cartera c;
         c.getSaldo();*/
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT c FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
-        Query query=nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,cliente);
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
@@ -369,13 +369,13 @@ public class CarteraFacade extends AbstractFacade<Cartera>
     }
     
     //TODO: Unir con el codigo superior
-    public List<Cartera> obtenerCarteraPorCobrarEstudianteFacade(Estudiante estudiante,Empresa empresa)
+    public List<Cartera> obtenerCarteraPorCobrarEstudianteFacade(Estudiante estudiante,Empresa empresa,EntityManager em)
     {
         /*Cartera c;
         c.getSaldo();*/
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT c FROM Cartera c WHERE c.segundaReferenciaId=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
-        Query query=nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,estudiante.getIdEstudiante());
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
@@ -383,7 +383,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         return query.getResultList();
     }
     
-    public BigDecimal obtenerSaldoDisponibleCruzarFacade(Persona cliente,Empresa empresa)
+    public BigDecimal obtenerSaldoDisponibleCruzarFacade(Persona cliente,Empresa empresa,EntityManager em)
     {
         /*Cartera cartera;
         cartera.getCarteraDocumentoEnum().getCategoria().COMPROBANTE_INGRESOS_EGRESOS;
@@ -393,7 +393,7 @@ public class CarteraFacade extends AbstractFacade<Cartera>
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.persona=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
         
-        Query query=nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,cliente);
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);
@@ -402,13 +402,13 @@ public class CarteraFacade extends AbstractFacade<Cartera>
     }
     
     //TODO: Ver si se puede unir el metodo con el de arriba
-    public BigDecimal obtenerSaldoDisponibleCruzarEstudianteFacade(Estudiante estudiante,Empresa empresa)
+    public BigDecimal obtenerSaldoDisponibleCruzarEstudianteFacade(Estudiante estudiante,Empresa empresa,EntityManager em)
     {
         //Cartera cartera;
         //cartera.getSegundaReferenciaId();
         String whereDocumentos=obtenerDocumentosDesdeCategoriaDocumento(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS,"c.codigoDocumento");
         String queryString = "SELECT SUM(c.saldo) FROM Cartera c WHERE c.segundaReferenciaId=?1 and c.estado=?2 and c.sucursal.empresa=?3 and c.saldo>0 and c.tipoCartera=?4 and ( "+whereDocumentos+" )";
-        Query query=nuevoEntityManager().createQuery(queryString);
+        Query query=em.createQuery(queryString);
         query.setParameter(1,estudiante.getIdEstudiante());
         query.setParameter(2,GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(3,empresa);

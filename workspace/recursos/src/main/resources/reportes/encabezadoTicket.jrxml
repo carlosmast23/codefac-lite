@@ -13,6 +13,7 @@
 	<parameter name="pl_razon_social" class="java.lang.String"/>
 	<parameter name="pl_ruc" class="java.lang.String"/>
 	<parameter name="pl_rimpe" class="java.lang.String"/>
+	<parameter name="obligado_contabilidad" class="java.lang.String"/>
 	<title>
 		<band height="93" splitType="Stretch">
 			<textField isBlankWhenNull="true">
@@ -30,7 +31,7 @@
 				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="69" width="160" height="16" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
+				<reportElement x="0" y="76" width="160" height="8" uuid="762323ac-9ad0-48e2-a3ff-8bc176c1b6ea"/>
 				<textElement textAlignment="Center">
 					<font size="6" isItalic="true"/>
 					<paragraph rightIndent="20"/>
@@ -68,6 +69,14 @@
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{pl_rimpe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="70" width="160" height="8" uuid="4475c125-e5c8-4125-9b59-6bfa205d45a8"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true" isItalic="true"/>
+					<paragraph rightIndent="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Obligado a llevar contabilidad: "+$P{obligado_contabilidad}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

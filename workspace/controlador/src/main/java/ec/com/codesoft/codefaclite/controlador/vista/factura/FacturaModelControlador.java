@@ -1997,6 +1997,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             mapParametros.put("numero_orden","# "+facturaProcesando.getNumeroOrden());
             mapParametros.put("tipo_orden",facturaProcesando.getTipoOrden());
             mapParametros.put("subtotal_cero",facturaProcesando.getSubtotalSinImpuestos().toString());
+            mapParametros.put("obligado_contabilidad",EnumSiNo.getEnumByLetra(facturaProcesando.getObligadoLlevarContabilidad())+"");
             
             
             //Poner los valore cuando tenga iva del cinco porcentaje
@@ -2060,8 +2061,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             //Agregar la forma de pago
             if(!UtilidadesLista.verificarListaVaciaONull(facturaProcesando.getFormaPagos()))
             {
-                FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
-                datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
+                for (FormaPago formaPago : facturaProcesando.getFormaPagos()) 
+                {
+                    datoAdicionalList.add(new InformacionAdicional(formaPago.getSriFormaPago().getAlias(),formaPago.getTotal().toString()));  
+                }
+                //FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
+                //datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
             }   
             
             //Agregar dato de la autorizacion si es manual y tiene seteado ese campo en la nota de venta

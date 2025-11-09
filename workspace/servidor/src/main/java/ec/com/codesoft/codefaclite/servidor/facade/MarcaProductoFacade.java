@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import jakarta.persistence.Query;
 
@@ -22,11 +23,11 @@ public class MarcaProductoFacade extends AbstractFacade<MarcaProducto>{
         super(MarcaProducto.class);
     }
     
-    public List<MarcaProducto> obtenerActivosPorEmpresa(Empresa empresa)
+    public List<MarcaProducto> obtenerActivosPorEmpresa(Empresa empresa,EntityManager em)
     {
         
         String queryStr=" SELECT m FROM MarcaProducto m WHERE m.estado=?1 and m.empresa=?2 ORDER BY m.nombre";
-        Query query=nuevoEntityManager().createQuery(queryStr);
+        Query query=em.createQuery(queryStr);
         query.setParameter(1, GeneralEnumEstado.ACTIVO.getEstado());
         query.setParameter(2, empresa);
         return query.getResultList();

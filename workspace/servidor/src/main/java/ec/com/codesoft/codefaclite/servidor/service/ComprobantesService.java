@@ -204,14 +204,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     private void setearClavesAccesoLote(List<ClaveAcceso> listaClaves,Empresa empresa)
     {
         for (ClaveAcceso claveAcceso : listaClaves) 
-        {
-            ComprobanteEntity comprobanteEntity=consultarPorClaveAcceso(claveAcceso, empresa);
-            comprobanteEntity.setClaveAcceso(claveAcceso.clave);
+        {           
             
             try {
                 ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                     @Override
                     public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                        ComprobanteEntity comprobanteEntity=consultarPorClaveAcceso(claveAcceso, empresa,entityManager);
+                        comprobanteEntity.setClaveAcceso(claveAcceso.clave);
                         entityManager.merge(comprobanteEntity);
                     }
                 });
@@ -2666,7 +2666,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobante.setSecuencial(secuencial);
         
         //Validacion para evitar ingresar comprobantes repetidos        
-        validarSecuencialRepetidoComprobante(comprobante,puntoEmision,true);
+        validarSecuencialRepetidoComprobante(comprobante,puntoEmision,true,entityManager);
         
         //GRABAR los datos recien modificados
         entityManager.merge(puntoEmision);
@@ -2798,7 +2798,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
     
-    private ComprobanteEntity consultarPorClaveAcceso(ClaveAcceso claveAcceso,Empresa empresa)
+    private ComprobanteEntity consultarPorClaveAcceso(ClaveAcceso claveAcceso,Empresa empresa,EntityManager em)
     {
         //claveAcceso
         
@@ -2814,7 +2814,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 documentoEnum, 
                 puntoEstablecimiento, 
                 puntoEmision, 
-                secuencial
+                secuencial,
+                em
         );
         
         
@@ -2831,7 +2832,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * @param comprobante
      * @return Boolean retorar true cuando existe un registro y false cuando no existe
      */
-    private void validarSecuencialRepetidoComprobante(ComprobanteEntity comprobante,PuntoEmision puntoEmisionOriginal,Boolean forzarCorregir) throws RemoteException, ServicioCodefacException
+    private void validarSecuencialRepetidoComprobante(ComprobanteEntity comprobante,PuntoEmision puntoEmisionOriginal,Boolean forzarCorregir,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         Empresa empresa=comprobante.getEmpresa();
         DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
@@ -2845,7 +2846,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 documentoEnum, 
                 puntoEstablecimiento, 
                 puntoEmision,
-                secuencial);
+                secuencial,
+                em);
         
         if(resultado.size()>0)
         {
@@ -2860,7 +2862,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                         empresa, 
                         documentoEnum, 
                         puntoEstablecimiento, 
-                        puntoEmision);
+                        puntoEmision,
+                        em);
 
                 //Aumentar secuencial corregido
                 secuencialCorregido++;
@@ -2868,7 +2871,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 puntoEmisionOriginal.setSecuencialPorDocumento(documentoEnum, secuencialCorregido+1);
                 comprobante.setSecuencial(secuencialCorregido);            
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.WARNING, null,"Corregido secuencial "+secuencial+" del Documento +"+documentoEnum.getNombre());
-                validarSecuencialRepetidoComprobante(comprobante, puntoEmisionOriginal, false);
+                validarSecuencialRepetidoComprobante(comprobante, puntoEmisionOriginal, false,em);
             }
             else
             {
@@ -2878,7 +2881,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //return false;
     }
     
-    public Integer getSecuencialUltimo(ComprobanteEntity comprobante) throws RemoteException, ServicioCodefacException
+    public Integer getSecuencialUltimo(ComprobanteEntity comprobante,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         Empresa empresa=comprobante.getEmpresa();
         DocumentoEnum documentoEnum=comprobante.getCodigoDocumentoEnum();
@@ -2891,7 +2894,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 empresa,
                 documentoEnum, 
                 puntoEstablecimiento, 
-                puntoEmision);
+                puntoEmision,
+                em);
         
         if(resultado==0)
         {

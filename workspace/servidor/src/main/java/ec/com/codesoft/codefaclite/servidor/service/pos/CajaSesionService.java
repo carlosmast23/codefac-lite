@@ -23,6 +23,7 @@ import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
                 
                 if(entity.getValorApertura() == null)
                 {
-                    CajaSession cajaSessionUltima = obtenerUltimaCajaSession(entity.getCaja());
+                    CajaSession cajaSessionUltima = obtenerUltimaCajaSession(entity.getCaja(),entityManager);
                     if(cajaSessionUltima == null)
                     {
                         entity.setValorApertura(BigDecimal.ZERO);
@@ -218,7 +219,21 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
 
     @Override
     public CajaSession obtenerUltimaCajaSession(Caja caja) {
-        return this.cajaSesionFacade.obtenerUltimaCajaSession(caja);
+        try {
+            return (CajaSession) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerUltimaCajaSession(caja, entityManager);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public CajaSession obtenerUltimaCajaSession(Caja caja,EntityManager em) {
+        return this.cajaSesionFacade.obtenerUltimaCajaSession(caja,em);
     }
     
     public List<CajaSession> obtenerCajaSessionPorUsuario(Usuario usuario)
@@ -261,31 +276,40 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
         
        
     }
-
+    public CajaSession obtenerCajaSessionPorPuntoEmisionYUsuario(Integer puntoEmision, Usuario usuario,EntityManager em) 
+    {
+        List<CajaSession> resultadoList = getFacade().obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(puntoEmision, usuario, em);
+        if (resultadoList != null && resultadoList.size() > 0) {
+            return resultadoList.get(0);
+        }
+        return null;
+    }
+    
 
     @Override
     public CajaSession obtenerCajaSessionPorPuntoEmisionYUsuario(Integer puntoEmision, Usuario usuario) 
     {
-        /*Map<String, Object> mapParametros = new HashMap<>();
-        mapParametros.put("usuario", usuario);
-        mapParametros.put("caja.puntoEmision.puntoEmision", puntoEmision);
-        mapParametros.put("estadoCierreCaja", CajaSessionEnum.ACTIVO.getEstado());
-        
-        List<CajaSession> cajasSession = getFacade().findByMap(mapParametros);*/
-        
-        
-        List<CajaSession> resultadoList= getFacade().obtenerCajaSessionPorPuntoEmisionYUsuarioFacade(puntoEmision, usuario);
-        if(resultadoList!=null && resultadoList.size()>0)
-        {
-            return resultadoList.get(0);
+
+        try {
+            return (CajaSession) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    return obtenerCajaSessionPorPuntoEmisionYUsuario(puntoEmision, usuario, entityManager);
+                }
+            });
+            
+            
+            
+            /*if(cajasSession.size() > 0)
+            {
+            return cajasSession.get(0);
+            }
+            
+            return null;*/
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-        /*if(cajasSession.size() > 0)
-        {
-            return cajasSession.get(0);
-        }
-        
-        return null;*/
     }
     
     @Override
@@ -349,13 +373,21 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
 
     @Override
     public List<CajaSession> obtenerCajaSessionPorCajaUsuarioYFecha(Caja caja, Usuario usuario, Date fechaInicio, Date fechaFin,CajaEnum estado) throws RemoteException {
-        
-        List<CajaSession> cajasSession = cajaSesionFacade.obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicio, fechaFin,estado);
-        if(cajasSession.size() > 0)
-        {
-            return cajasSession;
-        }        
-        return null;
+        try {
+            return (List<CajaSession>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    List<CajaSession> cajasSession = cajaSesionFacade.obtenerCajaSessionPorCajaUsuarioYFecha(caja, usuario, fechaInicio, fechaFin, estado,entityManager);
+                    if (cajasSession.size() > 0) {
+                        return cajasSession;
+                    }
+                    return null;
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSesionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList();
     }
 
 }
