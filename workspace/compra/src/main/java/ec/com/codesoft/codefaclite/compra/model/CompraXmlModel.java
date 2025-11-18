@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.panel.CompraXmlPanel;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
@@ -24,6 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ProductoProveedorServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.event.ActionEvent;
@@ -67,6 +69,11 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         JMenuItem jMenuItemNuevoProveedor = new JMenuItem("Crear Producto");
         jMenuItemNuevoProveedor.addActionListener(listenerCrearProducto);
         jPopupMenu.add(jMenuItemNuevoProveedor);
+        
+        //MENU PARA EDITAR UN PRODUCTO NUEVO        
+        JMenuItem jMenuItemEditarProveedor = new JMenuItem("Editar Producto");
+        jMenuItemEditarProveedor.addActionListener(listenerEditarProducto);
+        jPopupMenu.add(jMenuItemEditarProveedor);
         
         //MENU PARA CREAR O AGREGAR UN NUEVO LOTE
         JMenuItem jMenuItemNuevoLote = new JMenuItem("Crear Lote");
@@ -168,6 +175,46 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
 
         }
     }
+    
+    private ActionListener listenerEditarProducto=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int fila=getTblDetalles().getSelectedRow();
+            if(fila<0)
+            {
+                return ;
+            }
+            
+            CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
+            
+            if(compraDetalle.getProductoProveedor().getProducto().getIdProducto()==null)
+            {
+                DialogoCodefac.mensaje(new CodefacMsj("No se puede EDITAR un producto que no existe, por favor utilice la opción de CREAR",CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                return;
+            }
+            
+            ObserverUpdateInterface observer = new ObserverUpdateInterface<Producto>() {
+                    @Override
+                    public void updateInterface(Producto entity) {
+                        compraDetalle.getProductoProveedor().setProducto(entity);
+                        if (entity != null) {                            
+                            enlazarProductoTabla(entity, fila);
+                        }
+                    }
+                };
+
+                Object[] parametros={
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                };
+                
+                panelPadre.crearDialogoCodefac(observer, VentanaEnum.PRODUCTO, false,compraDetalle.getProductoProveedor().getProducto(),parametros,formularioActual);
+            
+        }
+    };
     
     private ActionListener listenerCrearProducto=new ActionListener() {
         @Override
@@ -309,8 +356,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     }
 
     public void crearModeloTabla() {
-        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema","Empaque", "Cod Xml", "Descripción compra","Iva","Ice","Cantidad","Precio","Desc","Lote"};
-        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class,String.class, String.class, String.class, String.class,String.class,String.class,String.class,String.class});
+        String titulo[] = new String[]{"Objeto", "Cod Sistema","Nombre Sistema","PvpVenta","Empaque", "Cod Xml", "Descripción compra","Iva","Ice","Cantidad","Precio","Desc","Lote"};
+        DefaultTableModel modelo = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Object.class, String.class, String.class,String.class,String.class, String.class, String.class, String.class,String.class,String.class,String.class,String.class,String.class});
         getTblDetalles().setModel(modelo);
         UtilidadesTablas.definirTamanioColumnas(getTblDetalles(), new Integer[]{0});
     }
@@ -323,6 +370,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
 
                 String codigoSistema="";
                 String nombreProductoSistema="";
+                String pvpVentaSistema="";
                 String codigoProveedor="";
                 String ivaPorcentaje=value.getIvaPorcentaje()+"";
                 String nombrePresentacion=value.getProductoProveedor().getProducto().obtenerNombrePresentacion();
@@ -331,6 +379,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                 {
                     codigoSistema=value.getProductoProveedor().getProducto().getCodigoPersonalizado();
                     nombreProductoSistema=value.getProductoProveedor().getProducto().getNombre();
+                    pvpVentaSistema=value.getProductoProveedor().getProducto().getValorUnitarioDefectoFormat()+"";
                     
                 }
                 
@@ -347,7 +396,8 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
                     value,
                     codigoSistema,
                     nombreProductoSistema,
-                    nombrePresentacion,
+                    pvpVentaSistema,
+                    nombrePresentacion,                    
                     value.getCodigoProveedor(),
                     value.getDescripcion(),
                     ivaPorcentaje,

@@ -84,7 +84,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
-import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadResult;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ComprobanteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.FacturacionServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
@@ -2122,7 +2122,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     public void agregarDatosParaCajaSession(ComprobanteVentaNotaCreditoAbstract factura,SignoEnum signoEnum,EntityManager em) throws ServicioCodefacException, RemoteException
     {
         //TODO Esta validación la realizo porque no existe una variable global que me permita saber si se realiza POS
-        List<CajaPermiso> cajasPermisosList = cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario());
+        List<CajaPermiso> cajasPermisosList = cajaPermisoService.buscarPermisosCajasActivos(factura.getUsuario(),em);
         //List<CajaPermiso> cajasPermisosList=factura.getUsuario().buscarPermisosCajasActivosService();
         if (cajasPermisosList != null && !cajasPermisosList.isEmpty()) {
 
@@ -2135,7 +2135,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         Usuario usuario = factura.getUsuario();
         
-        List<CajaPermiso> cajaPermisoList=cajaPermisoService.buscarPermisosCajasActivos(usuario);
+        List<CajaPermiso> cajaPermisoList=cajaPermisoService.buscarPermisosCajasActivos(usuario,em);
         //List<CajaPermiso> cajaPermisoList= usuario.buscarPermisosCajasActivosService();
         
         //Verifico si el usuario tiene cajas con permisos para el método POS
@@ -2150,7 +2150,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
         
         //TODO: Este artificio solo es temporal por que esta referencia no se esta actualizando de forma automatica y toca cerrar y abrir el sistema para que se actualice
-        List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuarioYSucursal(usuario,factura.getSucursalEmpresa());
+        List<CajaSession> cajasSessionUsuarioList=cajaSesionService.obtenerCajaSessionPorUsuarioYSucursal(usuario,factura.getSucursalEmpresa(),em);
         if(cajasSessionUsuarioList.isEmpty())
         {            
             throw new ServicioCodefacException("No esta activa una CAJA para el usuario: "+usuario.getNick());

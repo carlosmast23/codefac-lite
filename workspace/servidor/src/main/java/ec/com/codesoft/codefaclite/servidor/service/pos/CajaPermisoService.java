@@ -59,22 +59,22 @@ public class CajaPermisoService extends ServiceAbstract<CajaPermiso, CajaPermiso
         return puntoEmisionList;
     }
     
+    public List<CajaPermiso> buscarPermisosCajasActivos(Usuario usuario,EntityManager em) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("usuario", usuario);
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        return getFacade().findByMap(mapParametros, em);
+    }
+    
     public List<CajaPermiso> buscarPermisosCajasActivos(Usuario usuario) throws ServicioCodefacException,java.rmi.RemoteException
     {
             return (List<CajaPermiso>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
             public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                //CajaPermiso cajaPermiso;
-                //cajaPermiso.getUsuario();
-                //cajaPermiso.getEstado();
-                Map<String, Object> mapParametros = new HashMap<String, Object>();
-                mapParametros.put("usuario", usuario);
-                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                return getFacade().findByMap(mapParametros,entityManager);
+                return buscarPermisosCajasActivos(usuario, entityManager);
             }
         });
-        
-
     }
     
     /**

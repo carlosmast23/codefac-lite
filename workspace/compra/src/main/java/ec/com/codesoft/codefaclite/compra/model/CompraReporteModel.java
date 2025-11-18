@@ -7,7 +7,7 @@ package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.panel.CompraReportePanel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
@@ -18,7 +18,7 @@ import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.CompraAgrupad
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.CompraDataReporte;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProveedorBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteCompra;
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;

@@ -5,9 +5,9 @@
  */
 package ec.com.codesoft.codefaclite.inventario.data;
 
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
-import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import java.util.ArrayList;
 import java.util.List;
 

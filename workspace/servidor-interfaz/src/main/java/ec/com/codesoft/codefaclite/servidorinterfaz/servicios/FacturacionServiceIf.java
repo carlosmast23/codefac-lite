@@ -29,7 +29,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
-import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.rmi.Remote;

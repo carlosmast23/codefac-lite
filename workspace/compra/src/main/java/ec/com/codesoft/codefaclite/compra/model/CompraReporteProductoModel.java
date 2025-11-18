@@ -446,10 +446,15 @@ public class CompraReporteProductoModel  extends CompraReporteProductoPanel
             List<ProductoProveedor> productoProveedors = entry.getValue();
             for (ProductoProveedor productoProveedor : productoProveedors) 
             {
+                String costo="0";
+                if(productoProveedor.getCosto()!=null)
+                {
+                    costo=productoProveedor.getCosto().toString();
+                }
                 titulo = new Vector<>();
                 titulo.add("");
                 titulo.add("" + productoProveedor.getProducto().getNombre());
-                titulo.add("" + productoProveedor.getCosto().toString());
+                titulo.add(costo);
                 titulo.add("" + productoProveedor.getProducto().getCatalogoProducto().getIva().getTarifa());
                 defaultTableModel.addRow(titulo);
             }            

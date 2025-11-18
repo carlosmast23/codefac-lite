@@ -25,7 +25,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoConsultaEnum;
-import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadResult;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import es.mityc.firmaJava.libreria.utilidades.Utilidades;
 import jakarta.persistence.EntityManager;

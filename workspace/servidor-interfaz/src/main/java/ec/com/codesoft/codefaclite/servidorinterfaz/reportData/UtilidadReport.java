@@ -5,15 +5,19 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.reportData;
 
-import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+
+
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
  *
  * @author CARLOS_CODESOFT
  */
-public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
+public class UtilidadReport extends ReportDataAbstract<UtilidadResult> 
 {
 
     public UtilidadReport(String tituloReporte) {
@@ -54,7 +58,6 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         sumarTotal(DatoEnum.UTILIDAD,dato.getUtilidad());
         
     }
-    
         
     public enum DatoEnum implements DataReportIf
     {

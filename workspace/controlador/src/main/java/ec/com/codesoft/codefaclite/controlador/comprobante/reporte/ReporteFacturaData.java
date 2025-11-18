@@ -6,9 +6,9 @@
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
 import ec.com.codesoft.codefaclite.controlador.comprobante.reporte.ControladorReporteFactura.TipoReporteEnum;
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
-import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.NombreCampoAgrupadoIf;

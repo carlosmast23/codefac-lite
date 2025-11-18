@@ -7,14 +7,14 @@ package ec.com.codesoft.codefaclite.facturacion.model;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
-import ec.com.codesoft.codefaclite.servidorinterfaz.result.UtilidadResult;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadResult;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
@@ -150,7 +150,9 @@ public class UtilidadReporteModel extends FacturaReporteModel
                     try {
                         Excel excel = new Excel();
                         String[] titulos={"Código","Bodega","Lote","Nombre Producto","Fecha Vencimiento","Stock","Valor Unitario"};
-                        excel.gestionarIngresoInformacionExcel(titulos, new ArrayList());
+                        //excel.gestionarIngresoInformacionExcel(utilidadReport.getTitulos(),utilidadReport.getDetalleList());
+                        //excel.gestionarIngresoInformacionExcel(titulos, new ArrayList());
+                        excel.gestionarIngresoInformacionExcel(utilidadReport);
                         
                         excel.abrirDocumento();
                     } catch (Exception exc) {

@@ -8,7 +8,7 @@ package ec.com.codesoft.codefaclite.inventario.model;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogoFactory;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
-import ec.com.codesoft.codefaclite.controlador.excel.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
 //import ec.com.codesoft.codefaclite.controlador.mensajes.CodefacMsj;
 //import ec.com.codesoft.codefaclite.controlador.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;

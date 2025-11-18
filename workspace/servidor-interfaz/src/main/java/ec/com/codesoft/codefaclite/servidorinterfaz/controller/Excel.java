@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ec.com.codesoft.codefaclite.controlador.excel;
+package ec.com.codesoft.codefaclite.servidorinterfaz.controller;
 
-import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.awt.Desktop;
@@ -69,9 +70,14 @@ public class Excel<T>
         //this.archivo = "\\tmp\\"+nombreArchivoExcel+".xlsx";
         this.archivo = "tmp\\"+nombreArchivoExcel;
     }
+    public void gestionarIngresoInformacionExcel(ReportDataAbstract reportAbstract) throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException
+    {
+        gestionarIngresoInformacionExcel(reportAbstract.getTitulos(),reportAbstract.getDetalleList());
+    }
+    
     
     public void gestionarIngresoInformacionExcel(String[] cabeceraDatosDinamicos, List<ExcelDatosInterface> datosDinamicos) throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException
-    {
+    {        
         Map<String, CellStyle> obtenerEstilo = crearEstilos(libro);
         int numeroDatos = cabeceraDatosDinamicos.length;
         

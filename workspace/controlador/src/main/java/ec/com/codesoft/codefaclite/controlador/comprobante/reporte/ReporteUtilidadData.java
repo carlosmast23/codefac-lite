@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.controlador.comprobante.reporte;
 
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
-import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
 import java.util.List;
 

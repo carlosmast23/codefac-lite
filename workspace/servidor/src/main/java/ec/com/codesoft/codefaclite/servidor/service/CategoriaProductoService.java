@@ -79,7 +79,7 @@ public class CategoriaProductoService extends ServiceAbstract<CategoriaProducto,
     public List<CategoriaProducto> obtenerTodosPorEmpresa(Empresa empresa) throws java.rmi.RemoteException
     {
         try {
-            ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            return (List<CategoriaProducto>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
                 @Override
                 public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();

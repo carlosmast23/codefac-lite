@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package ec.com.codesoft.codefaclite.servidorinterfaz.result;
+package ec.com.codesoft.codefaclite.servidorinterfaz.reportData;
 
+
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
+import ec.com.codesoft.codefaclite.servidorinterfaz.result.AbstractResult;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,12 +17,14 @@ import java.sql.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author DellWin10
  */
-public class UtilidadResult extends AbstractResult{
+public class UtilidadResult extends AbstractResult implements ExcelDatosInterface{
     
     public Long facturaDetalleId;
     
@@ -159,6 +166,22 @@ public class UtilidadResult extends AbstractResult{
 
     public void setFacturaDetalleId(Long facturaDetalleId) {
         this.facturaDetalleId = facturaDetalleId;
+    }
+
+    @Override
+    public List<TipoDato> getDatos() {
+         List<TipoDato> tiposDatos = new ArrayList<>();
+        tiposDatos.add(new TipoDato("",Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.secuencial,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.fechaEmisionStr,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.razonSocial,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.nombreProducto,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.subtotal,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.costo,Excel.TipoDataEnum.NUMERO));
+        tiposDatos.add(new TipoDato(this.utilidad,Excel.TipoDataEnum.NUMERO));
+        return tiposDatos;
+        
     }
     
     

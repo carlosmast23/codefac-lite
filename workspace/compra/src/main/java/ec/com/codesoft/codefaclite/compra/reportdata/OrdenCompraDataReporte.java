@@ -5,8 +5,8 @@
  */
 package ec.com.codesoft.codefaclite.compra.reportdata;
 
-import ec.com.codesoft.codefaclite.controlador.excel.ExcelDatosInterface;
-import ec.com.codesoft.codefaclite.controlador.excel.TipoDato;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import java.util.List;
 
 /**

@@ -122,7 +122,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             return null;
         }
         
-        try {
+        /*try {
             return (Entity) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
                 public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
@@ -131,8 +131,9 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             });
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ServiceAbstract.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        }*/
+        return facade.find(primaryKey,entityManager);
+        //return null;
         
     }
     
