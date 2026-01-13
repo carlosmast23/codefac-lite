@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="180" pageHeight="400" columnWidth="170" leftMargin="5" rightMargin="5" topMargin="10" bottomMargin="10" isIgnorePagination="true" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.8481237518744824"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="501"/>
+	<property name="ireport.y" value="0"/>
 	<style name="style1">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -46,8 +46,8 @@
 	<parameter name="fecha_cierre" class="java.lang.String"/>
 	<parameter name="fecha_apertura" class="java.lang.String"/>
 	<parameter name="valor_apertura" class="java.lang.String"/>
-	<parameter name="valor_cierre_teorico" class="java.lang.String"/>
-	<parameter name="valor_ciere_practico" class="java.lang.String"/>
+	<parameter name="valor_ciere_teorico" class="java.lang.String"/>
+	<parameter name="valor_cierre_practico" class="java.lang.String"/>
 	<parameter name="observacion" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
@@ -226,7 +226,7 @@
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{valor_cierre_teorico}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{valor_ciere_teorico}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="2" y="50" width="155" height="12" uuid="12e07238-470a-46ff-add1-fb128f3e9d49"/>
@@ -265,7 +265,7 @@
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{valor_ciere_practico}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{valor_cierre_practico}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="2" y="14" width="154" height="12" uuid="5e5d3862-0589-4130-8a70-c01b5c62b0e6"/>
@@ -317,7 +317,7 @@
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_teorico}).subtract(new BigDecimal($P{valor_ciere_practico}))+""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).subtract(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

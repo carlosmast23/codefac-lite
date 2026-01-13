@@ -508,23 +508,8 @@ public class UtilidadesService extends ServiceAbstract<Object,UtilidadFacade> im
                 return true;
             }
             else //Si existe diferencias con la otra licencia lanza el dialogo para actualizar la licencia
-            {                
-                
+            {                                
                 throw new ServicioCodefacException("Su licencia esta desactualizada o es incorrecta. \n Por favor actualice su licencia para continuar");
-                /*ValidarLicenciaModel licenciaDialog = new ValidarLicenciaModel(null, true, true);
-                licenciaDialog.setValidacionLicenciaCodefac(validacion);
-                if (validacion.verificarConexionInternet()) {
-                    licenciaDialog.setVisible(true);
-                    if (licenciaDialog.licenciaCreada) {
-                        return comprobarLicencia(validacion.getPath()); //volver a verificar la licencia
-                    } else {
-                        return false;
-                    }
-                } else {
-                    DialogoCodefac.mensaje("Error", "Para activar su producto conéctese a Internet", DialogoCodefac.MENSAJE_INCORRECTO);
-                    return false;
-                }*/
-
             }            
 
     }

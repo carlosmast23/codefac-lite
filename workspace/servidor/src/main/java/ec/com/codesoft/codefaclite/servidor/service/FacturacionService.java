@@ -1420,7 +1420,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     private void afectarOrdenTrabajo(FacturaDetalle facturaDetalle,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
-        ReferenciaDetalleFacturaRespuesta respuesta= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerReferenciaDetalleFactura(TipoDocumentoEnum.ORDEN_TRABAJO, facturaDetalle.getReferenciaId(),entityManager);
+        ReferenciaDetalleFacturaRespuesta respuesta= obtenerReferenciaDetalleFactura(TipoDocumentoEnum.ORDEN_TRABAJO, facturaDetalle.getReferenciaId(),entityManager);
         OrdenTrabajo ordenTrabajo=(OrdenTrabajo) respuesta.objecto;
         ordenTrabajo.setEstadoEnum(OrdenTrabajo.EstadoEnum.FACTURADO);
         entityManager.merge(ordenTrabajo);

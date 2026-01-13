@@ -6,7 +6,9 @@
 package ec.com.codesoft.codefaclite.compra.model;
 
 import ec.com.codesoft.codefaclite.compra.panel.CompraXmlPanel;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.LoteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoComponenteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.vistas.core.components.ITableBindingAddData;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -21,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -79,6 +82,11 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         JMenuItem jMenuItemNuevoLote = new JMenuItem("Crear Lote");
         jMenuItemNuevoLote.addActionListener(listenerCrearLote);
         jPopupMenu.add(jMenuItemNuevoLote);
+        
+        //MENU PARA EDITAR UN LOTE
+        JMenuItem jMenuItemEditarLote = new JMenuItem("Buscar Lote");
+        jMenuItemEditarLote.addActionListener(listenerBuscarLote);
+        jPopupMenu.add(jMenuItemEditarLote);
         //jMenuItemNuevoLote.addActionListener();
                 
         
@@ -87,6 +95,35 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
         
         
     }
+    
+    private ActionListener listenerBuscarLote=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            int fila=getTblDetalles().getSelectedRow();
+            if(fila<0)
+            {
+                return ;
+            }
+            
+            CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
+            
+            LoteBusqueda loteBusqueda= new LoteBusqueda(session.getEmpresa(),compraDetalle.getProductoProveedor().getProducto());            
+            InterfaceModelFind busquedaInterface=new ProductoComponenteBusqueda();
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(loteBusqueda);
+            buscarDialogoModel.setVisible(true);
+            
+            Lote lote = (Lote) buscarDialogoModel.getResultado();
+            if(lote!=null)
+            {
+                
+                compraDetalle.setLote(lote);
+                actualizarBindingCompontValues();
+           }
+            
+            
+        }
+    };
     
     private ActionListener listenerCrearLote=new ActionListener() {
         @Override

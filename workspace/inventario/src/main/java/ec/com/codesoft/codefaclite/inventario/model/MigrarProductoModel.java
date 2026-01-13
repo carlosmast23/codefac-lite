@@ -115,6 +115,10 @@ public class MigrarProductoModel extends MigrarModel {
                     
                     //Obtener datos iniciales del inventario que necesito
                     String manejaInventario=(String) fila.getByEnum(ExcelMigrarProductos.Enum.MANEJA_INVENTARIO).valor;
+                    if(UtilidadesTextos.verificarNullOVacio(manejaInventario))
+                    {
+                        throw new ExcelMigrar.ExcepcionExcelRegistroDuplicado("No tiene ingresado una opción para maneja inventario");
+                    }
                     EnumSiNo manejaInventarioEnumSiNo=EnumSiNo.getEnumByLetra(manejaInventario.substring(0,1));
                     
                     Double stockMinimo=0d;

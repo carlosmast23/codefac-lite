@@ -114,7 +114,8 @@ public class CerrarCajaModel extends CajaSessionModel
             @Override
             public void internalFrameActivated(InternalFrameEvent e) {
                 System.out.println("estado formulario: "+estadoFormulario);
-                controlador.limpiar();
+                controlador.limpiarSinFormatear(); //TODO:Mejorar esa parte
+                actualizarBindingCompontValues();
             }
 
             @Override
@@ -192,8 +193,8 @@ public class CerrarCajaModel extends CajaSessionModel
         parametros.put("fecha_apertura", fechaAperturaStr);
         parametros.put("fecha_cierre", fechaCierreStr);
         parametros.put("valor_apertura", cajaSession.getValorApertura()+"");
-        parametros.put("valor_cierre_teorico", totalVentas+"");
-        parametros.put("valor_ciere_practico", cajaSession.getValorCierreReal()+"");
+        parametros.put("valor_ciere_teorico", totalVentas+"");
+        parametros.put("valor_cierre_practico", cajaSession.getValorCierreReal()+"");
         parametros.put("observacion", cajaSession.getObservacionCierreCaja());
         
         parametros.put("1ctv", cajaSession.getMoneda1ctv()+"");

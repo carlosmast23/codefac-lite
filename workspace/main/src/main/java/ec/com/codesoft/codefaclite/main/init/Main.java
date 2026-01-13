@@ -312,6 +312,15 @@ public class Main {
             if (usuarioDb != null || claveDb != null) { //TODO: hacer una validacion tambien cuando falte alguno de los datos por algun motivo anormal
                 AbstractFacade.usuarioDb = usuarioDb;
                 AbstractFacade.claveDb = claveDb;
+                
+                //Verificar que no exista problemas con la base de datos
+                try {
+                    UtilidadSql.conectarBaseDatos(usuarioDb, claveDb);
+                } catch (Exception ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    System.exit(0);
+                }
             }
         } else {
             DialogoCodefac.mensaje("Alerta", "No se puede actualizar la base de datos , error en las credenciales", DialogoCodefac.MENSAJE_ADVERTENCIA);
@@ -321,6 +330,8 @@ public class Main {
     //Funcion que verifica si se instalo una nueva version y ejecuta los scripts para actualizar la base de datos
     private static void verificarActualizacionBaseDatosVersion()
     {   
+        //Verificar conexion con la base de datos que no tenga problema
+        
         PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
         //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
         String modoAplicativo = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_MODO_APLICATIVO);
@@ -386,7 +397,8 @@ public class Main {
         LOG.log(Level.INFO," Terminando verificarActualizacionBaseDatosVersion");
         
     }
-
+    
+    
     private static void grabarVersionNueva()
     {
         String versionGrabadaBd=consultarUltimaVersionBd();

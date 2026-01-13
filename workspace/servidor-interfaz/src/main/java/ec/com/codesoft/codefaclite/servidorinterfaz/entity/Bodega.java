@@ -134,7 +134,10 @@ public class Bodega implements Serializable {
     }
 
     public void setTipoBodegaEnum(TipoBodegaEnum tipoBodegaEnum) {
-        this.tipoBodega = tipoBodegaEnum.getLetra();
+        if(tipoBodegaEnum!=null)
+        {
+            this.tipoBodega = tipoBodegaEnum.getLetra();
+        }
     }
 
     public Sucursal getSucursal() {

@@ -232,7 +232,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * TODO: Este metodo solo es temporal hasta solucionar un problema con el reporte de factura con costos
      * @param producto
      * @return
-     * @throws java.rmi.RemoteException 
+     * @throws java.rmi.RemoteException  
      */
    public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException
     {

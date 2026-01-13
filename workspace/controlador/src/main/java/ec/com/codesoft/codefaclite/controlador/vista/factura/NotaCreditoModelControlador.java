@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
@@ -254,7 +255,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
     }
     private void setearValoresNotaCredito()
     {
-        NotaCredito notaCredito=interfaz.obtenerNotaCredito();
+        NotaCredito notaCredito =interfaz.obtenerNotaCredito();
         notaCredito.setEmpresa(session.getEmpresa());
         //notaCredito.setEstado(Factura.ESTADO_FACTURADO);
         notaCredito.setFechaCreacion(UtilidadesFecha.castDateToTimeStamp(UtilidadesFecha.getFechaHoy()));
@@ -286,6 +287,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         notaCredito.setDireccionMatriz(session.getMatriz().getDirecccion());
         notaCredito.setUsuario(session.getUsuario());
         notaCredito.setSucursalEmpresa(session.getSucursal());
+        notaCredito.setSriFormaPago(interfaz.obtenerSriFormaPago());
         
         Persona.TipoIdentificacionEnum tipoIdentificacionEnum = notaCredito.getCliente().getTipoIdentificacionEnum();
         String codigoSri = "";
@@ -382,6 +384,7 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         public Date obtenerCmbFechaCompra();
         public Date obtenerDateFechaEmision();
         public TipoDocumentoEnum obtenerCmbTipoDocumento();
+        public SriFormaPago obtenerSriFormaPago();
         public String obtenerTxtMotivoAnulacion();
         public String obtenerTxtPreimpresoProveedor();
         public PuntoEmision obtenerPuntoEmisionSeleccionado();

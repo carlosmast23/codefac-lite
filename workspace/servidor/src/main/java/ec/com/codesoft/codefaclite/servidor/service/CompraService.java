@@ -91,6 +91,8 @@ import java.util.logging.Logger;
 public class CompraService extends ServiceAbstract<Compra,CompraFacade> implements CompraServiceIf{
     
     private RetencionService retencionService = new RetencionService();
+    private CompraFacturaReembolsoService compraFacturaReembolsoService= new CompraFacturaReembolsoService();
+    private CompraDetalleService compraDetalleService=new CompraDetalleService();
     CompraFacade compraFacade;
     CompraDetalleFacade compraDetalleFacade;
     
@@ -630,7 +632,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
     
     private void eliminarDetallesCompra(Compra compra,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
-        List<CompraDetalle> detalles=ServiceFactory.getFactory().getCompraDetalleServiceIf().buscarPorCompra(compra,entityManager);
+        List<CompraDetalle> detalles=compraDetalleService.buscarPorCompra(compra,entityManager);
         List<CompraDetalle> detallesCompraActual=compra.getDetalles();
         
         List<CompraDetalle> detallesEliminar=new ArrayList<CompraDetalle>();
@@ -660,7 +662,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 
         if(compra.getFacturaReembolsoList()!=null)
         {            
-            List<CompraFacturaReembolso> reembolsosOriginales =ServiceFactory.getFactory().getCompraFacturaReembolsoServiceIf().buscarPorCompra(compra,em);
+            List<CompraFacturaReembolso> reembolsosOriginales =compraFacturaReembolsoService.buscarPorCompra(compra,em);
             List<CompraFacturaReembolso> reembolsoList=compra.getFacturaReembolsoList();
             
             for (CompraFacturaReembolso reembolsoOriginal : reembolsosOriginales) {

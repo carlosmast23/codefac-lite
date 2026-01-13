@@ -86,4 +86,18 @@ public class UtilidadBigDecimal {
         return datoOriginal.add(BigDecimal.ZERO);
     }
     
+    public static boolean validarDistintoCeroOVacio(BigDecimal valor) {
+        // 1. Verificar que NO sea null
+        if (valor == null) {
+            return false;
+        }
+
+        // 2. Verificar que sea distinto de cero
+        if (valor.compareTo(BigDecimal.ZERO) == 0) {
+            return false;
+        }
+
+        // Si pasa ambas validaciones, es válido
+        return true;
+    }
 }

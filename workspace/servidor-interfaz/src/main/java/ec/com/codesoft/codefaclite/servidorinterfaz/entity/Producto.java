@@ -859,7 +859,13 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             return null; // o un default como EnumSiNo.NO
         }
         
-        return EnumSiNo.valueOf(actualizarPrecio);
+        try {
+            return EnumSiNo.valueOf(actualizarPrecio.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            Logger.getLogger(Producto.class.getName())
+                    .log(Level.WARNING, "Valor inválido en actualizarPrecio: " + actualizarPrecio, e);
+            return null; // o un valor por defecto
+        }
     }
 
     public void setActualizarPrecioEnum(EnumSiNo actualizarPrecioEnum) {
@@ -1096,7 +1102,10 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     }
 
     public void setPsicotropicoEnum(EnumSiNo psicotropicoEnum) {
-        this.psicotropico = psicotropicoEnum.getLetra();
+        if(psicotropicoEnum!=null)              
+            this.psicotropico = psicotropicoEnum.getLetra();
+        else
+            this.psicotropico =null;
     }
     
     
@@ -1181,6 +1190,7 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     {
         if(valorUnitario==null || valorUnitario.compareTo(BigDecimal.ZERO)==0)
         {
+            valorUnitario=BigDecimal.ZERO;
             return valorUnitario;
         }
         

@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.SQLNonTransientConnectionException;
 
 /**
  *
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class UtilidadSql {
     
-    public static Connection conectarBaseDatos(String usuario,String clave)
+    public static Connection conectarBaseDatos(String usuario,String clave) throws Exception
     {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -27,7 +28,22 @@ public class UtilidadSql {
             Connection conn = DriverManager.getConnection("jdbc:derby:Derby2.DB;databaseName=codefac;user=" + usuario + ";password=" + clave);
             //Statement s = conn.createStatement();
             return conn;
-        } catch (ClassNotFoundException ex) {
+            
+        } 
+        catch (SQLNonTransientConnectionException ex)
+        {
+            if (esCredencialInvalida(ex)) {
+                String msjError="Credenciales incorrectas (usuario/clave inválidos) base de datos";
+                Logger.getLogger(UtilidadSql.class.getName())
+                        .log(Level.WARNING, msjError, ex);
+                //Si es un error tan grave doy por terminado el sistema de forma abructa
+                throw new Exception(msjError);
+            }
+
+            Logger.getLogger(UtilidadSql.class.getName())
+                    .log(Level.SEVERE, "Fallo de conexión no transitorio.", ex);
+        }
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,6 +73,8 @@ public class UtilidadSql {
             conn.close();            
         } catch (SQLException ex) {
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (Exception ex) {
+            Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }
         return resultado;
     }
@@ -79,6 +97,9 @@ public class UtilidadSql {
         } catch (SQLException ex) {
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }
+        catch (Exception ex) {
+            Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return filasAfectadas;
     }
     
@@ -97,6 +118,18 @@ public class UtilidadSql {
         }
     
         return queryModificado;
+    }
+    
+    private static boolean esCredencialInvalida(SQLException ex) {
+        // Recorre la cadena de excepciones por si viene anidada
+        for (Throwable t = ex; t != null; t = (t instanceof SQLException) ? ((SQLException) t).getNextException() : null) {
+            if (t instanceof SQLException) {
+                String state = ((SQLException) t).getSQLState();
+                // 08004 = connection rejected (muy común en auth failure en Derby)
+                if ("08004".equals(state)) return true;
+            }
+        }
+        return false;
     }
     
 }

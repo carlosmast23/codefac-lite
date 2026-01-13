@@ -804,6 +804,11 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public SriFormaPago obtenerSriFormaPago() {
+        return null;
+    }
+
 
     public enum TipoPaginaEnum {  
         FACTURA("Factura", "factura"),

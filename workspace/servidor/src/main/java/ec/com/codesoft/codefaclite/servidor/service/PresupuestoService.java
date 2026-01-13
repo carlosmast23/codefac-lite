@@ -68,6 +68,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
 {
     private PresupuestoFacade presupuestoFacade;
     private PresupuestoDetalleService presupuestoDetalleService=new PresupuestoDetalleService();
+    private KardexService kardexService=new KardexService();
 
     public PresupuestoService() throws RemoteException 
     {
@@ -243,7 +244,7 @@ public class PresupuestoService extends ServiceAbstract<Presupuesto, Presupuesto
                 }
                 
                 entity.setPresupuestoDetalles(presupuestoDetalleList);
-                ServiceFactory.getFactory().getKardexServiceIf().grabarProductosReservadosSinTransaccion(entity,entityManager);
+                kardexService.grabarProductosReservadosSinTransaccion(entity,entityManager);
                 
                 entityManager.persist(entity);
                 entityManager.flush();

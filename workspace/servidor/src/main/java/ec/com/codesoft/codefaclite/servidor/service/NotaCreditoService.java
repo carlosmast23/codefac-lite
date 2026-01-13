@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Constrain
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoDetalleFacade;
 import ec.com.codesoft.codefaclite.servidor.facade.NotaCreditoFacade;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraService;
+import ec.com.codesoft.codefaclite.servidor.service.gestionAcademica.RubroEstudianteService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
@@ -58,10 +59,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoFacade> implements NotaCreditoServiceIf
 {
 
-    NotaCreditoFacade notaCreditoFacade;
-    NotaCreditoDetalleFacade notaCreditoDetalleFacade;
-    ParametroCodefacService parametroCodefacService;
-    PresupuestoService presupuestoService;
+    private NotaCreditoFacade notaCreditoFacade;
+    private NotaCreditoDetalleFacade notaCreditoDetalleFacade;
+    private ParametroCodefacService parametroCodefacService;
+    private PresupuestoService presupuestoService;
+    private RubroEstudianteService rubroEstudianteService;
 
     public NotaCreditoService() throws RemoteException {
         super(NotaCreditoFacade.class);
@@ -69,6 +71,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
         this.notaCreditoDetalleFacade = new NotaCreditoDetalleFacade();
         this.presupuestoService=new PresupuestoService();
         parametroCodefacService = new ParametroCodefacService();
+        this.rubroEstudianteService=new RubroEstudianteService();
     }
     
     private void validarSaldoDisponibleNotaCredito(NotaCredito notaCredito,EntityManager em) throws ServicioCodefacException
@@ -235,8 +238,8 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
     }
     
     private void anularRubroEstudiante(Long referenciaId,BigDecimal total,EntityManager entityManager) throws RemoteException
-    {
-        RubroEstudiante rubroEstudiante = ServiceFactory.getFactory().getRubroEstudianteServiceIf().buscarPorId(referenciaId,entityManager);
+    {        
+        RubroEstudiante rubroEstudiante = rubroEstudianteService.buscarPorId(referenciaId,entityManager);
         rubroEstudiante.setEstadoFactura(RubroEstudiante.FacturacionEstadoEnum.SIN_FACTURAR.getLetra());
         rubroEstudiante.setSaldo(rubroEstudiante.getSaldo().add(total));
         entityManager.merge(rubroEstudiante);

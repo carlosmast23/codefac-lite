@@ -30,6 +30,7 @@ import jakarta.persistence.Table;
 @Table(name = "EMPRESA")
 public class Empresa implements Serializable {
 
+    public static final String LEYENDA_REGIMEN_GENERAL="CONTRIBUYENTE REGIMEN GENERAL";
     public static final String LEYENDA_RIMPE="CONTRIBUYENTE RÉGIMEN RIMPE";
     public static final String NO_LLEVA_CONTABILIDAD = "NO";
     public static final String SI_LLEVA_CONTABILIDAD = "SI";
@@ -188,6 +189,19 @@ public class Empresa implements Serializable {
     public void setContribuyenteEspecial(String contribuyenteEspecial) {
         this.contribuyenteEspecial = contribuyenteEspecial;
     }
+    
+    public String getContribuyenteEspecialTexto() 
+    {
+        String leyendaRegimen=LEYENDA_REGIMEN_GENERAL;
+        if(!UtilidadesTextos.verificarNullOVacio(contribuyenteEspecial))
+        {
+            leyendaRegimen="";
+        }
+        
+        return leyendaRegimen;
+    }
+    
+    
 
     public String getImagenLogoPath() {
         return imagenLogoPath;
@@ -372,6 +386,13 @@ public class Empresa implements Serializable {
         {
             leyenda=LEYENDA_RIMPE;
         }
+        
+        //TODO: SI no es rimpre por omisión es regimen popular
+        if(UtilidadesTextos.verificarNullOVacio(leyenda))
+        {
+            leyenda=LEYENDA_REGIMEN_GENERAL;
+        }
+        
         return leyenda;
     }
     

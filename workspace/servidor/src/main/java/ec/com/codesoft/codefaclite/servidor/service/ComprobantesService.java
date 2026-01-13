@@ -2212,7 +2212,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         //voy a definir que tipo de regimen pertenece
-        String leyendaRegimen="CONTRIBUYENTE REGIMEN GENERAL";
+        /*String leyendaRegimen="CONTRIBUYENTE REGIMEN GENERAL";
         if(empresa.getRimpeEmprendedoresEnum()!=null || empresa.getRimpeNegociosPopularesEnum()!=null)
         {
             if(empresa.getRimpeEmprendedoresEnum().equals(EnumSiNo.SI))
@@ -2231,11 +2231,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         if(!UtilidadesTextos.verificarNullOVacio(empresa.getContribuyenteEspecial()))
         {
             leyendaRegimen="";
-        }
+        }*/
         
-        
-        
-        parametros.put("tipoRegimen", leyendaRegimen);
+        parametros.put("tipoRegimen", empresa.obtenerLeyendaRimpe());
         
 
         InputStream input=null;

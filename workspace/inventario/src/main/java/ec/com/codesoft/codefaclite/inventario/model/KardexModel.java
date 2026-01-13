@@ -299,7 +299,7 @@ public class KardexModel extends KardexPanel {
     private ActionListener listenerBuscarLote=new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            LoteBusqueda busqueda=new LoteBusqueda(session.getEmpresa(),productoSeleccionado);
+            LoteBusqueda busqueda=new LoteBusqueda(productoSeleccionado);
             BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(busqueda);            
             buscarDialogo.setVisible(true);
 

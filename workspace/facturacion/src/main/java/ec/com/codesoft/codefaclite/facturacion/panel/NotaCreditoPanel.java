@@ -12,6 +12,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ComponenteSecundarioAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -78,6 +79,8 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         jTextField4 = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
+        cmbFormaPagoDefecto = new javax.swing.JComboBox<>();
+        jLabel29 = new javax.swing.JLabel();
         PanelDatosNotaCredito = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -297,10 +300,10 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         panelDatosGenerales.add(lblTelefonos, gridBagConstraints);
 
         jLabel28.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
-        jLabel28.setText("Tipo Documento:");
+        jLabel28.setText("Pago devolución:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(jLabel28, gridBagConstraints);
@@ -382,6 +385,22 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         panelDatosGenerales.add(pnlSecuencialNCCompra, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 5);
+        panelDatosGenerales.add(cmbFormaPagoDefecto, gridBagConstraints);
+
+        jLabel29.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel29.setText("Tipo Documento:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosGenerales.add(jLabel29, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -1110,6 +1129,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarDetalle;
     private javax.swing.JCheckBox checkPorcentaje;
     private com.toedter.calendar.JDateChooser cmbFechaCompra;
+    private javax.swing.JComboBox<SriFormaPago> cmbFormaPagoDefecto;
     private javax.swing.JComboBox<ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision> cmbPuntoEmision;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JCheckBox jCheckBox1;
@@ -1135,6 +1155,7 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel34;
@@ -1488,6 +1509,14 @@ public abstract class NotaCreditoPanel extends ControladorCodefacInterface {
 
     public void setToolBarSecuencialNCVenta(JToolBar toolBarSecuencialNCVenta) {
         this.toolBarSecuencialNCVenta = toolBarSecuencialNCVenta;
+    }
+
+    public JComboBox<SriFormaPago> getCmbFormaPagoDefecto() {
+        return cmbFormaPagoDefecto;
+    }
+
+    public void setCmbFormaPagoDefecto(JComboBox<SriFormaPago> cmbFormaPagoDefecto) {
+        this.cmbFormaPagoDefecto = cmbFormaPagoDefecto;
     }
     
     

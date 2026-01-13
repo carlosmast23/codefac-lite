@@ -239,10 +239,10 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         
         getjCmbCajaPermiso().setSelectedItem(cajaSession.getCaja());
         
-        //get
+        
         getjTextValorCierreReal().setText(cajaSession.getValorCierreReal()+"");
         getTxtObservacionesCierreCaja().setText(cajaSession.getObservacionCierreCaja());
-       
+               
         if(cajaSession.getIngresosCaja()==null || cajaSession.getIngresosCaja().isEmpty())
         {
             getjTextValorCierreTeorico().setText("" + cajaSession.getValorApertura());
@@ -250,10 +250,17 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         else
         {    
 
+            //Calcular para ingresar en el campo cuanto es el valor del cierre que tiene que estar en el valor teorico
             BigDecimal totalVentas =cajaSession.calcularValorCierreTeorico();
             
             getjTextValorCierreTeorico().setText("" + totalVentas);
-            getjTextValorCierreReal().setText(totalVentas+"");
+            
+            //Si ya tenia un valor ingresado manualmente o calculado ya no hago el calculo
+            if(!UtilidadBigDecimal.validarDistintoCeroOVacio(cajaSession.getValorCierreReal()))
+            {
+                cajaSession.setValorCierreReal(totalVentas);
+                getjTextValorCierreReal().setText(totalVentas+"");
+            }            
             
         }
         

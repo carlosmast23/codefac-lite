@@ -44,6 +44,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.RubroEstudiante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
@@ -1007,6 +1008,20 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.LIBRE);
         getCmbTipoDocumento().addItem(TipoDocumentoEnum.VENTA);
         
+        //cargar formas de pago en las compras
+         //Cargar las formas de pago vigentes en el SRI
+        List<SriFormaPago> formasPago;
+        try {
+            formasPago = ServiceFactory.getFactory().getSriServiceIf().obtenerFormasPagoActivo();
+            getCmbFormaPagoDefecto().removeAllItems();
+            for (SriFormaPago formaPago : formasPago) {
+                getCmbFormaPagoDefecto().addItem(formaPago);
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(NotaCreditoModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
     
     private void btnListenerEditar()
@@ -1302,6 +1317,11 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
             NotaCreditoNoCallBack respuestaNoCallBack = new NotaCreditoNoCallBack(notaCredito, this);
             respuestaNoCallBack.iniciar();
         }
+    }
+
+    @Override
+    public SriFormaPago obtenerSriFormaPago() {
+        return (SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem();
     }
 
     

@@ -122,6 +122,9 @@ public class NotaCredito extends ComprobanteVentaNotaCreditoAbstract<NotaCredito
     @Column(name = "NUM_DOC_MODIFICADO")
     protected String numDocModificado;
     
+    @JoinColumn(name = "SRI_FORMA_PAGO_ID")
+    private SriFormaPago sriFormaPago;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notaCredito",fetch = FetchType.EAGER)
     private List<NotaCreditoDetalle> detalles;
@@ -421,6 +424,15 @@ public class NotaCredito extends ComprobanteVentaNotaCreditoAbstract<NotaCredito
         this.ice = ice;
     }
 
+    public SriFormaPago getSriFormaPago() {
+        return sriFormaPago;
+    }
+
+    public void setSriFormaPago(SriFormaPago sriFormaPago) {
+        this.sriFormaPago = sriFormaPago;
+    }
+
+    
     
     
 

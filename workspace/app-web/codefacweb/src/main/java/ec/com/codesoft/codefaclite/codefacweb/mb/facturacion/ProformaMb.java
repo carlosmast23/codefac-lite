@@ -515,7 +515,7 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         productoSeleccionado = (Producto) event.getObject(); 
         kardexProductoSeleccionado=controlador.obtenerKardexDesdeProducto(productoSeleccionado);
         System.out.println("kardexSeleccionado: "+kardexProductoSeleccionado);
-        System.out.println("kardex Stock: "+kardexProductoSeleccionado.getStock().setScale(2, RoundingMode.HALF_UP));
+        //System.out.println("kardex Stock: "+kardexProductoSeleccionado.getStock().setScale(2, RoundingMode.HALF_UP));
         precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
         controlador.agregarProductoVista(productoSeleccionado,null,null,BigDecimal.ZERO,null,null);
         //cargarDetalleFacturaAgregar(productoSeleccionado); 

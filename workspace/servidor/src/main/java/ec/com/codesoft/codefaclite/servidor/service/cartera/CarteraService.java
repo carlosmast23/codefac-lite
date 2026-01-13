@@ -262,7 +262,13 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //Grabar los datos para la caja para ver como sale en la cartera
         if(afectarCaja!=null && afectarCaja)
         {
-            grabarMovimientosCaja(cartera,false,entityManager);
+            //TODO: Este cambio esta de mejorar
+            Boolean eliminar=false;
+            if(cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+            {
+                eliminar=true;
+            }
+            grabarMovimientosCaja(cartera,eliminar,entityManager);
         }
         
     }
@@ -272,7 +278,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //TODO: Los únicos movimientos que pueden generar movimiento en cartera van a ser los ingresos y egresos
         if(!cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.ABONOS))
         {
-            return;
+            //en este caso tiene que ser igual distinto de nota de credito
+            if(!cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+            {
+                return;
+            }
+            
         }
         
         CajaSession cajaSession = cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario(),entityManager);
@@ -1035,6 +1046,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             cartera.setSaldo(notaCredito.getTotal());
             cartera.setTotal(notaCredito.getTotal());
             cartera.setUsuario(comprobante.getUsuario());
+            cartera.setSriFormaPago(notaCredito.getSriFormaPago());
             
             /**
              * ==========================================================================

@@ -83,21 +83,38 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         }
     }
     
-    public void limpiarDatos() 
+    public void limpiarDatos(Boolean formatear) 
     {
-        cajaSession = new CajaSession();
+        //Cambio de funcionalidad porque por ejemplo para recuperar el foco de la pantalla utilizo este metodo pero datos antererioes como cantidades ingresadas para ciere de la caja deben quedarse guardadas previamente
+        if(formatear)
+        {
+            cajaSession = new CajaSession();
+            cajaSession.setValorCierreReal(BigDecimal.ZERO);
+        }
+        
         cajaSession.setUsuario(this.session.getUsuario());
-        cajaSession.setEstadoSessionEnum(CajaSessionEnum.ACTIVO);
-        cajaSession.setValorCierreReal(BigDecimal.ZERO);
+        cajaSession.setEstadoSessionEnum(CajaSessionEnum.ACTIVO);        
         estadosList = UtilidadesLista.arrayToList(CajaEnum.values());
         estadoCajaSessionList = UtilidadesLista.arrayToList(CajaSessionEnum.values());
         if (cajasList!=null && cajasList.size() > 0) {
             cajaSession.setCaja(cajasList.get(0));
         }
+        
         //Consultar las cajas session que tenga activas
         if (cajaSessionList!=null && cajaSessionList.size() > 0) {
             cajaSessionSeleccionada = cajaSessionList.get(0);
-            cargarDatosPantalla(cajaSessionSeleccionada);
+            if(formatear)
+            {
+                cargarDatosPantalla(cajaSessionSeleccionada);
+            }
+            else
+            {
+                //Si estoy solo retomando el foco cargo la misma caja
+                cargarDatosPantalla(cajaSession);
+            }
+            
+            
+            
         }
     }
 
@@ -177,7 +194,13 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
     @Override
     public void limpiar(){
         cargarDatosIniciales();
-        limpiarDatos();
+        limpiarDatos(true);
+    }
+    
+    public void limpiarSinFormatear()
+    {
+        cargarDatosIniciales();
+        limpiarDatos(false);
     }
 
     @Override

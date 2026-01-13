@@ -31,6 +31,10 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
         this.productoFiltro = productoFiltro;
     }
     
+    public LoteBusqueda(Producto productoFiltro) {
+        this.productoFiltro = productoFiltro;
+    }
+    
     
     
     
@@ -53,21 +57,31 @@ public class LoteBusqueda implements InterfaceModelFind<Lote>{
         //Producto producto;
         //producto.getCodigoPersonalizado();
         
-        String queryString=" SELECT u FROM Lote u where u.estado=?1 and u.empresa=?2 and ( u.codigo like ?3 OR LOWER(u.producto.nombre) LIKE ?3  OR u.producto.codigoPersonalizado like ?3 ) ";
+        String queryString=" SELECT u FROM Lote u where u.estado=?1 and ( u.codigo like ?3 OR LOWER(u.producto.nombre) LIKE ?3  OR u.producto.codigoPersonalizado like ?3 ) ";
         
         if(productoFiltro!=null)
         {
             queryString+=" and u.producto= ?4 ";
         }
         
+        if(empresa!=null)
+        {
+            queryString+="  and u.empresa=?2 ";
+        }
+        
         QueryDialog queryDialog = new QueryDialog(queryString);
         queryDialog.agregarParametro(1,GeneralEnumEstado.ACTIVO.getEstado());
-        queryDialog.agregarParametro(2, empresa);
+        
         queryDialog.agregarParametro(3, filter);
         
         if(productoFiltro!=null)
         {
             queryDialog.agregarParametro(4, productoFiltro);
+        }
+        
+        if(empresa!=null)
+        {
+            queryDialog.agregarParametro(2, empresa);
         }
         
         return queryDialog;

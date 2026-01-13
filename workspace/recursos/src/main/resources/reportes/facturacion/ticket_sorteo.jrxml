@@ -62,14 +62,14 @@
 	<pageHeader>
 		<band height="98" splitType="Stretch">
 			<textField>
-				<reportElement x="5" y="20" width="107" height="17" uuid="abf4810f-0587-410a-86df-cb921db24dc4"/>
+				<reportElement x="5" y="16" width="107" height="15" uuid="abf4810f-0587-410a-86df-cb921db24dc4"/>
 				<textElement>
-					<font size="12"/>
+					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["#"+$P{numero}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="0" width="138" height="20" uuid="5889eba2-98b7-4371-8cd2-e63b4eef6a87"/>
+				<reportElement x="5" y="0" width="130" height="16" uuid="5889eba2-98b7-4371-8cd2-e63b4eef6a87"/>
 				<box>
 					<pen lineStyle="Dashed"/>
 					<topPen lineWidth="0.75" lineStyle="Dashed"/>
@@ -83,21 +83,21 @@
 				<text><![CDATA[TICKET PARA SORTEO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="37" width="128" height="24" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
+				<reportElement x="5" y="31" width="128" height="33" uuid="e607abf0-312c-41f4-8b05-40fc6adabb7a"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
-				<text><![CDATA[EL SORTEO SE REALIZARA EL SABADO 7 DE ENERO A PARTIR DE LAS 15:00PM]]></text>
+				<text><![CDATA[GANA 5 canastas navideñas y 1 smarthpone, sorteo: 29 de diciembre / 18:00hrs . Transmisión por Facebook y TikTok oficial de Urban Look EC]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="5" y="61" width="128" height="17" uuid="45d37439-debb-452b-8ad5-16cf0e2024ee"/>
+				<reportElement x="5" y="64" width="128" height="17" uuid="45d37439-debb-452b-8ad5-16cf0e2024ee"/>
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="5" y="78" width="138" height="17" uuid="3aa2ff14-ed01-49e9-85f7-58d35cd07aeb"/>
+				<reportElement x="5" y="81" width="138" height="17" uuid="3aa2ff14-ed01-49e9-85f7-58d35cd07aeb"/>
 				<box>
 					<pen lineStyle="Dashed"/>
 					<topPen lineStyle="Dashed"/>
