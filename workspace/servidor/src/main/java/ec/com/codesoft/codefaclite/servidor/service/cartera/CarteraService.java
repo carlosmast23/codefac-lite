@@ -321,36 +321,22 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             }
         }
         
-        //CarteraCruceService cc=new CarteraCruceService();
-        //List<CarteraCruce> carteraCruceList=cc.buscarPorCarteraDetalle(cartera.getDetalles().get(0));
+        //String descripcionIngreso="S/N";
         
-        //Cartera carteraTmp= buscarPorId(cartera.getId());
-        //Cartera carteraOriginal=carteraTmp.buscarCarteraOriginal();
-        //Poner el nombre de la descripción
-        String descripcionIngreso="S/N";
-        
-        /*if(carteraOriginal.getCarteraDocumentoEnum().getCategoria().equals(DocumentoCategoriaEnum.COMPROBANTES_VENTA))
-        {
-            descripcionIngreso="Venta";
-        }
-        else if(carteraOriginal.getCarteraDocumentoEnum().getCategoria().equals(DocumentoCategoriaEnum.COMPROBANTE_INGRESOS_EGRESOS))
-        {
-            descripcionIngreso="Comprobante";
-            
-            if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
-            {
-                descripcionIngreso="Ingreso";
-            }
-            else if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
-            {
-                descripcionIngreso="Egreso";
-            }
-        }*/
+
         ingresoCaja.setDescripcion(cartera.getDetalles().get(0).getDescripcion());
         
         if(eliminar)
         {
-            ingresoCaja.setDescripcion("[ Anulación ] "+ingresoCaja.getDescripcion());
+            if(cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+            {
+                ingresoCaja.setDescripcion("[ Nota de Crédito ] #"+cartera.getSecuencial());
+            }
+            else
+            {
+                ingresoCaja.setDescripcion("[ Anulación ] "+ingresoCaja.getDescripcion());
+            }
+            
         }
         
         ingresoCaja.setSecuencial(cartera.getReferenciaManual());
@@ -1363,12 +1349,18 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
         for (CarteraCruce carteraCruce : cruceList) {
             CarteraDetalle carteraDetalle = carteraCruce.getCarteraDetalle();
-            eliminarCarteraSinTransaccion(carteraDetalle.getCartera(), ModoProcesarEnum.FORZADO,entityManager);
+            //esa opción de quitar cruces en espcial para correciones no debe generar cruces con la caja
+            eliminarCarteraSinTransaccion(carteraDetalle.getCartera(), ModoProcesarEnum.FORZADO,entityManager,false);
         }
         
     }
     
     public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo,EntityManager entityManager) throws ServicioCodefacException, RemoteException 
+    {
+        eliminarCarteraSinTransaccion(entity, modo, entityManager, true);
+    }
+    
+    public void eliminarCarteraSinTransaccion(Cartera entity,ModoProcesarEnum modo,EntityManager entityManager,Boolean procesarCaja) throws ServicioCodefacException, RemoteException 
     {
         if (modo.NORMAL.equals(modo)) {
             if (entity.getCruces() != null && entity.getCruces().size() > 0) {
@@ -1392,7 +1384,10 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         entityManager.flush();         
         
         //Procesar con la caja en el caso que sean eliminación de abonos
-        grabarMovimientosCaja(entity,true,entityManager);
+        if(procesarCaja)
+        {
+            grabarMovimientosCaja(entity,true,entityManager);
+        }
                 
     }
     
