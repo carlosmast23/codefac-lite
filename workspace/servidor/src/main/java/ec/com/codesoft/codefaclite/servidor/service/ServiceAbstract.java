@@ -108,7 +108,7 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                AbstractFacade.nuevoEntityManager().persist(entity);
+                entityManager.persist(entity);
             }
         });
         return entity;

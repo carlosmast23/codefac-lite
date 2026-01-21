@@ -6,8 +6,10 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoDetalleEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.CarteraUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -167,6 +169,12 @@ public class CarteraDetalle implements Serializable,Cloneable {
         }
     }
     
+    public void actualizarTotalySaldo(BigDecimal total,BigDecimal saldo) throws ServicioCodefacException
+    {
+        CarteraUtil.validarTotalySaldo(total, saldo, Cartera.class);
+        setTotal(total);
+        setSaldo(saldo);
+    }
     
 
     @Override

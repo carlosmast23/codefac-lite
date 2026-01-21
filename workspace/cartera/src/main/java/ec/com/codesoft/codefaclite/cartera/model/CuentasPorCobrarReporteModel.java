@@ -348,6 +348,7 @@ public class CuentasPorCobrarReporteModel extends CuentasPorCobarReportePanel
             fila.add(cuentaPorCobrarData.getIdentificacion());            
             fila.add(cuentaPorCobrarData.getRazonSocial());
             fila.add(cuentaPorCobrarData.getDescripcion());
+            fila.add(cuentaPorCobrarData.getDiasCredito());
             //fila.add(cuentaPorCobrarData.getNombreComercial());            
             fila.add(cuentaPorCobrarData.getTotal());
             fila.add(cuentaPorCobrarData.getSaldo());

@@ -693,8 +693,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
                         carteraTmp.setNumeroCuota(i+1);
                         carteraTmp.setFechaEmision(UtilidadesFecha.castDateUtilToSql(UtilidadesFecha.sumarMesesFecha(carteraTmp.getFechaEmision(),i+1)));
-                        carteraTmp.setTotal(valorCuota);
-                        carteraTmp.setSaldo(valorCuota);
+                        //carteraTmp.setTotal(valorCuota);
+                        //carteraTmp.setSaldo(valorCuota);
+                        carteraTmp.actualizarTotalySaldo(valorCuota, valorCuota);
                         grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR,true,entityManager);
                     }
 
@@ -945,8 +946,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             cartera.setPersona(factura.getCliente());
             cartera.setReferenciaID(factura.getId());
             System.out.println("tot:"+factura.getTotal());
-            cartera.setSaldo(factura.getTotal());
-            cartera.setTotal(factura.getTotal());
+            //cartera.setSaldo(factura.getTotal());
+            //cartera.setTotal(factura.getTotal());
+            cartera.actualizarTotalySaldo(factura.getTotal(),factura.getTotal());
 
             for (FacturaDetalle detalle : factura.getDetalles()) {
                 CarteraDetalle carteraDetalle = new CarteraDetalle();
@@ -966,8 +968,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             Compra compra = (Compra) comprobante;
             cartera.setPersona(compra.getProveedor());
             cartera.setReferenciaID(compra.getId());
-            cartera.setSaldo(compra.getTotal());
-            cartera.setTotal(compra.getTotal());
+            //cartera.setSaldo(compra.getTotal());
+            //cartera.setTotal(compra.getTotal());
+            cartera.actualizarTotalySaldo(compra.getTotal(), compra.getTotal());
 
             for (CompraDetalle detalle : compra.getDetalles()) {
                 CarteraDetalle carteraDetalle = new CarteraDetalle();
@@ -989,8 +992,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             Factura factura = (Factura) comprobante;
             cartera.setPersona(factura.getCliente());
             cartera.setReferenciaID(factura.getId());
-            cartera.setSaldo(factura.getTotal());
-            cartera.setTotal(factura.getTotal());
+            //cartera.setSaldo(factura.getTotal());
+            //cartera.setTotal(factura.getTotal());
+            cartera.actualizarTotalySaldo(factura.getTotal(),factura.getTotal());
 
             for (FacturaDetalle detalle : factura.getDetalles()) {
                 CarteraDetalle carteraDetalle = new CarteraDetalle();
@@ -1009,8 +1013,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             Compra compra = (Compra) comprobante;
             cartera.setPersona(compra.getProveedor());
             cartera.setReferenciaID(compra.getId());
-            cartera.setSaldo(compra.getTotal());
-            cartera.setTotal(compra.getTotal());
+            //cartera.setSaldo(compra.getTotal());
+            //cartera.setTotal(compra.getTotal());
+            cartera.actualizarTotalySaldo(compra.getTotal(), compra.getTotal());
 
             for (CompraDetalle detalle : compra.getDetalles()) {
                 CarteraDetalle carteraDetalle = new CarteraDetalle();
@@ -1029,8 +1034,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
             NotaCredito notaCredito = (NotaCredito) comprobante;
             cartera.setPersona(notaCredito.getCliente());
             cartera.setReferenciaID(notaCredito.getId());
-            cartera.setSaldo(notaCredito.getTotal());
-            cartera.setTotal(notaCredito.getTotal());
+            //cartera.setSaldo(notaCredito.getTotal());
+            //cartera.setTotal(notaCredito.getTotal());
+            cartera.actualizarTotalySaldo(notaCredito.getTotal(), notaCredito.getTotal());
             cartera.setUsuario(comprobante.getUsuario());
             cartera.setSriFormaPago(notaCredito.getSriFormaPago());
             
@@ -1105,14 +1111,15 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
     }
     
-    private void crearCarteraAnularCompra(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,EntityManager entityManager)
+    private void crearCarteraAnularCompra(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,EntityManager entityManager) throws ServicioCodefacException
     {
         try {
             NotaCredito notaCredito = (NotaCredito) comprobante;
             cartera.setPersona(notaCredito.getCliente());
             cartera.setReferenciaID(notaCredito.getId());
-            cartera.setSaldo(notaCredito.getTotal());
-            cartera.setTotal(notaCredito.getTotal());
+            //cartera.setSaldo(notaCredito.getTotal());
+            //cartera.setTotal(notaCredito.getTotal());
+            cartera.actualizarTotalySaldo(notaCredito.getTotal(), notaCredito.getTotal());
             
             /**
              * ==========================================================================
@@ -1164,7 +1171,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     }
     
     
-    private void crearCarteraRetencion(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,EntityManager entityManager)
+    private void crearCarteraRetencion(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,EntityManager entityManager) throws ServicioCodefacException
     {
         Retencion retencion = (Retencion) comprobante;
         cartera.setPersona(retencion.getProveedor());
@@ -1172,8 +1179,9 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
 
         BigDecimal retencionIva = retencion.getTotalValorRetenido(SriRetencionRenta.CODIGO_RETENCION_IVA);
         BigDecimal retencionRenta = retencion.getTotalValorRetenido(SriRetencionRenta.CODIGO_RETENCION_RENTA);
-        cartera.setSaldo(retencionIva.add(retencionRenta));
-        cartera.setTotal(retencionIva.add(retencionRenta));
+        //cartera.setSaldo(retencionIva.add(retencionRenta));
+        //cartera.setTotal(retencionIva.add(retencionRenta));
+        cartera.actualizarTotalySaldo(retencionIva.add(retencionRenta),retencionIva.add(retencionRenta));
 
         /**
          * RETENCION DE LA RENTA

@@ -292,6 +292,7 @@ public class CarteraModel extends CarteraPanel{
         getTxtAutorizacion().setText("");
         getTxtReferenciaDetalle().setText("");
         getTxtDiasCredito().setText("0");
+        getTxtSaldo().setText("0");
     }
 
     //@Override
@@ -348,6 +349,7 @@ public class CarteraModel extends CarteraPanel{
         getTxtReferenciaManual().setText(cartera.getReferenciaManual());
         getTxtPreimpreso().setText(cartera.getPreimpreso());
         getTxtDiasCredito().setText(cartera.getDíasCredito()+"");
+        getTxtSaldo().setText(cartera.getSaldo()+"");
         
         cargarDatosReferencia(cartera);
         
