@@ -115,21 +115,10 @@ public class FacturaReporteModel extends FacturaReportePanel {
     protected void generarReporteConLecturaParametros(Date fechaInicio,Date fechaFin)
     {
         
-        //Date fechaInicio = null;
-        //Date fechaFin = null;
 
-        //mapTotales=new HashMap<String,BigDecimal>();
-        //igDecimal acum = BigDecimal.ZERO, acumdoce = BigDecimal.ZERO, acumiva = BigDecimal.ZERO, acumdesc = BigDecimal.ZERO;
         ComprobanteEntity.ComprobanteEnumEstado estadoFactura = (ComprobanteEntity.ComprobanteEnumEstado) getCmbEstado().getSelectedItem();
         String estadoStr = estadoFactura.getEstado();
 
-        //if (getDateFechaInicio().getDate() != null) {
-        //    fechaInicio = new Date(getDateFechaInicio().getDate().getTime());
-        //}
-
-        //if (getDateFechaFin().getDate() != null) {
-        //    fechaFin = new Date(getDateFechaFin().getDate().getTime());
-        //}
 
         Sucursal sucursal = null;
         if (!getChkSucursalTodos().isSelected()) {
@@ -169,7 +158,6 @@ public class FacturaReporteModel extends FacturaReportePanel {
         controladorReporte.setTodasVentas(getChkTodosVenta().isSelected());
         controladorReporte.setVendedor((Empleado) getCmbVendedor().getSelectedItem());
         
-
         //Cuando se quiere agrupar por produto activo la opcion de Agrupado por Producto
         TipoReporteEnum tipoReporteEnum = (TipoReporteEnum) getCmbTipoReporte().getSelectedItem();
         if (tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_PRODUCTO)
@@ -180,6 +168,7 @@ public class FacturaReporteModel extends FacturaReportePanel {
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_IVA)
                 || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE)
+                || productoFiltro!=null
             ) {
             controladorReporte.setReporteConDetallesFactura(true);            
         }

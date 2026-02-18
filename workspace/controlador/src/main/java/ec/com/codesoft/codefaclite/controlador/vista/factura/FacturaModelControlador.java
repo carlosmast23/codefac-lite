@@ -1114,7 +1114,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //Cuando el kardex es null se debe buscar el kardex original para hacer la comparacion
         if(producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
         {
-            kardex=producto.obtenerKardexOriginal();
+            kardex=producto.obtenerKardexOriginal(kardex.getLote());
         }
         
         //Alerta que no se puede verificar por algun motivo porque no tiene kardex

@@ -73,7 +73,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
      */
     public void anularInventario(Kardex kardex) throws java.rmi.RemoteException,ServicioCodefacException;
     
-    public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException;
+    public Kardex buscarKardexPorProducto(Producto producto,Lote lote) throws java.rmi.RemoteException;
     
     public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega,Lote lote,EntityManager entityManager) throws RemoteException, ServicioCodefacException;
     
@@ -107,7 +107,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     
     public void eliminarPorId(Long kardexId) throws RemoteException,ServicioCodefacException;
     
-    public Kardex buscarKardexPrincipal(Producto producto) throws java.rmi.RemoteException, ServicioCodefacException;
+    public Kardex buscarKardexPrincipal(Producto producto,Lote lote) throws java.rmi.RemoteException, ServicioCodefacException;
     
     public List<TransferenciaBodegaRespuesta> consultarMovimientosTransferencia(java.util.Date fechaInicial, java.util.Date fechaFinal,Bodega bodegaDestino) throws java.rmi.RemoteException,ServicioCodefacException;
     

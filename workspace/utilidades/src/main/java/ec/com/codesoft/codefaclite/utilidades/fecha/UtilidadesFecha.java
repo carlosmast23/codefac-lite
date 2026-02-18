@@ -510,6 +510,15 @@ public class UtilidadesFecha {
         return false;
     }
     
+    public static Boolean verificarFechaHoy(java.util.Date fecha)
+    {        
+        if(compararFechaSinImportarHora(fecha,UtilidadesFecha.getFechaHoy())==0)
+        {
+            return true;
+        }
+        return false;
+    }
+    
     public static java.util.Date combinarFechayHora(java.util.Date date, Time time) 
     {
         // Crea un objeto Calendar para manipular la fecha

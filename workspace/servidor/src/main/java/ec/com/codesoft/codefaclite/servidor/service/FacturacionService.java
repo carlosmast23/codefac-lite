@@ -1848,7 +1848,7 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                     if(referenciaDetalle.tipoDocumentoEnum.equals(TipoDocumentoEnum.INVENTARIO))
                     {
                         Producto producto=(Producto) referenciaDetalle.objecto;
-                        Kardex kardexTemp=kardexService.buscarKardexPorProducto(producto);
+                        Kardex kardexTemp=kardexService.buscarKardexPorProducto(producto,detalle.getLote());
                         if(kardexTemp!=null)
                         {
                             BigDecimal costoTotalDetalle=kardexTemp.getCostoPromedio().multiply(detalle.getCantidad());

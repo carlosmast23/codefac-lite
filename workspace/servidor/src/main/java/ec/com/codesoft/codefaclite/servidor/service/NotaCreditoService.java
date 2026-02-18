@@ -468,7 +468,7 @@ public class NotaCreditoService extends ServiceAbstract<NotaCredito,NotaCreditoF
             return (List<NotaCredito>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
                 @Override
                 public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                    return obtenerNotasReporte(persona, fi, ff, ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO, empresa, entityManager);
+                    return obtenerNotasReporte(persona, fi, ff, estado, empresa, entityManager);
                 }
             });
         } catch (ServicioCodefacException ex) {

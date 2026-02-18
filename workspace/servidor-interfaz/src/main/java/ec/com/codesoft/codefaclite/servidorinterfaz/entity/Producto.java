@@ -49,6 +49,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -576,6 +579,14 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
      *                      METODOS PERSONALIZADOS
      *=========================================================================
      */
+    
+    public List<ProductoComponenteDetalle> obtenerComponenteListActivos() {
+        return Optional.ofNullable(componenteList)
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(c -> c.getProductoComponente().getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                .collect(Collectors.toList());
+    }
     
     public void eliminarPresentacionProducto(ProductoPresentacionDetalle presentacionProducto)
     {
@@ -1634,10 +1645,10 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     // ALERTA: No usar este metodo desde el servidor porque puede causar lentitud en los procesos
     // solo utilizar desde los clientes
     // Este metodo se va a utilizar para obtener el kardex aunque se llame desde un empaque
-    public Kardex obtenerKardexOriginal()
+    public Kardex obtenerKardexOriginal(Lote lote)
     {
         try {
-            Kardex kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPrincipal(this);
+            Kardex kardex=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPrincipal(this,lote);
             return kardex;
         } catch (RemoteException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);

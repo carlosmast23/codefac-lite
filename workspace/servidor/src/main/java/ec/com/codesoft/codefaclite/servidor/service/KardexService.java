@@ -234,18 +234,30 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
      * @return
      * @throws java.rmi.RemoteException  
      */
-   public Kardex buscarKardexPorProducto(Producto producto) throws java.rmi.RemoteException
+   public Kardex buscarKardexPorProducto(Producto producto,Lote lote) throws java.rmi.RemoteException
     {
         try {
             return (Kardex) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
                 @Override
                 public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                     Map<String, Object> mapParametros = new HashMap<String, Object>();
+                    //Solo buscar productos que sean principales no presentaciones
                     mapParametros.put("producto", producto);
+                    mapParametros.put("lote", lote);
+                    mapParametros.put("producto.tipoProductoCodigo",TipoProductoEnum.PRODUCTO.getLetra());
+                    
                     List<Kardex> listaKardex = getFacade().findByMap(mapParametros,entityManager);
                     
                     if (listaKardex != null && listaKardex.size() > 0) {
-                        return listaKardex.get(0);
+                        for (Kardex kardex : listaKardex) 
+                        {
+                            //Solo retornar si es tipo producto porque pueda causar problemas con las presentaciones
+                            if(kardex.getProducto()!=null && kardex.getProducto().getTipoProductoEnum().equals(TipoProductoEnum.PRODUCTO))
+                            {
+                                return kardex;
+                            }
+                        }
+                        
                     }
                     
                     return null;
@@ -257,13 +269,13 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return null;
    }
    
-   public Kardex buscarKardexPrincipal(Producto producto) throws java.rmi.RemoteException, ServicioCodefacException
+   public Kardex buscarKardexPrincipal(Producto producto,Lote lote) throws java.rmi.RemoteException, ServicioCodefacException
    {
        return (Kardex) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
            @Override
            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                Producto productoOriginal = productoFacade.buscarProductoEmpaquePrincipal(producto,entityManager);
-               return buscarKardexPorProducto(productoOriginal);
+               return buscarKardexPorProducto(productoOriginal,lote);
            }
        });
    }

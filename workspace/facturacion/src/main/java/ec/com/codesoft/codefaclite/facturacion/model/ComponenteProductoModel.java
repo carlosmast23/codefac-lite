@@ -40,7 +40,7 @@ public class ComponenteProductoModel extends ec.com.codesoft.codefaclite.factura
         String[] titulo={"Op","Componente"};
         DefaultTableModel modelTabla=UtilidadesTablas.crearModeloTabla(titulo,new Class[]{Boolean.class,String.class});
         
-        List<ProductoComponenteDetalle> componenteList=producto.getComponenteList();
+        List<ProductoComponenteDetalle> componenteList=producto.obtenerComponenteListActivos();
         for (ProductoComponenteDetalle componente : componenteList) 
         {
             Vector<Object> fila=new Vector<Object>();            

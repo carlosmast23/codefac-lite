@@ -450,6 +450,12 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
         }
     }
     
+    //Metodo que se ejecuta luego de hacer todo el ciclo de un proceso de la ventana para hacer correciones muy particulares
+    public void postAction()
+    {
+        //TODO: por defecto sin implementar
+    }
+    
     public void agregarBindingComponent(ComponentBindingAbstract bindingAbstract)
     {
         this.bindingComponentList.add(bindingAbstract);

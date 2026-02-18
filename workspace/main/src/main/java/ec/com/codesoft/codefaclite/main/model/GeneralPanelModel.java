@@ -996,7 +996,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
                 frameInterface.actualizarBindingComponent(false,true);
                     
+                //TODO: OJO a este metodo que tambien controla el cursor por defecto de la pantalla esta bien pero aveces necesita empezar desde otro lado
                 limpiarCamposValidacion(frameInterface);
+                frameInterface.postAction();
                 frameInterface.consola=new ConsolaGeneral();
                 mostrarConsola(frameInterface.consola,true);                
             }

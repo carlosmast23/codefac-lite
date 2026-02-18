@@ -195,17 +195,7 @@ public class CorreoCodefac {
     {
         try
         {
-            //ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO);
-            //String correo=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_USUARIO,empresa).getValor();
-            
-
-            //String clave=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.CORREO_CLAVE,empresa).getValor();
-            //Obtener clave desencriptada
             String clave=UtilidadesEncriptar.desencriptar(claveEncriptada,ParametrosSistemaCodefac.LLAVE_ENCRIPTAR);
-            
-            //Construir los datos de las propiedades si existen
-            //String smtpHost=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_HOST,empresa).getValor();
-            //String smtpPort=ServiceFactory.getFactory().getParametroCodefacServiceIf().getParametroByNombre(ParametroCodefac.SMTP_PORT,empresa).getValor();
             
             PropiedadCorreo propiedadCorreo=null;
             if(!smtpHost.isEmpty() && !smtpPort.isEmpty())
@@ -213,13 +203,7 @@ public class CorreoCodefac {
                 propiedadCorreo=new PropiedadCorreo(smtpHost,new Integer(smtpPort));
             } 
             
-            //Agregar el nombre de la empresa o la razon social
-            //String alias=empresa.getNombreLegal();
             String alias=nombreEmpresa;
-            //if(alias==null || alias.trim().isEmpty())
-            //{
-            //    alias=empresa.getRazonSocial();
-            //}
             
             if(modoSession)
             {

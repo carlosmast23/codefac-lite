@@ -1025,8 +1025,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnAgregarDetalleFactura().setEnabled(false);
             getBtnAgregarProducto().setEnabled(false);
             getBtnCrearProducto().setEnabled(false);
-            //getTxtCodigoDetalle().setEnabled(false);
-            //getCmbIva().setSelectedItem(EnumSiNo.NO);
             
             //Cargar los datos de producto cuando sea el caso
             Producto producto=facturaDetalle.consultarProductoEnlazado();
@@ -1372,7 +1370,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     try {
                         productoSeleccionado = entity;                        
                         //Seleccionar el kardex en el caso que exista uno despues de crear
-                        Kardex kardexTmp=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(entity);
+                        Kardex kardexTmp=ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(entity,null);
                         kardexSeleccionado=kardexTmp;
                         
                         FacturaDetalle facturaDetalle=controlador.crearFacturaDetalle(
@@ -1968,17 +1966,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             DialogoCodefac.mensaje("Alerta", "No se puede facturar sin un punto de venta configurado", DialogoCodefac.MENSAJE_ADVERTENCIA);
             throw new ExcepcionCodefacLite("No se puede facturar sin un punto de venta configurado");
         }
-
-        /*if (factura.getCliente() == null) {
-            DialogoCodefac.mensaje("Alerta", "Necesita seleccionar un cliente", DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Necesita seleccionar un Cliente");
-        }*/
-        
-        /*if(!factura.getCliente().validarIdentificacion().equals(Persona.ValidacionCedulaEnum.VALIDACION_CORRECTA))
-        {
-            DialogoCodefac.mensaje("Error con el cliente", factura.getCliente().validarIdentificacion().getMensaje(), DialogoCodefac.MENSAJE_ADVERTENCIA);
-            throw new ExcepcionCodefacLite("Error con la identificacion del cliente seleccionado");
-        }*/
         
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         //TODO: Solo hacer las verificaciones para cuando no sean PROFORMAS
@@ -2045,6 +2032,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 {
                     throw new ExcepcionCodefacLite("Responsable requerido para grabar, en el producto: "+detalle.getDescripcion());
                 }
+            }
+        }
+        
+        //Mostrar alerta si cambia o esta mal la fecha no corresponde con la actual
+        java.util.Date fechaFactura=getjDateFechaEmision().getDate();
+        if(!UtilidadesFecha.verificarFechaHoy(fechaFactura))
+        {
+            if (!DialogoCodefac.dialogoPregunta("Advertencia", "La fecha de la factura no corresponde con la actual.\nDesea continuar de todos modos?", DialogoCodefac.MENSAJE_ADVERTENCIA)) 
+            {
+                throw new ExcepcionCodefacLite("Advertecia fecha de la factura, modifique la fecha para continuar");
             }
         }
 
@@ -3028,7 +3025,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarDetalleFactura().setEnabled(true);
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
-        //getTxtCodigoDetalle().setEnabled(true);
         
         //Borrar los datos del estudiantes y los representantes
         getCmbRepresentante().removeAllItems();
@@ -3065,6 +3061,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
                     
         getChkHabilitarCredito().setSelected(habilitarCredito.getBool());
+       
 
     }
     
@@ -3798,7 +3795,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         controlador.nuevo();
+        
     }
+
+    @Override
+    public void postAction() {
+        //getTxtCodigoDetalle().reque
+    }
+    
+    
         
 
     @Override
@@ -5078,7 +5083,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             getBtnBuscarReferenciaContacto().setEnabled(true);
             getBtnBuscarVendedor().setEnabled(true);
-            getBtnBuscarVendedor().setEnabled(true);
             getBtnLimpiarVendedor().setEnabled(true);
             getChkActivarFechaVencimiento().setEnabled(true);
             
@@ -5092,7 +5096,6 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             getBtnAgregarProducto().setEnabled(true);
             getBtnCrearProducto().setEnabled(true);
-            //getTxtCodigoDetalle().setEnabled(true);
             getBtnAgregarDetalleFactura().setEnabled(true);
             
             getCmbDocumento().setEnabled(true);
@@ -5106,9 +5109,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             //getBtnAutorizarComprobante().setEnabled(true);
             
             getBtnBuscarReferenciaContacto().setEnabled(false);
-            getBtnBuscarVendedor().setEnabled(false);
-            getBtnBuscarVendedor().setEnabled(false);
-            getBtnLimpiarVendedor().setEnabled(false);
+            //getBtnBuscarVendedor().setEnabled(false);
+            //getBtnLimpiarVendedor().setEnabled(false);
             getChkActivarFechaVencimiento().setEnabled(false);
             
             getBtnAgregarCliente().setEnabled(false);

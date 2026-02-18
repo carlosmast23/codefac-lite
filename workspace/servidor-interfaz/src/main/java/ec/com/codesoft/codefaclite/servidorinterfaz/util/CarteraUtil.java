@@ -17,7 +17,7 @@ public final  class CarteraUtil {
     public static void validarTotalySaldo(BigDecimal total,BigDecimal saldo,Class clase) throws ServicioCodefacException
     {
         //por defecto deben enviar 2 valores de total y saldo para poder llenar este dato
-        if(total==null || saldo==null)
+        if(total!=null && saldo!=null)
         {
             if(total.compareTo(saldo)>=0)
             {

@@ -858,7 +858,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     
     private void actualizarListaComponente()
     {
-        List<ProductoComponenteDetalle> componenteList=controlador.getProducto().getComponenteList();
+        List<ProductoComponenteDetalle> componenteList=controlador.getProducto().obtenerComponenteListActivos();
         DefaultListModel<ProductoComponenteDetalle> listModel = new DefaultListModel<>();                
         if(componenteList!=null)
         {
@@ -1020,7 +1020,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     private void cargarDatoKardex(Producto producto)
     {
         try {
-            Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto);
+            Kardex kardex= ServiceFactory.getFactory().getKardexServiceIf().buscarKardexPorProducto(producto,null);
             if(kardex!=null)
             {
                 BigDecimal costoUltimo=kardex.getPrecioUltimo();
