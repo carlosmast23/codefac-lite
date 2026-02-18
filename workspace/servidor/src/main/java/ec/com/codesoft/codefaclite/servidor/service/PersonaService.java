@@ -142,6 +142,13 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
 
     private void validarCliente(Persona persona, Boolean validarCedula, CrudEnum crudEnum,Boolean modoForzado,EntityManager em) throws ServicioCodefacException, java.rmi.RemoteException {
         
+        //Validacion de que no pueda editar consumidor final porque ese es un dato directo del sistema
+        if(Persona.IDENTIFICACION_CONSUMIDOR_FINAL.equals(persona.getIdentificacion()))
+        {
+            throw new ServicioCodefacException("No se puede modificar el cliente final");
+        }
+        
+        
         validarEdicionCampo(persona.getEmpresa(), crudEnum, new ValidarEdicionCampoIf<Persona>() {
             @Override
             public Object getId() {
