@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.main.other;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
+import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.ComprobacionComprobantesAutorizadosTarea;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.GestorTareasProgramadas;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.RespaldoProgramadoTarea;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
@@ -14,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import java.rmi.RemoteException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,7 +37,19 @@ public class TareasProgramadasCodefac {
     public void iniciar()
     {
         agregarTareaRespaldoProgramado(gestorTareas);
+        //agregarTareaComprobarAutorizacionComprobantes(gestorTareas);
         Logger.getLogger(Main.class.getName()).log(Level.INFO,"Iniciando gestor de TAREAS PROGRAMADAS ...");
+    }
+    
+    private static void agregarTareaComprobarAutorizacionComprobantes(GestorTareasProgramadas gestorTareas)
+    {
+        //ejecutar la tarea la primera vez al primer minuto y luego cada 30 minutos
+        gestorTareas.agregarTareaProgramada(new ComprobacionComprobantesAutorizadosTarea(), 
+                Long.valueOf(10), 
+                Long.valueOf(60), 
+                TimeUnit.SECONDS);
+        Logger.getLogger(TareasProgramadasCodefac.class.getName()).log(Level.INFO,"Configurado tarea automatica para intentar autorizar comprobantes que queden pendientes");        
+        //gestorTareas.agregarTareaProgramada(tarea, Long.MIN_VALUE, Long.MIN_VALUE, TimeUnit.NANOSECONDS);
     }
     
     /**

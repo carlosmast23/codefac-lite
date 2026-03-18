@@ -93,7 +93,7 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     @JoinColumn(name = "REFERIDO_ID")
     @ManyToOne
-    private Persona referido;
+    private Empleado referente;
 
     @JoinColumn(name = "TIPO_IDENTIFICACION_ID")
     private SriIdentificacion sriIdentificacion;
@@ -101,8 +101,8 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @JoinColumn(name = "VENDEDOR_ID")
     private Empleado vendedor;
 
-    @JoinColumn(name = "USUARIO_ID")
-    private Usuario usuario;
+    //@JoinColumn(name = "USUARIO_ID")
+    //private Usuario usuario;
 
     @JoinColumn(name = "PEDIDO_ID")
     private Factura proforma;
@@ -148,6 +148,19 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @Column(name = "VALOR_RECIBIDO")
     private BigDecimal valorRecibido;
+    
+    @Column(name = "PORCENTAJE_VENDEDOR")
+    private Integer porcentajeVendedor;
+    
+    @Column(name = "PORCENTAJE_REFERIDOS")
+    private Integer porcentajeReferidos;
+    
+    @Column(name = "ORIGEN_VENTA_ID")
+    private Integer origenVentaId;
+    
+    @Column(name = "ORIGEN_VENTA_NOTA")
+    private String origenVentaNota;
+    
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -228,12 +241,12 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.estadoNotaCredito = estadoNotaCredito;
     }
 
-    public Persona getReferido() {
-        return referido;
+    public Empleado getReferente() {
+        return referente;
     }
 
-    public void setReferido(Persona referido) {
-        this.referido = referido;
+    public void setReferente(Empleado referente) {
+        this.referente = referente;
     }
 
     public SriIdentificacion getSriIdentificacion() {
@@ -284,6 +297,24 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setCodigoOrigenTransaccionEnum(OrigenTransaccionEnum codigoOrigenTransaccionEnum) {
         this.codigoOrigenTransaccion = codigoOrigenTransaccionEnum.getCodigo();
     }
+
+    public Integer getOrigenVentaId() {
+        return origenVentaId;
+    }
+
+    public void setOrigenVentaId(Integer origenVentaId) {
+        this.origenVentaId = origenVentaId;
+    }
+
+    public String getOrigenVentaNota() {
+        return origenVentaNota;
+    }
+
+    public void setOrigenVentaNota(String origenVentaNota) {
+        this.origenVentaNota = origenVentaNota;
+    }
+    
+    
 
     /**
      * Informacion adicional
@@ -571,13 +602,14 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.vendedor = vendedor;
     }
 
+    /*
     public Usuario getUsuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
+    }*/
 
     public Factura getProforma() {
         return proforma;
@@ -654,6 +686,23 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void setTipoOrden(String tipoOrden) {
         this.tipoOrden = tipoOrden;
     }
+
+    public Integer getPorcentajeVendedor() {
+        return porcentajeVendedor;
+    }
+
+    public void setPorcentajeVendedor(Integer porcentajeVendedor) {
+        this.porcentajeVendedor = porcentajeVendedor;
+    }
+
+    public Integer getPorcentajeReferidos() {
+        return porcentajeReferidos;
+    }
+
+    public void setPorcentajeReferidos(Integer porcentajeReferidos) {
+        this.porcentajeReferidos = porcentajeReferidos;
+    }
+    
     
     
     

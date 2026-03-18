@@ -177,7 +177,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
         if(parametroCodefac==null)
         {
             parametroCodefac=new ParametroCodefac();
-            parametroCodefac.setEmpresa(empresa);
+            parametroCodefac.setEmpresaTmp(empresa);
             parametroCodefac.setNombre(parametroNombre);
         }
         parametroCodefac.setValor(valor);
@@ -282,7 +282,7 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     private ParametroCodefac crearObjectoSinTransaccion(Empresa empresa,String nombre, String valor)
     {
         ParametroCodefac parametro=new ParametroCodefac();
-        parametro.setEmpresa(empresa);
+        parametro.setEmpresaTmp(empresa);
         parametro.setNombre(nombre);
         parametro.setValor(valor);
         return parametro;

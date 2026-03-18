@@ -124,4 +124,11 @@ public interface ComprobanteServiceIf extends Remote {
     
     public Integer obtenerTotalComprobantesSinTerminarProcesar(Empresa empresa) throws RemoteException;
     
+    public Integer obtenerTotalComprobantesSinTerminarProcesarTodos() throws RemoteException;
+    
+    public List<String> procesarComprobantesPendienteLoteTodos(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException;
+    
+    public Integer obtenerTotalComprobantesRechazados(Empresa empresa) throws RemoteException;
+    
+    public void procesarSinAutorizarYEnviadosPendientesTodos() throws RemoteException,ServicioCodefacException;
 }

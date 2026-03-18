@@ -6,11 +6,13 @@
 package ec.com.codesoft.codefaclite.facturacionelectronica;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
-import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,6 +31,7 @@ public class ClaveAcceso implements Serializable{
     public String puntoEmision;
     public String secuencial;
     public String codigoBatch;
+    public Date fechaEmision;
 
     public ClaveAcceso(String clave) {
         this.clave = clave;
@@ -46,9 +49,24 @@ public class ClaveAcceso implements Serializable{
        this.puntoEstablecimiento=claveTemporal.substring(24,27);
        this.puntoEmision=claveTemporal.substring(27,30);
        this.secuencial=claveTemporal.substring(30,39);
-       //this.codigoBatch=claveTemporal.substring(0,8);
+        try {
+            //this.codigoBatch=claveTemporal.substring(0,8);
+            this.fechaEmision=obtenerFechaEmision(clave);
+        } catch (Exception ex) {
+            Logger.getLogger(ClaveAcceso.class.getName()).log(Level.SEVERE, null, ex);
+        }
        
    }
+   
+    public Date obtenerFechaEmision(String claveAcceso) throws Exception {
+
+        String fechaStr = claveAcceso.substring(0, 8); // ddMMyyyy
+
+        SimpleDateFormat formato = new SimpleDateFormat("ddMMyyyy");
+        Date fecha = formato.parse(fechaStr);
+
+        return fecha;
+    }
    
    public Class getClassTipoComprobante()
    {    

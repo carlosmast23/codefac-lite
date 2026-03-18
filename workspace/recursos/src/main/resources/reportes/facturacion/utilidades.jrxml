@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteEjemplo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eebb6c8f-6681-4b1f-9c88-39752bf00886">
 	<property name="ireport.zoom" value="2.1398375295825325"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="88"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -34,6 +34,9 @@
 	<field name="subtotal" class="java.math.BigDecimal"/>
 	<field name="costo" class="java.math.BigDecimal"/>
 	<field name="utilidad" class="java.math.BigDecimal"/>
+	<field name="vendedor" class="java.lang.String"/>
+	<field name="referente" class="java.lang.String"/>
+	<field name="colaborador" class="java.lang.String"/>
 	<variable name="SUBTOTAL_SUM" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtotal}]]></variableExpression>
 	</variable>
@@ -82,7 +85,7 @@
 	<columnHeader>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="48" height="15" uuid="c62311d8-28e4-469e-992e-7248c6f60246"/>
+				<reportElement x="0" y="0" width="29" height="15" uuid="c62311d8-28e4-469e-992e-7248c6f60246"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -92,7 +95,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Secuencial]]></text>
+				<text><![CDATA[# doc]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="506" y="0" width="49" height="15" forecolor="#FFFFFF" backcolor="#666666" uuid="aa1cb3b4-be8f-4a75-80ee-cfafbb904caa"/>
@@ -108,7 +111,7 @@
 				<text><![CDATA[Utilidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="48" y="0" width="48" height="15" uuid="8a28b40a-9f6a-4e39-870c-a437d513eef8"/>
+				<reportElement x="29" y="0" width="40" height="15" uuid="8a28b40a-9f6a-4e39-870c-a437d513eef8"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -121,7 +124,7 @@
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="165" y="0" width="255" height="15" uuid="f032c180-2f43-41f2-b3b3-6f679d9ffff3"/>
+				<reportElement x="129" y="0" width="165" height="15" uuid="f032c180-2f43-41f2-b3b3-6f679d9ffff3"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -131,10 +134,10 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Razón Social]]></text>
+				<text><![CDATA[Cliente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="96" y="0" width="69" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
+				<reportElement x="69" y="0" width="60" height="15" uuid="c4e63977-442f-4270-a25a-b9852f4bf0ff"/>
 				<box>
 					<topPen lineWidth="0.75"/>
 					<leftPen lineWidth="0.75"/>
@@ -172,12 +175,51 @@
 				</textElement>
 				<text><![CDATA[Costo]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="294" y="0" width="42" height="15" uuid="e1bb03e3-7cbe-4722-8b76-964df3344f6d"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vendedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="336" y="0" width="42" height="15" uuid="753b37dd-4905-4cd0-9472-8de4ed8fd926"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Referente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="378" y="0" width="42" height="15" uuid="c930c343-dc97-46f1-a5eb-40bd17bf2d83"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Colaborador]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="13" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="48" height="13" uuid="bc0af878-ff1a-492b-82b6-70a66e98e3df"/>
+				<reportElement x="0" y="0" width="29" height="13" uuid="bc0af878-ff1a-492b-82b6-70a66e98e3df"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -191,7 +233,7 @@
 				<textFieldExpression><![CDATA[$F{secuencial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="48" y="0" width="48" height="13" uuid="6944bb62-b069-4430-a693-c3b1788d07ca"/>
+				<reportElement x="29" y="0" width="40" height="13" uuid="6944bb62-b069-4430-a693-c3b1788d07ca"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -205,7 +247,7 @@
 				<textFieldExpression><![CDATA[$F{fechaEmisionStr}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="96" y="0" width="69" height="13" uuid="2c1167f8-6f6c-4dc6-add3-55bf1eea62cd"/>
+				<reportElement x="69" y="0" width="60" height="13" uuid="2c1167f8-6f6c-4dc6-add3-55bf1eea62cd"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -219,7 +261,7 @@
 				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="165" y="0" width="255" height="13" uuid="b802aa70-f8ff-4d2b-8d0a-6ffdec3aed58"/>
+				<reportElement x="129" y="0" width="165" height="13" uuid="b802aa70-f8ff-4d2b-8d0a-6ffdec3aed58"/>
 				<box>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
@@ -273,6 +315,48 @@
 					<paragraph leftIndent="2" rightIndent="2" spacingBefore="3" spacingAfter="3"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{utilidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="294" y="0" width="42" height="13" backcolor="#E3E3E3" uuid="cbf99679-54fd-4742-86e8-0f6722089710"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="3" spacingAfter="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vendedor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="336" y="0" width="42" height="13" backcolor="#E3E3E3" uuid="0381f4db-6126-41ae-926c-3dd445b7f6c3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="3" spacingAfter="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{referente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="378" y="0" width="42" height="13" backcolor="#E3E3E3" uuid="4a362f67-7a8b-45ae-96d1-7b7ab5ef9ca6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="3" spacingAfter="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{colaborador}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

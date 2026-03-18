@@ -905,13 +905,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 throw new ServicioCodefacException("Error al grabar el documento, se va a generar un documento repetido ");
             }
             
-            //Verificar que no pueda poner una fecha superior a la del día de hoy
+            //Verificar que solo se pueda facturar una factura con la fecha actual
             if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
             {
-                if(factura.getFechaEmision().compareTo(UtilidadesFecha.getFechaHoraHoy())>0)
+                if(UtilidadesFecha.compararFechaSinImportarHora(factura.getFechaEmision(), UtilidadesFecha.getFechaHoy())!=0)
                 {
-                    throw new ServicioCodefacException("Error al grabar el documento, no se puede grabar con fecha superior a la actual ");
+                    throw new ServicioCodefacException("Error al grabar el documento, solo se puede grabar una factura con la fecha actual ");
                 }
+                
+                /*if(factura.getFechaEmision().compareTo(UtilidadesFecha.getFechaHoraHoy())!=0)
+                {
+                    throw new ServicioCodefacException("Error al grabar el documento, solo se puede grabar una factura con la fecha actual ");
+                }*/
             }
            
 

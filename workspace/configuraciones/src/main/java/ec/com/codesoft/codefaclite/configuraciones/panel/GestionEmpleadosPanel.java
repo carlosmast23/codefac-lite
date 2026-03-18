@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneroEnum;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -74,6 +75,13 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         txtCodigo = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         txtPlaca = new javax.swing.JTextField();
+        jToolBar1 = new javax.swing.JToolBar();
+        jLabel18 = new javax.swing.JLabel();
+        spnVendedor = new javax.swing.JSpinner();
+        jLabel19 = new javax.swing.JLabel();
+        spnReferidos = new javax.swing.JSpinner();
+        jLabel20 = new javax.swing.JLabel();
+        spnColaborador = new javax.swing.JSpinner();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -174,7 +182,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         jLabel12.setText("Placa:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel12, gridBagConstraints);
@@ -285,7 +293,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         jLabel13.setText("          ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.weightx = 0.1;
@@ -303,7 +311,7 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         getContentPane().add(jLabel15, new java.awt.GridBagConstraints());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.weighty = 0.1;
         getContentPane().add(lblEspacio2, gridBagConstraints);
@@ -335,11 +343,32 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         txtPlaca.setText("  ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtPlaca, gridBagConstraints);
+
+        jToolBar1.setRollover(true);
+
+        jLabel18.setText("% Vendedor");
+        jToolBar1.add(jLabel18);
+        jToolBar1.add(spnVendedor);
+
+        jLabel19.setText("     % Referidos: ");
+        jToolBar1.add(jLabel19);
+        jToolBar1.add(spnReferidos);
+
+        jLabel20.setText("     % Colaborador: ");
+        jToolBar1.add(jLabel20);
+        jToolBar1.add(spnColaborador);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 2;
+        getContentPane().add(jToolBar1, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -464,6 +493,32 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
         return txtTelefono;
     }
 
+    public JSpinner getSpnColaborador() {
+        return spnColaborador;
+    }
+
+    public void setSpnColaborador(JSpinner spnColaborador) {
+        this.spnColaborador = spnColaborador;
+    }
+
+    public JSpinner getSpnReferidos() {
+        return spnReferidos;
+    }
+
+    public void setSpnReferidos(JSpinner spnReferidos) {
+        this.spnReferidos = spnReferidos;
+    }
+
+    public JSpinner getSpnVendedor() {
+        return spnVendedor;
+    }
+
+    public void setSpnVendedor(JSpinner spnVendedor) {
+        this.spnVendedor = spnVendedor;
+    }
+    
+    
+
     /**
      * @param args the command line arguments
      */
@@ -502,7 +557,10 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -510,7 +568,11 @@ public abstract class GestionEmpleadosPanel extends ControladorCodefacInterface{
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblEspacio2;
+    private javax.swing.JSpinner spnColaborador;
+    private javax.swing.JSpinner spnReferidos;
+    private javax.swing.JSpinner spnVendedor;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextArea txtAreaDireccion;
     private javax.swing.JScrollPane txtAreaDireccion1;

@@ -13,6 +13,8 @@ import autorizacion.ws.sri.gob.ec.RespuestaComprobante;
 import autorizacion.ws.sri.gob.ec.RespuestaLote;
 import com.thoughtworks.xstream.XStream;
 import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_AUTORIZADOS;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA;
+import static ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR;
 import ec.com.codesoft.codefaclite.facturacionelectronica.exception.ComprobanteElectronicoException;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FacturaComprobante;
@@ -20,6 +22,7 @@ import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.Comprobantes
 import static ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.ComprobantesElectronicosUtil.archivoToByte;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.UtilidadesComprobantes;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.util.XStreamUtil;
+import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.ws.recepcion.Comprobante;
 import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.ws.recepcion.RecepcionComprobantesOffline;
@@ -63,7 +66,7 @@ public class ServicioSri {
     /**
      * Numeros de intento para esperar que el sri me devuelva la consulta de autorizacion de un documentos
      */
-    private static final Long INTENTOS_AUTORIZACION =10L; //Esperar maximo 10 segundos 
+    private static final Long INTENTOS_AUTORIZACION =15L; //Esperar maximo 15 segundos 
     
     private static final Long INTENTOS_AUTORIZACION_LOTE = 30L;
     
@@ -203,7 +206,7 @@ public class ServicioSri {
         
         //TODO: Tener cuidado con estas 
         File archivoXMLFirmado = new File(urlFile);
-        RecepcionComprobantesOffline port = servicio.getRecepcionComprobantesOfflinePort();
+        
         byte[] bytesEnviar=null;
         try {
             bytesEnviar= archivoToByte(archivoXMLFirmado);
@@ -212,32 +215,61 @@ public class ServicioSri {
             throw new ComprobanteElectronicoException(ex.getMessage(), "Enviando Sri", ComprobanteElectronicoException.ERROR_COMPROBANTE);
         }
         
-        for (int i = 0; ;) {
+        for (int i = 0; i<INTENTO_MAXIMO;i++) 
+        {
             try {
+                if(i>0)Thread.sleep(1000); //evita que si la primera vez funciona lo haga rapido para las siguientes veces hago más lento
+                mensajes = null;
+                RecepcionComprobantesOffline port = servicio.getRecepcionComprobantesOfflinePort();
                 RespuestaSolicitud respuestaSolicitud = port.validarComprobante(bytesEnviar);
-                //System.out.println(respuestaSolicitud.getEstado()); //RECIBIDA DEVUELTA           
-                if (respuestaSolicitud.getComprobantes().getComprobante().size() == 0) {
-                    return true;
-                } else {
+                String estado = respuestaSolicitud.getEstado();
+                
+                if (respuestaSolicitud.getComprobantes() != null
+                        && respuestaSolicitud.getComprobantes().getComprobante() != null
+                        && !respuestaSolicitud.getComprobantes().getComprobante().isEmpty()
+                        && respuestaSolicitud.getComprobantes().getComprobante().get(0).getMensajes() != null) {
                     mensajes = respuestaSolicitud.getComprobantes().getComprobante().get(0).getMensajes().getMensaje();
-                    return false;
                 }
+                
+                if ("RECIBIDA".equals(estado)) {
+                    return true;
+                }
+                
+                //todo: mejorar esta parte para tener clasificados mensajes y esos código del sri
+                //nota: 70-CLAVE DE ACCESO EN PROCESAMIENTO -La clave de acceso 1902202601239005588100110011000000144760000000017  esta en procesamiento VALOR DEVUELTO POR EL PROCEDIMIENTO: SI
+                if ("DEVUELTA".equals(estado)) {
+                    //hacer una verificación adicional porque el Sri manda con código 70 diciendo si esta procesando en este momento
+                    if (mensajes != null && !mensajes.isEmpty() && "70".equals(mensajes.get(0).getIdentificador())) {
+                        Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING, "CLAVE DE ACCESO EN PROCESAMIENTO, el Sri esta procesando y se esta demorando pero el procesa sigue en marcha de forma correcta");
+                        return true;
+                    } else {
+                        //Si no es ninguno de los 2 estados asumo que es un error del Sri
+                        throw new ComprobanteElectronicoException(mensajes.get(0).getMensaje()+": "+mensajes.get(0).getInformacionAdicional(), "Rechazado Sri", ComprobanteElectronicoException.RECHAZADO,CARPETA_FIRMADOS_SIN_ENVIAR);
+                    }
 
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
-                if(i==INTENTO_MAXIMO)
-                {
-                    throw new ComprobanteElectronicoException(ex.getMessage(), "Enviando Sri", ComprobanteElectronicoException.ERROR_COMPROBANTE);
                 }
-                else
-                {
-                    i++;
-                }
+                
+                //Caso que no sea ninguno de los otros
+                throw new ComprobanteElectronicoException(
+                        "Estado no esperado: " + estado,
+                        "Enviando Sri",
+                        ComprobanteElectronicoException.ERROR_COMPROBANTE
+                );
+
+            }
+            catch (ComprobanteElectronicoException ex) 
+            {
+                // Si el error ya fue controlado por la lógica del negocio, no reintentar
+                throw ex;
+            }
+            catch (Exception ex) {
+                //Ver que me salio, y finalmente volver intentar
+                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, "Error en intento " + (i + 1) + " de " + INTENTO_MAXIMO, ex);
+                
             }
         }
         
-        //return false;
+        throw new ComprobanteElectronicoException("Intentos Agotados", "Enviando Sri", ComprobanteElectronicoException.ERROR_COMPROBANTE);
     } 
     
     
@@ -309,6 +341,7 @@ public class ServicioSri {
            AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
            for(int i=0;i<INTENTOS_AUTORIZACION;i++)
            {
+               
                try {
                    
                    RespuestaComprobante respuesta=port.autorizacionComprobante(claveAcceso);
@@ -321,6 +354,7 @@ public class ServicioSri {
                    {
                        if(autorizaciones.get(0).getEstado().equals(AUTORIZADO))
                        {
+                           Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE,"Se autorizo en el intento: "+i);
                             return true;
                        }if(autorizaciones.get(0).getEstado().equals("EN PROCESO"))
                        {
@@ -337,8 +371,10 @@ public class ServicioSri {
                                System.out.println(mensaje.getTipo());
                                mensajeError+=mensaje.getMensaje()+"\n"+mensaje.getInformacionAdicional();
                            }
-                           throw new ComprobanteElectronicoException(mensajeError," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
-                           //for
+                           
+                           //Si el Sri lanza algun error coloco en la carpeta de rechazados
+                           throw new ComprobanteElectronicoException(mensajeError," Autorizando",ComprobanteElectronicoException.RECHAZADO,ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
+                           
                        }
                    }
                } catch (InterruptedException ex) {
@@ -351,7 +387,10 @@ public class ServicioSri {
                }
            }
            
-           //Si sale del bucle sin retornar asumo que excedio el tiempo de espera
+           
+           validacionPostComprobarAutorizacion(new ClaveAcceso(claveAcceso));
+           
+           //Si sale del bucle sin retornar asumo que excedio el tiempo de espera y lanzo una advertencia
            throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , Por favor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
        }
        else
@@ -360,6 +399,16 @@ public class ServicioSri {
        }
        //return false;
        
+    }
+    
+    private void validacionPostComprobarAutorizacion(ClaveAcceso claveAcceso) throws ComprobanteElectronicoException
+    {
+        //Si ha pasado más de 1 día esperando recibir respuesta lo clasifico como error para analizar el problema
+        java.util.Date fechaEmisionTolerable=UtilidadesFecha.sumarDiasFecha(claveAcceso.fechaEmision, 1);
+        if(UtilidadesFecha.compararFechaSinImportarHora(fechaEmisionTolerable,UtilidadesFecha.getFechaHoy())<0)
+        {
+            throw new ComprobanteElectronicoException("ERRROR TIEMPO AUTORIZACION: el sri no ha respondiendo en la etapa de autorización lo cual puede ser un error","Prevalidar",ComprobanteElectronicoException.RECHAZADO,CARPETA_ENVIADOS_SIN_RESPUESTA);
+        }
     }
     
     public boolean autorizarLote(String claveAcceso) throws ComprobanteElectronicoException

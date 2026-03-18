@@ -106,9 +106,12 @@ public class CajaSession implements Serializable
     /*
     * Foreign Key
     */
-    @JoinColumn(name = "CAJA_ID")
-    @ManyToOne
-    private Caja caja;
+    //@JoinColumn(name = "CAJA_ID")
+    //@ManyToOne
+    //private Caja caja;
+    
+    @Column(name = "CAJA_ID")
+    private Long cajaId;
     
     @JoinColumn(name = "USUARIO_ID")
     @ManyToOne
@@ -173,12 +176,23 @@ public class CajaSession implements Serializable
         this.valorCierre = valorCierre;
     }
 
+    @Deprecated
     public Caja getCaja() {
-        return caja;
+        try {
+            return ServiceFactory.getFactory().getCajaServiceIf().buscarPorId(cajaId);
+            //return caja;
+        } catch (RemoteException ex) {
+            Logger.getLogger(CajaSession.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setCaja(Caja caja) {
-        this.caja = caja;
+        if(caja!=null)
+        {
+            cajaId = caja.getId();
+        }
+        
     }
 
     public Usuario getUsuario() {
@@ -424,7 +438,8 @@ public class CajaSession implements Serializable
 
     @Override
     public String toString() {
-        return caja.getNombre()+" - "+usuario.getNick();
+        //return getca.getNombre()+" - "+usuario.getNick();
+        return "CAJA SESSIÓN :"+usuario.getNick();
     }
     
     /**
@@ -484,7 +499,7 @@ public class CajaSession implements Serializable
                     }
                     
                 }
-                else if(ingresoCaja.getCartera()!=null)
+                else if(ingresoCaja.getCarteraId()!=null)
                 {
                     //Cuando no tiene forma de pago asumo que es en efectivo
                     if(ingresoCaja.getFormaPago()==null)

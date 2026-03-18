@@ -1419,7 +1419,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         } else {
             parametroCodefac.setValor(valor);
         }
-        parametroCodefac.setEmpresa(session.getEmpresa());
+        parametroCodefac.setEmpresaTmp(session.getEmpresa());
     }
 
     @Override

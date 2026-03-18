@@ -96,8 +96,10 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     @Column(name = "CANTIDAD_PRESENTACION")
     private BigDecimal cantidadPresentacion;
     
-    @JoinColumn(name = "CATALOGO_PRODUCTO_ID")
-    private CatalogoProducto catalogoProducto;
+    //@JoinColumn(name = "CATALOGO_PRODUCTO_ID")
+    //private CatalogoProducto catalogoProducto;
+    @Column(name = "CATALOGO_PRODUCTO_ID")
+    private Long catalogoProductoId;
     
     @JoinColumn(name = "KARDEX_ITEM_ESPECIFICO_ID")
     private KardexItemEspecifico kardexItemEspecifico;
@@ -265,7 +267,13 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     
 
     public CatalogoProducto getCatalogoProducto() {
-        return catalogoProducto;
+        try {
+            return ServiceFactory.getFactory().getCatalogoProductoServiceIf().buscarPorId(catalogoProductoId);
+            //return catalogoProducto;
+        } catch (RemoteException ex) {
+            Logger.getLogger(DetalleFacturaNotaCeditoAbstract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public BigDecimal getCostoPromedio() {
@@ -277,7 +285,10 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     public void setCatalogoProducto(CatalogoProducto catalogoProducto) {
-        this.catalogoProducto = catalogoProducto;
+        if(catalogoProducto!=null)
+        {
+            this.catalogoProductoId = catalogoProducto.getId();
+        }
     }
 
     public BigDecimal getCantidadPresentacion() {

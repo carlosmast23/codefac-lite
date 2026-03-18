@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
@@ -18,6 +19,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -79,8 +83,11 @@ public class PuntoEmision implements Serializable{
     @Column(name = "AUTORIZACION")
     private String autorizacion;
     
-    @JoinColumn(name = "SUCURSAL_ID")
-    private Sucursal sucursal;
+    //@JoinColumn(name = "SUCURSAL_ID")
+    //private Sucursal sucursal;
+    
+    @Column(name = "SUCURSAL_ID")
+    private Long sucursalId;
 
     public PuntoEmision() {
     }
@@ -239,10 +246,14 @@ public class PuntoEmision implements Serializable{
     public void setAutorizacion(String autorizacion) {
         this.autorizacion = autorizacion;
     }
-    
-    
-    
-    
+
+    public Long getSucursalId() {
+        return sucursalId;
+    }
+
+    public void setSucursalId(Long sucursalId) {
+        this.sucursalId = sucursalId;
+    }
     
 
     @Override
@@ -293,11 +304,22 @@ public class PuntoEmision implements Serializable{
     //}
 
     public Sucursal getSucursal() {
-        return sucursal;
+        try {
+            return ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(sucursalId);
+            //return sucursal;
+        } catch (RemoteException ex) {
+            Logger.getLogger(PuntoEmision.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
+        
+        if(sucursal!=null)
+        {
+            this.sucursalId = sucursal.getId();
+        }
+        
     }
     
     /*public ComprobanteEntity.TipoEmisionEnum getTipoFacturacionEnum()

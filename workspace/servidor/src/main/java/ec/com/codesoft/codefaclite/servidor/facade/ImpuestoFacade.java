@@ -32,7 +32,8 @@ public class ImpuestoFacade extends AbstractFacade<Impuesto> {
         String queryString = "SELECT i FROM Impuesto i WHERE i.nombre=?1";
         Query query = em.createQuery(queryString);
         query.setParameter(1,nombre); 
-        return (Impuesto) query.getSingleResult();
+        List<Impuesto> lista = query.getResultList();
+        return lista.isEmpty() ? null : lista.get(0);
     }
     
     /*public Impuesto getByImpuestoVigente(String nombre)

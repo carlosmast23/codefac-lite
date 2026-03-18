@@ -746,7 +746,7 @@ public class Main {
                     parametroDirectorioRecursos = new ParametroCodefac();
                     parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
                     parametroDirectorioRecursos.setValor(directorioUsuario);
-                    parametroDirectorioRecursos.setEmpresa(empresa);
+                    parametroDirectorioRecursos.setEmpresaTmp(empresa);
                     ServiceFactory.getFactory().getParametroCodefacServiceIf().grabar(parametroDirectorioRecursos);
                 } else {
                     parametroDirectorioRecursos.setValor(directorioUsuario);
@@ -794,7 +794,7 @@ public class Main {
             }    
             parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
             parametroDirectorioRecursos.setValor(directorioUsuario);
-            parametroDirectorioRecursos.setEmpresa(empresa);
+            parametroDirectorioRecursos.setEmpresaTmp(empresa);
             
             if(parametroDirectorioRecursos.getId()==null)
             {

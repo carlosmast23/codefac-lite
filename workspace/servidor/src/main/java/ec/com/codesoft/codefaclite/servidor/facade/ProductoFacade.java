@@ -300,7 +300,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
                 if (productoConsultado.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) 
                 {
                     Producto productoOriginal = productoConsultado.buscarProductoEmpaquePrincipal();
-                    if (productoOriginal.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+                    if (productoOriginal!=null && productoOriginal.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
                     {                        
                         return productoConsultado;
                     }

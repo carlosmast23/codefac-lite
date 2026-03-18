@@ -15,6 +15,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.pos.panel.CajaSessionPanel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
@@ -242,8 +243,19 @@ public class CajaSessionModel extends CajaSessionPanel implements ControladorVis
         
         getjTextValorCierreReal().setText(cajaSession.getValorCierreReal()+"");
         getTxtObservacionesCierreCaja().setText(cajaSession.getObservacionCierreCaja());
-               
-        if(cajaSession.getIngresosCaja()==null || cajaSession.getIngresosCaja().isEmpty())
+           
+        //Mejorar esta parte porque solo necesito saber el total
+        Long cantidadIngresoCajas=0l;
+        try {
+            cantidadIngresoCajas = ServiceFactory.getFactory().getIngresoCajaServiceIf().consultarPorCajaSessionCount(cajaSession);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(CajaSessionModel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CajaSessionModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //List<IngresoCaja> ingresoCajaList=cajaSession.getIngresosCaja();
+        if(cantidadIngresoCajas==0)
         {
             getjTextValorCierreTeorico().setText("" + cajaSession.getValorApertura());
         }

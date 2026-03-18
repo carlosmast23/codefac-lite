@@ -22,17 +22,25 @@ public class AuditoriaInformacionModel extends AuditoriaInformacionPanel{
     public AuditoriaInformacionModel(String fechaIngreso, String fechaEdicion, String usuarioIngreso, String usuarioEdicion) 
     {
          super(null,true);
-         setearDatos(fechaIngreso, fechaEdicion, usuarioIngreso, usuarioEdicion);
+         setearDatos(fechaIngreso, fechaEdicion, usuarioIngreso, usuarioEdicion,"");
+    }
+    
+    public AuditoriaInformacionModel(String fechaIngreso, String fechaEdicion, String usuarioIngreso, String usuarioEdicion,String log) 
+    {
+         super(null,true);
+         setearDatos(fechaIngreso, fechaEdicion, usuarioIngreso, usuarioEdicion,log);
     }
     
     
-    public void setearDatos(String fechaIngreso, String fechaEdicion, String usuarioIngreso, String usuarioEdicion) 
+    public void setearDatos(String fechaIngreso, String fechaEdicion, String usuarioIngreso, String usuarioEdicion,String log) 
     {
         getLblFechaCreacion().setText(fechaIngreso);
         getLblFechaEdicion().setText(fechaEdicion);
         
         getLblUsuarioCreacion().setText(usuarioIngreso);
         getLblUsuarioEdicion().setText(usuarioEdicion);
+        
+        getTxtAreaLog().setText(log);
         
     }
     

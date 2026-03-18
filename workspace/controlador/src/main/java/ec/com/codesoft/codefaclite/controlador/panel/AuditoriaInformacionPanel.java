@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.panel;
 
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -41,6 +42,8 @@ public class AuditoriaInformacionPanel extends javax.swing.JDialog {
         lblFechaEdicion = new javax.swing.JLabel();
         lblUsuarioCreacion = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtAreaLog = new javax.swing.JTextArea();
 
         jLabel2.setText("jLabel2");
 
@@ -128,6 +131,21 @@ public class AuditoriaInformacionPanel extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 15, 5);
         getContentPane().add(jLabel10, gridBagConstraints);
 
+        txtAreaLog.setColumns(20);
+        txtAreaLog.setRows(5);
+        txtAreaLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Logs"));
+        jScrollPane1.setViewportView(txtAreaLog);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(jScrollPane1, gridBagConstraints);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -180,10 +198,12 @@ public class AuditoriaInformacionPanel extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFechaCreacion;
     private javax.swing.JLabel lblFechaEdicion;
     private javax.swing.JLabel lblUsuarioCreacion;
     private javax.swing.JLabel lblUsuarioEdicion;
+    private javax.swing.JTextArea txtAreaLog;
     // End of variables declaration//GEN-END:variables
 
     public JLabel getLblFechaCreacion() {
@@ -217,5 +237,15 @@ public class AuditoriaInformacionPanel extends javax.swing.JDialog {
     public void setLblUsuarioEdicion(JLabel lblUsuarioEdicion) {
         this.lblUsuarioEdicion = lblUsuarioEdicion;
     }    
+
+    public JTextArea getTxtAreaLog() {
+        return txtAreaLog;
+    }
+
+    public void setTxtAreaLog(JTextArea txtAreaLog) {
+        this.txtAreaLog = txtAreaLog;
+    }
+    
+    
     
 }

@@ -59,6 +59,8 @@ create table RETENCION
     PUNTO_EMISION_ID BIGINT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.7)*/
     OBSERVACION varchar(512),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.2)*/
+    LOG_SRI varchar(250),
 
     primary key (ID)
 

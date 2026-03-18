@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades.ComparadorInterface;
 import java.io.Serializable;
@@ -15,6 +16,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Session;
 
 /**
  *
@@ -395,8 +400,10 @@ public class ParametroCodefac implements Serializable {
     @Column(name = "VALOR")    
     public String valor;
 
-    @JoinColumn(name = "EMPRESA_ID")
-    private Empresa empresa;
+    //@JoinColumn(name = "EMPRESA_ID")
+   // private Empresa empresa;
+    @Column(name = "EMPRESA_ID")    
+    private Long empresaId;
 
     public ParametroCodefac(String nombre) {
         this.nombre = nombre;
@@ -436,12 +443,31 @@ public class ParametroCodefac implements Serializable {
         this.valor = valor;
     }
 
-    public Empresa getEmpresa() {
-        return empresa;
+    public Long getEmpresaId() {
+        return empresaId;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    public void setEmpresaId(Long empresaId) {
+        this.empresaId = empresaId;
+    }
+    
+    
+
+    @Deprecated
+    public Empresa getEmpresaTmp() {
+        try {
+            return ServiceFactory.getFactory().getEmpresaServiceIf().buscarPorId(empresaId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ParametroCodefac.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void setEmpresaTmp(Empresa empresa) {
+        if(empresa!=null)
+        {
+            this.empresaId = empresa.getId();
+        }
     }
     
     

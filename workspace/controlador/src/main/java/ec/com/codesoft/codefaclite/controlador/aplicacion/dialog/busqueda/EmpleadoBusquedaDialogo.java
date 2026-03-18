@@ -45,7 +45,7 @@ public class EmpleadoBusquedaDialogo implements InterfaceModelFind<Empleado>,Int
 
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
-        //Empleado empleado;
+        Empleado empleado;
         //empleado.getDepartamento().getTipo();
         String queryString = "SELECT e FROM Empleado e WHERE ((LOWER(e.nombres) like ?1) or ";
         queryString+="(LOWER(e.apellidos) like ?2) or e.identificacion like ?3 )  and e.estado=?4";

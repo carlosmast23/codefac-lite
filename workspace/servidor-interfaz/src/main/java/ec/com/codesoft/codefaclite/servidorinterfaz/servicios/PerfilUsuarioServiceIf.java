@@ -7,6 +7,8 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.servicios;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -15,4 +17,6 @@ import java.util.List;
  */
 public interface PerfilUsuarioServiceIf extends ServiceAbstractIf<PerfilUsuario> {
     public List<PerfilUsuario> buscarPorPerfil(Perfil perfil) throws java.rmi.RemoteException;
+    public List<PerfilUsuario> buscarPorUsuario(Usuario usuario) throws RemoteException;
+    
 }

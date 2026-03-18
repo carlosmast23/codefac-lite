@@ -30,13 +30,14 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Profor
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ReferidoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.componentes.ComponenteDatosComprobanteElectronicosInterface;
+import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.utilidades.ComprobanteElectronicoComponente;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
-import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_EDITAR;
 import static ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface.ESTADO_GRABAR;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
+import ec.com.codesoft.codefaclite.controlador.model.AuditoriaInformacionModel;
 import ec.com.codesoft.codefaclite.controlador.model.LoginArqueoCajalModel;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadReportes;
 import ec.com.codesoft.codefaclite.facturacion.busqueda.FacturaBusquedaPresupuesto;
@@ -614,14 +615,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnBuscarReferenciaContacto().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ReferidoBusquedaDialogo busquedaDialog = new ReferidoBusquedaDialogo(session);
-                BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
-                buscarDialogoModel.setVisible(true);
-                Persona referidoTmp=(Persona) buscarDialogoModel.getResultado();
-                if(referidoTmp!=null)
+                
+                BuscarDialogoModel buscarDialogoModel=crearDialogoEmpleado();
+                Empleado referenteTmp=(Empleado) buscarDialogoModel.getResultado();
+                if(referenteTmp!=null)
                 {
-                    factura.setReferido(referidoTmp);
-                    getTxtReferenciaContacto().setText(referidoTmp.getIdentificacion()+" - "+referidoTmp.getNombresCompletos());
+                    factura.setReferente(referenteTmp);
+                    getTxtReferenciaContacto().setText(referenteTmp.getIdentificacion()+" - "+referenteTmp.getNombresCompletos());            
+                    getSpnPorcentajeReferente().setValue(referenteTmp.getPorcentajeReferidos());
                 }
             }
         });
@@ -868,6 +869,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
             }
         });
+        
+        getBtnLimpiarReferente().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                factura.setReferente(null);
+                getTxtReferenciaContacto().setText("");
+
+            }
+        });
 
         getBtnBuscarVendedor().addActionListener(new ActionListener() {
             @Override
@@ -913,7 +923,59 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         
         getBtnAbonoCartera().addActionListener(listenerAbonoCartera);
         
+        getBtnAuditoria().addActionListener(listenerBotonAuditoria);
+        
+        getBtnActualizarFechaReprocesar().addActionListener(listenerBotonActualizarFechaReprocesar);
+        
     }
+    
+    private ActionListener listenerBotonActualizarFechaReprocesar=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (estadoFormulario.equals(ESTADO_EDITAR)) {
+                
+                //Validacion que ingrese la clave de soporte para poder continuar
+                String claveIngresada = DialogoCodefac.mensajeTextoIngreso(MensajeCodefacSistema.IngresoInformacion.INGRESO_CLAVE_CODEFAC);
+                if (!UtilidadesSistema.verificarClaveSoporte(claveIngresada)) {
+                    DialogoCodefac.mensaje(new CodefacMsj("Clave de acceso incorrecta",CodefacMsj.TipoMensajeEnum.ERROR));
+                    return;
+                }
+                
+                try {
+                    //1.-primero tengo que cambiar de modo de rechaza a sin autorizar
+                    factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR);
+                    
+                    //2.-cambiar la fecha por la del día de hoy
+                    factura.setFechaEmision(UtilidadesFecha.getFechaHoy());
+                    
+                    //3.- grabar los cambios
+                    ServiceFactory.getFactory().getComprobanteServiceIf().editar(factura);
+                    
+                    //4.- reevias los cambios nuevamente al sri
+                    getPnlDatosAdicionales().procesarComprobante();                    
+                    
+                    DialogoCodefac.mensaje(new CodefacMsj("Fecha modificada correctamente, el comprobante va a empezar a procesar nuevamente",CodefacMsj.TipoMensajeEnum.CORRECTO));
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }
+    };
+    
+    
+    private ActionListener listenerBotonAuditoria=new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (estadoFormulario.equals(ESTADO_EDITAR)) {
+                AuditoriaInformacionModel auditoriaModel = new AuditoriaInformacionModel(factura.getFechaCreacion() + "", factura.getFechaUltimaEdicion() + "", factura.getUsuario() + "", factura.getUsuarioUltimaEdicion() + "",factura.getLogSri());
+                auditoriaModel.setVisible(true);
+
+            }
+        }
+    };
     
     private ActionListener listenerAbonoCartera=new ActionListener() {
         @Override
@@ -951,25 +1013,25 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
     };
     
-    private void eventoAgregarBtnVendedor()
+    private BuscarDialogoModel crearDialogoEmpleado()
     {
         EmpleadoBusquedaDialogo busquedaDialog = new EmpleadoBusquedaDialogo();
         busquedaDialog.setTipoEnum(Departamento.TipoEnum.Ventas);
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaDialog);
         buscarDialogoModel.setVisible(true);
+        return buscarDialogoModel;
+    }
+    
+    private void eventoAgregarBtnVendedor()
+    {
+        BuscarDialogoModel buscarDialogoModel=crearDialogoEmpleado();
         Empleado empleadoTmp = (Empleado) buscarDialogoModel.getResultado();
         if (empleadoTmp != null) {
-            //vendedor=empleadoTmp;
+            
             factura.setVendedor(empleadoTmp);
-            getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());
-            //factura.setVendedor(null);
-
-            /*factura.addDatoAdicional(new FacturaAdicional(
-                            ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(), 
-                            factura.getVendedor().getNombresCompletos(), 
-                            ComprobanteAdicional.Tipo.TIPO_OTRO) {
-                    });*/
-            //factura.addDatoAdicional(ComprobanteAdicional.CampoDefectoEnum.VENDEDOR.getNombre(),factura.getVendedor().getNombresCompletos());
+            getTxtVendedor().setText(empleadoTmp.getIdentificacion() + " - " + empleadoTmp.getNombresCompletos());         
+            
+            getSpnPorcentajeVendedor().setValue(empleadoTmp.getPorcentajeVendedor());
             cargarTablaDatosAdicionales();
         }
     }
@@ -3041,6 +3103,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getCmbFechaVencimiento().setDate(null);
         getCmbFechaVencimiento().setEnabled(false);
         getTxtVendedor().setText("");
+        getSpnPorcentajeReferente().setValue(0);
+        getSpnPorcentajeVendedor().setValue(0);
+        
+        getTxtOrigenVentaNota().setText("");
+        getCmbOrigenVenta().setSelectedIndex(0);
         
         getCmbPreciosVenta().removeAllItems();
         getCmbPresentacionProducto().removeAllItems();
@@ -3692,6 +3759,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             factura.setDireccion(factura.getSucursal().getDireccion());
             factura.setTelefono(factura.getSucursal().getTelefonoCelular());
         }
+        
+        factura.setOrigenVentaId(getCmbOrigenVenta().getSelectedIndex());
+        factura.setOrigenVentaNota(getTxtOrigenVentaNota().getText());
         //factura.setIvaSriId(session.get;
         
         /**
@@ -3850,11 +3920,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(factura.getVendedor()!=null)
         {
             getTxtVendedor().setText(factura.getVendedor().getIdentificacion() + " - " + factura.getVendedor().getNombresCompletos());
+            getSpnPorcentajeVendedor().setValue(factura.getVendedor().getPorcentajeVendedor());
         }
         
-        if(factura.getReferido()!=null)
+        if(factura.getReferente()!=null)
         {
-            getTxtReferenciaContacto().setText(factura.getReferido().getIdentificacion() + " - " + factura.getReferido().getNombresCompletos());
+            getTxtReferenciaContacto().setText(factura.getReferente().getIdentificacion() + " - " + factura.getReferente().getNombresCompletos());
+            getSpnPorcentajeReferente().setValue(factura.getReferente().getPorcentajeReferidos());
         }
         
         if(factura.getFechaVencimiento()!=null)
@@ -3871,6 +3943,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             getTxtDiasCredito().setValue(factura.getDiasCredito());
         }
+        
+        getTxtOrigenVentaNota().setText(factura.getOrigenVentaNota());
+        getCmbOrigenVenta().setSelectedIndex(factura.getOrigenVentaId());
         
     }
 
@@ -5101,6 +5176,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getCmbDocumento().setEnabled(true);
             getCmbTipoDocumento().setEnabled(true);
             getCmbFechaVencimiento().setEnabled(true);
+            getBtnActualizarFechaReprocesar().setVisible(false);
         }
         else
         {
@@ -5108,7 +5184,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getPnlDatosAdicionales().habilitar(true);
             //getBtnAutorizarComprobante().setEnabled(true);
             
-            getBtnBuscarReferenciaContacto().setEnabled(false);
+            //getBtnBuscarReferenciaContacto().setEnabled(false);
             //getBtnBuscarVendedor().setEnabled(false);
             //getBtnLimpiarVendedor().setEnabled(false);
             getChkActivarFechaVencimiento().setEnabled(false);
@@ -5128,7 +5204,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getCmbDocumento().setEnabled(false);
             getCmbTipoDocumento().setEnabled(false);
             getCmbFechaVencimiento().setEnabled(false);
-
+            getBtnActualizarFechaReprocesar().setVisible(true);
         }
     }
 

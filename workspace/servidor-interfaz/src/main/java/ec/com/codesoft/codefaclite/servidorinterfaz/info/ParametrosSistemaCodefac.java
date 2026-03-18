@@ -27,11 +27,16 @@ public abstract class ParametrosSistemaCodefac {
     /**
      * Version actual del sistema
      */
-    public static final String VERSION="1.4.0.0";
+    public static final String VERSION="1.4.0.2";
     /*
      * El modo de conf9.6.7guracion del sistema
      */
     public static final ModoSistemaEnum MODO=ModoSistemaEnum.PRODUCCION;
+    
+    /**
+     * Variable general para saber cual es el número actual para atención para los clientes
+     */
+    public static final String NUMERO_SOPORTE="0979809032";
     
     
     public static final String DIRECTORIO_RECURSOS_DEFECTO=System.getProperty("user.home") + "/codefacRecursos";

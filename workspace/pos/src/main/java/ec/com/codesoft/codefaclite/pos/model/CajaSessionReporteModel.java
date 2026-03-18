@@ -119,15 +119,16 @@ public class CajaSessionReporteModel extends CajaSessionReportePanel
                         fechaCierreStr=format.format(cs.getFechaHoraCierre());
                     }
                     
-                    if(cs.getCaja()!=null)
-                    {
+                     Caja cajaSession=cs.getCaja();
+                    if(cajaSession!=null)
+                    {                       
                         dataReporte.add(
                             new CajaSessionReporteData(
                                     cs,
-                                    cs.getCaja().getNombre(),
+                                    cajaSession.getNombre(),
                                     cs.getUsuario().getNick(),
-                                    cs.getCaja().getSucursal().getNombre(),
-                                    cs.getCaja().getPuntoEmision().getPuntoEmision().toString(),
+                                    cajaSession.getSucursal().getNombre(),
+                                    cajaSession.getPuntoEmision().getPuntoEmision().toString(),
                                     fechaAperturaStr,
                                     fechaCierreStr,
                                     (cs.getValorApertura()!=null)?cs.getValorApertura().toString():"",

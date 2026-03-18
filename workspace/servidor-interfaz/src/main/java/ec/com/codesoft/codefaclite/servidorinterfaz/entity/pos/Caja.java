@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CajaEnum;
@@ -22,6 +23,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -49,11 +53,15 @@ public class Caja implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
     
-    @JoinColumn(name = "SUCURSAL_ID")
-    private Sucursal sucursal;
+    //@JoinColumn(name = "SUCURSAL_ID")
+    //private Sucursal sucursal;
+    @Column(name = "SUCURSAL_ID")
+    private Long sucursalId;
     
-    @JoinColumn(name = "PUNTO_EMISION_ID")
-    private PuntoEmision puntoEmision;
+    //@JoinColumn(name = "PUNTO_EMISION_ID")
+    //private PuntoEmision puntoEmision;
+    @Column(name = "PUNTO_EMISION_ID")
+    private Long puntoEmisionId;
     
     @JoinColumn(name = "PUNTO_EMISION_2_ID")
     private PuntoEmision puntoEmision2;
@@ -115,19 +123,56 @@ public class Caja implements Serializable {
     }
 
     public Sucursal getSucursal() {
-        return sucursal;
+        
+        try {
+            return ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(sucursalId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Caja.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setSucursal(Sucursal sucursal) {
-        this.sucursal = sucursal;
+        if(sucursal!=null)
+        {
+            this.sucursalId = sucursal.getId();
+        }
     }
 
+    public Long getSucursalId() {
+        return sucursalId;
+    }
+
+    public void setSucursalId(Long sucursalId) {
+        this.sucursalId = sucursalId;
+    }
+
+    public Long getPuntoEmisionId() {
+        return puntoEmisionId;
+    }
+
+    public void setPuntoEmisionId(Long puntoEmisionId) {
+        this.puntoEmisionId = puntoEmisionId;
+    }
+    
+    
+    
+    @Deprecated
     public PuntoEmision getPuntoEmision() {
-        return puntoEmision;
+        try {
+            return ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(puntoEmisionId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Caja.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
+    @Deprecated
     public void setPuntoEmision(PuntoEmision puntoEmision) {
-        this.puntoEmision = puntoEmision;
+        if(puntoEmision!=null)
+        {
+            this.puntoEmisionId = puntoEmision.getId();
+        }
     }
     
     /*public List<CajaPermiso> getCajasPermiso() {
@@ -187,6 +232,7 @@ public class Caja implements Serializable {
 
     @Override
     public String toString() {
-        return "" + nombre + " - Punto Emisión: " + puntoEmision.getPuntoEmision();
+        //return "" + nombre + " - Punto Emisión: " + puntoEmision.getPuntoEmision();
+        return "" + nombre + " - Punto Emisión: ";
     }
 }

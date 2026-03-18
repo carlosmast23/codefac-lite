@@ -263,7 +263,7 @@ public class ComprobantesConfiguracionModel extends ComprobantesConfiguracionPan
             parametroCodefac.setNombre(parametro);
         }        
  
-        parametroCodefac.setEmpresa(session.getEmpresa());
+        parametroCodefac.setEmpresaTmp(session.getEmpresa());
         parametroCodefac.setValor(valor);    
         parametrosEditar.add(parametroCodefac);
         

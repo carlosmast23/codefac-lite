@@ -27,6 +27,8 @@ create table TRANSPORTISTA
     OBLIGADO_LLEVAR_CONTABILIDAD varchar(2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.7.9.7)*/
     EMPRESA_ID BIGINT,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.2)*/
+    LOG_SRI varchar(250),
     primary key (ID)
 );
 

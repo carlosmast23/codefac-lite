@@ -109,13 +109,13 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
             if(parametroHoraProgramada==null)
             {
                 parametroHoraProgramada=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA,"");
-                parametroHoraProgramada.setEmpresa(session.getEmpresa());
+                parametroHoraProgramada.setEmpresaTmp(session.getEmpresa());
             }
             
             if(parametroRespaldarSalir==null)
             {
                 parametroRespaldarSalir=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,"");
-                parametroRespaldarSalir.setEmpresa(session.getEmpresa());
+                parametroRespaldarSalir.setEmpresaTmp(session.getEmpresa());
             }
             
         } catch (RemoteException ex) {
@@ -147,7 +147,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     if(parametroDirectorio==null)
                     {
                         parametroDirectorio=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DIRECTORIO_RESPALDO);
-                        parametroDirectorio.setEmpresa(session.getEmpresa());
+                        parametroDirectorio.setEmpresaTmp(session.getEmpresa());
                     }
                     
                     parametroDirectorio.setValor(getTxtUbicacionRespaldo().getText());

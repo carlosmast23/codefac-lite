@@ -33,10 +33,10 @@ public class ParametroCodefacFacade extends AbstractFacade<ParametroCodefac>
     {
         //ParametroCodefac parametroCodefac;
         //parametroCodefac.getEmpresa()
-        String queryString = "SELECT p FROM ParametroCodefac p WHERE p.empresa=?1 ";
+        String queryString = "SELECT p FROM ParametroCodefac p WHERE p.empresaId=?1 ";
         
         Query query = em.createQuery(queryString);
-        query.setParameter(1,empresa); 
+        query.setParameter(1,empresa.getId()); 
         query.setFlushMode(FlushModeType.COMMIT);
         return query.getResultList();
     }
@@ -45,11 +45,12 @@ public class ParametroCodefacFacade extends AbstractFacade<ParametroCodefac>
     {
         try
         {
+            //ParametroCodefac pc;pc.getEmpresaId()
             //Este Order o hago por si existen datos repetidos seleccionar el último guardado        
-            String queryString = "SELECT p FROM ParametroCodefac p WHERE p.empresa=?2 AND p.nombre=?1 ORDER BY p.id desc ";
+            String queryString = "SELECT p FROM ParametroCodefac p WHERE p.empresaId=?2 AND p.nombre=?1 ORDER BY p.id desc ";
             Query query = em.createQuery(queryString);
             query.setParameter(1,nombre); 
-            query.setParameter(2,empresa); 
+            query.setParameter(2,empresa.getId()); 
 
             List<ParametroCodefac> resultadoList=query.getResultList();
             if(resultadoList.size()>0)

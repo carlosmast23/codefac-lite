@@ -286,9 +286,9 @@ public class ControladorReporteFactura {
                          * =====================================================
                          */
                         BigDecimal valorComision = BigDecimal.ZERO;
-                        if (factura.getReferido() != null) {
-                            BigDecimal porcentajeComision = (factura.getReferido().getContactoClientePorcentaje() != null) ? factura.getReferido().getContactoClientePorcentaje() : BigDecimal.ZERO;
-                            
+                        if (factura.getReferente()!= null) {
+                            //BigDecimal porcentajeComision = (factura.getReferente().getContactoClientePorcentaje() != null) ? factura.getReferente().getContactoClientePorcentaje() : BigDecimal.ZERO;
+                            BigDecimal porcentajeComision =BigDecimal.ZERO;
                             //Cuando los valores son distintos es porque aplica una nota de credito
                             if (factura.getTotal().compareTo(totalMenosNotaCredito) != 0) {
                                 BigDecimal porcentajeImpuestosOriginal = factura.getIva().divide(factura.getTotal(), 8, BigDecimal.ROUND_HALF_UP); //Obtenego cual es la proporcion del iva original , por si afecta un nota de credito valor a calcular la comision con esta proporicion
@@ -336,9 +336,9 @@ public class ControladorReporteFactura {
                                 totalNotaCredito.toString(),
                                 preimpresoNotaCreditoAfecta,
                                 totalMenosNotaCredito.toString(),
-                                (factura.getReferido() != null) ? factura.getReferido().getRazonSocial() : "",
-                                (factura.getReferido() != null) ? factura.getReferido().getIdentificacion() : "",
-                                (factura.getReferido() != null) ? factura.getReferido().getContactoClientePorcentaje().toString() : "0",
+                                (factura.getReferente()!= null) ? factura.getReferente().getNombres() : "",
+                                (factura.getReferente() != null) ? factura.getReferente().getIdentificacion() : "",
+                                (factura.getReferente() != null) ? "0".toString() : "0",
                                 valorComision.toString(),
                                 factura.getClaveAcceso(),
                                 factura.getPuntoEmision().toString(),

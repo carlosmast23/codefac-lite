@@ -419,19 +419,19 @@ public class EmpresaService extends ServiceAbstract<Empresa, EmpresaFacade> impl
         ParametroCodefac parametroDirectorioRecursos = new ParametroCodefac();
         parametroDirectorioRecursos.setNombre(ParametroCodefac.DIRECTORIO_RECURSOS);
         parametroDirectorioRecursos.setValor(pathPorDefecto);
-        parametroDirectorioRecursos.setEmpresa(empresa);
+        parametroDirectorioRecursos.setEmpresaTmp(empresa);
         parametros.add(parametroDirectorioRecursos);
         
         //Agregando parametro del iva por defecto
         ParametroCodefac parametroIvaDefecto=new ParametroCodefac();
         parametroIvaDefecto.setNombre(ParametroCodefac.IVA_DEFECTO);
         parametroIvaDefecto.setValor(ParametrosSistemaCodefac.IVA_DEFECTO);
-        parametroIvaDefecto.setEmpresa(empresa);
+        parametroIvaDefecto.setEmpresaTmp(empresa);
         parametros.add(parametroIvaDefecto);
         
         //Agregar la referencia de la empresa para que el resto de datos se grabe con la empresa correcta
         for (ParametroCodefac parametro : parametros) {
-            parametro.setEmpresa(empresa);
+            parametro.setEmpresaTmp(empresa);
         }
         
     }

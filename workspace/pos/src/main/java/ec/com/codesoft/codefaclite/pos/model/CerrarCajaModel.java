@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.Caja;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.IngresoCaja;
@@ -284,6 +285,8 @@ public class CerrarCajaModel extends CajaSessionModel
 
                 String referenciaSecuencial=ingresoCaja.getSecuencial();
                 
+                Cartera carteraCaja=ingresoCaja.getCartera();
+                
                 if(ingresoCaja.getFactura()!=null)
                 {
                     
@@ -329,14 +332,14 @@ public class CerrarCajaModel extends CajaSessionModel
                         detalleData.add(compraData);
                     }
                 }
-                else if(ingresoCaja.getCartera()!=null)
+                else if(carteraCaja!=null)
                 {
                     if (UtilidadesTextos.verificarNullOVacio(ingresoDescripcionTmp)) {
-                        ingresoDescripcionTmp = ingresoCaja.getCartera().getCarteraDocumentoEnum().getNombre();
+                        ingresoDescripcionTmp = carteraCaja.getCarteraDocumentoEnum().getNombre();
                     }
 
                     if (UtilidadesTextos.verificarNullOVacio(referenciaSecuencial)) {
-                        referenciaSecuencial = ingresoCaja.getCartera().getId() + "";
+                        referenciaSecuencial = carteraCaja.getId() + "";
                     }
 
                     String formaPagoStr = "Sin Definir";
@@ -353,9 +356,9 @@ public class CerrarCajaModel extends CajaSessionModel
                     VentaReporteData compraData = new VentaReporteData(
                             ingresoCaja.getId()+"",
                             referenciaSecuencial,
-                            ingresoCaja.getCartera().getPersona().getIdentificacion(),
+                            carteraCaja.getPersona().getIdentificacion(),
                             ingresoDescripcionTmp,
-                            ingresoCaja.getCartera().getPersona().getRazonSocial(),
+                            carteraCaja.getPersona().getRazonSocial(),
                             ingresoCaja.getValor() + "",
                             "",
                             formaPagoStr,

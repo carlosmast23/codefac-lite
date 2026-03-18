@@ -47,6 +47,10 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
     public BigDecimal utilidad;
     
     private String fechaEmisionStr;
+    
+    private String vendedor;
+    private String referente;
+    private String colaborador;
 
     
     @Override
@@ -57,10 +61,13 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
         razonSocial=(String) dato[3];
         identificacion=(String)dato[4];
         nombreProducto=(String)dato[5];
-        facturaId=(Long) dato[6];
-        subtotal=(BigDecimal) dato[7];
-        costo=(BigDecimal) dato[8];
-        utilidad=(BigDecimal) dato[9];
+        vendedor=(String)dato[6];
+        referente=(String)dato[7];
+        colaborador=(String)dato[8];
+        facturaId=(Long) dato[9];
+        subtotal=(BigDecimal) dato[10];
+        costo=(BigDecimal) dato[11];
+        utilidad=(BigDecimal) dato[12];
         
         //Setear la fecha de emision
         fechaEmisionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
@@ -168,6 +175,32 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
         this.facturaDetalleId = facturaDetalleId;
     }
 
+    public String getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(String vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public String getReferente() {
+        return referente;
+    }
+
+    public void setReferente(String referente) {
+        this.referente = referente;
+    }
+
+    public String getColaborador() {
+        return colaborador;
+    }
+
+    public void setColaborador(String colaborador) {
+        this.colaborador = colaborador;
+    }
+    
+    
+
     @Override
     public List<TipoDato> getDatos() {
          List<TipoDato> tiposDatos = new ArrayList<>();
@@ -177,9 +210,14 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
         tiposDatos.add(new TipoDato(this.razonSocial,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreProducto,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.vendedor,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referente,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.colaborador,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.subtotal,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.costo,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.utilidad,Excel.TipoDataEnum.NUMERO));
+        
+        
         return tiposDatos;
         
     }

@@ -82,7 +82,10 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         //alertas.add(obtenerCuentasPorCobrarPorCaducar(sucursal));
         alertas.add(obtenerNotificacionProblemasConEnvioRespaldo(sucursal.getEmpresa()));
         alertas.add(obtenerNotificacionFechaRespaldo(sucursal.getEmpresa()));
+        alertas.add(obtenerNotificacionComprobantesElectronicosRechazados(sucursal.getEmpresa()));
+        
         alertas=UtilidadesLista.eliminarReferenciaNulas(alertas);
+        
         
         
         
@@ -222,7 +225,7 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     {
         if(ParametroUtilidades.comparar(empresa, ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,EnumSiNo.SI))
         {
-            AlertaResponse alerta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.GRAVE,"Error Enviar Último Respaldo","Llamar Soporte");
+            AlertaResponse alerta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Error Enviar Último Respaldo","Llamar Soporte");
             return alerta;
         }
                 
@@ -396,6 +399,20 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
                     "Utilizar herramienta enviar");
         }
 
+        return null;
+    }
+    
+    private AlertaResponse obtenerNotificacionComprobantesElectronicosRechazados(Empresa empresa) throws RemoteException,ServicioCodefacException
+    {
+        ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+        Integer totalComprobantesRechazados=comprobanteServiceIf.obtenerTotalComprobantesRechazados(empresa);
+        if(totalComprobantesRechazados>0)
+        {
+            return new AlertaResponse(
+                    AlertaResponse.TipoAdvertenciaEnum.GRAVE,
+                    totalComprobantesRechazados + " " + AlertaResponse.ALERTA_COMPROBANTES_RECHAZADOS,
+                    "Llamar Soporte");
+        }
         return null;
     }
     

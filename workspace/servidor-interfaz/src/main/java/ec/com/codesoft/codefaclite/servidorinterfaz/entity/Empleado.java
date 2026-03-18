@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
 import java.util.Objects;
@@ -16,6 +17,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -64,9 +68,24 @@ public class Empleado implements Serializable
     @ManyToOne    
     private Departamento departamento;
     
-    @JoinColumn(name = "NACIONALIDAD_ID")
-    @ManyToOne
-    private Nacionalidad nacionalidad;
+    //@Column(name = "DEPARTAMENTO_ID")
+   // private Long departamentoId;
+    
+    //@JoinColumn(name = "NACIONALIDAD_ID")
+    //@ManyToOne
+    //private Nacionalidad nacionalidad;
+    
+    @Column(name = "NACIONALIDAD_ID")
+    private Long nacionalidadId;
+    
+    @Column(name = "PORCENTAJE_VENDEDOR")
+    private Integer porcentajeVendedor;
+    
+    @Column(name = "PORCENTAJE_REFERIDOS")
+    private Integer porcentajeReferidos;
+    
+    @Column(name = "PORCENTAJE_COLABORADOR")
+    private Integer porcentajeColaborador;
     
     //TODO: Falta aumentar la empresa
             
@@ -114,10 +133,37 @@ public class Empleado implements Serializable
 //        this.cliente = cliente;
 //    }
 
+    /*public Long getDepartamentoId() {
+        return departamentoId;
+    }
+
+    public void setDepartamentoId(Long departamentoId) {
+        this.departamentoId = departamentoId;
+    }*/
+
+    
+    
+
     public Departamento getDepartamento() {
         return departamento;
     }
 
+    /*@Deprecated
+    public Departamento getDepartamento() {
+    try {
+    return ServiceFactory.getFactory().getDepartamentoServiceIf().buscarPorId(departamentoId);
+    } catch (RemoteException ex) {
+    Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+    }
+    @Deprecated
+    public void setDepartamento(Departamento departamento) {
+    if(departamento!=null)
+    {
+    this.departamentoId = departamento.getId();
+    }
+    }*/
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
@@ -186,12 +232,31 @@ public class Empleado implements Serializable
         this.sexo = sexo;
     }
 
-    public Nacionalidad getNacionalidad() {
-        return nacionalidad;
+    public Long getNacionalidadId() {
+        return nacionalidadId;
     }
 
-    public void setNacionalidad(Nacionalidad nacionalidad) {
-        this.nacionalidad = nacionalidad;
+    public void setNacionalidadId(Long nacionalidadId) {
+        this.nacionalidadId = nacionalidadId;
+    }
+    
+    
+
+    public Nacionalidad getNacionalidadTmp() {
+        try {
+            return ServiceFactory.getFactory().getNacionalidadServiceIf().buscarPorId(nacionalidadId);
+            //return nacionalidad;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Empleado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void setNacionalidadTmp(Nacionalidad nacionalidad) {
+        if(nacionalidad!=null)
+        {
+            this.nacionalidadId = nacionalidad.getIdNacionalidad();
+        }
     }
     
     public String getNombresCompletos()
@@ -214,10 +279,40 @@ public class Empleado implements Serializable
     public void setPlaca(String placa) {
         this.placa = placa;
     }
+
+    public Integer getPorcentajeVendedor() {
+        return porcentajeVendedor;
+    }
+
+    public void setPorcentajeVendedor(Integer porcentajeVendedor) {
+        this.porcentajeVendedor = porcentajeVendedor;
+    }
+
+    public Integer getPorcentajeReferidos() {
+        if(porcentajeReferidos==null)
+            porcentajeReferidos=0;            
+            
+        return porcentajeReferidos;
+    }
+
+    public void setPorcentajeReferidos(Integer porcentajeReferidos) {
+        this.porcentajeReferidos = porcentajeReferidos;
+    }
+
+    public Integer getPorcentajeColaborador() {
+        return porcentajeColaborador;
+    }
+
+    public void setPorcentajeColaborador(Integer porcentajeColaborador) {
+        this.porcentajeColaborador = porcentajeColaborador;
+    }
+    
+    
     
     
     public Boolean verificarSupervisor()
     {
+        //Departamento departamento=getDepartamento();
         if(departamento!=null)
         {
             if(Departamento.TipoEnum.Supervisor.equals(departamento.getTipoEnum()))
@@ -232,7 +327,7 @@ public class Empleado implements Serializable
     @Override
     public String toString() {
         String nombreCompleto = this.apellidos + " " +this.nombres;
-        return ""+((departamento!=null)?departamento.getNombre():"sin departamento")+ " - " + nombreCompleto;
+        return " Departamento - " + nombreCompleto;
     }
 
     @Override

@@ -54,6 +54,7 @@ public abstract class WidgetNotificacionesCodefac extends ObjetoEscritorioAbstra
 
         add(lblTitulo, java.awt.BorderLayout.PAGE_START);
 
+        tblNotificaciones.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         jScrollPane1.setViewportView(tblNotificaciones);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);

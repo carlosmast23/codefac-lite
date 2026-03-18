@@ -539,7 +539,7 @@ public class UtilidadesService extends ServiceAbstract<Object,UtilidadFacade> im
                 {
                     parametroFechaValidacion = new ParametroCodefac();
                     parametroFechaValidacion.setNombre(ParametroCodefac.ULTIMA_FECHA_VALIDACION);
-                    parametroFechaValidacion.setEmpresa(empresa);
+                    parametroFechaValidacion.setEmpresaTmp(empresa);
                 }
             }
 

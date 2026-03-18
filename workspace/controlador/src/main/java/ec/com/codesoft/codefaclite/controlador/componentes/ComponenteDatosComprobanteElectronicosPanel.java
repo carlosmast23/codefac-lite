@@ -178,23 +178,12 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         btnReProcesarComprobante.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                if(comprobante.getEstadoFormularioEnum().equals(GeneralPanelInterface.EstadoFormularioEnum.EDITAR))
-                {
-                    if(DialogoCodefac.dialogoPregunta("Advertencia","Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-No se genero ninguna etapa al procesar el comprobante electrónico.\n-No existen en la carpeta de recursos ningun XML  ni RIDE. \n\n Está  seguro que desea continuar de todos modos ?  ",DialogoCodefac.MENSAJE_ADVERTENCIA))
-                    {                        
-                        try {
-                            ClienteInterfaceComprobante cic=comprobante.getInterfaceComprobante();
-                            //ClienteFacturaImplComprobante cic = new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);
-                            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(comprobante.obtenerComprobanteData(),comprobante.getComprobante(),comprobante.getComprobante().getUsuario(), cic);
-                            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
-                            btnReProcesarComprobante.setEnabled(false);
-                        } catch (RemoteException ex) {
-                            Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                         
+                if (comprobante.getEstadoFormularioEnum().equals(GeneralPanelInterface.EstadoFormularioEnum.EDITAR)) {
+                    if (DialogoCodefac.dialogoPregunta("Advertencia", "Esta opción solo debe ser usada para corregir problemas, Por ejemplo:\n-No se genero ninguna etapa al procesar el comprobante electrónico.\n-No existen en la carpeta de recursos ningun XML  ni RIDE. \n\n Está  seguro que desea continuar de todos modos ?  ", DialogoCodefac.MENSAJE_ADVERTENCIA)) {
+                        procesarComprobante();
                     }
                 }
+
             }
         });
         
@@ -391,6 +380,20 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
                 
     }
     
+    public void procesarComprobante()
+    {
+        try {
+            ClienteInterfaceComprobante cic = comprobante.getInterfaceComprobante();
+            //ClienteFacturaImplComprobante cic = new ClienteFacturaImplComprobante((FacturacionModel) formularioActual, factura, false);
+            ServiceFactory.getFactory().getComprobanteServiceIf().procesarComprobante(comprobante.obtenerComprobanteData(), comprobante.getComprobante(), comprobante.getComprobante().getUsuario(), cic);
+            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_EN_CURSO);
+            btnReProcesarComprobante.setEnabled(false);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComponenteDatosComprobanteElectronicosPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        
+    }
+    
     private void setearDatosRecepcion(DialogMostrarClaveAcceso dialogo)
     {
         String identificacionReceptor="";
@@ -570,5 +573,15 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
             }
         }
     }
+
+    public JButton getBtnReProcesarComprobante() {
+        return btnReProcesarComprobante;
+    }
+
+    public void setBtnReProcesarComprobante(JButton btnReProcesarComprobante) {
+        this.btnReProcesarComprobante = btnReProcesarComprobante;
+    }
+    
+    
     
 }

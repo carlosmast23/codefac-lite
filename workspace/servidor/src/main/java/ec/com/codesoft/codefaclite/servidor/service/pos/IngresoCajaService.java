@@ -67,4 +67,15 @@ public class IngresoCajaService extends ServiceAbstract<IngresoCaja, IngresoCaja
         
     }
     
+    public Long consultarPorCajaSessionCount(CajaSession cajaSession) throws ServicioCodefacException, RemoteException 
+    {
+        return (Long) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().consultarPorCajaSessionCount(cajaSession,entityManager);
+            }
+        });
+        
+    }
+    
 }

@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
@@ -18,6 +19,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Session;
 
 /**
  *
@@ -38,13 +43,17 @@ public class PerfilUsuario implements Serializable {
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
     
-    @JoinColumn(name = "USUARIO_ID")
-    @ManyToOne    
-    private Usuario usuario;
+    //@JoinColumn(name = "USUARIO_ID")
+    //@ManyToOne    
+    //private Usuario usuario;
+    @Column(name = "USUARIO_ID")
+    private Long  usuarioId;
 
     @JoinColumn(name = "PERFIL_ID")
-    @ManyToOne        
+    //@ManyToOne        
     private Perfil perfil;
+    //@Column(name = "PERFIL_ID")
+    //private Long  perfilId;
 
     public PerfilUsuario() {
     }
@@ -66,11 +75,19 @@ public class PerfilUsuario implements Serializable {
     }
 
     public Usuario getUsuario() {
-        return usuario;
+        try {
+            return ServiceFactory.getFactory().getUsuarioServicioIf().buscarPorId(usuarioId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        if(usuario!=null)
+        {
+            this.usuarioId = usuario.getId();
+        }
     }
 
     public Perfil getPerfil() {
@@ -80,6 +97,18 @@ public class PerfilUsuario implements Serializable {
     public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     }
+
+    
+
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    
 
     @Override
     public int hashCode() {

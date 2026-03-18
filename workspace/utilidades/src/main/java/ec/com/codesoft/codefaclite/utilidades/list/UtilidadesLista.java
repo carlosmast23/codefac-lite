@@ -153,6 +153,16 @@ public abstract class UtilidadesLista {
         return null;
         
     }
+ 
+    public static <T> List<T> unirListas(List<T> lista1, List<T> lista2) {
+
+        List<T> resultado = new ArrayList<>();
+
+        resultado.addAll(lista1);
+        resultado.addAll(lista2);
+
+        return resultado;
+    }
     
     public static boolean  verificarListadoDuplicadoPorCriterio(List datos,DatoCompararIf compararIf)
     {

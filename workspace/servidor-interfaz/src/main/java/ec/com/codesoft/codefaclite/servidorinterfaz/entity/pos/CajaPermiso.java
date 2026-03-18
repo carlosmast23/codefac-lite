@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import java.io.Serializable;
@@ -22,6 +23,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -48,8 +52,11 @@ public class CajaPermiso implements Serializable
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
     
-    @JoinColumn(name = "CAJA_ID")
-    private Caja caja;
+    //@JoinColumn(name = "CAJA_ID")
+    //private Caja caja;
+    @Column(name = "CAJA_ID")
+    private Long cajaId;
+    
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaPermiso", fetch = FetchType.EAGER)
     private List<TurnoAsignado> turnoAsignadoList; 
@@ -100,12 +107,22 @@ public class CajaPermiso implements Serializable
         this.usuario = usuario;
     }
 
+    @Deprecated
     public Caja getCaja() {
-        return caja;
+        try {
+            return ServiceFactory.getFactory().getCajaServiceIf().buscarPorId(cajaId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CajaPermiso.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
+    @Deprecated
     public void setCaja(Caja caja) {
-        this.caja = caja;
+        if(caja!=null)
+        {
+            this.cajaId = caja.getId();
+        }
     }
 
     public List<TurnoAsignado> getTurnoAsignadoList() {
@@ -154,6 +171,7 @@ public class CajaPermiso implements Serializable
 
     @Override
     public String toString() {
+        Caja caja=getCaja();
         return "Caja: " + caja.getNombre() + " - Punto Emisión: " + caja.getPuntoEmision();
     }
 }

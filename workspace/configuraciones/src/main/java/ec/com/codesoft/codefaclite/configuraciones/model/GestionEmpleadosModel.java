@@ -215,6 +215,9 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtTelefono().setText("");
         getTxtAreaDireccion().setText("");
         getTxtCodigo().setText("");
+        getSpnColaborador().setValue(0);
+        getSpnReferidos().setValue(0);
+        getSpnVendedor().setValue(0);
         
         //getCmbNacionalidad().setSelectedItem(ABORT);
     }
@@ -237,7 +240,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         this.empleado.setIdentificacion(""+getTxtIdentificacion().getText());
         Nacionalidad nacionalidad = (Nacionalidad) getCmbNacionalidad().getSelectedItem();
         if(generalEnumEstado != null){
-            this.empleado.setNacionalidad(nacionalidad);
+            this.empleado.setNacionalidadTmp(nacionalidad);
         }
         this.empleado.setNombres(""+getTxtNombres().getText());
         GeneroEnum generoEnum = (GeneroEnum) getCmbSexo().getSelectedItem();
@@ -247,6 +250,10 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         this.empleado.setTelefonoCelular(""+getTxtCelular().getText());
         this.empleado.setTelefonoConvencional(""+getTxtTelefono().getText());
         this.empleado.setCodigo(getTxtCodigo().getText());
+        
+        this.empleado.setPorcentajeColaborador((Integer)getSpnColaborador().getValue());
+        this.empleado.setPorcentajeReferidos((Integer)getSpnReferidos().getValue());
+        this.empleado.setPorcentajeVendedor((Integer)getSpnVendedor().getValue());
     }
     
     public void mostrarDatos()
@@ -266,6 +273,10 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtTelefono().setText(this.empleado.getTelefonoConvencional());
         getTxtCodigo().setText(this.empleado.getCodigo());
         
+        getSpnColaborador().setValue((this.empleado.getPorcentajeColaborador()!=null)?this.empleado.getPorcentajeColaborador():0);
+        getSpnReferidos().setValue((this.empleado.getPorcentajeReferidos()!=null)?this.empleado.getPorcentajeReferidos():0);
+        getSpnVendedor().setValue((this.empleado.getPorcentajeVendedor()!=null)?this.empleado.getPorcentajeVendedor():0);
+        
         /**
          * Cargar datos en combos
          */
@@ -274,7 +285,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         if(departamento != null){
             getCmbDepartamento().setSelectedItem(departamento);
         }
-        Nacionalidad nacionalidad = this.empleado.getNacionalidad();
+        Nacionalidad nacionalidad = this.empleado.getNacionalidadTmp();
         if(nacionalidad != null){
             getCmbNacionalidad().setSelectedItem(nacionalidad);
         }

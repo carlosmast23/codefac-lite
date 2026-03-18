@@ -61,9 +61,11 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     //@Column(name = "EMPRESA_ID")
     //protected Long empresaId;
     //@Column(name = "USUARIO_ID")
-    @JoinColumn(name = "USUARIO_ID")
-    protected Usuario usuario;
-    //protected Long usuarioId;
+    //@JoinColumn(name = "USUARIO_ID")
+    //protected Usuario usuario;
+    
+    @Column(name = "USUARIO_ID")
+    protected Long usuarioId;
 
     @Column(name = "FECHA_CREACION")
     protected Timestamp fechaCreacion;
@@ -143,6 +145,9 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     
     @Column(name ="OBSERVACION")
     protected String observacion;
+    
+    @Column(name ="LOG_SRI")
+    protected String logSri;
 
     public ComprobanteEntity() {
     }
@@ -204,12 +209,23 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
     public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }*/
+    
+    //TODO: Solucion temporal porque carga muchos datos
+    @Deprecated
     public Usuario getUsuario() {
-        return usuario;
+        try {
+            return ServiceFactory.getFactory().getUsuarioServicioIf().buscarPorId(usuarioId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ComprobanteEntity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+        if(usuario!=null)
+        {
+            this.usuarioId = usuario.getId();
+        }
     }
 
     public Timestamp getFechaCreacion() {
@@ -368,6 +384,15 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
         this.puntoEmisionId = puntoEmisionId;
     }
 
+    public String getLogSri() {
+        return logSri;
+    }
+
+    public void setLogSri(String logSri) {
+        this.logSri = logSri;
+    }
+
+    
     
     
     public void addDatoAdicional(T comprobante) {
@@ -568,7 +593,10 @@ public abstract class ComprobanteEntity<T extends ComprobanteAdicional> implemen
          * Estado que solo sirve para las proformas para saber que estan facturas
          * TODO: Buscar otra forma mejor de ubicar el estado de la proformas por que esta mesclando la logica de los comprobantes
          */
-        FACTURADO_PROFORMA("F","Facturado");
+        FACTURADO_PROFORMA("F","Facturado"),
+        /* Metodo que me permite asaber si el Sri rechazo el documento por algun motivo */
+        RECHAZADO_SRI("R", "Rechazado Sri"),
+        ;
 
         private ComprobanteEnumEstado(String estado, String nombre) {
             this.estado = estado;

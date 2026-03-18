@@ -674,7 +674,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                     parametro=new ParametroCodefac();
                     parametro.setNombre(ParametroCodefac.CELULAR_VIRTUAL_MALL);
                     parametro.setValor(widgetVirtualMall.getTxtCelular().getText());
-                    parametro.setEmpresa(sessionCodefac.getEmpresa());
+                    parametro.setEmpresaTmp(sessionCodefac.getEmpresa());
                     servicio.grabar(parametro);
                 }
                 else

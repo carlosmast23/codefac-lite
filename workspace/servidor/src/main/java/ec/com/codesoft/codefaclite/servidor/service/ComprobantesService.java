@@ -78,6 +78,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemisionAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.proxy.ReporteProxy;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -116,6 +118,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**UtilidadesRmi.deserializar(byteReporte);
  *
@@ -125,6 +128,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
 
     private static final Logger LOG = Logger.getLogger(ComprobantesService.class.getName());
     
+    private EmpresaService empresaService;
+    //private ComprobantesService comprobanteService;
     
 
     /**
@@ -136,6 +141,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     public ComprobantesService() throws RemoteException {
         //super();
         clientesLista=new Vector<ClienteInterfaceComprobante>();
+        empresaService=new EmpresaService();
+        //this.comprobanteService=new ComprobantesService();
     }
     
     
@@ -220,6 +227,15 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             }
             
             
+        }
+    }
+    
+    public void procesarSinAutorizarYEnviadosPendientesTodos() throws RemoteException,ServicioCodefacException
+    {
+        List<Empresa> empresaList=ServiceFactory.getFactory().getEmpresaServiceIf().obtenerTodosActivos(OrdenarEnum.ASCEDENTE);
+        for (Empresa empresa : empresaList) 
+        {
+            procesarSinAutorizarYEnviadosPendientes(empresa);
         }
     }
     
@@ -484,6 +500,43 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
         return alertas;
     }
+    public List<String> procesarComprobantesPendienteLoteTodos(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException 
+    {
+        List<String> errores=new ArrayList<>();
+        List<Empresa> empresaList= empresaService.buscar();
+        for (Empresa empresa : empresaList) {
+            List<String> erroresTmp= procesarComprobantesPendienteLote(etapaInicial, etapaLimite, mapClaveAccesoYCorreos, enviarCorreo, empresa);
+            errores=UtilidadesLista.unirListas(errores, erroresTmp);            
+        }
+        return errores;
+    }
+    
+    public List<String> procesarComprobantesPendienteTodasEmpresasLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo) throws RemoteException,ServicioCodefacException 
+    {
+        List<String> erroresList=new ArrayList<>();
+        List<ComprobanteElectronico> comprobanteRespuestaList=new ArrayList<>();
+        List<Empresa> empresaList=empresaService.obtenerTodosActivos(OrdenarEnum.ASCEDENTE);
+        for (Empresa empresa : empresaList) 
+        {
+            List<ComprobanteElectronico> comprobanteTmpList=getComprobantesObjectByFolder(ComprobanteElectronicoService.CARPETA_AUTORIZADOS, empresa);
+            comprobanteRespuestaList=UtilidadesLista.unirListas(comprobanteTmpList,comprobanteRespuestaList);
+            
+            //Construir el Map sin correos para terminar de procesar
+            Map<String,List<String>> mapComprobantesPorEmpresa=new HashMap<>();
+            for (ComprobanteElectronico comprobanteElectronico : comprobanteTmpList) 
+            {
+                mapComprobantesPorEmpresa.put(comprobanteElectronico.getInformacionTributaria().getClaveAcceso(),new ArrayList<>());                
+            }
+            
+            //Procesar el conjunto de comprobantes pendientes por cada empresa por si tiene que enviar al correo
+            List<String> erroresTmpList=procesarComprobantesPendienteLote(etapaInicial, etapaLimite, mapClaveAccesoYCorreos, enviarCorreo, empresa);            
+            erroresList=UtilidadesLista.unirListas(erroresList, erroresTmpList);
+            
+        }
+        return erroresList;
+        
+    }
+    
     
     public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo,Empresa empresa) throws RemoteException,ServicioCodefacException 
     {
@@ -601,6 +654,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 @Override
                 public void error(ComprobanteElectronicoException cee) {
                     try {
+                        ComprobanteEntity comprobante = obtenerComprobantePorClaveAcceso(new ClaveAcceso(cee.getClaveAcceso()));
+                        setearDatoComprobanteRechazoConTransaccion(comprobante, cee);
                         if(existeConexionRemota)
                         {
                             if(callbackClientObject!=null)
@@ -610,6 +665,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                             
                         }
                     } catch (RemoteException ex) {
+                        Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ServicioCodefacException ex) {
                         Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -781,11 +838,31 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         
     }
     
+    public Integer obtenerTotalComprobantesSinTerminarProcesarTodos() throws RemoteException
+    {
+        Integer total=0;
+        List<Empresa> empresaList=empresaService.buscar();
+        for (Empresa empresa : empresaList) {
+            if(empresa.getEstadoEnum().equals(GeneralEnumEstado.ACTIVO))
+            {
+                total+=obtenerTotalComprobantesSinTerminarProcesar(empresa);
+            }
+        }
+        return total;
+    }
+    
     public Integer obtenerTotalComprobantesSinTerminarProcesar(Empresa empresa) throws RemoteException
     {
         Integer firmadosSinEnviarTotal= getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR, empresa);
         Integer enviadosSinRespuestoTotal= getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
         return firmadosSinEnviarTotal+enviadosSinRespuestoTotal;
+    }
+    
+    public Integer obtenerTotalComprobantesRechazados(Empresa empresa) throws RemoteException
+    {
+        Integer comprobantesRechazados= getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_RECHAZADOS, empresa);
+        //Integer enviadosSinRespuestoTotal= getComprobantesObjectByFolderCantidad(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA, empresa);
+        return comprobantesRechazados;
     }
     
     
@@ -1040,7 +1117,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 //Si la variable para enviar por lote no se encuentra creada generar un numero secuencial
                 if (parametroCodefac == null) {
                     parametroCodefac = new ParametroCodefac();
-                    parametroCodefac.setEmpresa(empresa);
+                    parametroCodefac.setEmpresaTmp(empresa);
                     parametroCodefac.setNombre(ParametroCodefac.SECUENCIAL_LOTE);
                     parametroCodefac.setValor("0");//Si no existe el primer dato lo creo en la base de datos
                     entityManager.persist(parametroCodefac);
@@ -1386,6 +1463,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void error(ComprobanteElectronicoException cee) {
                 try {
+                    
                     if(existeConexionRemota)
                     {
                         callbackClientObject.error(cee, comprobanteElectronico.getClaveAcceso());
@@ -1420,8 +1498,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
      * con los datos finales implementados
      */
     public void procesarComprobante(ComprobanteDataInterface comprobanteData,ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobante,Usuario usuario,ClienteInterfaceComprobante callbackClientObject) throws RemoteException {
-                
+        
         ComprobanteElectronicoService comprobanteElectronico= cargarConfiguracionesInicialesComprobantes(comprobanteData, usuario);
+        //Cuando voy a procesar de nuevo un comprobante borro de la carpeta de RECHAZADOS porque todo se va a volver a generar
+        comprobanteElectronico.eliminarComprobante(comprobante.getClaveAcceso(),ComprobanteElectronicoService.CARPETA_RECHAZADOS);
+        
         procesarComprobanteExtend(comprobanteElectronico, comprobante, callbackClientObject);
 
     }
@@ -1529,11 +1610,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             @Override
             public void error(ComprobanteElectronicoException cee) {
                 try {
+                    setearDatoComprobanteRechazoConTransaccion(comprobanteOriginal, cee);
                     if(existeConexionRemota)
                     {
                         callbackClientObject.error(cee,comprobanteElectronico.getClaveAcceso());
                     }
                 } catch (RemoteException ex) {
+                    Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ServicioCodefacException ex) {
                     Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -1586,6 +1670,22 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         comprobanteElectronico.procesar(false);
     
     }
+    private void setearDatoComprobanteRechazoConTransaccion(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,ComprobanteElectronicoException ce) throws ServicioCodefacException
+    {        
+        //solo si es error de tipo rechazado guardo los logs
+        if(ce.getTipoError().equals(ComprobanteElectronicoException.RECHAZADO))
+        {        
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException 
+                {
+                    comprobanteOriginal.setEstadoEnum(ComprobanteEnumEstado.RECHAZADO_SRI);
+                    comprobanteOriginal.setLogSri(ce.getMessage());
+                    entityManager.merge(comprobanteOriginal);
+                }
+            });
+        }
+    }
     
     private void setearDatosAutorizacionComprobanteConTransaccion(ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity comprobanteOriginal,Autorizacion documentoAutorizado) throws ServicioCodefacException
     {
@@ -1593,7 +1693,8 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         //Codigo que no necesita procesar en una transaccion para evitar poner lento al sistema al grabar nuevos datos
         if (documentoAutorizado.getEstado().equals("AUTORIZADO")) 
         {
-            if (!verificarExisteXmlAutorizado(comprobanteOriginal)) {
+            if (!verificarExisteXmlAutorizado(comprobanteOriginal)) 
+            {
                 String mensajeError = "ERROR AL CAMBIAR DE ESTADO A AUTORIZAR EL COMPROBANTE: " + comprobanteOriginal.getClaveAcceso() + ", NO EXISTE EL XML EN EL DISCO";
                 Logger.getLogger(ComprobantesService.class.getName()).log(Level.SEVERE, mensajeError);
                 throw new ServicioCodefacException(mensajeError);
@@ -1616,6 +1717,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             //entityManager.merge(comprobanteOriginal);
             //Logger.getLogger(ComprobantesService.class.getName()).log(Level.INFO, "El comprobante " + comprobanteOriginal.getPreimpreso() + " fue autorizado desde el metodo setearDatosAutorizacionComprobanteConTransaccion() en la clase ComprobantesService");
             
+            //TODO: Revisar esta parte que externamente no este dentro de una transaccion
            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
@@ -1811,6 +1913,9 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         } else {
             infoTributaria.setAmbiente(ComprobanteElectronicoService.CODIGO_SRI_MODO_PRUEBAS + "");
         }
+        
+        //TODO: Temporal solo para forzar un error
+        //infoTributaria.setAmbiente("3");
 
         infoTributaria.setClaveAcceso("");                
         infoTributaria.setCodigoDocumento(comprobanteData.getCodigoComprobante());

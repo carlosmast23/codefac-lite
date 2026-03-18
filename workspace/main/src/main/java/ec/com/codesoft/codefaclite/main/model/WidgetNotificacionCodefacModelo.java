@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.common.AlertaResponse.TipoAdvertenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import java.awt.Color;
@@ -90,6 +91,8 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
                     
                     definirFormatoTabla();
                     
+                    mostrarAlertaUrgentePantalla(alertas);
+                    
                     //cargar datos lentos
                     List<AlertaResponse> alertasLentas = ServiceFactory.getFactory().getAlertaServiceIf().actualizarNotificacionesCargaLenta(sucursal.getEmpresa(),modoEnum);
                     UtilidadesTablas.llenarTablasDatos(
@@ -121,6 +124,16 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
 
     }
     
+    private void mostrarAlertaUrgentePantalla(List<AlertaResponse> alertaList)
+    {
+        for (AlertaResponse alertaResponse : alertaList) {
+            if(alertaResponse.getTipoAdvertenciaEnum().equals(TipoAdvertenciaEnum.GRAVE))
+            {
+                DialogoCodefac.mensaje(new CodefacMsj("Existe ERRORES URGENTES en el sistema\nLlamar a SOPORTE de Codefac: "+ParametrosSistemaCodefac.NUMERO_SOPORTE+"\nRecuerde que algunos problemas pueden generar MULTAS en el SRI", CodefacMsj.TipoMensajeEnum.ERROR));
+                return;
+            }
+        }
+    }
     
     
     /**

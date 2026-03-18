@@ -264,7 +264,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                         procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
                         break;
 
-                    case ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS:
+                    case ComprobanteElectronicoService.CARPETA_RECHAZADOS:
                         procesarComprobanteLote(ComprobanteElectronicoService.ETAPA_AUTORIZAR+1,etapaLimite);
                         break;
                         
@@ -421,7 +421,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_FIRMADOS_SIN_ENVIAR);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_ENVIADOS_SIN_RESPUESTA);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_AUTORIZADOS);
-        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS);
+        getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_RECHAZADOS);
         getCmbCarpetaComprobante().addItem(ComprobanteElectronicoService.CARPETA_RIDE);
         
         cargarEtapas();
@@ -472,9 +472,9 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
 
                 try {
                     //TODO: Revisar esta validacion temporal porque no existe la carpeta de no autorizado
-                    if (getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_NO_AUTORIZADOS)) {
-                        return;
-                    }
+                    //if (getCmbCarpetaComprobante().getSelectedItem().equals(ComprobanteElectronicoService.CARPETA_RECHAZADOS)) {
+                    //    return;
+                    //}
                     
                                        
                     ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();

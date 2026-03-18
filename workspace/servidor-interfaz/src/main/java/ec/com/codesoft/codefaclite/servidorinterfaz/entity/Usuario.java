@@ -67,9 +67,11 @@ public class Usuario implements Serializable{
     @Column (name = "PARAMETROS_COMPROBANTES_ELECTRONICOS")
     private String parametrosComprobatesElectronicos;
     
-    @JoinColumn(name = "EMPLEADO_ID")
-    @ManyToOne 
-    private Empleado empleado;
+    //@JoinColumn(name = "EMPLEADO_ID")
+    //@ManyToOne 
+    //private Empleado empleado;
+    @Column(name = "EMPLEADO_ID")
+    private Long empleadoId;
     
     @JoinColumn(name = "EMPRESA_ID")
     private Empresa empresa;
@@ -92,8 +94,8 @@ public class Usuario implements Serializable{
     //@Transient
     //public boolean isConfig;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
-    private List<PerfilUsuario> perfilesUsuario;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
+    //private List<PerfilUsuario> perfilesUsuario;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PuntoEmisionUsuario> puntosEmisionUsuario;
@@ -158,12 +160,30 @@ public class Usuario implements Serializable{
         this.estado = estadoEnum.getEstado();
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
+    public Long getEmpleadoId() {
+        return empleadoId;
+    }
+
+    public void setEmpleadoId(Long empleadoId) {
+        this.empleadoId = empleadoId;
+    }
+    
+    public Empleado getEmpleado() {        
+        
+        try {
+            return ServiceFactory.getFactory().getEmpleadoServiceIf().buscarPorId(empleadoId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
     }
 
     public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
+        if(empleado!=null)
+        {
+            this.empleadoId = empleado.getId();
+        }        
     }
 
     public Empresa getEmpresa() {
@@ -186,12 +206,18 @@ public class Usuario implements Serializable{
     
 
     public List<PerfilUsuario> getPerfilesUsuario() {
-        return perfilesUsuario;
+        try {
+            return ServiceFactory.getFactory().getPerfilUsuarioServiceIf().buscarPorUsuario(this);
+            //return perfilesUsuario;
+        } catch (RemoteException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<>();
     }
 
-    public void setPerfilesUsuario(List<PerfilUsuario> perfilesUsuario) {
-        this.perfilesUsuario = perfilesUsuario;
-    }
+    //public void setPerfilesUsuario(List<PerfilUsuario> perfilesUsuario) {
+    //    this.perfilesUsuario = perfilesUsuario;
+    //}
 
     public List<PuntoEmisionUsuario> getPuntosEmisionUsuario() {
         return puntosEmisionUsuario;
@@ -283,13 +309,14 @@ public class Usuario implements Serializable{
     
     public void addPerfilUsuario(PerfilUsuario perfilUsuario)
     {
-        if(this.perfilesUsuario==null)
+        List<PerfilUsuario> perfilesUsuario=getPerfilesUsuario();
+        if(perfilesUsuario==null)
         {
-            this.perfilesUsuario=new ArrayList<PerfilUsuario>();
+            perfilesUsuario=new ArrayList<PerfilUsuario>();
         }
         perfilUsuario.setUsuario(this);
         
-        this.perfilesUsuario.add(perfilUsuario);
+        perfilesUsuario.add(perfilUsuario);
         
     }
     
@@ -386,6 +413,7 @@ public class Usuario implements Serializable{
     
     public Boolean verficarSupervisor()
     {
+        Empleado empleado=getEmpleado();
         if(empleado!=null)
         {
             return empleado.verificarSupervisor();

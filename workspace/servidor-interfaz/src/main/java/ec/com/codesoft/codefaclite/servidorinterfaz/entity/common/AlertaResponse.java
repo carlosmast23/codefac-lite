@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class AlertaResponse implements Serializable{
     
     public static final String ALERTA_COMPROBANTES_PENDIENTES_AUTORIZAR="Comprobantes de enviar al Sri";
+    public static final String ALERTA_COMPROBANTES_RECHAZADOS="Comprobantes RECHAZADOS por el Sri";
     
     public TipoAdvertenciaEnum tipoAdvertenciaEnum;
     public String descripcion;

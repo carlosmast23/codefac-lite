@@ -45,13 +45,15 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
     @Override   
     public List<PuntoEmisionUsuario> obtenerActivoPorUsuario(Usuario usuario,Sucursal sucursal) throws ServicioCodefacException, RemoteException
     {
+        //PuntoEmisionUsuario s;
+        //s.getPuntoEmision().getSucursalId()
         return (List<PuntoEmisionUsuario>)ejecutarConsulta(new MetodoInterfaceConsulta() {
             @Override
             public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("usuario",usuario);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-                mapParametros.put("puntoEmision.sucursal",sucursal);
+                mapParametros.put("puntoEmision.sucursalId",sucursal.getId());
                 return getFacade().findByMap(mapParametros,em);
             }
         });

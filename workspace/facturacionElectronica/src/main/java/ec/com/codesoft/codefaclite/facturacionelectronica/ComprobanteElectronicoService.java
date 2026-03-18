@@ -34,23 +34,23 @@ import ec.com.codesoft.codefaclite.ws.recepcion.Mensaje;
 import ec.com.codesoft.codefaclite.utilidades.email.CorreoElectronico;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
-import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
-import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
-import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
+    import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
+    import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+    import ec.com.codesoft.codefaclite.utilidades.xml.UtilidadesXml;
+    import java.awt.Image;
+    import java.awt.image.BufferedImage;
+    import java.awt.image.DataBufferByte;
+    import java.io.ByteArrayInputStream;
+    import java.io.ByteArrayOutputStream;
+    import java.io.File;
+    import java.io.FileInputStream;
+    import java.io.FileNotFoundException;
+    import java.io.IOException;
+    import java.io.InputStream;
+    import java.io.PrintWriter;
+    import java.io.Reader;
+    import java.io.StringReader;
+    import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -89,7 +89,7 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String CARPETA_FIRMADOS_SIN_ENVIAR = "firmados_sin_enviar";
     public static final String CARPETA_ENVIADOS_SIN_RESPUESTA = "enviados";
     public static final String CARPETA_AUTORIZADOS = "autorizados";
-    public static final String CARPETA_NO_AUTORIZADOS = "no_autorizados";
+    public static final String CARPETA_RECHAZADOS = "rechazados";
     public static final String CARPETA_RIDE = "ride";
     public static final String CARPETA_LOTE = "lote";
     
@@ -100,8 +100,8 @@ public class ComprobanteElectronicoService implements Runnable {
     public static final String MODO_PRUEBAS = "pruebas";
 
     //TODO: Ver mejor si estos estados se convierten a un enum fuera de esta clase para tener mejor organizado
-    public static final Integer ETAPA_GENERAR = 1;
-    public static final Integer ETAPA_PRE_VALIDAR = 2;
+    public static final Integer ETAPA_PRE_VALIDAR = 1;
+    public static final Integer ETAPA_GENERAR = 2;
     public static final Integer ETAPA_FIRMAR = 3;
     public static final Integer ETAPA_RIDE = 4;
     public static final Integer ETAPA_ENVIO_COMPROBANTE =5;
@@ -282,6 +282,19 @@ public class ComprobanteElectronicoService implements Runnable {
         try {
             if(escucha!=null)escucha.iniciado(comprobante);
             
+            
+            if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
+            
+                preValidacion(new ClaveAcceso(claveAcceso));
+                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
+                System.out.println("preValidacion()");
+                if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
+                    if(escucha!=null)escucha.termino();
+                    return;
+                }
+                etapaActual++;
+            }
+            
             if (etapaActual.equals(ETAPA_GENERAR)){
                 generar();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
@@ -292,17 +305,6 @@ public class ComprobanteElectronicoService implements Runnable {
                     return;
                 }
 
-                etapaActual++;
-            }
-
-            if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
-                preValidacion();
-                if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
-                System.out.println("preValidacion()");
-                if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
-                    if(escucha!=null)escucha.termino();
-                    return;
-                }
                 etapaActual++;
             }
 
@@ -358,6 +360,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
             
             if (etapaActual.equals(ETAPA_ENVIAR)) {
+                validacionRecepcionSri(new ClaveAcceso(claveAcceso));
                 enviarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("enviarSri()");
@@ -416,10 +419,31 @@ public class ComprobanteElectronicoService implements Runnable {
 
             if(escucha!=null)escucha.termino();
         } catch (ComprobanteElectronicoException cee) {
+            
+            //Si el error es rechazado toca gestionar de una manera adicional
+            if(cee.getTipoError().equals(ComprobanteElectronicoException.RECHAZADO))
+            {
+                comprobanteRechazado(cee.getCarpetaComprobante());
+            }
+            
+            cee.setClaveAcceso(this.claveAcceso);
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.SEVERE,cee.getMessage());
             if(escucha!=null)escucha.error(cee);
         }
 
+    }
+    
+    private void comprobanteRechazado(String carpetaComprobante)
+    {
+        //Copiar el archivo a LA CARPETA DE RECHAZADOS porque tiene un error
+        ComprobantesElectronicosUtil.copiarArchivoXml(getPathComprobante(carpetaComprobante), getPathComprobante(CARPETA_RECHAZADOS));
+        //Elimina la carpeta de los firmados para saber que ya fue enviado
+        ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobante(carpetaComprobante));
+    }
+    
+    public void eliminarComprobante(String claveAcceso,String carpetaComprobante)
+    {
+        ComprobantesElectronicosUtil.eliminarArchivo(getPathComprobanteConClaveAcceso(carpetaComprobante,claveAcceso));
     }
     
     private void procesarComprobanteLote()
@@ -430,9 +454,29 @@ public class ComprobanteElectronicoService implements Runnable {
             if(escuchaLote!=null)escuchaLote.iniciado();            
             Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService posiniciando lote  ... ");
             
+            List<ClaveAcceso> listaClaves=generarLote();                
+            
+             //Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO, "ComprobanteElectronicoService ETAPA_PRE_VALIDAR PRE ... ");
+
+            if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
+                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO, "ComprobanteElectronicoService ETAPA_PRE_VALIDAR  ... ");
+                preValidacionLote(listaClaves);
+                if (escuchaLote != null) {
+                    escuchaLote.procesando(etapaActual);
+                }
+                System.out.println("preValidacion lote()");
+                if (etapaLimiteProcesar <= ETAPA_PRE_VALIDAR) {
+                    if (escuchaLote != null) {
+                        escuchaLote.termino(null);
+                    }
+                    return;
+                }
+                etapaActual++;
+            }
+            
             if (etapaActual.equals(ETAPA_GENERAR)){
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_GENERAR  ... ");
-                List<ClaveAcceso> listaClaves=generarLote();                
+                //List<ClaveAcceso> listaClaves=generarLote();                
                 
                 Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService PRE escuchaLote.clavesGeneradas  ... ");
                 if(escuchaLote!=null)escuchaLote.clavesGeneradas(listaClaves);
@@ -449,21 +493,6 @@ public class ComprobanteElectronicoService implements Runnable {
 
                 etapaActual++;
             }
-            
-            Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_PRE_VALIDAR PRE ... ");
-
-            if (etapaActual.equals(ETAPA_PRE_VALIDAR)) {
-                Logger.getLogger(ComprobanteElectronicoService.class.getName()).log(Level.INFO,"ComprobanteElectronicoService ETAPA_PRE_VALIDAR  ... ");
-                preValidacion();
-                if(escuchaLote!=null)escuchaLote.procesando(etapaActual);
-                System.out.println("preValidacion lote()");
-                if (etapaLimiteProcesar<=ETAPA_PRE_VALIDAR) {
-                    if(escuchaLote!=null)escuchaLote.termino(null);
-                    return;
-                }
-                etapaActual++;
-            }
-
             
             
             if (etapaActual.equals(ETAPA_FIRMAR)) {
@@ -1133,8 +1162,26 @@ public class ComprobanteElectronicoService implements Runnable {
             }
     }
 
-    private void preValidacion() {
-
+    private void preValidacion(ClaveAcceso claveAcceso) throws ComprobanteElectronicoException
+    {
+        //TODO: Implementar validaciones cuando recien se quiere generar el Comprobante
+    }
+    
+    private void validacionRecepcionSri(ClaveAcceso claveAcceso) throws ComprobanteElectronicoException
+    {
+        //Validar que solo permita enviar comprobantes del mismo dia porque el SRI va a realizar multas
+        if(UtilidadesFecha.compararFechaSinImportarHora(claveAcceso.fechaEmision,UtilidadesFecha.getFechaHoy())!=0)
+        {
+            throw new ComprobanteElectronicoException("ERRROR FECHAS: el sri no permite autorizar comprobantes fuera de la fecha actual","Prevalidar",ComprobanteElectronicoException.RECHAZADO,CARPETA_FIRMADOS_SIN_ENVIAR);
+        }
+    }
+    
+    private void preValidacionLote(List<ClaveAcceso> claveAccesoList) throws ComprobanteElectronicoException
+    {
+        for (ClaveAcceso claveAcceso : claveAccesoList) 
+        {
+            preValidacion(claveAcceso);
+        }
     }
     
     public JasperPrint getPrintJasperComprobante(ComprobanteElectronico comprobante,ClaveAcceso claveAcceso)
@@ -1406,7 +1453,7 @@ public class ComprobanteElectronicoService implements Runnable {
             }
         } catch (ComprobanteElectronicoException cee) {
             cee.printStackTrace();
-            throw new ComprobanteElectronicoException(cee);
+            throw cee;
         }
     }
     

@@ -323,6 +323,28 @@ public abstract class ComprobantesElectronicosUtil {
         return 0;
     }
     
+    public static List<String> getComprobantesObjectByFolderNombres(String pathBase, String carpetaConfiguracion) {
+        String pathDirectorio = pathBase +"/" + carpetaConfiguracion;
+        File f = new File(pathDirectorio);
+        
+        
+        List<String> listaNombres = new ArrayList<>();
+                
+        if (f.exists()) { // Directorio existe 
+            File[] ficheros = f.listFiles();
+            
+            if (ficheros != null) {
+                for (File archivo : ficheros) {
+                    if (archivo.isFile()) { // Solo archivos (no subcarpetas)
+                        listaNombres.add(archivo.getName());
+                    }
+                }
+            }
+            
+        }
+        return new ArrayList<>();
+    }
+    
     public static List<ComprobanteElectronico> getComprobantesObjectByFolder(String pathBase, String carpetaConfiguracion) {
         List<ComprobanteElectronico> comprobantes=new ArrayList<ComprobanteElectronico>();
         

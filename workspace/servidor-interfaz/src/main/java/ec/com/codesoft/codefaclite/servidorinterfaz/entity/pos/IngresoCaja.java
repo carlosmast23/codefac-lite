@@ -5,6 +5,7 @@
  */
 package ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos;
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
@@ -23,7 +24,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.rmi.RemoteException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -57,13 +61,14 @@ public class IngresoCaja implements Serializable
      */
     public IngresoCaja() {
     }
-
     /*
     * Foreing Key
     */
-    @JoinColumn(name = "CAJA_SESSION_ID")
-    @ManyToOne
-    private CajaSession cajaSession;
+    //@JoinColumn(name = "CAJA_SESSION_ID")
+    //@ManyToOne
+    //private CajaSession cajaSession;
+    @Column(name = "CAJA_SESSION_ID") 
+    private Long cajaSessionId;
     
     @JoinColumn(name = "FACTURA_ID")
     @ManyToOne
@@ -73,9 +78,12 @@ public class IngresoCaja implements Serializable
     @ManyToOne
     private Compra compra;
     
-    @JoinColumn(name = "CARTERA_ID")
-    @ManyToOne
-    private Cartera cartera;
+    //@JoinColumn(name = "CARTERA_ID")
+    //@ManyToOne
+    //private Cartera cartera;
+    
+    @Column(name = "CARTERA_ID") 
+    private Long carteraId;
     
     @JoinColumn(name = "SRI_FORMA_PAGO_ID")
     @ManyToOne
@@ -86,6 +94,8 @@ public class IngresoCaja implements Serializable
     
     @Column(name = "FECHA_HORA")    
     private java.util.Date fechaHora;
+    
+    
     
     /*
     * Get and Set
@@ -106,12 +116,17 @@ public class IngresoCaja implements Serializable
         this.valor = valor;
     }
 
-    public CajaSession getCajaSession() {
-        return cajaSession;
+    @Deprecated
+    public CajaSession getCajaSession() throws RemoteException {
+        return ServiceFactory.getFactory().getCajaSesionServiceIf().buscarPorId(cajaSessionId);
+        //return cajaSession;
     }
 
     public void setCajaSession(CajaSession cajaSession) {
-        this.cajaSession = cajaSession;
+        if(cajaSession!=null)
+        {
+            this.cajaSessionId = cajaSession.getId();
+        }
     }
 
     public Factura getFactura() {
@@ -156,13 +171,24 @@ public class IngresoCaja implements Serializable
         this.signoIngreso = signoIngresoEnum.getValor();
     }
 
+    //TODO: Metodo de forma temporal hasta poder encontrar una mejor manera de consultar
+    @Deprecated    
     public Cartera getCartera() {
+        Cartera cartera=null;
+        try {
+            cartera=ServiceFactory.getFactory().getCarteraServiceIf().buscarPorId(carteraId);
+        } catch (RemoteException ex) {
+            Logger.getLogger(IngresoCaja.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return cartera;
     }
 
+    //TODO: Solución temporal
+    @Deprecated
     public void setCartera(Cartera cartera) {
-        this.cartera = cartera;
+        this.carteraId = cartera.getId();
     }
+    
 
     public SriFormaPago getFormaPago() {
         return formaPago;
@@ -192,6 +218,23 @@ public class IngresoCaja implements Serializable
     public void setFechaHora(Date fechaHora) {
         this.fechaHora = fechaHora;
     }
+
+    public Long getCarteraId() {
+        return carteraId;
+    }
+
+    public void setCarteraId(Long carteraId) {
+        this.carteraId = carteraId;
+    }
+
+    public Long getCajaSessionId() {
+        return cajaSessionId;
+    }
+
+    public void setCajaSessionId(Long cajaSessionId) {
+        this.cajaSessionId = cajaSessionId;
+    }
+    
     
     
     

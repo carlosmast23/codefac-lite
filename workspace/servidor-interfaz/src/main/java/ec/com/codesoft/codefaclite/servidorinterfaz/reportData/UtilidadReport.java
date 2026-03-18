@@ -33,6 +33,9 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
             DatoEnum.RAZON_SOCIAL.nombre,
             DatoEnum.IDENTIFICACION.nombre,
             DatoEnum.PRODUCTO.nombre,
+            DatoEnum.VENDEDOR.nombre,
+            DatoEnum.REFERENTE.nombre,
+            DatoEnum.COLABORADOR.nombre,
             DatoEnum.SUBTOTAL.nombre,
             DatoEnum.COSTO.nombre,
             DatoEnum.UTILIDAD.nombre,
@@ -48,6 +51,9 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         fila.add(dato.getRazonSocial());
         fila.add(dato.getIdentificacion());
         fila.add(dato.getNombreProducto());
+        fila.add(dato.getVendedor());
+        fila.add(dato.getReferente());
+        fila.add(dato.getColaborador());
         fila.add(dato.getSubtotal().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getCosto().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getUtilidad().setScale(2, RoundingMode.HALF_UP));
@@ -67,6 +73,9 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         RAZON_SOCIAL("Razón Social"),
         IDENTIFICACION("Identificación"),
         PRODUCTO("Producto"),
+        VENDEDOR("Vendedor"),
+        REFERENTE("Referente"),
+        COLABORADOR("Colaborador"),
         SUBTOTAL("Subtotal"),
         COSTO("Costo"),
         UTILIDAD("Utilidad");
