@@ -397,6 +397,12 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
         //List<JMenu> menus=new ArrayList<JMenu>();
         MenuCodefacRespuesta respuesta=new MenuCodefacRespuesta();
         
+        //Validacion de las ventanas cuando el usuario es GRATIS o no tiene creado ningun otro usuario y esta entrando con el usuario de soporte de ADMIN
+        //Solo habilito los acceso que son del gratuito hasta que pueda terminar de configurar      
+        //TODO: Talvez esta parte se debe mejorar por que ya se hace la misma consulta para poder dar acceso al usuario en el login
+        UsuarioServicio usuarioServicio = new UsuarioServicio();
+        Integer numeroUsuarios = usuarioServicio.obtenerCantidadUsuariosActivosPorEmpresa(sessionCodefac.getEmpresa());
+        
                 
         for (ModuloCodefacEnum moduloSistema : ModuloCodefacEnum.values()) {
             
@@ -437,11 +443,6 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
                         }
                         else //Si esta en modo de produccion hago las validaciones normales
                         {                        
-                            //Validacion de las ventanas cuando el usuario es GRATIS o no tiene creado ningun otro usuario y esta entrando con el usuario de soporte de ADMIN
-                            //Solo habilito los acceso que son del gratuito hasta que pueda terminar de configurar      
-                            //TODO: Talvez esta parte se debe mejorar por que ya se hace la misma consulta para poder dar acceso al usuario en el login
-                            UsuarioServicio usuarioServicio=new UsuarioServicio();
-                            Integer numeroUsuarios=usuarioServicio.obtenerCantidadUsuariosActivosPorEmpresa(sessionCodefac.getEmpresa());
                              
                             if(sessionCodefac.getTipoLicenciaEnum().equals(TipoLicenciaEnum.GRATIS) || numeroUsuarios==0)
                             {

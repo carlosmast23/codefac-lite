@@ -84,6 +84,7 @@ public class StockReporteModel extends StockMinimoPanel{
     private List<Object[]> listaStock;
     private List<StockMinimoData> listaData;
     private Bodega bodegaSeleccionada;
+    private static Integer DECIMALES_CANTIDAD_REDONDEAR=null;
     
     protected CategoriaProducto categoriaProducto;
     
@@ -561,21 +562,23 @@ public class StockReporteModel extends StockMinimoPanel{
     
     private Integer obtenerCantidadDecimales()
     {
-        //Por defecto si no tiene un valor redondea al numero de decimales
-        Integer decimalesCantidadRedondear = null;
-        decimalesCantidadRedondear = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
-            @Override
-            public Object consultarParametro(String nombreParametro) {
-                return Integer.parseInt(nombreParametro);
-            }
-        });
-        
-        if(decimalesCantidadRedondear==null)
+        //solo consulto la primera vez cuando no tenga este parametro
+        if(DECIMALES_CANTIDAD_REDONDEAR==null)
         {
-            decimalesCantidadRedondear=2;
+            DECIMALES_CANTIDAD_REDONDEAR = ParametroUtilidades.obtenerValorBaseDatos(session.getEmpresa(), ParametroCodefac.NUMERO_DECIMAL_PRODUCTO, new ParametroUtilidades.ComparadorInterface() {
+                @Override
+                public Object consultarParametro(String nombreParametro) {
+                    return Integer.parseInt(nombreParametro);
+                }
+            });
+            
+            if (DECIMALES_CANTIDAD_REDONDEAR == null) {
+                DECIMALES_CANTIDAD_REDONDEAR = 2;
+            }
+            
         }
-        
-        return decimalesCantidadRedondear;
+                
+        return DECIMALES_CANTIDAD_REDONDEAR;
     }
     
     

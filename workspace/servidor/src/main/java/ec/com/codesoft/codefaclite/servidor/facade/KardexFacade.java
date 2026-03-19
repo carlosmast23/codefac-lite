@@ -443,12 +443,6 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         //Producto p;
         //p.getManejarInventario;
         
-        //k.getProducto().getCodigoPersonalizado();
-         //k.getReserva();
-        //k.getProducto().getCatalogoProducto().getCategoriaProducto();
-        //k.getProducto().getNombre()
-        //Producto p;
-        
         String whereBodega="";
         if(bodega!=null)
         {

@@ -73,21 +73,12 @@ public class ParametroCodefacService extends ServiceAbstract<ParametroCodefac,Pa
     }
     
     public ParametroCodefac getParametroByNombre(String nombre,Empresa empresa) throws java.rmi.RemoteException
-    {
+    {        
         try {
             return (ParametroCodefac) ejecutarConsulta(new MetodoInterfaceConsulta() {
                 @Override
                 public Object consulta(EntityManager em) throws ServicioCodefacException, RemoteException {
-                    /*Map<String, Object> map = new HashMap<String, Object>();
-                    map.put("nombre", nombre);
-                    map.put("empresa", empresa);
-                    List<ParametroCodefac> parametroCodefacList = getFacade().findByMap(map);
-                    if (parametroCodefacList != null && parametroCodefacList.size() > 0)
-                        return parametroCodefacList.get(0);
-                    else
-                        return null;
-                }*/
-                return getFacade().getParametroByNombreFacade(nombre, empresa,em);
+                    return getFacade().getParametroByNombreFacade(nombre, empresa,em);
                 }
                 
             });
