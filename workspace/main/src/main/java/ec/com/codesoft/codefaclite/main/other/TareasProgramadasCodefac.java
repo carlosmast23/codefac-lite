@@ -37,7 +37,7 @@ public class TareasProgramadasCodefac {
     public void iniciar()
     {
         agregarTareaRespaldoProgramado(gestorTareas);
-        //agregarTareaComprobarAutorizacionComprobantes(gestorTareas);
+        agregarTareaComprobarAutorizacionComprobantes(gestorTareas);
         Logger.getLogger(Main.class.getName()).log(Level.INFO,"Iniciando gestor de TAREAS PROGRAMADAS ...");
     }
     
@@ -45,9 +45,9 @@ public class TareasProgramadasCodefac {
     {
         //ejecutar la tarea la primera vez al primer minuto y luego cada 30 minutos
         gestorTareas.agregarTareaProgramada(new ComprobacionComprobantesAutorizadosTarea(), 
-                Long.valueOf(10), 
-                Long.valueOf(60), 
-                TimeUnit.SECONDS);
+                Long.valueOf(1), 
+                Long.valueOf(15), 
+                TimeUnit.MINUTES);
         Logger.getLogger(TareasProgramadasCodefac.class.getName()).log(Level.INFO,"Configurado tarea automatica para intentar autorizar comprobantes que queden pendientes");        
         //gestorTareas.agregarTareaProgramada(tarea, Long.MIN_VALUE, Long.MIN_VALUE, TimeUnit.NANOSECONDS);
     }
