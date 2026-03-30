@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import jakarta.persistence.Cacheable;
 import java.io.Serializable;
 import java.util.Objects;
 import jakarta.persistence.Column;
@@ -22,6 +23,8 @@ import jakarta.persistence.Table;
  *
  * @author Carlos
  */
+
+@Cacheable(true)
 @Entity
 @Table(name = "SUCURSAL")
 public class Sucursal implements Serializable{

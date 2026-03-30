@@ -274,11 +274,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
     @Override
     public void iniciar() {
         controlador=new ProductoModelControlador(DialogoCodefac.intefaceMensaje, session,this,ModelControladorAbstract.TipoVista.ESCRITORIO);
-        
-        //controlador.producto=new Producto();
-        //controlador.producto.setGenerarCodigoBarrasEnum(EnumSiNo.NO);
-        //Iniciar cmbLleva inventario
-        
+                
         listenerComboBox();
         listenerBotones();
         listenerTablas();

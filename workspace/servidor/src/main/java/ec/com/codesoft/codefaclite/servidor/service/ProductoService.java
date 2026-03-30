@@ -733,6 +733,16 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             throw new ServicioCodefacException("El código debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
         }
         
+        if(p.getCodigoEAN().length()>Producto.TAMANIO_MAX_CODIGO)
+        {
+            throw new ServicioCodefacException("El código EAN debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
+        }
+        
+        if(p.getCodigoUPC().length()>Producto.TAMANIO_MAX_CODIGO)
+        {
+            throw new ServicioCodefacException("El código UPC debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
+        }
+        
         //TODO: Analizar porque el Sri supuestamente si deja mandar productos con valor 0 , por el momento solo pongo los menores que 0
         if(p.getValorUnitario().compareTo(BigDecimal.ZERO)<0)
         {

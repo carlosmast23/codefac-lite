@@ -239,18 +239,24 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     /**
      * Esto proceso permite reinvertir los calculos cuando ya se tiene un detalle incluido el iva
      */
-    public void invertirCalculoNVIaFactura()
+    public void invertirCalculoNVIaFactura(Boolean agregarValorIva)
     {
         CatalogoProducto catalogoProducto= this.getCatalogoProducto();
         System.out.println("IVA: "+this.getIvaPorcentaje());
         //Si el producto original tiene IVA y el iva temporal del detalle es CERO entonces proceso a realizar el proceso inverso de cambiar el iva 
         if(this.getIvaPorcentaje()==0 && catalogoProducto.getIva().getTarifa()>0)
         {
+            BigDecimal tarifaIva=new BigDecimal(catalogoProducto.getIva().getTarifa());
             //Guardo el precio anterior
             BigDecimal precioUnitarioTmp=new BigDecimal(this.getPrecioUnitario()+"");
+            if(agregarValorIva)
+            {
+                precioUnitarioTmp=UtilidadesImpuestos.agregarValorIva(tarifaIva, precioUnitarioTmp);
+                setPrecioUnitario(precioUnitarioTmp);
+            }
             //Obtengo el nuevo precio sin iva
             //this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(),this.getPrecioUnitario(), 4));
-            this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(new BigDecimal(catalogoProducto.getIva().getTarifa()),this.getPrecioUnitario(), 4));
+            this.setPrecioUnitario(UtilidadesImpuestos.quitarValorIva(tarifaIva,this.getPrecioUnitario(), 4));
             
             //Seteo el valor del IVA, que en este caso es la resta del valor anterior y el valor nuevo
             this.setIva(precioUnitarioTmp.subtract(this.getPrecioUnitario()));

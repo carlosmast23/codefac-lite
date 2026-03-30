@@ -43,11 +43,11 @@ public class PerfilUsuario implements Serializable {
     @Column(name = "FECHA_CREACION")
     private Date fechaCreacion;
     
-    //@JoinColumn(name = "USUARIO_ID")
-    //@ManyToOne    
-    //private Usuario usuario;
-    @Column(name = "USUARIO_ID")
-    private Long  usuarioId;
+    @JoinColumn(name = "USUARIO_ID")
+    @ManyToOne    
+    private Usuario usuario;
+    //@Column(name = "USUARIO_ID")
+    //private Long  usuarioId;
 
     @JoinColumn(name = "PERFIL_ID")
     //@ManyToOne        
@@ -74,7 +74,7 @@ public class PerfilUsuario implements Serializable {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public Usuario getUsuario() {
+    /*public Usuario getUsuario() {
         try {
             return ServiceFactory.getFactory().getUsuarioServicioIf().buscarPorId(usuarioId);
         } catch (RemoteException ex) {
@@ -88,7 +88,17 @@ public class PerfilUsuario implements Serializable {
         {
             this.usuarioId = usuario.getId();
         }
+    }*/
+
+    public Usuario getUsuario() {
+        return usuario;
     }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    
 
     public Perfil getPerfil() {
         return perfil;
@@ -100,13 +110,13 @@ public class PerfilUsuario implements Serializable {
 
     
 
-    public Long getUsuarioId() {
+    /*public Long getUsuarioId() {
         return usuarioId;
     }
 
     public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
-    }
+    }*/
 
     
 

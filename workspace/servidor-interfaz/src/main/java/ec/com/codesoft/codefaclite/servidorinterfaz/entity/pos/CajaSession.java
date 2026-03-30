@@ -106,12 +106,12 @@ public class CajaSession implements Serializable
     /*
     * Foreign Key
     */
-    //@JoinColumn(name = "CAJA_ID")
-    //@ManyToOne
-    //private Caja caja;
+    @JoinColumn(name = "CAJA_ID")
+    @ManyToOne
+    private Caja caja;
     
-    @Column(name = "CAJA_ID")
-    private Long cajaId;
+    //@Column(name = "CAJA_ID")
+    //private Long cajaId;
     
     @JoinColumn(name = "USUARIO_ID")
     @ManyToOne
@@ -176,7 +176,17 @@ public class CajaSession implements Serializable
         this.valorCierre = valorCierre;
     }
 
-    @Deprecated
+    public Caja getCaja() {
+        return caja;
+    }
+
+    public void setCaja(Caja caja) {
+        this.caja = caja;
+    }
+    
+    
+
+    /*@Deprecated
     public Caja getCaja() {
         try {
             return ServiceFactory.getFactory().getCajaServiceIf().buscarPorId(cajaId);
@@ -193,7 +203,7 @@ public class CajaSession implements Serializable
             cajaId = caja.getId();
         }
         
-    }
+    }*/
 
     public Usuario getUsuario() {
         return usuario;

@@ -215,9 +215,11 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtTelefono().setText("");
         getTxtAreaDireccion().setText("");
         getTxtCodigo().setText("");
+        getTxtAlias().setText("");
         getSpnColaborador().setValue(0);
         getSpnReferidos().setValue(0);
         getSpnVendedor().setValue(0);
+        
         
         //getCmbNacionalidad().setSelectedItem(ABORT);
     }
@@ -226,6 +228,7 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
     {
         this.empleado.setApellidos(""+getTxtApellidos().getText());
         this.empleado.setCargo(""+getTxtCargo().getText());
+        this.empleado.setAlias(getTxtAlias().getText());
         this.empleado.setPlaca(getTxtPlaca().getText());
         this.empleado.setCorreoElectronico(""+getTxtCorreoElectronico().getText());
         Departamento departamento = (Departamento) getCmbDepartamento().getSelectedItem();
@@ -272,7 +275,8 @@ public class GestionEmpleadosModel extends GestionEmpleadosPanel
         getTxtNombres().setText(this.empleado.getNombres());
         getTxtTelefono().setText(this.empleado.getTelefonoConvencional());
         getTxtCodigo().setText(this.empleado.getCodigo());
-        
+        getTxtAlias().setText(this.empleado.getAlias());
+       
         getSpnColaborador().setValue((this.empleado.getPorcentajeColaborador()!=null)?this.empleado.getPorcentajeColaborador():0);
         getSpnReferidos().setValue((this.empleado.getPorcentajeReferidos()!=null)?this.empleado.getPorcentajeReferidos():0);
         getSpnVendedor().setValue((this.empleado.getPorcentajeVendedor()!=null)?this.empleado.getPorcentajeVendedor():0);

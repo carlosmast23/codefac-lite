@@ -83,11 +83,11 @@ public class PuntoEmision implements Serializable{
     @Column(name = "AUTORIZACION")
     private String autorizacion;
     
-    //@JoinColumn(name = "SUCURSAL_ID")
-    //private Sucursal sucursal;
+    @JoinColumn(name = "SUCURSAL_ID")
+    private Sucursal sucursal;
     
-    @Column(name = "SUCURSAL_ID")
-    private Long sucursalId;
+    /*@Column(name = "SUCURSAL_ID")
+    private Long sucursalId;*/
 
     public PuntoEmision() {
     }
@@ -247,13 +247,13 @@ public class PuntoEmision implements Serializable{
         this.autorizacion = autorizacion;
     }
 
-    public Long getSucursalId() {
+    /*public Long getSucursalId() {
         return sucursalId;
     }
 
     public void setSucursalId(Long sucursalId) {
         this.sucursalId = sucursalId;
-    }
+    }*/
     
 
     @Override
@@ -304,23 +304,14 @@ public class PuntoEmision implements Serializable{
     //}
 
     public Sucursal getSucursal() {
-        try {
-            return ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(sucursalId);
-            //return sucursal;
-        } catch (RemoteException ex) {
-            Logger.getLogger(PuntoEmision.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return sucursal;
     }
 
     public void setSucursal(Sucursal sucursal) {
-        
-        if(sucursal!=null)
-        {
-            this.sucursalId = sucursal.getId();
-        }
-        
+        this.sucursal = sucursal;
     }
+
+    
     
     /*public ComprobanteEntity.TipoEmisionEnum getTipoFacturacionEnum()
     {

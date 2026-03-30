@@ -285,6 +285,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         {
             panelLateral.setVisible(false);
         }
+        
+         //Verificar que tipo de empresa es para activar datos adicionales;
+        if (TipoNegocioEnum.LAVANDERIA.getLetra().equals(ParametroUtilidades.obtenerValorParametro(session.getEmpresa(), ParametroCodefac.TIPO_NEGOCIO))) {
+            activarTabDatos(5);
+        }
     }
 
     public Factura getFactura() {
@@ -2029,6 +2034,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             throw new ExcepcionCodefacLite("No se puede facturar sin un punto de venta configurado");
         }
         
+        BigDecimal abonoLavado=UtilidadBigDecimal.convertirTextoEnBigDecimal(getTxtLavadoAbono().getText());
+        if(abonoLavado.compareTo(factura.getTotal())>0)
+        {
+            DialogoCodefac.mensaje("Alerta", "No puede dejar un abono superior al total", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("No puede dejar un abono superior al total");
+        }
+        
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();
         //TODO: Solo hacer las verificaciones para cuando no sean PROFORMAS
         //porque para el resto de documentos si debe validar que no guade vacio
@@ -3117,6 +3129,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getTxtDescuentoGlobal().setText("0");
         actualizarVistaReembolso();
         
+        getCmbLavadoDiaEntrega().setSelectedIndex(0);
+        getCmbLavadoTipo().setSelectedIndex(0);
+        getTxtLavadoAbono().setText("");
+        getTxtLavadoPrendas().setText("");
+        
         
         
         habilitarPermisosEdicionFactura();
@@ -3764,6 +3781,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setOrigenVentaNota(getTxtOrigenVentaNota().getText());
         //factura.setIvaSriId(session.get;
         
+        factura.setPorcentajeVendedor(Integer.valueOf(getSpnPorcentajeVendedor().getValue()+""));
+        factura.setPorcentajeReferidos(Integer.valueOf(getSpnPorcentajeReferente().getValue()+""));
+        
+        
         /**
          * Redondeo los valores de los precios unitario de los detalles de la factura
          * Nota: este proceso lo hago al final porque para los totales necesitaba tener los valores exactos de los precios unitarios, pero como ya va a generar la factura puedo redondeal los valores unitario
@@ -3771,6 +3792,47 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //for (FacturaDetalle facturaDetalle : factura.getDetalles()) {
         //    facturaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario().setScale(2,RoundingMode.HALF_UP));
         //}
+        
+        //Agregar datos adicionales para las empresas de lavado
+        {
+            if(getCmbLavadoDiaEntrega().getSelectedIndex()>0)
+            {
+                factura.addDatoAdicional(new FacturaAdicional(
+                                "Día de Entrega",
+                                getCmbLavadoDiaEntrega().getSelectedItem()+"",
+                                FacturaAdicional.Tipo.TIPO_ADICIONAL));
+            }
+            
+            if(getCmbLavadoTipo().getSelectedIndex()>0)
+            {
+                factura.addDatoAdicional(new FacturaAdicional(
+                                "Tipo",
+                                getCmbLavadoTipo().getSelectedItem()+"",
+                                FacturaAdicional.Tipo.TIPO_ADICIONAL));
+            }
+            
+            if(!UtilidadesTextos.verificarNullOVacio(getTxtLavadoAbono().getText()))
+            {
+                factura.addDatoAdicional(new FacturaAdicional(
+                                "Abono",
+                                "$"+getTxtLavadoAbono().getText(),
+                                FacturaAdicional.Tipo.TIPO_ADICIONAL));
+                
+                BigDecimal saldo=factura.getTotal().subtract(UtilidadBigDecimal.convertirTextoEnBigDecimal(getTxtLavadoAbono().getText()));
+                factura.addDatoAdicional(new FacturaAdicional(
+                                "Saldo",
+                                "$"+saldo,
+                                FacturaAdicional.Tipo.TIPO_ADICIONAL));
+            }
+           
+            if (!UtilidadesTextos.verificarNullOVacio(getTxtLavadoPrendas().getText())) {
+                factura.addDatoAdicional(new FacturaAdicional(
+                        "Número de Prendas",
+                        getTxtLavadoPrendas().getText() + "",
+                        FacturaAdicional.Tipo.TIPO_ADICIONAL));
+            }
+    
+        }
 
     }
     
@@ -3803,10 +3865,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnCrearProducto().setToolTipText("Crear nuevo producto");
 
         getBtnAgregarFormaPago().setText("");
-        getBtnAgregarFormaPago().setToolTipText("Agregar formas e pago");
+        getBtnAgregarFormaPago().setToolTipText("Agregar formas e pago");        
         
-        
-
     }
 
     public boolean comprobarRangoDeFechaPermitido(java.util.Date fecha) {
@@ -3944,8 +4004,15 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getTxtDiasCredito().setValue(factura.getDiasCredito());
         }
         
-        getTxtOrigenVentaNota().setText(factura.getOrigenVentaNota());
-        getCmbOrigenVenta().setSelectedIndex(factura.getOrigenVentaId());
+        if(factura.getOrigenVentaNota()!=null)
+        {
+            getTxtOrigenVentaNota().setText(factura.getOrigenVentaNota());
+        }
+        
+        if(factura.getOrigenVentaId()!=null)
+        {
+            getCmbOrigenVenta().setSelectedIndex(factura.getOrigenVentaId());
+        }
         
     }
 
@@ -4319,19 +4386,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         DocumentoEnum documentoSeleccionado=obtenerDocumentoSeleccionado();                     
                         Integer ivaPorcentajeTmp=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifa().intValue():0;
                         
-                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA) || documentoSeleccionado.equals(DocumentoEnum.PROFORMA) )
                         {
                             if(ivaPorcentajeTmp>0)
                             {
                                 //Verificar si esta activa la opcion que los comprobates de venta deben llevar iva en ese caso no agrego el iva
                                 //ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.NO,session.getEmpresa());
                                 Boolean agregarIvaNVI=ParametroUtilidades.comparar(ParametroCodefac.NOTA_VENTA_INTERNA_IVA,EnumSiNo.SI,session.getParametrosCodefac());
+                                //Si no tiene dato grabado por defecto le pongo en false
+                                if(agregarIvaNVI==null)
+                                {
+                                    agregarIvaNVI=false;
+                                }
                                 
                                 //Cuando se tenga que agregar el iva no tiene que sumar el iva al subtotal
                                 if(!agregarIvaNVI)
-                                {
-                                    pvp=UtilidadesImpuestos.agregarValorIva(new BigDecimal(ivaPorcentaje),pvp);
-                                    
+                                {                                                                        
+                                    if (!ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.NVI_TOTAL_CON_IVA, EnumSiNo.NO)) 
+                                    {
+                                        pvp=UtilidadesImpuestos.agregarValorIva(new BigDecimal(ivaPorcentaje),pvp);
+                                    }
                                     //Todo: Solucion temporal para no volver a cargar de nuevo el iva del porcentaje
                                     ivaPorcentaje=0;
                                 }
@@ -4570,10 +4644,17 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         ///Caso para cuando se cambia de NOTA DE VENTA INTERNA A FACTURA
         if(documentoAnterior.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && documentoNuevo.equals(DocumentoEnum.FACTURA))
         {
+            
+            //Este artificio utilizo cuando muestro como nota de venta los valores sin y con factura los valores agregados
+            Boolean agregarValorIva = false;
+            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.NVI_TOTAL_CON_IVA, EnumSiNo.NO)) {
+                agregarValorIva = true;
+            }
+            
             for (FacturaDetalle detalle : factura.getDetalles()) 
             {
                 //Hacer el calculo inverso asumiendo que en los productos que tiene IVA, ya esta agregado el iva en el valor Unitario
-                detalle.invertirCalculoNVIaFactura();
+                detalle.invertirCalculoNVIaFactura(agregarValorIva);
             }
         }
         
@@ -4615,7 +4696,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     break;
                     
                 case INVENTARIO: case LIBRE:
-                    activarTabDatos(0);
+                    //activarTabDatos(0);
                     
                     //Activar el combo de varios precios cuando selecciono cualquiera de las 2 opciones
                     getCmbPreciosVenta().setVisible(true);

@@ -37,6 +37,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
@@ -45,6 +46,8 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ProformaModel extends FacturacionModel{
 
+    public static String PROFORMA_NOMBRE_ALIAS=null;
+    
     public ProformaModel() {
         super();
     }
@@ -80,6 +83,12 @@ public class ProformaModel extends FacturacionModel{
         getChkEnviarCorreo().setVisible(true);
         getChkEnviarCorreo().setSelected(true);
         
+        String aliasNotaVenta = ParametroUtilidades.obtenerValorParametro(session.getEmpresa(), ParametroCodefac.AliasNombresDocumentos.PROFORMA_NOMBRE_ALIAS);
+        if (!UtilidadesTextos.verificarNullOVacio(aliasNotaVenta)) {
+            PROFORMA_NOMBRE_ALIAS = aliasNotaVenta;
+        } else {
+            PROFORMA_NOMBRE_ALIAS = "Proforma";
+        }
     }
 
     @Override
@@ -221,18 +230,18 @@ public class ProformaModel extends FacturacionModel{
             }
         }
         
-        /*List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(factura);
-
-        //map de los parametros faltantes
-        Map<String, Object> mapParametros = getMapParametrosReporte(factura);
+        //Si es un reporte de Pos utilizo el mismo formato de las facturas para reutilizar
+        if(formatoReporte.getNombre().contains("POS"))
+        {
+            FacturaModelControlador.imprimirComprobanteVenta(factura, PROFORMA_NOMBRE_ALIAS,false,session,panelPadre,getEstadoFormularioEnum());
+        }
+        else
+        {
+            JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura,formatoReporte,getChkImprimirSinCodigo().isSelected(),getChkImprimirUbicacion().isSelected());
+            ReporteCodefac.generarReporteInternalFrame(jasperReporte, panelPadre, PROFORMA_NOMBRE_ALIAS+" "+factura.getSecuencial(), ConfiguracionImpresoraEnum.NINGUNA);
+        }
         
-        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_COMPROBANTES_ELECTRONICOS,"proforma.jrxml",mapParametros, dataReporte, this.panelPadre, "Proforma", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.A4);*/
-        JasperPrint jasperReporte=FacturaModelControlador.getReporteJasperProforma(factura,formatoReporte,getChkImprimirSinCodigo().isSelected(),getChkImprimirUbicacion().isSelected());
         
-        
-        
-        ReporteCodefac.generarReporteInternalFrame(jasperReporte, panelPadre, "Proforma "+factura.getSecuencial(), ConfiguracionImpresoraEnum.NINGUNA);
-        //ReporteCodefac.generarReporteInternalFramePlantilla(pathReporte, parametros, bindingComponentList, panelPadre, TITLE_PROPERTY, OrientacionReporteEnum.HORIZONTAL);
 
     }
     

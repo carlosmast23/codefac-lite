@@ -59,6 +59,8 @@ public class Empleado implements Serializable
     private String estado;
     @Column(name = "PLACA")
     private String placa;
+    @Column(name = "ALIAS")
+    private String alias;
     
 //    @JoinColumn(name = "PERSONA_ID")
 //    @ManyToOne    
@@ -305,6 +307,14 @@ public class Empleado implements Serializable
 
     public void setPorcentajeColaborador(Integer porcentajeColaborador) {
         this.porcentajeColaborador = porcentajeColaborador;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
     
     

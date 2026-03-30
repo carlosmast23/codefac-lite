@@ -94,8 +94,8 @@ public class Usuario implements Serializable{
     //@Transient
     //public boolean isConfig;
     
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
-    //private List<PerfilUsuario> perfilesUsuario;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
+    private List<PerfilUsuario> perfilesUsuario;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",fetch = FetchType.EAGER)
     private List<PuntoEmisionUsuario> puntosEmisionUsuario;
@@ -201,11 +201,19 @@ public class Usuario implements Serializable{
     public void setParametrosComprobatesElectronicos(String parametrosComprobatesElectronicos) {
         this.parametrosComprobatesElectronicos = parametrosComprobatesElectronicos;
     }
+
+    public List<PerfilUsuario> getPerfilesUsuario() {
+        return perfilesUsuario;
+    }
+
+    public void setPerfilesUsuario(List<PerfilUsuario> perfilesUsuario) {
+        this.perfilesUsuario = perfilesUsuario;
+    }
     
     
     
 
-    public List<PerfilUsuario> getPerfilesUsuario() {
+    /*public List<PerfilUsuario> getPerfilesUsuario() {
         try {
             return ServiceFactory.getFactory().getPerfilUsuarioServiceIf().buscarPorUsuario(this);
             //return perfilesUsuario;
@@ -213,7 +221,7 @@ public class Usuario implements Serializable{
             Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ArrayList<>();
-    }
+    }*/
 
     //public void setPerfilesUsuario(List<PerfilUsuario> perfilesUsuario) {
     //    this.perfilesUsuario = perfilesUsuario;
@@ -309,14 +317,14 @@ public class Usuario implements Serializable{
     
     public void addPerfilUsuario(PerfilUsuario perfilUsuario)
     {
-        List<PerfilUsuario> perfilesUsuario=getPerfilesUsuario();
-        if(perfilesUsuario==null)
+        //List<PerfilUsuario> perfilesUsuario=getPerfilesUsuario();
+        if(this.perfilesUsuario==null)
         {
-            perfilesUsuario=new ArrayList<PerfilUsuario>();
+            this.perfilesUsuario=new ArrayList<PerfilUsuario>();
         }
         perfilUsuario.setUsuario(this);
         
-        perfilesUsuario.add(perfilUsuario);
+        this.perfilesUsuario.add(perfilUsuario);
         
     }
     

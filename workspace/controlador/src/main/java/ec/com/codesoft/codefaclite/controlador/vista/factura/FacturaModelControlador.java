@@ -853,7 +853,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             agregarIva=agregarIvaSiNo.getBool();
         }
         
-        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && !agregarIva)        
+        if((documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) || documentoEnum.equals(DocumentoEnum.PROFORMA)) && !agregarIva)        
         {
             /**
              * Si el producto tiene ice calculo el nuevo subtotal
@@ -1263,6 +1263,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             } else {
                 descuento = BigDecimal.ZERO;
             }
+            
+            descuento=descuento.multiply(facturaDetalle.getCantidad());
             
             //Redonde a 2 decimales porque en el Sri no permite con mas decimales
             facturaDetalle.setDescuento(descuento.setScale(2,BigDecimal.ROUND_HALF_UP));
@@ -1676,6 +1678,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
      */
     public static void imprimirComprobanteVenta(Factura facturaProcesando,String nombre,Boolean activarConfiguracionesImpresion,SessionCodefacInterface session,InterfazComunicacionPanel panelPadre,GeneralPanelInterface.EstadoFormularioEnum formEnum) 
     {
+        
         //Revisar el nombre del comproante si tiene un alias
         if(facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
         {
@@ -1685,10 +1688,19 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 nombre=aliasNotaVenta;
             }
         }
-        else
+        else if(facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
         {
             nombre="Factura";
         }
+        /*else if(facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.pro))
+        {            
+            nombre="Proforma";
+            String aliasProforma=ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.AliasNombresDocumentos.PROFORMA_NOMBRE_ALIAS);
+            if(!UtilidadesTextos.verificarNullOVacio(aliasProforma))
+            {
+                nombre=aliasProforma;
+            }
+        }*/
         
         FormatoReporteEnum tipoReporteEnum=ParametroUtilidades.obtenerValorParametroEnum(session.getEmpresa(),ParametroCodefac.REPORTE_DEFECTO_VENTA, FormatoReporteEnum.A2);
         
@@ -1751,9 +1763,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                     nombreReporte = "comprobante_venta_ticket.jrxml";
                     //TODO:Terminar de implementar para los demas comprobantes
                     
+                    //Solución temporal para alinear los reportes muy pequeños a la izquierda
                     if(tipoReporteEnum!=null)
                     {
                         nombreReporte=tipoReporteEnum.getReporteJasperNombre();
+                        if(nombreReporte.equals("comprobante_venta_ticket_30.jrxml") || nombreReporte.equals("comprobante_venta_ticket_40.jrxml") || nombreReporte.equals("comprobante_venta_ticket_50.jrxml"))
+                        {
+                            formatoEnum.setPos58(true);
+                        }
                     }
                     
                 }
@@ -2051,30 +2068,32 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
                 datoAdicionalList.add(informacionAdicional);
             }
             
-            
-            ///Agregar el tipo de Emisión en el caso que sea factura electronica
-            if(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.equals(facturaProcesando.getTipoFacturacionEnum()))
+            if(!facturaProcesando.getCodigoDocumentoEnum().equals(DocumentoEnum.PROFORMA))
             {
-                datoAdicionalList.add(new InformacionAdicional("Emisión","Normal"));
-            }
-            
-            //Agregar la forma de pago
-            if(!UtilidadesLista.verificarListaVaciaONull(facturaProcesando.getFormaPagos()))
-            {
-                for (FormaPago formaPago : facturaProcesando.getFormaPagos()) 
+                ///Agregar el tipo de Emisión en el caso que sea factura electronica
+                if(ComprobanteEntity.TipoEmisionEnum.ELECTRONICA.equals(facturaProcesando.getTipoFacturacionEnum()))
                 {
-                    datoAdicionalList.add(new InformacionAdicional(formaPago.getSriFormaPago().getAlias(),formaPago.getTotal().toString()));  
+                    datoAdicionalList.add(new InformacionAdicional("Emisión","Normal"));
                 }
-                //FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
-                //datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
-            }   
-            
-            //Agregar dato de la autorizacion si es manual y tiene seteado ese campo en la nota de venta
-            if(ComprobanteEntity.TipoEmisionEnum.NORMAL.equals(facturaProcesando.getTipoFacturacionEnum()))
-            {
-                if(!UtilidadesTextos.verificarNullOVacio(facturaProcesando.getClaveAcceso()))
+
+                //Agregar la forma de pago
+                if(!UtilidadesLista.verificarListaVaciaONull(facturaProcesando.getFormaPagos()))
                 {
-                    datoAdicionalList.add(new InformacionAdicional("Autorización",facturaProcesando.getClaveAcceso()));
+                    for (FormaPago formaPago : facturaProcesando.getFormaPagos()) 
+                    {
+                        datoAdicionalList.add(new InformacionAdicional(formaPago.getSriFormaPago().getAlias(),formaPago.getTotal().toString()));  
+                    }
+                    //FormaPago formaPago=facturaProcesando.getFormaPagos().get(0);
+                    //datoAdicionalList.add(new InformacionAdicional("Forma de Pago",formaPago.getSriFormaPago().getAlias()));
+                }   
+
+                //Agregar dato de la autorizacion si es manual y tiene seteado ese campo en la nota de venta
+                if(ComprobanteEntity.TipoEmisionEnum.NORMAL.equals(facturaProcesando.getTipoFacturacionEnum()))
+                {
+                    if(!UtilidadesTextos.verificarNullOVacio(facturaProcesando.getClaveAcceso()))
+                    {
+                        datoAdicionalList.add(new InformacionAdicional("Autorización",facturaProcesando.getClaveAcceso()));
+                    }
                 }
             }
             
@@ -2111,7 +2130,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     private static void agregarDatosFacturacionElectronica(Factura factura,List<InformacionAdicional> datoAdicionalList)
     {
         //Si el documento es una nota de venta no tengo en cuenta los datos para las facturas
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        DocumentoEnum documentoEnum=factura.getCodigoDocumentoEnum();
+        if(!documentoEnum.equals(DocumentoEnum.FACTURA))
         {
             return ;
         }

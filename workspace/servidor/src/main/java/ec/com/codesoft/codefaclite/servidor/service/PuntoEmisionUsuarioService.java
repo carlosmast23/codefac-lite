@@ -53,7 +53,7 @@ public class PuntoEmisionUsuarioService extends ServiceAbstract<PuntoEmisionUsua
                 Map<String,Object> mapParametros=new  HashMap<String,Object>();
                 mapParametros.put("usuario",usuario);
                 mapParametros.put("estado",GeneralEnumEstado.ACTIVO.getEstado());
-                mapParametros.put("puntoEmision.sucursalId",sucursal.getId());
+                mapParametros.put("puntoEmision.sucursal",sucursal);
                 return getFacade().findByMap(mapParametros,em);
             }
         });

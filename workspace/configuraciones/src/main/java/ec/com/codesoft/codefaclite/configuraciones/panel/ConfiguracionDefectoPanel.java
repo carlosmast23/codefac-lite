@@ -67,6 +67,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtLeyendaAdicionalComprobante = new javax.swing.JTextField();
         jLabel89 = new javax.swing.JLabel();
         txtPuntoEmisionDefectoPresupuestos = new javax.swing.JSpinner();
+        jLabel127 = new javax.swing.JLabel();
+        txtProformaNombreAlias = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -377,10 +379,10 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel1.add(lblEspacio1, gridBagConstraints);
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        jLabel12.setText("Nota de Venta Interna (Alias):");
+        jLabel12.setText("Proforma (Alias):");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel12, gridBagConstraints);
@@ -404,7 +406,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel52.setText("Punto Emisión Por Defecto Presupuestos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel52, gridBagConstraints);
@@ -425,7 +427,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel1.add(jLabel65, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtLeyendaAdicionalComprobante, gridBagConstraints);
@@ -434,17 +436,32 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel89.setText("Leyenda Adicional Comprobante:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(jLabel89, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtPuntoEmisionDefectoPresupuestos, gridBagConstraints);
+
+        jLabel127.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel127.setText("Nota de Venta Interna (Alias):");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(jLabel127, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel1.add(txtProformaNombreAlias, gridBagConstraints);
 
         jTabbedPane1.addTab("Documentos", jPanel1);
 
@@ -2815,6 +2832,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel124;
     private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel126;
+    private javax.swing.JLabel jLabel127;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2979,6 +2997,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JTextField txtProductoF7;
     private javax.swing.JTextField txtProductoF8;
     private javax.swing.JTextField txtProductoF9;
+    private javax.swing.JTextField txtProformaNombreAlias;
     private javax.swing.JSpinner txtPuntoEmisionDefectoPresupuestos;
     private javax.swing.JSpinner txtPvp1MargenUtilidad;
     private javax.swing.JSpinner txtPvp2MargenUtilidad;
@@ -4003,6 +4022,15 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     public void setTxtValorMinimoSorteo(JSpinner txtValorMinimoSorteo) {
         this.txtValorMinimoSorteo = txtValorMinimoSorteo;
     }
+
+    public JTextField getTxtProformaNombreAlias() {
+        return txtProformaNombreAlias;
+    }
+
+    public void setTxtProformaNombreAlias(JTextField txtProformaNombreAlias) {
+        this.txtProformaNombreAlias = txtProformaNombreAlias;
+    }
+    
     
     
     

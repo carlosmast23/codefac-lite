@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.entity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades.ComparadorInterface;
+import jakarta.persistence.Cacheable;
 import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +26,7 @@ import javax.mail.Session;
  *
  * @author Carlos
  */
+@Cacheable(true)
 @Entity
 @Table(name = "PARAMETRO")
 public class ParametroCodefac implements Serializable {
@@ -281,7 +283,9 @@ public class ParametroCodefac implements Serializable {
     
     /**
      * Variable que me permite contralar si la nota de venta interna debe incluir el iva al momento de realziar el calculo
+     * NOTA: Esta opción en futuras opciones toca quitar porque ninguna nota de venta puede incluir el iva como dato porque eso es ilegal 
      */
+    @Deprecated
     public static final String NOTA_VENTA_INTERNA_IVA="NOTA_VENTA_INTERNA_IVA";
     
     /**
@@ -587,6 +591,7 @@ public class ParametroCodefac implements Serializable {
     public static class AliasNombresDocumentos
     {
         public static String NOTA_VENTA_INTERNA_ALIAS="NOTA_VENTA_INTERNA_ALIAS";
+        public static String PROFORMA_NOMBRE_ALIAS="PROFORMA_NOMBRE_ALIAS";
     }
     
     public static class Inventario

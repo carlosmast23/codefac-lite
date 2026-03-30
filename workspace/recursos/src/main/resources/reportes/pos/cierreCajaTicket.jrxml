@@ -220,7 +220,7 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="112" splitType="Stretch">
+		<band height="122" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement x="71" y="75" width="55" height="12" uuid="395e42bd-bd0e-47b4-8040-30122e4da97f"/>
 				<textElement>
@@ -310,14 +310,32 @@
 				<textElement>
 					<font size="8" isBold="false" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Diferencia:]]></text>
+				<text><![CDATA[Faltante:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="71" y="99" width="55" height="12" uuid="c4e8089e-191e-4b6d-8ce2-f5f2cd95e49d"/>
+				<reportElement x="71" y="99" width="55" height="12" uuid="c4e8089e-191e-4b6d-8ce2-f5f2cd95e49d">
+					<printWhenExpression><![CDATA[new BigDecimal($P{valor_ciere_teorico}).compareTo(new BigDecimal($P{valor_cierre_practico}))>0]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).subtract(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new BigDecimal($P{valor_ciere_teorico}).subtract(new BigDecimal($P{valor_cierre_practico}))+""]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="110" width="68" height="12" uuid="bab2ae66-6e48-45d2-bf05-64ed102d1585"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Sobrante:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="71" y="110" width="55" height="12" uuid="c4fc3807-b27b-4587-ad30-64b7fdb4017a">
+					<printWhenExpression><![CDATA[new BigDecimal($P{valor_ciere_teorico}).compareTo(new BigDecimal($P{valor_cierre_practico}))<0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).compareTo(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

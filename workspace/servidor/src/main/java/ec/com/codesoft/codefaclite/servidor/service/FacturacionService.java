@@ -2269,13 +2269,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         
     }    
     
-   public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto) throws RemoteException,ServicioCodefacException 
+   public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto,Sucursal sucursal,Empleado empleado) throws RemoteException,ServicioCodefacException 
    {
        return (UtilidadReport) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
            @Override
            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
                 UtilidadReport reporte = new UtilidadReport("Reporte de Utilidades");
-               List<UtilidadResult> datosList = getFacade().consultaUtilidadFacade(fechaMenor, fechaMayor, categoriaProducto,entityManager);
+               List<UtilidadResult> datosList = getFacade().consultaUtilidadFacade(fechaMenor, fechaMayor, categoriaProducto,sucursal,empleado,entityManager);
                reporte.setDetalleList(datosList);
 
                return reporte;

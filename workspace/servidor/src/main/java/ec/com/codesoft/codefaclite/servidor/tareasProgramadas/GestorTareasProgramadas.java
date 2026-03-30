@@ -43,7 +43,7 @@ public class GestorTareasProgramadas
     public void agregarTareaProgramada(Runnable tarea,Long periodoInicialEspera,Long periodo,TimeUnit unidadMedida)
     {
         this.tareasList.add(tarea);
-        executor.scheduleAtFixedRate(tarea, periodoInicialEspera, periodo, unidadMedida);
+        executor.scheduleWithFixedDelay(tarea, periodoInicialEspera, periodo, unidadMedida);
     }
     
     public void agregarTareaProgramadaPorDia(Runnable tarea,Integer hora,Integer minutos)

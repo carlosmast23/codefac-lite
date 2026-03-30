@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRElement;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -50,7 +52,10 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JRDesignFrame;
+import net.sf.jasperreports.engine.design.JRDesignTextElement;
 import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.type.HorizontalTextAlignEnum;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -354,7 +359,11 @@ public class ReporteCodefac {
 
                         jasperDesign.setColumnWidth(newColumnWidth);
                         report =JasperCompileManager.compileReport(jasperDesign);
+                        
+
                     }
+                                        
+                    
                 }
                 
                 //en el caso que no haya compilado, compilo en esta opción
@@ -376,6 +385,7 @@ public class ReporteCodefac {
         }
         return null;
     }
+
     
     /**
      * TODO: Revisar el tema del parametro de InterfazComunicacionPanel por que parece que tiene un error en el diseño para llenar esos datos
@@ -756,7 +766,14 @@ public class ReporteCodefac {
             {
                 case TICKET:
                 case A6:
-                        nombreReporteEncabezado = "encabezadoTicket.jrxml";
+                        if(formatoReporte.getPos58())
+                        {
+                            nombreReporteEncabezado ="encabezadoTicket58mm.jrxml";
+                        }
+                        else
+                        {
+                            nombreReporteEncabezado = "encabezadoTicket.jrxml";
+                        }
                         nombreReportePiePagina = "pie_paginaTicket.jrxml";
                         break;
                 

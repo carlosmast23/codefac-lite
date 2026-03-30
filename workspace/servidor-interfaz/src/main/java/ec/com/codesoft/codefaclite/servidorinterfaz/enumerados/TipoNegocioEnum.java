@@ -15,7 +15,8 @@ public enum TipoNegocioEnum implements ParametroUtilidades.ComparadorInterface<T
     SIMPLE("s","simple"),
     NORMAL("n","normal"),
     TALLER_AUTOMOTRIZ("t","taller automotriz"),
-    FARMACIA("f","farmacia");    
+    FARMACIA("f","farmacia"),
+    LAVANDERIA("l","lavandería");    
     
     private String letra;
     private String nombre;    

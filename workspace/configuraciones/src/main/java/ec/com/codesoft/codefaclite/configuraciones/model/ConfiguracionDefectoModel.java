@@ -632,6 +632,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             parametro=parametrosTodos.get(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);
             getTxtNotaVentaInternaAlias().setText((parametro != null) ? parametro.getValor():"");
             
+            parametro=parametrosTodos.get(ParametroCodefac.AliasNombresDocumentos.PROFORMA_NOMBRE_ALIAS);
+            getTxtProformaNombreAlias().setText((parametro != null) ? parametro.getValor():"");
+            
             
             parametro=parametrosTodos.get(ParametroCodefac.Inventario.F1_PRODUCTO);
             getTxtProductoF1().setText((parametro != null) ? parametro.getValor():"");
@@ -1282,7 +1285,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
 
         
         agregarParametro(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS, getTxtNotaVentaInternaAlias().getText());
-        agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);    
+        agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.NOTA_VENTA_INTERNA_ALIAS);   
+        
+        agregarParametro(ParametroCodefac.AliasNombresDocumentos.PROFORMA_NOMBRE_ALIAS, getTxtProformaNombreAlias().getText());
+        agregarParametroEditar(ParametroCodefac.AliasNombresDocumentos.PROFORMA_NOMBRE_ALIAS);   
         
         
         agregarParametro(ParametroCodefac.Inventario.F1_PRODUCTO, getTxtProductoF1().getText());

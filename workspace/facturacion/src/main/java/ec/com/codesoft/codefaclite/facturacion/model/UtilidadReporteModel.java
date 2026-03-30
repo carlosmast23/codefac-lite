@@ -11,7 +11,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
 import ec.com.codesoft.codefaclite.controlador.model.ReporteDialogListener;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadResult;
@@ -86,8 +88,10 @@ public class UtilidadReporteModel extends FacturaReporteModel
         try {
             java.sql.Date fechaInicio = UtilidadesFecha.castDateUtilToSql(getDateFechaInicio().getDate());
             java.sql.Date fechaFin = UtilidadesFecha.castDateUtilToSql(getDateFechaFin().getDate());
+            Sucursal sucursal= (Sucursal) getCmbSucursal().getSelectedItem();
+            Empleado empleado= (Empleado) getCmbVendedor().getSelectedItem();
             //CategoriaProducto categoriaProducto=getcmb            
-            utilidadReport=ServiceFactory.getFactory().getFacturacionServiceIf().consultaUtilidadVentas(fechaInicio,fechaFin,categoriaFiltro);
+            utilidadReport=ServiceFactory.getFactory().getFacturacionServiceIf().consultaUtilidadVentas(fechaInicio,fechaFin,categoriaFiltro,sucursal,empleado);
             llenarTabla();
             
         } catch (RemoteException ex) {
@@ -103,6 +107,7 @@ public class UtilidadReporteModel extends FacturaReporteModel
         {
             getTblDocumentos().setModel(utilidadReport.obtenerModeloTabla());
             UtilidadesTablas.ocultarColumna(getTblDocumentos(),0);
+            //UtilidadesTablas.cambiarTamanioColumnas(getTblDocumentos(),new Integer[]{500,50,100,100,100,50,30,50,30,50,30,30,30});
             
             getLblSubtotalUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.SUBTOTAL));
             getLblCostoUtilidad().setText(utilidadReport.getTotalFormatStr(UtilidadReport.DatoEnum.COSTO));

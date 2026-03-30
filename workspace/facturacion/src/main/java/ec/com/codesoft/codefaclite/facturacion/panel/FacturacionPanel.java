@@ -216,6 +216,15 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         jLabel47 = new javax.swing.JLabel();
         spnNumeroOrdenComanda = new javax.swing.JSpinner();
         btnBuscarOrden = new javax.swing.JButton();
+        panelDatosLavado = new javax.swing.JPanel();
+        jLabel48 = new javax.swing.JLabel();
+        cmbLavadoTipo = new javax.swing.JComboBox<>();
+        jLabel49 = new javax.swing.JLabel();
+        cmbLavadoDiaEntrega = new javax.swing.JComboBox<>();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        txtLavadoAbono = new javax.swing.JTextField();
+        txtLavadoPrendas = new javax.swing.JTextField();
         jTabCartera = new javax.swing.JTabbedPane();
         panelDatosEmpresa = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -1247,6 +1256,76 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         panelTabDatos.addTab("Restaurante", panelProductos1);
 
+        panelDatosLavado.setLayout(new java.awt.GridBagLayout());
+
+        jLabel48.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel48.setText("Abono:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        panelDatosLavado.add(jLabel48, gridBagConstraints);
+
+        cmbLavadoTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Almidon", "Armador", "Doblado" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosLavado.add(cmbLavadoTipo, gridBagConstraints);
+
+        jLabel49.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel49.setText("Día de Entrega:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        panelDatosLavado.add(jLabel49, gridBagConstraints);
+
+        cmbLavadoDiaEntrega.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosLavado.add(cmbLavadoDiaEntrega, gridBagConstraints);
+
+        jLabel50.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel50.setText("Prendas:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        panelDatosLavado.add(jLabel50, gridBagConstraints);
+
+        jLabel52.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel52.setText("Tipo:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        panelDatosLavado.add(jLabel52, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosLavado.add(txtLavadoAbono, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.ipadx = 40;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelDatosLavado.add(txtLavadoPrendas, gridBagConstraints);
+
+        panelTabDatos.addTab("Lavado", panelDatosLavado);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -2016,6 +2095,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private org.jdesktop.swingx.JXDatePicker cmbFechaVencimiento;
     private javax.swing.JComboBox<EnumSiNo> cmbIva;
     private javax.swing.JComboBox<EnumSiNo> cmbIvaDescuento;
+    private javax.swing.JComboBox<String> cmbLavadoDiaEntrega;
+    private javax.swing.JComboBox<String> cmbLavadoTipo;
     private javax.swing.JComboBox<Mesa> cmbMesaComanda;
     private javax.swing.JComboBox<String> cmbOrigenVenta;
     private javax.swing.JComboBox<Producto.PrecioVenta> cmbPreciosVenta;
@@ -2065,8 +2146,12 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel45;
     private javax.swing.JLabel jLabel46;
     private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -2125,6 +2210,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JPanel panelDatosEmpresa;
     private javax.swing.JPanel panelDatosEmpresa1;
     private javax.swing.JPanel panelDatosFactura;
+    private javax.swing.JPanel panelDatosLavado;
     private javax.swing.JPanel panelDatosPresupuestos;
     private javax.swing.JPanel panelProductos;
     private javax.swing.JPanel panelProductos1;
@@ -2153,6 +2239,8 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextField txtFinanciamientoEntrada;
     private javax.swing.JSpinner txtFinanciamientoNumeroCuotas;
     private javax.swing.JTextField txtFinanciamientoTarifa;
+    private javax.swing.JTextField txtLavadoAbono;
+    private javax.swing.JTextField txtLavadoPrendas;
     private javax.swing.JTextArea txtNotaMesa;
     private javax.swing.JSpinner txtNumeroCuotas;
     private javax.swing.JTextField txtOrigenVentaNota;
@@ -2191,7 +2279,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         return lblTelefonoCliente;
     }
 
-    @CursorPorDefectoAnotacion()
+    //@CursorPorDefectoAnotacion()
     public JTextField getTxtCliente() {
         return txtCliente;
     }
@@ -2972,6 +3060,38 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public void setBtnActualizarFechaReprocesar(JButton btnActualizarFechaReprocesar) {
         this.btnActualizarFechaReprocesar = btnActualizarFechaReprocesar;
+    }
+
+    public JComboBox<String> getCmbLavadoDiaEntrega() {
+        return cmbLavadoDiaEntrega;
+    }
+
+    public void setCmbLavadoDiaEntrega(JComboBox<String> cmbLavadoDiaEntrega) {
+        this.cmbLavadoDiaEntrega = cmbLavadoDiaEntrega;
+    }
+
+    public JComboBox<String> getCmbLavadoTipo() {
+        return cmbLavadoTipo;
+    }
+
+    public void setCmbLavadoTipo(JComboBox<String> cmbLavadoTipo) {
+        this.cmbLavadoTipo = cmbLavadoTipo;
+    }
+
+    public JTextField getTxtLavadoAbono() {
+        return txtLavadoAbono;
+    }
+
+    public void setTxtLavadoAbono(JTextField txtLavadoAbono) {
+        this.txtLavadoAbono = txtLavadoAbono;
+    }
+
+    public JTextField getTxtLavadoPrendas() {
+        return txtLavadoPrendas;
+    }
+
+    public void setTxtLavadoPrendas(JTextField txtLavadoPrendas) {
+        this.txtLavadoPrendas = txtLavadoPrendas;
     }
     
     

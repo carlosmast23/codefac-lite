@@ -49,6 +49,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Size;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,10 +78,16 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     @Basic(optional = false)
     @Column(name = NOMBRE_CAMPO_ID)
     private Long idProducto;
+    
+    @Size(max = 25)
     @Column(name = "CODIGO_PERSONALIZADO")
     private String codigoPersonalizado;
+    
+    @Size(max = 25)
     @Column(name = "CODIGO_EAN")
     private String codigoEAN;
+    
+    @Size(max = 25)
     @Column(name = "CODIGO_UPC")
     private String codigoUPC;
 

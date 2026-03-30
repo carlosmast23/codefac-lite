@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.ComprobacionComprobantesAutorizadosTarea;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.GestorTareasProgramadas;
 import ec.com.codesoft.codefaclite.servidor.tareasProgramadas.RespaldoProgramadoTarea;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -42,10 +43,10 @@ public class TareasProgramadasCodefac {
     }
     
     private static void agregarTareaComprobarAutorizacionComprobantes(GestorTareasProgramadas gestorTareas)
-    {
+    {        
         //ejecutar la tarea la primera vez al primer minuto y luego cada 30 minutos
         gestorTareas.agregarTareaProgramada(new ComprobacionComprobantesAutorizadosTarea(), 
-                Long.valueOf(1), 
+                Long.valueOf(3), 
                 Long.valueOf(15), 
                 TimeUnit.MINUTES);
         Logger.getLogger(TareasProgramadasCodefac.class.getName()).log(Level.INFO,"Configurado tarea automatica para intentar autorizar comprobantes que queden pendientes");        

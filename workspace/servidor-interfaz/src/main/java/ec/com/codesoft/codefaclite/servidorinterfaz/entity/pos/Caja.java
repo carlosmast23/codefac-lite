@@ -53,15 +53,15 @@ public class Caja implements Serializable {
     @Column(name = "ESTADO")
     private String estado;
     
-    //@JoinColumn(name = "SUCURSAL_ID")
-    //private Sucursal sucursal;
-    @Column(name = "SUCURSAL_ID")
-    private Long sucursalId;
+    @JoinColumn(name = "SUCURSAL_ID")
+    private Sucursal sucursal;
+    //@Column(name = "SUCURSAL_ID")
+    //private Long sucursalId;
     
-    //@JoinColumn(name = "PUNTO_EMISION_ID")
-    //private PuntoEmision puntoEmision;
-    @Column(name = "PUNTO_EMISION_ID")
-    private Long puntoEmisionId;
+    @JoinColumn(name = "PUNTO_EMISION_ID")
+    private PuntoEmision puntoEmision;
+    //@Column(name = "PUNTO_EMISION_ID")
+    //private Long puntoEmisionId;
     
     @JoinColumn(name = "PUNTO_EMISION_2_ID")
     private PuntoEmision puntoEmision2;
@@ -122,7 +122,7 @@ public class Caja implements Serializable {
         }
     }
 
-    public Sucursal getSucursal() {
+    /*public Sucursal getSucursal() {
         
         try {
             return ServiceFactory.getFactory().getSucursalServiceIf().buscarPorId(sucursalId);
@@ -137,48 +137,56 @@ public class Caja implements Serializable {
         {
             this.sucursalId = sucursal.getId();
         }
-    }
-
-    public Long getSucursalId() {
-        return sucursalId;
-    }
-
-    public void setSucursalId(Long sucursalId) {
-        this.sucursalId = sucursalId;
-    }
-
-    public Long getPuntoEmisionId() {
-        return puntoEmisionId;
-    }
-
-    public void setPuntoEmisionId(Long puntoEmisionId) {
-        this.puntoEmisionId = puntoEmisionId;
-    }
-    
-    
-    
-    @Deprecated
-    public PuntoEmision getPuntoEmision() {
-        try {
-            return ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(puntoEmisionId);
-        } catch (RemoteException ex) {
-            Logger.getLogger(Caja.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-
-    @Deprecated
-    public void setPuntoEmision(PuntoEmision puntoEmision) {
-        if(puntoEmision!=null)
-        {
-            this.puntoEmisionId = puntoEmision.getId();
-        }
-    }
-    
-    /*public List<CajaPermiso> getCajasPermiso() {
-        return cajasPermiso;
     }*/
 
+    public Sucursal getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(Sucursal sucursal) {
+        this.sucursal = sucursal;
+    }
+
+
+    public PuntoEmision getPuntoEmision() {
+        return puntoEmision;
+    }
+
+    /*public Long getSucursalId() {
+    return sucursalId;
+    }
+    public void setSucursalId(Long sucursalId) {
+    this.sucursalId = sucursalId;
+    }*/
+    /*public Long getPuntoEmisionId() {
+    return puntoEmisionId;
+    }
+    public void setPuntoEmisionId(Long puntoEmisionId) {
+    this.puntoEmisionId = puntoEmisionId;
+    }*/
+    /*@Deprecated
+    public PuntoEmision getPuntoEmision() {
+    try {
+    return ServiceFactory.getFactory().getPuntoVentaServiceIf().buscarPorId(puntoEmisionId);
+    } catch (RemoteException ex) {
+    Logger.getLogger(Caja.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return null;
+    }
+    @Deprecated
+    public void setPuntoEmision(PuntoEmision puntoEmision) {
+    if(puntoEmision!=null)
+    {
+    this.puntoEmisionId = puntoEmision.getId();
+    }
+    }*/
+    public void setPuntoEmision(PuntoEmision puntoEmision) {
+        this.puntoEmision = puntoEmision;
+    }
+
+    /*public List<CajaPermiso> getCajasPermiso() {
+    return cajasPermiso;
+    }*/
     public PuntoEmision getPuntoEmision2() {
         return puntoEmision2;
     }

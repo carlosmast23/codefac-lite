@@ -427,7 +427,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
         return query.getResultList();
     }
       
-      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto,EntityManager em)
+      public List<UtilidadResult> consultaUtilidadFacade(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto,Sucursal sucursal,Empleado empleado,EntityManager em)
       {
           //Factura f;
           //f.getEstadoEnum().AUTORIZADO
@@ -437,6 +437,10 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           String whereFechaMayor="";
           
           String whereEstado="";
+          
+          String whereSucursal="";
+          
+          String whereEmpleado="";
           
           //filtro para solo ingresar los documentos de factura, nota de venta, y no ta de venta interna
           String whereDocumentos=" AND ( F.CODIGO_DOCUMENTO='FAC' OR F.CODIGO_DOCUMENTO='NVI' OR F.CODIGO_DOCUMENTO='NVT' ) ";
@@ -451,6 +455,17 @@ public class FacturaFacade extends AbstractFacade<Factura> {
               whereFechaMenor= " AND F.FECHA_EMISION >= ?2";
           }
           
+          if(sucursal!=null)
+          {
+              whereSucursal= " AND F.SUCURSAL_ID >= ?3";
+          }
+
+          if (empleado != null) 
+          {
+              whereEmpleado = " AND ( E.ID = ?4 OR ER2.ID=?4 OR ER.ID=?4 )";
+          }
+          
+          
           whereEstado=" AND (F.ESTADO='A' OR F.ESTADO='S' ) ";
           
           /*String queryString="SELECT F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,F.ID,FD.SUBTOTAL,FD.COSTO,FD.UTILIDAD FROM FACTURA F INNER JOIN " +
@@ -458,9 +473,28 @@ public class FacturaFacade extends AbstractFacade<Factura> {
                         "	SELECT FD.FACTURA_ID ,SUM(FD.TOTAL) AS SUBTOTAL ,SUM(FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION) AS COSTO , SUM(FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION) AS UTILIDAD FROM FACTURA_DETALLE FD  GROUP BY FD.FACTURA_ID " +
                         ") FD ON F.ID =FD.FACTURA_ID WHERE 1=1  "+whereFechaMayor+whereFechaMenor+whereEstado ;*/
           
-          String queryString="SELECT FD.ID, F.SECUENCIAL,F.FECHA_EMISION ,F.RAZON_SOCIAL,F.IDENTIFICACION,FD.DESCRIPCION AS NOMBRE_PRODUCTO  ,FD.FACTURA_ID,FD.TOTAL AS SUBTOTAL ,FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS COSTO , \n" +
-"			FD.TOTAL-FD.COSTO_PROMEDIO*FD.CANTIDAD*FD.CANTIDAD_PRESENTACION AS UTILIDAD \n" +
-"		FROM FACTURA_DETALLE FD	INNER JOIN FACTURA F ON F.ID =FD.FACTURA_ID WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado+whereDocumentos ;
+          String queryString = " SELECT   FD.ID,\n"
+                  + "    F.SECUENCIAL,\n"
+                  + "    F.FECHA_EMISION,\n"
+                  + "    F.RAZON_SOCIAL,\n"
+                  + "    F.IDENTIFICACION,\n"
+                  + "    FD.DESCRIPCION AS NOMBRE_PRODUCTO,\n"
+                  + "    E.ALIAS ALIAS_VENDEDOR,\n"
+                  + "    F.PORCENTAJE_VENDEDOR,\n"
+                  + "    ER2.ALIAS ALIAS_REFERENTE,\n"
+                  + "    F.PORCENTAJE_REFERIDOS,\n"
+                  + "    ER.ALIAS AS ALIAS_RESPONSABLE,\n"
+                  + "    F.PORCENTAJE_REFERIDOS,\n"
+                  + "    FD.FACTURA_ID,\n"
+                  + "    FD.TOTAL AS SUBTOTAL,\n"
+                  + "    FD.COSTO_PROMEDIO * FD.CANTIDAD * FD.CANTIDAD_PRESENTACION AS COSTO,\n"
+                  + "    FD.TOTAL - FD.COSTO_PROMEDIO * FD.CANTIDAD * FD.CANTIDAD_PRESENTACION AS UTILIDAD \n"
+                  + "		FROM\n"
+                  + "    FACTURA_DETALLE FD\n"
+                  + "    INNER JOIN FACTURA F ON F.ID = FD.FACTURA_ID\n"
+                  + "    LEFT JOIN EMPLEADO ER ON ER.ID=FD.RESPONSABLE_ID\n"
+                  + "    LEFT JOIN EMPLEADO E ON E.ID=F.VENDEDOR_ID\n"
+                  + "    LEFT JOIN EMPLEADO ER2 ON ER2.ID=F.REFERIDO_ID  WHERE 1=1 "+ whereFechaMayor+whereFechaMenor+whereEstado+whereDocumentos+whereSucursal+whereEmpleado ;
       
           Query query=em.createNativeQuery(queryString);
           Logger.getLogger(FacturaFacade.class.getName()).log(Level.INFO,queryString);
@@ -475,6 +509,15 @@ public class FacturaFacade extends AbstractFacade<Factura> {
               query.setParameter(2,fechaMenor);
           }
           
+          if(sucursal!=null)
+          {
+              query.setParameter(3,sucursal.getId());
+          }
+          
+          if(empleado!=null)
+          {
+              query.setParameter(4,empleado.getId());
+          }
           
           List<Object[]> resultado=query.getResultList();
           List<UtilidadResult> resultadoList=new ArrayList<UtilidadResult>();

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.servidor.tareasProgramadas;
 
 import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteElectronicoService;
+import ec.com.codesoft.codefaclite.servidor.util.UtilidadesServidor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -38,6 +39,12 @@ public class ComprobacionComprobantesAutorizadosTarea implements Runnable{
     
     private void comprobacion()
     {
+        if(UtilidadesServidor.mapEmpresasLicencias.isEmpty())
+        {
+            //Si no existe validado ninguna empresa con ninguna licencia no ejecuto nada
+            return;
+        }
+        
         try {
             Integer comprobantesPendientes=ServiceFactory.getFactory().getComprobanteServiceIf().obtenerTotalComprobantesSinTerminarProcesarTodos();
             if(comprobantesPendientes>0)

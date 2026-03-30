@@ -18,14 +18,26 @@ public enum FormatoHojaEnum {
     TICKET("TICKET");
     
     private String letra;    
+    private Boolean pos58;
 
     private FormatoHojaEnum(String letra) {
         this.letra = letra;
+        this.pos58=false;
     }
 
     public String getLetra() {
         return letra;
     }
+
+    public Boolean getPos58() {
+        return pos58;
+    }
+
+    public void setPos58(Boolean pos58) {
+        this.pos58 = pos58;
+    }
+    
+    
     
     public static FormatoHojaEnum buscarPorLetra(String letra)
     {

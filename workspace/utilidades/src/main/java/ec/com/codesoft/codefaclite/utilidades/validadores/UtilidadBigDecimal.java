@@ -53,9 +53,9 @@ public class UtilidadBigDecimal {
         }
         catch(Exception e)
         {
-            
+            return BigDecimal.ZERO;
         }
-        return null;
+        //return BigDecimal.ZERO;
     }
     
     public static BigDecimal obtenerValorJTextField(JTextField textField)

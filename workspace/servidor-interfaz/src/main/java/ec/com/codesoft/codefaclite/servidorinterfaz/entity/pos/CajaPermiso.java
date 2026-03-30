@@ -52,10 +52,10 @@ public class CajaPermiso implements Serializable
     @JoinColumn(name = "USUARIO_ID")
     private Usuario usuario;
     
-    //@JoinColumn(name = "CAJA_ID")
-    //private Caja caja;
-    @Column(name = "CAJA_ID")
-    private Long cajaId;
+    @JoinColumn(name = "CAJA_ID")
+    private Caja caja;
+    //@Column(name = "CAJA_ID")
+    //private Long cajaId;
     
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cajaPermiso", fetch = FetchType.EAGER)
@@ -107,7 +107,17 @@ public class CajaPermiso implements Serializable
         this.usuario = usuario;
     }
 
-    @Deprecated
+    public Caja getCaja() {
+        return caja;
+    }
+
+    public void setCaja(Caja caja) {
+        this.caja = caja;
+    }
+    
+    
+
+    /*@Deprecated
     public Caja getCaja() {
         try {
             return ServiceFactory.getFactory().getCajaServiceIf().buscarPorId(cajaId);
@@ -123,7 +133,7 @@ public class CajaPermiso implements Serializable
         {
             this.cajaId = caja.getId();
         }
-    }
+    }*/
 
     public List<TurnoAsignado> getTurnoAsignadoList() {
         return turnoAsignadoList;
@@ -171,7 +181,7 @@ public class CajaPermiso implements Serializable
 
     @Override
     public String toString() {
-        Caja caja=getCaja();
+        //Caja caja=getCaja();
         return "Caja: " + caja.getNombre() + " - Punto Emisión: " + caja.getPuntoEmision();
     }
 }

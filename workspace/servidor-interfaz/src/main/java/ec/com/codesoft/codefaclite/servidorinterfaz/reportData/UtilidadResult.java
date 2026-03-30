@@ -51,23 +51,36 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
     private String vendedor;
     private String referente;
     private String colaborador;
+    
+    private Long vendedorComision;
+    private Long referenteComision;
+    private Long colaboradorComision;
+    
 
     
     @Override
     public void constructor(Object[] dato) {
-        facturaDetalleId=(Long) dato[0];
-        secuencial=(String) dato[1];
-        fechaEmision=(Date) dato[2];
-        razonSocial=(String) dato[3];
-        identificacion=(String)dato[4];
-        nombreProducto=(String)dato[5];
-        vendedor=(String)dato[6];
-        referente=(String)dato[7];
-        colaborador=(String)dato[8];
-        facturaId=(Long) dato[9];
-        subtotal=(BigDecimal) dato[10];
-        costo=(BigDecimal) dato[11];
-        utilidad=(BigDecimal) dato[12];
+        int indice=0;
+        facturaDetalleId=(Long) dato[indice++];
+        secuencial=(String) dato[indice++];
+        fechaEmision=(Date) dato[indice++];
+        razonSocial=(String) dato[indice++];
+        identificacion=(String)dato[indice++];
+        nombreProducto=(String)dato[indice++];
+        
+        vendedor=(String)dato[indice++];
+        vendedorComision=(Long)dato[indice++];
+        
+        referente=(String)dato[indice++];
+        referenteComision=(Long)dato[indice++];
+        
+        colaborador=(String)dato[indice++];
+        colaboradorComision=(Long)dato[indice++];
+        
+        facturaId=(Long) dato[indice++];
+        subtotal=(BigDecimal) dato[indice++];
+        costo=(BigDecimal) dato[indice++];
+        utilidad=(BigDecimal) dato[indice++];
         
         //Setear la fecha de emision
         fechaEmisionStr=ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(fechaEmision);
@@ -119,13 +132,7 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
         this.identificacion = identificacion;
     }
 
-    public Long getFacturaId() {
-        return facturaId;
-    }
-
-    public void setFacturaId(Long facturaId) {
-        this.facturaId = facturaId;
-    }
+    
 
     public BigDecimal getSubtotal() {
         return subtotal;
@@ -198,6 +205,34 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
     public void setColaborador(String colaborador) {
         this.colaborador = colaborador;
     }
+
+    public Long getVendedorComision() {
+        return vendedorComision;
+    }
+
+    public void setVendedorComision(Long vendedorComision) {
+        this.vendedorComision = vendedorComision;
+    }
+
+    public Long getReferenteComision() {
+        return referenteComision;
+    }
+
+    public void setReferenteComision(Long referenteComision) {
+        this.referenteComision = referenteComision;
+    }
+
+    public Long getColaboradorComision() {
+        return colaboradorComision;
+    }
+
+    public void setColaboradorComision(Long colaboradorComision) {
+        this.colaboradorComision = colaboradorComision;
+    }
+
+
+    
+    
     
     
 
@@ -211,8 +246,11 @@ public class UtilidadResult extends AbstractResult implements ExcelDatosInterfac
         tiposDatos.add(new TipoDato(this.identificacion,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreProducto,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.vendedor,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.vendedorComision,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.referente,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.referenteComision,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.colaborador,Excel.TipoDataEnum.TEXTO));
+        tiposDatos.add(new TipoDato(this.colaboradorComision,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.subtotal,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.costo,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.utilidad,Excel.TipoDataEnum.NUMERO));

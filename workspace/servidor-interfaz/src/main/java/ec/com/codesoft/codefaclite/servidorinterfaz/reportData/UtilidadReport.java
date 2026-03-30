@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidorinterfaz.reportData;
 
 
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
+import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +35,11 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
             DatoEnum.IDENTIFICACION.nombre,
             DatoEnum.PRODUCTO.nombre,
             DatoEnum.VENDEDOR.nombre,
+            DatoEnum.VENDEDOR_PORCENTAJE.nombre,
             DatoEnum.REFERENTE.nombre,
+            DatoEnum.REFERENTE_PORCENTAJE.nombre,
             DatoEnum.COLABORADOR.nombre,
+            DatoEnum.COLABORADOR_PORCENTAJE.nombre,
             DatoEnum.SUBTOTAL.nombre,
             DatoEnum.COSTO.nombre,
             DatoEnum.UTILIDAD.nombre,
@@ -52,8 +56,11 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         fila.add(dato.getIdentificacion());
         fila.add(dato.getNombreProducto());
         fila.add(dato.getVendedor());
+        fila.add(UtilidadBigDecimal.convertirTextoEnBigDecimal(dato.getVendedorComision()+""));
         fila.add(dato.getReferente());
+        fila.add(UtilidadBigDecimal.convertirTextoEnBigDecimal(dato.getReferenteComision()+""));
         fila.add(dato.getColaborador());
+        fila.add(UtilidadBigDecimal.convertirTextoEnBigDecimal(dato.getColaboradorComision()+""));
         fila.add(dato.getSubtotal().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getCosto().setScale(2, RoundingMode.HALF_UP));
         fila.add(dato.getUtilidad().setScale(2, RoundingMode.HALF_UP));
@@ -74,8 +81,11 @@ public class UtilidadReport extends ReportDataAbstract<UtilidadResult>
         IDENTIFICACION("Identificación"),
         PRODUCTO("Producto"),
         VENDEDOR("Vendedor"),
+        VENDEDOR_PORCENTAJE("%Vend"),
         REFERENTE("Referente"),
+        REFERENTE_PORCENTAJE("%Ref"),
         COLABORADOR("Colaborador"),
+        COLABORADOR_PORCENTAJE("%Col"),
         SUBTOTAL("Subtotal"),
         COSTO("Costo"),
         UTILIDAD("Utilidad");
