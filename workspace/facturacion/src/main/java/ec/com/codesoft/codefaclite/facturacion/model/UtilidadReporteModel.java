@@ -237,16 +237,30 @@ public class UtilidadReporteModel extends FacturaReporteModel
                 {
                     try {
                         UtilidadResult dataReport= (UtilidadResult) getTblDocumentos().getValueAt(filaSeleccionada,0);
-                        //dataReport.getFacturaDetalleId();
+                        if(dataReport==null || dataReport.getFacturaDetalleId()==null)
+                        {
+                            DialogoCodefac.mensaje("Alerta", "La fila seleccionada no tiene un detalle de factura v\u00e1lido para editar el costo.", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            return;
+                        }
+                        
                         FacturaDetalle facturaDetalle= ServiceFactory.getFactory().getFacturaDetalleServiceIf().buscarPorId(dataReport.getFacturaDetalleId());
+                        if(facturaDetalle==null)
+                        {
+                            DialogoCodefac.mensaje("Alerta", "No se encontr\u00f3 el detalle de factura asociado a la fila seleccionada.", DialogoCodefac.MENSAJE_ADVERTENCIA);
+                            return;
+                        }
+
+                        
                         facturaDetalle.setCostoPromedio(costoNuevo);
                         ServiceFactory.getFactory().getFacturaDetalleServiceIf().editar(facturaDetalle);
                         listenerBuscar();
                         
                     } catch (RemoteException ex) {
                         Logger.getLogger(UtilidadReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Error", "No se pudo actualizar el costo por un problema de conexi\u00f3n con el servicio.", DialogoCodefac.MENSAJE_INCORRECTO);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(UtilidadReporteModel.class.getName()).log(Level.SEVERE, null, ex);
+                        DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
                     }
                     
                 }
@@ -255,6 +269,11 @@ public class UtilidadReporteModel extends FacturaReporteModel
         });
         jpopMenuItem.add(itemCambiarCosto);
         getTblDocumentos().setComponentPopupMenu(jpopMenuItem);
+    }
+
+    private boolean esValorCeroONulo(BigDecimal valor)
+    {
+        return valor==null || valor.compareTo(BigDecimal.ZERO)==0;
     }
 
     

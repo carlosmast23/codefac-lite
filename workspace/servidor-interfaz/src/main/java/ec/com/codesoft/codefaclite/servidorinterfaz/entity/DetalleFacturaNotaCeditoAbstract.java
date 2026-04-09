@@ -292,10 +292,18 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     }
 
     public BigDecimal getCantidadPresentacion() {
+        if(cantidadPresentacion==null)
+        {
+            cantidadPresentacion=BigDecimal.ONE;
+        }
         return cantidadPresentacion;
     }
 
     public void setCantidadPresentacion(BigDecimal cantidadPresentacion) {
+        if(cantidadPresentacion==null)
+        {
+            cantidadPresentacion=BigDecimal.ONE;
+        }
         this.cantidadPresentacion = cantidadPresentacion;
     }
 

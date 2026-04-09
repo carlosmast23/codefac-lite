@@ -80,5 +80,18 @@ public class FacturaDetalleService extends ServiceAbstract<FacturaDetalle, Factu
         mapParametros.put("factura",factura);
         return getFacade().findByMap(mapParametros,em);
     }
+
+    @Override
+    public void editar(FacturaDetalle entity) throws ServicioCodefacException, RemoteException {
+        
+        ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+            @Override
+            public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                entityManager.merge(entity);
+            }
+        });                
+    }
+    
+    
     
 }
