@@ -126,20 +126,25 @@ public class SegmentoProductoService extends ServiceAbstract<SegmentoProducto, S
         } );
     }
     
+    public SegmentoProducto buscarPorNombre(Empresa empresa,String nombre,EntityManager entityManager) throws ServicioCodefacException,java.rmi.RemoteException
+    {
+        Map<String, Object> mapParametros = new HashMap<String, Object>();
+        mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
+        mapParametros.put("empresa", empresa);
+        mapParametros.put("nombre", nombre);
+        List<SegmentoProducto> resultados = getFacade().findByMap(mapParametros, entityManager);
+        if (resultados.size() > 0) {
+            return resultados.get(0);
+        }
+        return null;        
+    }
+    
     public SegmentoProducto buscarPorNombre(Empresa empresa,String nombre) throws ServicioCodefacException,java.rmi.RemoteException
     {
         return (SegmentoProducto) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
             public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                Map<String, Object> mapParametros = new HashMap<String, Object>();
-                mapParametros.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
-                mapParametros.put("empresa", empresa);
-                mapParametros.put("nombre", nombre);
-                List<SegmentoProducto> resultados = getFacade().findByMap(mapParametros,entityManager);
-                if (resultados.size() > 0) {
-                    return resultados.get(0);
-                }
-                return null;
+                return buscarPorNombre(empresa, nombre, entityManager);
             }
         });
         

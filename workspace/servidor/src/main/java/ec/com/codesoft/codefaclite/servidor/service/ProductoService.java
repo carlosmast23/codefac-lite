@@ -415,7 +415,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             {
                 tipoProductoService.grabarSinTransaccion(tipoProducto, p.getEmpresa(),null,entityManager);
                 entityManager.flush();
-                tipoProducto=tipoProductoService.buscarPorNombre(p.getEmpresa(), tipoProducto.getNombre());
+                tipoProducto=tipoProductoService.buscarPorNombre(p.getEmpresa(), tipoProducto.getNombre(),entityManager);
             }
             
         }
@@ -426,7 +426,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             {                
                 segmentoProductoService.grabarSinTransaccion(segmentoProducto,  p.getEmpresa(), null,entityManager);
                 entityManager.flush();
-                segmentoProducto=segmentoProductoService.buscarPorNombre(p.getEmpresa(), segmentoProducto.getNombre());
+                segmentoProducto=segmentoProductoService.buscarPorNombre(p.getEmpresa(), segmentoProducto.getNombre(),entityManager);
             }
                         
         }
@@ -437,7 +437,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             {                
                 marcaProductoService.grabarSinTransaccion(marcaProducto,entityManager);
                 entityManager.flush();
-                marcaProducto=marcaProductoService.buscarPorNombre(p.getEmpresa(),marcaProducto.getNombre());
+                marcaProducto=marcaProductoService.buscarPorNombre(p.getEmpresa(),marcaProducto.getNombre(),entityManager);
             }
         
         }
@@ -733,12 +733,12 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
             throw new ServicioCodefacException("El código debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
         }
         
-        if(p.getCodigoEAN().length()>Producto.TAMANIO_MAX_CODIGO)
+        if(p.getCodigoEAN()!=null && p.getCodigoEAN().length()>Producto.TAMANIO_MAX_CODIGO)
         {
             throw new ServicioCodefacException("El código EAN debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
         }
         
-        if(p.getCodigoUPC().length()>Producto.TAMANIO_MAX_CODIGO)
+        if(p.getCodigoUPC()!=null && p.getCodigoUPC().length()>Producto.TAMANIO_MAX_CODIGO)
         {
             throw new ServicioCodefacException("El código UPC debe tener un tamaño maximo de "+Producto.TAMANIO_MAX_CODIGO+" caracteres ");
         }

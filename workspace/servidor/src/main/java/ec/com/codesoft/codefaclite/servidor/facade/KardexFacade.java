@@ -536,11 +536,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         }
         
         //Kardex k;
-        //k.getProducto().getTipoProductoCodigo();
+        //k.getLote().getEstado();
         ///k.getId();
         String whereTipoProducto=" AND ( k.producto.tipoProductoCodigo=?12 OR k.producto.tipoProductoCodigo=?13 ) ";
+        String whereLoteActivos="AND k.lote.estado='A'";
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+orderBy;
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+whereLoteActivos+orderBy;
         Query query = em.createQuery(queryString);
         
         

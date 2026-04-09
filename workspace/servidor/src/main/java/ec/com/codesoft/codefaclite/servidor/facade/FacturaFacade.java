@@ -457,7 +457,7 @@ public class FacturaFacade extends AbstractFacade<Factura> {
           
           if(sucursal!=null)
           {
-              whereSucursal= " AND F.SUCURSAL_ID >= ?3";
+              whereSucursal= " AND F.SUCURSAL_EMPRESA_ID = ?3";
           }
 
           if (empleado != null) 

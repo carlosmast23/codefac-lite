@@ -90,6 +90,11 @@ public class UtilidadReporteModel extends FacturaReporteModel
             java.sql.Date fechaFin = UtilidadesFecha.castDateUtilToSql(getDateFechaFin().getDate());
             Sucursal sucursal= (Sucursal) getCmbSucursal().getSelectedItem();
             Empleado empleado= (Empleado) getCmbVendedor().getSelectedItem();
+            
+            if(getChkSucursalTodos().isSelected())
+            {
+                sucursal=null;
+            }
             //CategoriaProducto categoriaProducto=getcmb            
             utilidadReport=ServiceFactory.getFactory().getFacturacionServiceIf().consultaUtilidadVentas(fechaInicio,fechaFin,categoriaFiltro,sucursal,empleado);
             llenarTabla();
