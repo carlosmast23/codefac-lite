@@ -120,8 +120,14 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
     
     private AlertaResponse obtenerCuentasPorCobrarPorCaducar(Sucursal sucursal)
     {
-    
         try {
+            // Si el modulo de cartera esta desactivado no deben mostrarse alertas
+            // relacionadas con cuentas por cobrar o pagar en la pantalla principal.
+            if(!ParametroUtilidades.comparar(sucursal.getEmpresa(), ParametroCodefac.ACTIVAR_CARTERA, EnumSiNo.SI))
+            {
+                return null;
+            }
+            
             Integer numeroDias= ParametroUtilidades.obtenerValorParametroInteger(sucursal.getEmpresa(), ParametroCodefac.DIAS_CREDITO_ALERTA,0);
             
             Long cantidadCartera = ServiceFactory.getFactory().getCarteraServiceIf().listaCarteraSaldoCeroTamanio(

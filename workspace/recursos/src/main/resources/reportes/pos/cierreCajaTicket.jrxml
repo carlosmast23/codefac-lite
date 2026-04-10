@@ -335,7 +335,7 @@
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).compareTo(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).subtract(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

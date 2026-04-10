@@ -802,7 +802,7 @@
 					<font size="9"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).compareTo(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new BigDecimal($P{valor_cierre_practico}).subtract(new BigDecimal($P{valor_ciere_teorico}))+""]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="293" y="60" width="43" height="15" uuid="e9585429-4379-4397-b8ec-e5fe3cba7d76">
