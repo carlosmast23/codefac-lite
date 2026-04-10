@@ -10,9 +10,9 @@
       <property name="jakarta.persistence.flushMode" value="AUTO"/>
       <property name="eclipselink.cache.shared.default" value="true"/>
       <!-- Estas dos lines sirven para activar los logs del eclipseLink -->
-      <!-- <property name="eclipselink.logging.level.sql" value="FINE"/>-->
+      <!--<property name="eclipselink.logging.level.sql" value="FINER"/>-->
       <!-- <property name="eclipselink.logging.level" value="FINE"/>-->
-      <!-- <property name="eclipselink.logging.parameters" value="true"/>-->
+      <!--<property name="eclipselink.logging.parameters" value="true"/>-->
       <!-- <property name="eclipselink.logging.parameters" value="true"/>-->
       <!--<property name = " eclipselink.ddl-generation " value = "create-or-extend-tables" />-->
     </properties>

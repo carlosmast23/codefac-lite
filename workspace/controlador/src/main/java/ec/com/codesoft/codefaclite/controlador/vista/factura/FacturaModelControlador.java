@@ -853,7 +853,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             agregarIva=agregarIvaSiNo.getBool();
         }
         
-        if((documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) || documentoEnum.equals(DocumentoEnum.PROFORMA)) && !agregarIva)        
+        // La proforma debe respetar el IVA configurado en el producto; esta regla aplica
+        // solo para nota de venta interna cuando la empresa trabaja sin desglose de IVA.
+        if(documentoEnum.equals(DocumentoEnum.NOTA_VENTA_INTERNA) && !agregarIva)        
         {
             /**
              * Si el producto tiene ice calculo el nuevo subtotal

@@ -4386,7 +4386,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         DocumentoEnum documentoSeleccionado=obtenerDocumentoSeleccionado();                     
                         Integer ivaPorcentajeTmp=(catalogoProducto.getIva()!=null)?catalogoProducto.getIva().getTarifa().intValue():0;
                         
-                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA) || documentoSeleccionado.equals(DocumentoEnum.PROFORMA) )
+                        // Los parámetros de NVI solo deben modificar el comportamiento de la
+                        // nota de venta interna, nunca de la proforma.
+                        if(documentoSeleccionado.equals(DocumentoEnum.NOTA_VENTA_INTERNA))
                         {
                             if(ivaPorcentajeTmp>0)
                             {
