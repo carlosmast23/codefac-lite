@@ -307,12 +307,59 @@ public class LoginModel extends LoginFormDialog{
                
             } catch (RemoteException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                if(manejarErrorConexionFatal(ex))
+                {
+                    return;
+                }
                 DialogoCodefac.mensaje("Error Login", "Datos Incorrectos", MENSAJE_INCORRECTO);
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+                if(manejarErrorConexionFatal(ex))
+                {
+                    return;
+                }
+                DialogoCodefac.mensaje("Error Login", ex.getMessage(), MENSAJE_INCORRECTO);
             }
         }
     
+    }
+
+    private boolean manejarErrorConexionFatal(Exception ex)
+    {
+        String detalle=(ex!=null)?ex.getMessage():null;
+        if(detalle==null)
+        {
+            return false;
+        }
+        
+        String detalleMayuscula=detalle.toUpperCase();
+        boolean errorDerbyBloqueado=detalleMayuscula.contains("ERROR XSDB6")
+                || detalleMayuscula.contains("ANOTHER INSTANCE OF DERBY")
+                || detalleMayuscula.contains("FAILED TO START DATABASE");
+        boolean errorBaseDatos=detalleMayuscula.contains("SE PRODUJO UN ERROR EN LA BASE DE DATOS")
+                || detalleMayuscula.contains("ERROR DE PERSISTENCIA")
+                || detalleMayuscula.contains("PERSISTENCEEXCEPTION");
+        
+        if(!errorDerbyBloqueado && !errorBaseDatos)
+        {
+            return false;
+        }
+        
+        String mensaje="Existe un problema de conexión con la base de datos.";
+        if(errorDerbyBloqueado)
+        {
+            mensaje+="\nOtra instancia de Derby ya tiene abierta la base embebida.";
+            mensaje+="\nCierre la otra instancia del sistema o libere la base y vuelva a intentar.";
+        }
+        else
+        {
+            mensaje+="\nNo es posible iniciar el sistema mientras no se pueda abrir la base de datos.";
+        }
+        
+        DialogoCodefac.mensaje("Error base de datos", mensaje, MENSAJE_ADVERTENCIA);
+        dispose();
+        System.exit(0);
+        return true;
     }
     
     public void solicitarIngresoForzadoSistema()
@@ -364,6 +411,7 @@ public class LoginModel extends LoginFormDialog{
             }*/
         } catch (RemoteException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+            manejarErrorConexionFatal(ex);
         }
         
         cargarSucursalesPorEmpresa();        
@@ -382,8 +430,10 @@ public class LoginModel extends LoginFormDialog{
             }
         } catch (RemoteException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+            manejarErrorConexionFatal(ex);
         }catch (ServicioCodefacException ex) {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+            manejarErrorConexionFatal(ex);
         }
     }
 

@@ -423,8 +423,8 @@
 			</subreport>
 		</band>
 	</pageFooter>
-	<lastPageFooter>
-		<band height="191">
+	<summary>
+		<band height="191" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="15" width="230" height="15" uuid="7f3b5801-41c9-4337-aff6-e59bec3654ba"/>
 				<box>
@@ -565,5 +565,5 @@
 				<text><![CDATA[Para los cuadros de la sumatoria solo se tomó en cuenta los comprobantes AUTORIZADOS]]></text>
 			</staticText>
 		</band>
-	</lastPageFooter>
+	</summary>
 </jasperReport>

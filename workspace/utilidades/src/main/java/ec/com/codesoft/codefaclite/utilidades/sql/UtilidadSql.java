@@ -33,19 +33,26 @@ public class UtilidadSql {
         catch (SQLNonTransientConnectionException ex)
         {
             if (esCredencialInvalida(ex)) {
-                String msjError="Credenciales incorrectas (usuario/clave inválidos) base de datos";
+                String msjError="Credenciales incorrectas (usuario/clave invÃ¡lidos) base de datos";
                 Logger.getLogger(UtilidadSql.class.getName())
                         .log(Level.WARNING, msjError, ex);
                 //Si es un error tan grave doy por terminado el sistema de forma abructa
                 throw new Exception(msjError);
             }
+            
+            if (esErrorConexionFatal(ex)) {
+                throw ex;
+            }
 
             Logger.getLogger(UtilidadSql.class.getName())
-                    .log(Level.SEVERE, "Fallo de conexión no transitorio.", ex);
+                    .log(Level.SEVERE, "Fallo de conexiÃ³n no transitorio.", ex);
         }
         catch (ClassNotFoundException ex) {
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+            if (esErrorConexionFatal(ex)) {
+                throw ex;
+            }
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
@@ -72,8 +79,14 @@ public class UtilidadSql {
             pstm.close();
             conn.close();            
         } catch (SQLException ex) {
+            if (esErrorConexionFatal(ex)) {
+                throw new IllegalStateException("No se pudo consultar la base de datos", ex);
+            }
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }catch (Exception ex) {
+            if (esErrorConexionFatal(ex)) {
+                throw new IllegalStateException("No se pudo consultar la base de datos", ex);
+            }
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }
         return resultado;
@@ -95,9 +108,15 @@ public class UtilidadSql {
             pstm.close();
             conn.close();
         } catch (SQLException ex) {
+            if (esErrorConexionFatal(ex)) {
+                throw new IllegalStateException("No se pudo ejecutar el proceso SQL", ex);
+            }
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }
         catch (Exception ex) {
+            if (esErrorConexionFatal(ex)) {
+                throw new IllegalStateException("No se pudo ejecutar el proceso SQL", ex);
+            }
             Logger.getLogger(UtilidadSql.class.getName()).log(Level.SEVERE, null, ex);
         }
         return filasAfectadas;
@@ -125,9 +144,39 @@ public class UtilidadSql {
         for (Throwable t = ex; t != null; t = (t instanceof SQLException) ? ((SQLException) t).getNextException() : null) {
             if (t instanceof SQLException) {
                 String state = ((SQLException) t).getSQLState();
-                // 08004 = connection rejected (muy común en auth failure en Derby)
+                // 08004 = connection rejected (muy comÃºn en auth failure en Derby)
                 if ("08004".equals(state)) return true;
             }
+        }
+        return false;
+    }
+    
+    private static boolean esErrorConexionFatal(Throwable ex)
+    {
+        Throwable errorActual=ex;
+        while(errorActual!=null)
+        {
+            String mensaje=errorActual.getMessage();
+            if(mensaje!=null)
+            {
+                String mensajeMayuscula=mensaje.toUpperCase();
+                if(mensajeMayuscula.contains("ERROR XSDB6")
+                        || mensajeMayuscula.contains("ANOTHER INSTANCE OF DERBY")
+                        || mensajeMayuscula.contains("FAILED TO START DATABASE")
+                        || mensajeMayuscula.contains("ERROR XJ040"))
+                {
+                    return true;
+                }
+            }
+            if(errorActual instanceof SQLException)
+            {
+                SQLException sqlException=(SQLException) errorActual;
+                if(esErrorConexionFatal(sqlException.getNextException()))
+                {
+                    return true;
+                }
+            }
+            errorActual=errorActual.getCause();
         }
         return false;
     }

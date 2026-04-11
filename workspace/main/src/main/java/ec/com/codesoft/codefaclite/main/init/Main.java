@@ -318,7 +318,15 @@ public class Main {
                     UtilidadSql.conectarBaseDatos(usuarioDb, claveDb);
                 } catch (Exception ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                    DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                    if(esErrorConexionFatalBaseDatos(ex))
+                    {
+                        mostrarErrorConexionFatalBaseDatos();
+                    }
+                    DialogoCodefac.mensaje(
+                            new CodefacMsj(
+                                    "No fue posible abrir la base de datos.\n"
+                                    + "Revise las credenciales configuradas e intente nuevamente.",
+                                    CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
                     System.exit(0);
                 }
             }
@@ -331,6 +339,7 @@ public class Main {
     private static void verificarActualizacionBaseDatosVersion()
     {   
         //Verificar conexion con la base de datos que no tenga problema
+        try {
         
         PropertiesConfiguration propiedadesIniciales=ArchivoConfiguracionesCodefac.getInstance().getPropiedadesIniciales();
         //Si el usuario inicia el programa en modo cliente no debe hacer esta validacion de actualizar datos
@@ -377,6 +386,10 @@ public class Main {
                         }                        
                         
                     } catch (Exception ex) {
+                        if(esErrorConexionFatalBaseDatos(ex))
+                        {
+                            mostrarErrorConexionFatalBaseDatos();
+                        }
                         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
@@ -395,6 +408,13 @@ public class Main {
         //TODO: Organizar mejor por que se esta actalizando en 3 sitios anteriores
         grabarVersionNueva();
         LOG.log(Level.INFO," Terminando verificarActualizacionBaseDatosVersion");
+        } catch (RuntimeException ex) {
+            if(esErrorConexionFatalBaseDatos(ex))
+            {
+                mostrarErrorConexionFatalBaseDatos();
+            }
+            throw ex;
+        }
         
     }
     
@@ -614,7 +634,7 @@ public class Main {
             LoginModel.DatosLogin  datosLogin= cargarLoginUsuario(panel,sucursalDefecto);
             if (datosLogin.usuario == null) {
                 LOG.log(Level.WARNING, "Error en la licencia ");
-                //return;
+                System.exit(0);
             }
             
             //panel.setSessionCodefac(session);
@@ -987,6 +1007,16 @@ public class Main {
             verificarCreacionBaseDatosMysql();
             
         } catch (PersistenceException e) {
+            if(esErrorConexionFatalBaseDatos(e))
+            {
+                DialogoCodefac.mensaje(
+                        "Error base de datos",
+                        "No se puede conectar con la base de datos.\n"
+                        + "Existe otra instancia de Derby usando la base embebida o la persistencia no pudo iniciar.\n"
+                        + "Cierre la otra instancia del sistema y vuelva a intentar.",
+                        DialogoCodefac.MENSAJE_ADVERTENCIA);
+                System.exit(0);
+            }
             try {
                 System.out.println(e.getMessage());
                 UtilidadesServidor.crearBaseDatos();
@@ -994,8 +1024,16 @@ public class Main {
                 AbstractFacade.cargarEntityManagerFactory();
             } catch (PersistenceException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje(
+                        "Error base de datos",
+                        "No se pudo inicializar la persistencia de la base de datos.\n"
+                        + "El sistema se cerrará para evitar continuar con una conexión inválida.",
+                        DialogoCodefac.MENSAJE_ADVERTENCIA);
+                System.exit(0);
             } catch (PersistenciaDuplicadaException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                DialogoCodefac.mensaje("Error", ex.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                System.exit(0);
             } catch (SQLException ex) {
                 //System.out.println(ex.getErrorCode());
                 
@@ -1007,7 +1045,8 @@ public class Main {
                 }
                 else
                 {
-                    DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);                
+                    DialogoCodefac.mensaje("Error al crear la base de datos",ex.getMessage()+"\n Se recomienda eliminar y volver a crear la db",DialogoCodefac.MENSAJE_ADVERTENCIA);
+                    System.exit(0);
                 }
                 
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -1022,6 +1061,40 @@ public class Main {
     }
     
     //Esta opción solo es para MySql para verificar cuando no tenga tablas
+    private static boolean esErrorConexionFatalBaseDatos(Throwable ex)
+    {
+        Throwable errorActual=ex;
+        while(errorActual!=null)
+        {
+            String mensaje=errorActual.getMessage();
+            if(mensaje!=null)
+            {
+                String mensajeMayuscula=mensaje.toUpperCase();
+                if(mensajeMayuscula.contains("ERROR XSDB6")
+                        || mensajeMayuscula.contains("ANOTHER INSTANCE OF DERBY")
+                        || mensajeMayuscula.contains("FAILED TO START DATABASE")
+                        || mensajeMayuscula.contains("ERROR XJ040"))
+                {
+                    return true;
+                }
+            }
+            errorActual=errorActual.getCause();
+        }
+        return false;
+    }
+    
+    private static void mostrarErrorConexionFatalBaseDatos()
+    {
+        DialogoCodefac.mensaje(
+                "Error base de datos",
+                "No se pudo abrir la base de datos local del sistema.\n"
+                + "Lo mas probable es que Codefac ya este abierto en otra ventana o que otro proceso siga usando la base de datos.\n"
+                + "Cierre las otras instancias de Codefac y vuelva a intentarlo.\n"
+                + "El sistema se cerrara para evitar trabajar con datos incompletos.",
+                DialogoCodefac.MENSAJE_ADVERTENCIA);
+        System.exit(0);
+    }
+    
     private static void verificarCreacionBaseDatosMysql()
     {
         if(AbstractFacade.baseDatosEnum.equals(TipoBaseDatosEnum.MYSQL))
