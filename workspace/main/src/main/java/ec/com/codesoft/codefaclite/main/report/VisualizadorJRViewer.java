@@ -5,12 +5,16 @@
  */
 package ec.com.codesoft.codefaclite.main.report;
 
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImpresora;
 import static ec.com.codesoft.codefaclite.main.report.VisualizadorJRViewer.Extension.DOCX;
 import static ec.com.codesoft.codefaclite.main.report.VisualizadorJRViewer.Extension.ODT;
 import static ec.com.codesoft.codefaclite.main.report.VisualizadorJRViewer.Extension.RTF;
 import static ec.com.codesoft.codefaclite.recursos.RecursoCodefac.HTML;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoReporteEnum.PDF;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.swing.JRViewerController;
 import net.sf.jasperreports.swing.JRViewer;
 import net.sf.jasperreports.swing.JRViewerToolbar;
 import net.sf.jasperreports.view.JRSaveContributor;
@@ -18,6 +22,7 @@ import net.sf.jasperreports.view.JRSaveContributor;
 import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.view.save.JRCsvSaveContributor;
 import net.sf.jasperreports.view.save.JRDocxSaveContributor;
 import net.sf.jasperreports.view.save.JREmbeddedImagesXmlSaveContributor;
@@ -53,7 +58,7 @@ public class VisualizadorJRViewer extends JRViewer {
 
     @Override
     protected JRViewerToolbar createToolbar() {
-        JRViewerToolbar toolbar = super.createToolbar();
+        JRViewerToolbar toolbar = new VisualizadorJRViewerToolbar(viewerContext);
         Locale locale = viewerContext.getLocale();
         ResourceBundle resBundle = viewerContext.getResourceBundle();
 
@@ -71,6 +76,51 @@ public class VisualizadorJRViewer extends JRViewer {
 
         toolbar.setSaveContributors(jrsc);
         return toolbar;
+    }
+    
+    private static class VisualizadorJRViewerToolbar extends JRViewerToolbar
+    {
+
+        public VisualizadorJRViewerToolbar(JRViewerController viewerContext)
+        {
+            super(viewerContext);
+            configurarBotonImprimir();
+        }
+        
+        private void configurarBotonImprimir()
+        {
+            for (ActionListener actionListener : btnPrint.getActionListeners())
+            {
+                btnPrint.removeActionListener(actionListener);
+            }
+            
+            btnPrint.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    Thread threadImpresion = new Thread(new Runnable() {
+                        @Override
+                        public void run()
+                        {
+                            try
+                            {
+                                UtilidadesImpresora.mostrarDialogoImpresion(viewerContext.getJasperPrint());
+                            }
+                            catch (Exception ex)
+                            {
+                                JOptionPane.showMessageDialog(
+                                        VisualizadorJRViewerToolbar.this,
+                                        "No fue posible abrir la ventana de seleccion de impresora.\n"
+                                        + "Revise las impresoras instaladas en Windows.",
+                                        "Error imprimiendo reporte",
+                                        JOptionPane.WARNING_MESSAGE);
+                            }
+                        }
+                    });
+                    threadImpresion.start();
+                }
+            });
+        }
     }
 
     public enum Extension {
