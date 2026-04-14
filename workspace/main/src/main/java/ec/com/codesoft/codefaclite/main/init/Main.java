@@ -541,7 +541,7 @@ public class Main {
                     ipServidor=ipServidorDefecto;
                 }
                 
-                cargarConfiguracionIpPublica(propiedadesIniciales);
+                cargarConfiguracionIpPublica(propiedadesIniciales,ipServidor);
                                 
                 cargarRecursosRmiServidor(ipServidor); 
                                 
@@ -722,9 +722,19 @@ public class Main {
     }
     
     
-    private static void cargarConfiguracionIpPublica(PropertiesConfiguration propiedadesIniciales)
+    private static void cargarConfiguracionIpPublica(PropertiesConfiguration propiedadesIniciales,String ipServidor)
     {
         String ipPublica = propiedadesIniciales.getString(ArchivoConfiguracionesCodefac.CAMPO_IP_PUBLICA_SERVIDOR);
+        
+        //Si no tiene configurada una ip publica configura la misma ip evitar conflictos
+        //Registry es la ip servidor donde se registra el catalogo de servicios
+        //Stubs son los objetos intermediarios para conectarse desde el cliente
+        //En mi caso siempre deben ser iguales por eso esta logica, pero dejo abierto si por algun caso especial tengo que poner otro valor
+        if(UtilidadesTextos.verificarNullOVacio(ipPublica))
+        {
+            ipPublica=ipServidor;
+        }
+        
         //TODO: Esta linea se debe descomentar para funcionar con una ip publica pero generaba erro con la libreria healthmarketscience , literalmente esto sirve para decir que se procesen todas las peticiones que viene desde la ip publica
         if (ipPublica != null && !ipPublica.isEmpty()) {
             System.setProperty("java.rmi.server.hostname", ipPublica);
