@@ -48,6 +48,7 @@ import ec.com.codesoft.codefaclite.main.other.BaseDatosCredenciales;
 import ec.com.codesoft.codefaclite.main.other.TareasProgramadasCodefac;
 import ec.com.codesoft.codefaclite.main.panel.publicidad.Publicidad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
+import ec.com.codesoft.codefaclite.main.utilidades.ChangelogInicioUtil;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servicios.controller.ControllerServiceUtil;
@@ -660,6 +661,7 @@ public class Main {
             panel.iniciarComponentesGenerales();
             //frameAplicacion.dispose(); //Libero el recurso de la pantalla que tiene el icono en la barra de tareas
             panel.setVisible(true);
+            ChangelogInicioUtil.mostrarSiExisteNuevaVersion(panel);
             
             
         } catch (RemoteException ex) {

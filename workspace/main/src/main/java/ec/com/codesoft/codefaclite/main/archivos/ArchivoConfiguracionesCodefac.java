@@ -90,6 +90,11 @@ public class ArchivoConfiguracionesCodefac {
     public static final String CAMPO_FORZAR_ACTUALIZACION="forzar_actualizar";
     
     /**
+     * Campo para guardar cual fue la ultima version de la bitacora mostrada al usuario.
+     */
+    public static final String CAMPO_ULTIMA_VERSION_CHANGELOG_MOSTRADA="ultima_version_changelog_mostrada";
+    
+    /**
      * Campo que me permite desactivar la publicidad en la parte inferior de la barra lateral despues de realizar una venta
      */
     public static final String CAMPO_DESACTIVAR_PUBLICIDAD="desactivar_publicidad";

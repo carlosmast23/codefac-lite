@@ -1,39 +1,40 @@
-{
-  "versionActual": "1.4.0.4",
-  "historial": [
+[
     {
-      "version": "1.4.0.4",
-      "fecha": "2026-04-15",
-      "titulo": "Correcciones Varias",
-      "cambios": [
-        {
-          "tipo": "Correccion",
-          "detalle": "Las comisiones no estaban funcionando bien al editar lo comprobantes de venta"
-        },
-        {
-          "tipo": "Correccion",
-          "detalle": "Se corrigio la ventana para imprimir, porque aveces causaba problemas"
-        },
-        {
-          "tipo": "Mejora",
-          "detalle": "Cuando las maquinas tienen muchas redes a veces generaba problemas de conexión, ahora funciona bien"
-        }
-      ]
+        "version": "1.4.0.4",
+        "fecha": "2026-04-15",
+        "titulo": "Correcciones Varias",
+        "cambios": [
+            {
+                "tipo": "Mejora",
+                "detalle": "Se agrego una ventana de logs para poder llevar un control rapido de los cambios"
+            },
+            {
+                "tipo": "Correccion",
+                "detalle": "Las comisiones no estaban funcionando bien al editar los comprobantes de venta"
+            },
+            {
+                "tipo": "Correccion",
+                "detalle": "Se corrigio la ventana para imprimir, porque a veces causaba problemas"
+            },
+            {
+                "tipo": "Mejora",
+                "detalle": "Cuando las maquinas tienen muchas redes a veces generaba problemas de conexion"
+            }
+        ]
     },
     {
-      "version": "1.4.0.3",
-      "fecha": "2026-04-10",
-      "titulo": "Varios Cambios mejoras",
-      "cambios": [
-        {
-          "tipo": "Correccion",
-          "detalle": "Reporte Mejorados"
-        },
-        {
-          "tipo": "Mejora",
-          "detalle": "Se crearon indices en varias tablas lo cual mejora el rendimiento del sistema"
-        }
-      ]
+        "version": "1.4.0.3",
+        "fecha": "2026-04-10",
+        "titulo": "Varios cambios mejoras",
+        "cambios": [
+            {
+                "tipo": "Correccion",
+                "detalle": "Reportes mejorados"
+            },
+            {
+                "tipo": "Mejora",
+                "detalle": "Se crearon indices en varias tablas lo cual mejora el rendimiento del sistema"
+            }
+        ]
     }
-  ]
-}
+]

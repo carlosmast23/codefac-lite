@@ -76,6 +76,7 @@ import ec.com.codesoft.codefaclite.main.panel.GeneralPanelForm;
 import ec.com.codesoft.codefaclite.main.panel.VentanaManualUsuario;
 import ec.com.codesoft.codefaclite.main.panel.WidgetVentasDiarias;
 import ec.com.codesoft.codefaclite.main.report.VisualizadorJRViewer;
+import ec.com.codesoft.codefaclite.main.utilidades.ChangelogInicioUtil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.SessionCodefac;
 import ec.com.codesoft.codefaclite.main.utilidades.UtilidadServicioWeb;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
@@ -271,6 +272,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private List<IconoPanel> listaIconos;
     
     private JMenuItem menuCopiar;
+    private JMenuItem menuItemHistorialCambios;
     
     /**
      * Tipo de letra que siempre voy a utilizar para no crear a cada rato
@@ -287,6 +289,9 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
         mapPantallaAbiertas=new HashMap<GeneralPanelInterface, JMenuItem>();
         this.menuCopiar=new JMenuItem("Copiar");
+        this.menuItemHistorialCambios = new JMenuItem("Historial de cambios");
+        this.menuItemHistorialCambios.setFont(new Font("Arial", Font.PLAIN, 13));
+        getjMenuAyuda().add(this.menuItemHistorialCambios, 1);
         
     }
     
@@ -3611,13 +3616,20 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         });
         
         getjMenuItemContenido().addActionListener(new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                  cargarAyudaTodo();
+                  mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_AYUDA);
+              }
+          });
+
+        menuItemHistorialCambios.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargarAyudaTodo();
-                mostrarPanelSecundario(true,PanelSecundarioAbstract.PANEL_AYUDA);
+                ChangelogInicioUtil.mostrarHistorial(GeneralPanelModel.this);
             }
         });
-        
+          
         getjMenuItemAcerca().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {                
