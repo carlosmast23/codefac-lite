@@ -283,6 +283,11 @@ public class Empleado implements Serializable
     }
 
     public Integer getPorcentajeVendedor() {
+        if(porcentajeVendedor==null)
+        {
+            porcentajeVendedor=0;
+        }
+        
         return porcentajeVendedor;
     }
 

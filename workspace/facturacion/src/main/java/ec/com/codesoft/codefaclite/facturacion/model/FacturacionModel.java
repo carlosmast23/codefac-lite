@@ -3980,13 +3980,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if(factura.getVendedor()!=null)
         {
             getTxtVendedor().setText(factura.getVendedor().getIdentificacion() + " - " + factura.getVendedor().getNombresCompletos());
-            getSpnPorcentajeVendedor().setValue(factura.getVendedor().getPorcentajeVendedor());
+            getSpnPorcentajeVendedor().setValue((factura.getPorcentajeVendedor()!=null)?factura.getPorcentajeVendedor():factura.getVendedor().getPorcentajeVendedor());
         }
         
         if(factura.getReferente()!=null)
         {
             getTxtReferenciaContacto().setText(factura.getReferente().getIdentificacion() + " - " + factura.getReferente().getNombresCompletos());
-            getSpnPorcentajeReferente().setValue(factura.getReferente().getPorcentajeReferidos());
+            getSpnPorcentajeReferente().setValue((factura.getPorcentajeReferidos()!=null)?factura.getPorcentajeReferidos():factura.getReferente().getPorcentajeReferidos());
         }
         
         if(factura.getFechaVencimiento()!=null)
