@@ -5,6 +5,10 @@
         "titulo": "Correcciones Varias",
         "cambios": [
             {
+                "tipo": "Correccion",
+                "detalle": "Coregido problema con las notas de venta interna con la caja no se estaban registrando"
+            },
+            {
                 "tipo": "Mejora",
                 "detalle": "Se agrego una ventana de logs para poder llevar un control rapido de los cambios"
             },

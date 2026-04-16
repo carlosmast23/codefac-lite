@@ -1060,7 +1060,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
                 if(modoProcesarEnum.equals(modoProcesarEnum.FORZADO))
                 {
-                    eliminarCrucesPorCartera(carteraFactura,entityManager,Boolean.FALSE);
+                    eliminarCrucesPorCartera(carteraFactura,Boolean.FALSE,entityManager);
                 }
                 
             }
