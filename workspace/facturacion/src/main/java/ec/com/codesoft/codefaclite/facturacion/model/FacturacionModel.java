@@ -1071,12 +1071,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         session.obtenerIvaActualDecimal(),
                         BigDecimal.ZERO,
                         facturaDetalle.getPrecioUnitario());
-                getTxtValorUnitario().setText(valorConIva + "");
+                getTxtValorUnitario().setText(UtilidadBigDecimal.convertirATextoPlano(valorConIva));
                 
             }
             else
             {
-                getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+                getTxtValorUnitario().setText(UtilidadBigDecimal.convertirATextoPlano(facturaDetalle.getPrecioUnitario()));
                 setComboIva(EnumSiNo.NO);
             }
             
@@ -5527,7 +5527,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
     @Override
     public void cargarDatosDetalleVista(BigDecimal valorUnitario,BigDecimal descuento,String descripcion,String codigo) {
-        getTxtValorUnitario().setText(valorUnitario+"");
+        getTxtValorUnitario().setText(UtilidadBigDecimal.convertirATextoPlano(valorUnitario));
         getTxtDescripcion().setText(descripcion);
         getTxtDescripcion().setCaretPosition(0);
         //getTxtDescuento().setText(descuento.toString());

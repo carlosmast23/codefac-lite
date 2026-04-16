@@ -85,6 +85,11 @@ public class UtilidadBigDecimal {
     {
         return datoOriginal.add(BigDecimal.ZERO);
     }
+
+    public static String convertirATextoPlano(BigDecimal valor)
+    {
+        return (valor != null) ? valor.toPlainString() : "";
+    }
     
     public static boolean validarDistintoCeroOVacio(BigDecimal valor) {
         // 1. Verificar que NO sea null

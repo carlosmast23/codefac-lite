@@ -293,7 +293,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     }
     
     private void setearValoresProducto(BigDecimal valorUnitario,String descripcion,String codigo) {
-        getTxtValorUnitario().setText(valorUnitario+"");
+        getTxtValorUnitario().setText(UtilidadBigDecimal.convertirATextoPlano(valorUnitario));
         getTxtDescripcion().setText(descripcion);
         //getTxtValorUnitario().setText(productoSeleccionado.getValorUnitario().toString());
         //getTxtDescripcion().setText(productoSeleccionado.getNombre());
@@ -1094,7 +1094,7 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
                 {
                     //setear valores para cargar de nuevo en los campos de la factura
                     NotaCreditoDetalle facturaDetalle = notaCredito.getDetalles().get(fila);
-                    getTxtValorUnitario().setText(facturaDetalle.getPrecioUnitario() + "");
+                    getTxtValorUnitario().setText(UtilidadBigDecimal.convertirATextoPlano(facturaDetalle.getPrecioUnitario()));
                     getTxtCantidad().setText(facturaDetalle.getCantidad() + "");
                     getTxtDescripcion().setText(facturaDetalle.getDescripcion());
                     getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
@@ -1323,7 +1323,5 @@ public class NotaCreditoModel extends NotaCreditoPanel implements ComponenteDato
     public SriFormaPago obtenerSriFormaPago() {
         return (SriFormaPago) getCmbFormaPagoDefecto().getSelectedItem();
     }
-
-    
 
 }
