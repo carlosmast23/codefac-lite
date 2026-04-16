@@ -5,7 +5,11 @@
         "titulo": "Correcciones Varias",
         "cambios": [
             {
-                "tipo": "Correccion",
+                "tipo": "Mejora",
+                "detalle": "Al momento de elimintar notas de venta interna ahora necesita autorización de un empleado con rol de supervisor"
+            },
+            {
+                "tipo": "Cambio",
                 "detalle": "Coregido problema con las notas de venta interna con la caja no se estaban registrando"
             },
             {
@@ -13,11 +17,11 @@
                 "detalle": "Se agrego una ventana de logs para poder llevar un control rapido de los cambios"
             },
             {
-                "tipo": "Correccion",
+                "tipo": "Cambio",
                 "detalle": "Las comisiones no estaban funcionando bien al editar los comprobantes de venta"
             },
             {
-                "tipo": "Correccion",
+                "tipo": "Cambio",
                 "detalle": "Se corrigio la ventana para imprimir, porque a veces causaba problemas"
             },
             {
@@ -32,7 +36,7 @@
         "titulo": "Varios cambios mejoras",
         "cambios": [
             {
-                "tipo": "Correccion",
+                "tipo": "Cambio",
                 "detalle": "Reportes mejorados"
             },
             {

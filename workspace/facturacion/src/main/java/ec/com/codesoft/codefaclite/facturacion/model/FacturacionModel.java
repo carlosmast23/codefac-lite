@@ -2741,6 +2741,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }else //Cuando no es un documento legal elimino directamente
             {
                 //todo:verificar si tengo que poner el estado o eso se lo hace automaticamente
+                validarCredencialesSupervisorEliminarConCaja();
                 if(DialogoCodefac.dialogoPregunta("Advertencia","Está seguro que quiere eliminar el registro ?",DialogoCodefac.MENSAJE_ADVERTENCIA))
                 {                                        
                     try {
@@ -5397,6 +5398,44 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 DialogoCodefac.mensaje("Se realizo un arqueo de caja exitoso", DialogoCodefac.MENSAJE_CORRECTO);
             }
         },VentanaEnum.ARQUEO_CAJA, false,parametros,this);
+    }
+    
+    private void validarCredencialesSupervisorEliminarConCaja() throws ExcepcionCodefacLite, RemoteException
+    {
+        CajaSession cajaSession = obtenerCajaSessionActivaUsuario();
+        if(cajaSession == null)
+        {
+            return;
+        }
+        
+        LoginArqueoCajalModel loginArqueoCajalModel = new LoginArqueoCajalModel(session);
+        loginArqueoCajalModel.setVisible(true);
+        
+        Usuario usuarioSupervisor = loginArqueoCajalModel.getUsuario();
+        if(usuarioSupervisor == null)
+        {
+            DialogoCodefac.mensaje("Advertencia", "Verifique las credenciales del supervisor", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Verifique las credenciales del supervisor");
+        }
+        
+        if(usuarioSupervisor.getEmpleado() == null)
+        {
+            DialogoCodefac.mensaje("Advertencia", "El usuario supervisor necesita tener un empleado ligado", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Usuario supervisor no contiene ligado un empleado");
+        }
+        
+        if(!usuarioSupervisor.verficarSupervisor())
+        {
+            DialogoCodefac.mensaje("Advertencia", "El usuario ingresado no tiene autorización de supervisor para eliminar la nota de venta", DialogoCodefac.MENSAJE_ADVERTENCIA);
+            throw new ExcepcionCodefacLite("Usuario no tiene autorización de supervisor para eliminar la nota de venta");
+        }
+    }
+    
+    private CajaSession obtenerCajaSessionActivaUsuario() throws RemoteException
+    {
+        return ServiceFactory.getFactory()
+                .getCajaSesionServiceIf()
+                .obtenerCajaSessionPorPuntoEmisionYUsuario(getPuntoEmisionSeleccionado().getPuntoEmision(), session.getUsuario());
     }
     
     private ActionListener listenerEjemplo=new ActionListener() {

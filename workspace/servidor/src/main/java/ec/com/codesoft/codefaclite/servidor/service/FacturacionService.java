@@ -1925,8 +1925,8 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                             }
                         }
                         
-                        //Crear un registro negativo en la caja session
-                        agregarDatosParaCajaSession(factura,SignoEnum.NEGATIVO,entityManager);
+                        //Crear un registro negativo en la caja session esta validación dejo sin usar por el momento
+                        //(factura,SignoEnum.NEGATIVO,entityManager);
                         
                         imprimirLogFactura(factura, CrudEnum.ELIMINAR);
                     
