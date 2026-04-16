@@ -1916,8 +1916,10 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                         {
                             if(carteraFactura!=null)
                             {
+                                //Obtengo el usuario de la factura esto es importante porque con ese usuario igual va a interactuar con la caja
+                                //carteraFactura.setUsuario(factura.getUsuario());
                                 //tambien eliminar los cruces para evitar inconsistencias
-                                carteraService.eliminarCrucesPorCartera(carteraFactura,entityManager);
+                                carteraService.eliminarCrucesPorCartera(carteraFactura,Boolean.TRUE,entityManager);
                                 
                                 carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO,entityManager);
                             }

@@ -276,14 +276,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     private void grabarMovimientosCaja(Cartera cartera,Boolean eliminar,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //TODO: Los únicos movimientos que pueden generar movimiento en cartera van a ser los ingresos y egresos
-        if(!cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.ABONOS))
+        DocumentoEnum documentoEnum = cartera.getCarteraDocumentoEnum();
+        boolean generarMovimientoCaja =
+                DocumentoEnum.ABONOS.equals(documentoEnum)
+                || DocumentoEnum.NOTA_CREDITO.equals(documentoEnum);
+        
+        if(!generarMovimientoCaja)
         {
-            //en este caso tiene que ser igual distinto de nota de credito
-            if(!cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
-            {
-                return;
-            }
-            
+            return;
         }
         
         CajaSession cajaSession = cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario(),entityManager);
@@ -1060,7 +1060,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 
                 if(modoProcesarEnum.equals(modoProcesarEnum.FORZADO))
                 {
-                    eliminarCrucesPorCartera(carteraFactura,entityManager);
+                    eliminarCrucesPorCartera(carteraFactura,entityManager,Boolean.FALSE);
                 }
                 
             }
@@ -1351,14 +1351,14 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     /**
      * TODO: Este metodo tiene que usarse con cuidad por que se pueden eliminar cruces importantes y luego puede generar incosisencia en los daots
      */
-    public void eliminarCrucesPorCartera(Cartera carteraPadre,EntityManager entityManager) throws ServicioCodefacException, RemoteException
+    public void eliminarCrucesPorCartera(Cartera carteraPadre,Boolean procesarCaja,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         List<CarteraCruce> cruceList = carteraCruceService.buscarPorCarteraAfecta(carteraPadre,entityManager);
 
         for (CarteraCruce carteraCruce : cruceList) {
             CarteraDetalle carteraDetalle = carteraCruce.getCarteraDetalle();
             //esa opción de quitar cruces en espcial para correciones no debe generar cruces con la caja
-            eliminarCarteraSinTransaccion(carteraDetalle.getCartera(), ModoProcesarEnum.FORZADO,entityManager,false);
+            eliminarCarteraSinTransaccion(carteraDetalle.getCartera(), ModoProcesarEnum.FORZADO,entityManager,procesarCaja);
         }
         
     }
