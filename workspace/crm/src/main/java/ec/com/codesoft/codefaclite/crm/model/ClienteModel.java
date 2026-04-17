@@ -223,7 +223,10 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         persona.setCampoAdicional(getTxtCampoAdicional().getText());
         
         //Solo grabar el numero de precio en el caso que se haya seleccionado alguno
-        Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPrecioVentaDefecto().getSelectedItem();
+        Object precioVentaSeleccionado = getCmbPrecioVentaDefecto().getSelectedItem();
+        Producto.PrecioVenta precioVenta = (precioVentaSeleccionado instanceof Producto.PrecioVenta)
+                ? (Producto.PrecioVenta) precioVentaSeleccionado
+                : null;
         if(precioVenta!=null)
         {
             persona.setPvpDefecto(precioVenta.getAlias());
@@ -433,7 +436,7 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         getCmbFormaPagoDefecto().setSelectedItem(persona.getSriFormaPago());
         getTxtNombreContacto().setText(persona.getContactoClienteNombre());
         getTxtObservaciones().setText(persona.getObservaciones());
-        getCmbPrecioVentaDefecto().setSelectedItem(persona.getPvpDefecto());
+        seleccionarPrecioVentaDefecto(persona.getPvpDefecto());
         
         if(persona.getDiasCreditoCliente()!=null)
             getTxtDiasCredito().setValue(persona.getDiasCreditoCliente());
@@ -627,6 +630,26 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
         
         
         
+    }
+
+    private void seleccionarPrecioVentaDefecto(String aliasPrecioVenta)
+    {
+        if(aliasPrecioVenta==null || aliasPrecioVenta.trim().isEmpty())
+        {
+            getCmbPrecioVentaDefecto().setSelectedItem(null);
+            return;
+        }
+
+        for (int i = 0; i < getCmbPrecioVentaDefecto().getItemCount(); i++) {
+            Producto.PrecioVenta precioVenta = getCmbPrecioVentaDefecto().getItemAt(i);
+            if(precioVenta != null && aliasPrecioVenta.equalsIgnoreCase(precioVenta.getAlias()))
+            {
+                getCmbPrecioVentaDefecto().setSelectedItem(precioVenta);
+                return;
+            }
+        }
+
+        getCmbPrecioVentaDefecto().setSelectedItem(null);
     }
 
     private boolean prevalidar() {

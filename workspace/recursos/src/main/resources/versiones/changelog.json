@@ -1,5 +1,16 @@
 [
     {
+        "version": "1.4.0.5",
+        "fecha": "2026-04-17",
+        "titulo": "Correcciones Varias",
+        "cambios": [
+            {
+                "tipo": "Cambio",
+                "detalle": "Corrigiendo problema que no dejaba grabar el pvp2"
+            }
+        ]
+    },
+    {
         "version": "1.4.0.4",
         "fecha": "2026-04-15",
         "titulo": "Correcciones Varias",
