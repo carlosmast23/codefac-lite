@@ -5,8 +5,12 @@
         "titulo": "Correcciones Varias",
         "cambios": [
             {
-                "tipo": "Cambio",
-                "detalle": "Corrigiendo problema que no dejaba grabar el pvp2"
+                "tipo": "Mejora",
+                "detalle": "Corrigiendo problema que no dejaba grabar el pvp2 en la pantalla de cliente"
+            },
+            {
+                "tipo": "Mejora",
+                "detalle": "En la pantalla de facturación se verifico que funcione sin problema el tema de pvp distintos"
             }
         ]
     },

@@ -692,7 +692,8 @@ public class ClienteModel extends ClienteForm implements DialogInterfacePanel<Pe
             }
             
             //Cargar los distintos precios disponibles
-            UtilidadesComboBox.llenarComboBox(getCmbPrecioVentaDefecto(),Producto.PrecioVenta.getListadoPrecios());
+            //UtilidadesComboBox.llenarComboBox(getCmbPrecioVentaDefecto(),Producto.PrecioVenta.getListadoPrecios());
+            UtilidadesComboBox.llenarComboBox(getCmbPrecioVentaDefecto(),Producto.PrecioVenta.getListadoPreciosEnum());
             
             ParametroUtilidades.obtenerValorParametro(session.getEmpresa(),ParametroCodefac.FORMA_PAGO_POR_DEFECTO_PANTALLA_CLIENTE);
             

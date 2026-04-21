@@ -93,19 +93,27 @@ public class NotaCreditoModelControlador extends FacturaNotaCreditoModelControla
         for (FacturaDetalle facturaDetalle : detallesFactura) {
             NotaCreditoDetalle notaDetalle = new NotaCreditoDetalle();
             notaDetalle.setCantidad(facturaDetalle.getCantidad());
+            notaDetalle.setCantidadPresentacion(facturaDetalle.getCantidadPresentacion());
             notaDetalle.setDescripcion(facturaDetalle.getDescripcion());
             //System.out.println(facturaDetalle.getDescuento());
             notaDetalle.setDescuento(facturaDetalle.getDescuento());
             notaDetalle.setIva(facturaDetalle.getIva());
             notaDetalle.setPrecioUnitario(facturaDetalle.getPrecioUnitario());
+            notaDetalle.setPrecioSinAhorro(facturaDetalle.getPrecioSinAhorro());
             notaDetalle.setReferenciaId(facturaDetalle.getReferenciaId());
             notaDetalle.setCatalogoProducto(facturaDetalle.getCatalogoProducto());
             notaDetalle.setTipoDocumento(facturaDetalle.getTipoDocumento());
             notaDetalle.setTotal(facturaDetalle.getTotal());
+            notaDetalle.setTotalFinal(facturaDetalle.getTotalFinal());
             notaDetalle.setValorIce(facturaDetalle.getValorIce());
             notaDetalle.setIvaPorcentaje(facturaDetalle.getIvaPorcentaje());
             notaDetalle.setIcePorcentaje(facturaDetalle.getIcePorcentaje());
             notaDetalle.setLote(facturaDetalle.getLote());
+            notaDetalle.setCodigoPrincipal(facturaDetalle.getCodigoPrincipal());
+            notaDetalle.setCodigoSecundario(facturaDetalle.getCodigoSecundario());
+            notaDetalle.setPresentacionCodigo(facturaDetalle.getPresentacionCodigo());
+            notaDetalle.setKardexId(facturaDetalle.getKardexId());
+            notaDetalle.setKardexItemEspecifico(facturaDetalle.getKardexItemEspecifico());
 
             notaCredito.addDetalle(notaDetalle);
         }

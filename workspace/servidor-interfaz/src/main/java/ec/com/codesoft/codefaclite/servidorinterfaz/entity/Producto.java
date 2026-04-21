@@ -1680,6 +1680,22 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         public BigDecimal precio;
         public Integer numero;
 
+        public PrecioVenta() {
+        }
+        
+        public PrecioVenta(String alias) {
+            this.alias = alias;
+        }
+
+        public PrecioVenta(String alias, Integer numero) {
+            this.alias = alias;
+            this.numero = numero;
+        }
+        
+        
+        
+        
+
         @Override
         public String toString() {
             return alias;
@@ -1721,6 +1737,20 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             precioList.add(PV4);
             precioList.add(PV5);
             precioList.add(PV6);
+            return precioList;
+            
+        }
+        
+        public static List<PrecioVenta> getListadoPreciosEnum()
+        {
+            List<PrecioVenta> precioList=new ArrayList<PrecioVenta>();
+            precioList.add(new PrecioVenta(PV1,1));
+            precioList.add(new PrecioVenta(PV2,2));
+            precioList.add(new PrecioVenta(PV3,3));
+            
+            precioList.add(new PrecioVenta(PV4,4));
+            precioList.add(new PrecioVenta(PV5,5));
+            precioList.add(new PrecioVenta(PV6,6));
             return precioList;
             
         }
