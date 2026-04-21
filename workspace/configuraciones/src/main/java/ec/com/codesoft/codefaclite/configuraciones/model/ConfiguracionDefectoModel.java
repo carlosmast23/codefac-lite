@@ -332,6 +332,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         impresoraList.add(0,null);
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda(),impresoraList);
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda2(),impresoraList);
+        UtilidadesComboBox.llenarComboBox(getCmbImpresoraComanda3(),impresoraList);
         
         UtilidadesComboBox.llenarComboBox(getCmbImpresoraFactura(),impresoraList);
         
@@ -434,6 +435,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroImpresoraComanda2 = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
             nombreImpresora=(parametroImpresoraComanda2 != null) ? parametroImpresoraComanda2.getValor() :null;
             getCmbImpresoraComanda2().setSelectedItem(nombreImpresora);
+
+            ParametroCodefac parametroImpresoraComanda3 = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_3);
+            nombreImpresora=(parametroImpresoraComanda3 != null) ? parametroImpresoraComanda3.getValor() :null;
+            getCmbImpresoraComanda3().setSelectedItem(nombreImpresora);
             
             ParametroCodefac parametroTipoNegocio = parametrosTodos.get(ParametroCodefac.TIPO_NEGOCIO);
             TipoNegocioEnum tipoNegocioEnum=TipoNegocioEnum.getEnum((parametroTipoNegocio != null) ? parametroTipoNegocio.getValor() : null);
@@ -1188,6 +1193,15 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         }
         agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,impresoraComandaTxt);
         agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2);
+
+        impresoraComanda=getCmbImpresoraComanda3().getSelectedItem();
+        impresoraComandaTxt=null;
+        if(impresoraComanda!=null)
+        {
+            impresoraComandaTxt=impresoraComanda.toString();
+        }
+        agregarParametro(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_3,impresoraComandaTxt);
+        agregarParametroEditar(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_3);
         
         impresoraComanda=getCmbImpresoraFactura().getSelectedItem();
         impresoraComandaTxt=null;

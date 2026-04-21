@@ -97,6 +97,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtCopiasComanda = new javax.swing.JSpinner();
         jLabel79 = new javax.swing.JLabel();
         cmbImpresoraComanda2 = new javax.swing.JComboBox<>();
+        jLabel128 = new javax.swing.JLabel();
+        cmbImpresoraComanda3 = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         lblEspacioVertical = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -598,7 +600,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jLabel59.setText("Copias Comanda:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel11.add(jLabel59, gridBagConstraints);
@@ -612,7 +614,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel11.add(cmbReporteDefectoPedido, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -645,7 +647,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel11.add(cmbImpresoraComanda, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -667,6 +669,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel11.add(cmbImpresoraComanda2, gridBagConstraints);
+
+        jLabel128.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel128.setText("Impresora Comanda 3:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel11.add(jLabel128, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.ipadx = 100;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel11.add(cmbImpresoraComanda3, gridBagConstraints);
 
         jTabbedPane1.addTab("Pedido", jPanel11);
 
@@ -2765,6 +2784,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbHabilitarRetencionesEnCompras;
     private javax.swing.JComboBox<String> cmbImpresoraComanda;
     private javax.swing.JComboBox<String> cmbImpresoraComanda2;
+    private javax.swing.JComboBox<String> cmbImpresoraComanda3;
     private javax.swing.JComboBox<String> cmbImpresoraFactura;
     private javax.swing.JComboBox<EnumSiNo> cmbImprimirCodigoInternoProducto;
     private javax.swing.JComboBox<EnumSiNo> cmbIngresoMayusculas;
@@ -2833,6 +2853,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel126;
     private javax.swing.JLabel jLabel127;
+    private javax.swing.JLabel jLabel128;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3547,6 +3568,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbImpresoraComanda2(JComboBox<String> cmbImpresoraComanda2) {
         this.cmbImpresoraComanda2 = cmbImpresoraComanda2;
+    }
+
+    public JComboBox<String> getCmbImpresoraComanda3() {
+        return cmbImpresoraComanda3;
+    }
+
+    public void setCmbImpresoraComanda3(JComboBox<String> cmbImpresoraComanda3) {
+        this.cmbImpresoraComanda3 = cmbImpresoraComanda3;
     }
 
     

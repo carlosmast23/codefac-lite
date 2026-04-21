@@ -253,6 +253,7 @@ public class ParametroCodefac implements Serializable {
     
     public static final String IMPRESORA_DEFECTO_COMANDA="impresora_defecto_comanda";
     public static final String IMPRESORA_DEFECTO_COMANDA_2="impresora_defecto_comanda_2";
+    public static final String IMPRESORA_DEFECTO_COMANDA_3="impresora_defecto_comanda_3";
     
     public static final String IMPRESORA_DEFECTO_FACTURA="impresora_defecto_factura";
     

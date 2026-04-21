@@ -844,11 +844,12 @@ public class ReporteCodefac {
     
     public enum ImpresionAutomaticaEnum
     {
-        COMANDA(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA,ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,ParametroCodefac.COPIAS_IMPRESORA_COMANDA),
+        COMANDA(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA,ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_3,ParametroCodefac.COPIAS_IMPRESORA_COMANDA),
         VENTA(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA,ParametroCodefac.COPIAS_IMPRESORA_VENTA);
         
         private String nombreParametroImpresora;
         private String nombreParametroImpresora2;
+        private String nombreParametroImpresora3;
         private String copiasParametroImpresora;
         
         private ImpresionAutomaticaEnum(String nombreParametroImpresora, String copiasParametroImpresora) {
@@ -859,6 +860,13 @@ public class ReporteCodefac {
         private ImpresionAutomaticaEnum(String nombreParametroImpresora, String nombreParametroImpresora2, String copiasParametroImpresora) {
             this.nombreParametroImpresora = nombreParametroImpresora;
             this.nombreParametroImpresora2 = nombreParametroImpresora2;
+            this.copiasParametroImpresora = copiasParametroImpresora;
+        }
+
+        private ImpresionAutomaticaEnum(String nombreParametroImpresora, String nombreParametroImpresora2, String nombreParametroImpresora3, String copiasParametroImpresora) {
+            this.nombreParametroImpresora = nombreParametroImpresora;
+            this.nombreParametroImpresora2 = nombreParametroImpresora2;
+            this.nombreParametroImpresora3 = nombreParametroImpresora3;
             this.copiasParametroImpresora = copiasParametroImpresora;
         }
         
@@ -893,6 +901,12 @@ public class ReporteCodefac {
 
                     //Impresora 2
                     nombreImpresoraDefecto = ParametroUtilidades.obtenerValorParametro(empresa, nombreParametroImpresora2);
+                    if (!UtilidadesTextos.verificarNullOVacio(nombreImpresoraDefecto) && !nombreImpresoraDefecto.equals("null")) {
+                        UtilidadesImpresora.printReportToPrinter(jasperReporte, cantidad, nombreImpresoraDefecto);
+                    }
+
+                    //Impresora 3
+                    nombreImpresoraDefecto = ParametroUtilidades.obtenerValorParametro(empresa, nombreParametroImpresora3);
                     if (!UtilidadesTextos.verificarNullOVacio(nombreImpresoraDefecto) && !nombreImpresoraDefecto.equals("null")) {
                         UtilidadesImpresora.printReportToPrinter(jasperReporte, cantidad, nombreImpresoraDefecto);
                     }
