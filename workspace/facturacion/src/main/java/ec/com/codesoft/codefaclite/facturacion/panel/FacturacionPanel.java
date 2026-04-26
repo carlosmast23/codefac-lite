@@ -1541,7 +1541,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
         lblEspacioVertical.add(jLabel17, gridBagConstraints);
 
-        cmbOrigenVenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin Asignar", "Facebook", "Marketplace", "WhatsAPP Estado", "Referido Vendedor", "Referido Cliente", "Local", "Otros", " " }));
+        cmbOrigenVenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin Asignar", "Facebook", "Marketplace", "WhatsAPP Estado", "Referido Vendedor", "Referido Cliente", "Cliente Recurrente", "Local", "Otros", " " }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;

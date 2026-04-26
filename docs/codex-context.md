@@ -1,0 +1,159 @@
+# Codefac Lite Context
+
+Ultima actualizacion: 2026-04-22
+
+## Proposito del proyecto
+Codefac Lite es una plataforma modular orientada a operacion comercial y administrativa. El codigo evidencia un nucleo fuerte de:
+
+- facturacion y comprobantes electronicos
+- CRM y mantenimiento de clientes/proveedores
+- inventario y kardex
+- cartera y credito
+- compras
+- servicios/taller/mantenimiento
+- transporte
+- POS y restaurante
+- gestion academica
+- contabilidad, impuestos y prestamos
+
+El sistema se usa principalmente como aplicacion de escritorio Swing con modo local o cliente-servidor, y ademas mantiene un frente web JSF/PrimeFaces.
+
+## Stack principal
+- Lenguaje principal: Java
+- Build principal: Maven
+- Parent aggregator: `workspace/mavenCodefacLite/pom.xml`
+- Escritorio: Swing + NetBeans GUI Builder (`.form`) + SwingX + JCalendar + JTattoo + JavaFX embebido
+- Web: JSF 2.2 + PrimeFaces 7 + PrimeFlex + WAR Maven
+- Persistencia: JPA/EclipseLink
+- Base de datos soportada en codigo: Derby embebido por defecto y MySQL opcional
+- Integracion entre cliente y servidor: RMI via `ServiceFactory`
+- Reporteria: JasperReports
+- Documentos electronicos: modulo `facturacionElectronica` con generacion/firma/autorizacion SRI
+
+## Restricciones tecnicas relevantes
+- La mayor parte del escritorio compila con `source/target 1.8`.
+- `workspace/app-web/codefacweb` compila con `source/target 1.6`; no asumir sintaxis moderna alli.
+- El proyecto mezcla librerias antiguas y dependencias mas nuevas de Jakarta; evitar refactors transversales grandes sin revisar compatibilidad modulo por modulo.
+- Hay repositorios locales tipo `lib/` en algunos modulos por herencia de NetBeans y dependencias historicas.
+
+## Arquitectura operativa
+### Entrada de escritorio
+`workspace/main/src/main/java/ec/com/codesoft/codefaclite/main/init/Main.java`
+
+Este arranque:
+
+- configura propiedades Derby
+- carga tema/look & feel
+- valida licencias y actualizaciones
+- resuelve modo de inicio: cliente, servidor o cliente-servidor
+- inicializa persistencia y/o cliente RMI segun contexto
+
+### Capa compartida de entidades y contratos
+`workspace/servidor-interfaz`
+
+Contiene:
+
+- entidades JPA
+- enums de negocio
+- contratos `ServiceIf`
+- objetos de sesion y parametros del sistema
+
+### Persistencia y servicios
+`workspace/servidor`
+
+Puntos clave:
+
+- `META-INF/persistence.xml`: unidad `pu_ejemplo`
+- `AbstractFacade`: inicializa `EntityManagerFactory`, selecciona Derby/MySQL, helpers de consultas y dialogos
+- `service/`: logica transaccional y casos de uso de servidor
+
+### Shell y controladores de UI
+- `workspace/main`: shell, login, navegacion, monitor, actualizaciones
+- `workspace/controlador`: modelos/controladores compartidos, dialogos, reportes, componentes y vistas base
+- `workspace/coreCodefacLite`: validacion, bindings, helpers UI y componentes reutilizables
+
+### Modulos funcionales principales
+- `workspace/crm`: clientes, proveedores, empresa, rutas, zonas
+- `workspace/facturacion`: factura, proforma, nota de credito, reportes y pantallas de facturacion
+- `workspace/inventario`: productos, bodegas, stock, kardex
+- `workspace/cartera`: credito, abonos, cruces
+- `workspace/compra`: compras y ordenes
+- `workspace/servicios`: taller, mantenimientos, vehiculos
+- `workspace/gestionAcademica`: estudiantes, rubros, niveles y flujos academicos
+- `workspace/pos`, `workspace/restaurante`, `workspace/transporte`, `workspace/contabilidad`, `workspace/impuestos`, `workspace/prestamos`
+
+### Frente web
+`workspace/app-web`
+
+Submodulos:
+
+- `codefacweb`: WAR JSF/PrimeFaces
+- `recursosWeb`: recursos compartidos para web
+
+Templates y estilos base:
+
+- `workspace/app-web/codefacweb/src/main/webapp/template/codefac_template.xhtml`
+- `workspace/app-web/codefacweb/src/main/webapp/resources/css/estilo.css`
+
+## Reglas de negocio clave observables en codigo
+- `Persona` se persiste sobre la tabla `CLIENTE` y representa el operador comercial con variantes de cliente/proveedor segun `tipo`.
+- La identificacion de consumidor final esta fija como `9999999999999`.
+- `Persona` puede tener multiples `PersonaEstablecimiento`; la direccion/telefono/correo por defecto suelen salir del primer establecimiento activo.
+- `Persona` guarda `PVP_DEFECTO` como alias string, no como enum persistido.
+- El proyecto maneja datos por empresa, pero algunas busquedas pueden omitir ese filtro si el parametro `DATOS_COMPARTIDOS_EMPRESA` esta en `SI`.
+- Las notas de credito referenciadas a factura deben replicar suficiente metadata del detalle original para devolver inventario correctamente.
+- Guardar comprobantes no termina en la entidad: tambien puede disparar cartera, kardex, impresion y procesamiento de comprobante electronico.
+
+## Estado actual del sistema
+- El workspace principal activo es `workspace/`.
+- La app de escritorio es el flujo dominante y tiene un runtime local con muchas bases Derby bajo `workspace/main/Derby2.DB*`.
+- Existe un frente web funcional pero secundario frente al escritorio.
+- Tambien existe `workspace_app` como app Android/Gradle y `workspace_movil/codefacMobil` como workspace movil adicional.
+
+## Decisiones y aprendizajes recientes importantes
+- En cliente/CRM, el `PVP_DEFECTO` debe tratarse como alias persistido. La UI no debe asumir que el combo devuelve siempre `Producto.PrecioVenta`; puede venir como string persistido.
+- En nota de credito parcial sobre factura, para afectar inventario correctamente hay que preservar y reutilizar metadata de inventario del detalle original: presentacion, lote, `kardexId` e item especifico.
+- En la pantalla de facturacion, los cambios sobre combos declarados por GUI Builder deben reflejarse tanto en `FacturacionPanel.java` como en `FacturacionPanel.form`.
+- Para evaluar consultas o UX pesada, `debug` no es una referencia fiable de rendimiento en este proyecto.
+
+## Problemas recientes conocidos
+- Hotspot de busqueda de cliente:
+  - `workspace/controlador/src/main/java/ec/com/codesoft/codefaclite/controlador/aplicacion/dialog/busqueda/ClienteEstablecimientoBusquedaDialogo.java`
+  - combinacion de `SELECT DISTINCT`, `LEFT JOIN u.persona.estudiantes e`, muchos `LOWER(...) LIKE` y `Persona.estudiantes` en `FetchType.EAGER`
+- Riesgo de arranque Derby si ya existe otra instancia usando la base embebida. `Main` y `AbstractFacade` ya contienen manejo para errores tipicos `XSDB6` / `XJ040`.
+- Problemas de compilacion pueden venir de cache local Maven danada, no necesariamente del repo.
+- El uso de valores string de negocio en combos y parametros sigue siendo una fuente de fragilidad.
+
+## Proximos focos recomendados
+- Revisar la busqueda de cliente/establecimiento para reducir costo en Derby:
+  - considerar `EXISTS` en vez de `LEFT JOIN + DISTINCT`
+  - evaluar `LAZY` en relaciones academicas si no rompe pantallas
+  - revisar indices Derby por tablas mas usadas
+- Reducir strings magicos en catalogos UI persistidos como texto.
+- Seguir endureciendo escenarios de anulacion parcial de factura y retorno de inventario.
+- Diferenciar mejor codigo fuente vs. datos/runtime dentro de `workspace/main`.
+
+## Archivos que se deben revisar primero al retomar
+- `workspace/mavenCodefacLite/pom.xml`
+- `workspace/main/src/main/java/ec/com/codesoft/codefaclite/main/init/Main.java`
+- `workspace/main/src/main/java/ec/com/codesoft/codefaclite/main/model/GeneralPanelModel.java`
+- `workspace/servidor/src/main/resources/META-INF/persistence.xml`
+- `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/facade/AbstractFacade.java`
+- `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/controller/ServiceFactory.java`
+- `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/entity/Persona.java`
+- `workspace/controlador/src/main/java/ec/com/codesoft/codefaclite/controlador/aplicacion/dialog/busqueda/ClienteEstablecimientoBusquedaDialogo.java`
+- `workspace/facturacion/src/main/java/ec/com/codesoft/codefaclite/facturacion/panel/FacturacionPanel.java`
+- `workspace/controlador/src/main/java/ec/com/codesoft/codefaclite/controlador/vista/factura/NotaCreditoModelControlador.java`
+- `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/service/NotaCreditoService.java`
+- `workspace/app-web/codefacweb/src/main/webapp/template/codefac_template.xhtml`
+
+## Criterio de trabajo recomendado
+- Trabajar por flujo completo, no solo por pantalla.
+- Confirmar siempre:
+  - modulo UI afectado
+  - entidad persistida
+  - servicio remoto/local implicado
+  - impacto en inventario, cartera, impresion o comprobante electronico
+- Si tocas formularios Swing generados, validar `.java` y `.form`.
+- Si tocas web, respetar template/base CSS existentes y no introducir otro stack frontend.
+- Si detectas cambios importantes de arquitectura, negocio o estado operativo, actualizar este documento y los demas archivos de continuidad en el mismo turno.
