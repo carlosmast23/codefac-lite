@@ -139,6 +139,7 @@ Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(V
 
 ## Decisiones y aprendizajes recientes importantes
 - Se agrego la entidad `Variante` al modulo de inventario (2026-04-27). Permite asociar talla y color a un producto y vincular ese par Producto+Variante directamente en el Kardex (campo `VARIANTE_ID` nullable para retrocompatibilidad). Archivos clave: `Variante.java`, `VarianteService`, `VarianteControlador`, `VariantePanel/Model`, `VarianteBusqueda`. Version SQL usada: `1.4.0.6`.
+- En la busqueda de productos con inventario usada desde facturacion, la variante vinculada al `Kardex` se muestra visualmente dentro de la columna `Nombre` como `Producto [talla X color Y]`, sin agregar columnas ni ampliar el filtro de busqueda por talla/color.
 - En cliente/CRM, el `PVP_DEFECTO` debe tratarse como alias persistido. La UI no debe asumir que el combo devuelve siempre `Producto.PrecioVenta`; puede venir como string persistido.
 - En nota de credito parcial sobre factura, para afectar inventario correctamente hay que preservar y reutilizar metadata de inventario del detalle original: presentacion, lote, `kardexId` e item especifico.
 - En la pantalla de facturacion, los cambios sobre combos declarados por GUI Builder deben reflejarse tanto en `FacturacionPanel.java` como en `FacturacionPanel.form`.

@@ -20,6 +20,7 @@ Ultima actualizacion: 2026-04-27
 - En CRM, el `Pvp Por Defecto` debe resolverse por alias persistido y no asumir un cast directo a `Producto.PrecioVenta`.
 - En nota de credito parcial, el retorno de inventario depende de copiar correctamente metadata del detalle de factura original y de reactivar items especificos cuando aplique.
 - En facturacion, se agrego la opcion `Cliente Recurrente` en `Origen de Venta`; al tocar ese combo hay que mantener `FacturacionPanel.java` y `FacturacionPanel.form` sincronizados.
+- En la busqueda de productos de facturacion que devuelve `Kardex`, la variante se muestra en la columna `Nombre` como `Producto [talla X color Y]`. Por ahora es solo visual: no se amplio la busqueda por talla/color para evitar cambiar el comportamiento del filtro.
 
 ## Problemas recientes conocidos
 - Consulta lenta de cliente/establecimiento:
