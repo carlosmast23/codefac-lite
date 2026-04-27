@@ -1,6 +1,6 @@
 # Codex Handoff
 
-Ultima actualizacion: 2026-04-22
+Ultima actualizacion: 2026-04-27
 
 ## Estado actual
 - Monorepo principal activo en `workspace/`.
@@ -10,6 +10,8 @@ Ultima actualizacion: 2026-04-22
 - Worktree local venia con cambios recientes en facturacion; al retomar conviene revisar `git status` antes de tocar pantallas de factura.
 
 ## Ultimas decisiones importantes
+- Se agrego entidad `Variante` al modulo de inventario (2026-04-27): talla + color, vinculada a `Kardex` con campo `VARIANTE_ID` nullable (retrocompatible). Version SQL `1.4.0.6`. El flujo completo toco 14 archivos — ver checklist en `docs/codex-context.md`.
+- Se confirmo que al agregar cualquier entidad nueva hay tres puntos criticos fuera del flujo obvio: `persistence.xml`, `ControllerServiceUtil.java` (registro RMI) y `VentanaEnum.java` + `PerfilService.java` (menu). Omitir cualquiera causa errores silenciosos o de arranque.
 - Se dejo documentado que los archivos de continuidad deben mantenerse de forma proactiva:
   - `AGENTS.md`
   - `docs/codex-context.md`
@@ -46,6 +48,9 @@ Ultima actualizacion: 2026-04-22
 - `workspace/main/src/main/java/ec/com/codesoft/codefaclite/main/init/Main.java`
 - `workspace/main/src/main/java/ec/com/codesoft/codefaclite/main/model/GeneralPanelModel.java`
 - `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/facade/AbstractFacade.java`
+- `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servicios/controller/ControllerServiceUtil.java`
+- `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/enumerados/VentanaEnum.java`
+- `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/service/PerfilService.java`
 - `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/entity/Persona.java`
 - `workspace/crm/src/main/java/ec/com/codesoft/codefaclite/crm/model/ClienteModel.java`
 - `workspace/facturacion/src/main/java/ec/com/codesoft/codefaclite/facturacion/panel/FacturacionPanel.java`

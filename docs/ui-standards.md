@@ -1,6 +1,6 @@
 # UI Standards
 
-Ultima actualizacion: 2026-04-22
+Ultima actualizacion: 2026-04-27
 
 Este proyecto si tiene interfaz y ademas conviven dos capas UI:
 
@@ -42,6 +42,65 @@ El estandar aqui no es reinventar la experiencia, sino mantener consistencia con
 - Evitar cargas innecesarias en pantallas de busqueda.
 - Si una mejora es de rendimiento, validar en modo `run`; `debug` en este proyecto agrega mucha sobrecarga.
 - Si una pantalla depende de relaciones pesadas o datos academicos, revisar joins y fetch antes de culpar a la UI.
+
+## Patron para nueva pantalla CRUD en Swing
+
+Toda pantalla nueva de inventario/CRM sigue esta estructura de 5 archivos en 3 modulos:
+
+```
+inventario/panel/XxxPanel.java        abstract, extends ControladorCodefacInterface
+inventario/panel/XxxPanel.form        XML NetBeans (par obligatorio del .java)
+inventario/model/XxxModel.java        extends XxxPanel, implements ControladorVistaIf + XxxControlador.SwingIf
+controlador/vista/.../XxxControlador  extends ModelControladorAbstract, logica CRUD
+controlador/busqueda/XxxBusqueda      implements InterfaceModelFind<T>
+```
+
+### Anotaciones obligatorias en el Panel
+
+En los getters de los campos de texto expuestos al binding:
+
+```java
+@MayusculaAnotacion                          // convierte a mayusculas automaticamente
+@TextFieldBinding(value = "controlador.entidad.campo")   // enlaza con la entidad del controlador
+@ValidacionCodefacAnotacion(requerido = true/false,
+    expresionRegular = ExpresionRegular.textoSimple,
+    nombre = "Nombre visible",
+    expresionRegularMensaje = "No se permiten caracteres especiales")
+public JTextField getTxtCampo() { ... }
+```
+
+### Estructura del Controlador
+
+```java
+public class XxxControlador extends ModelControladorAbstract<XxxControlador.CommonIf,
+        XxxControlador.SwingIf, XxxControlador.WebIf> implements VistaCodefacIf {
+
+    private XxxEntity entidad;
+
+    // grabar() y editar() llaman setearDatosAdicionales() antes de persistir
+    private void setearDatosAdicionales() {
+        entidad.setEmpresa(session.getEmpresa());
+    }
+
+    // limpiar() crea instancia nueva con campos vacios (no null)
+    // cargarDatosPantalla() castea el Object recibido a la entidad
+
+    public interface CommonIf {}
+    public interface SwingIf extends CommonIf {}
+    public interface WebIf extends CommonIf {}
+}
+```
+
+### Registro de pantalla en el menu
+
+Dos puntos obligatorios despues de crear los archivos de UI:
+
+1. `VentanaEnum.java`: agregar entrada con clase completa, codigo de 4 letras unico, modulo (`ModuloCodefacEnum.INVENTARIO`) y categoria (`CategoriaMenuEnum.GESTIONAR`).
+2. `PerfilService.java`: agregar `VentanaEnum.XXX` en cada bloque de perfil que deba verla (`PERFIL_SIMPLE`, `PERFIL_INVENTARIO_SIMPLE`, etc.).
+
+### Ejemplo de referencia
+
+`MarcaProductoPanel` / `MarcaProductoModel` / `MarcaProductoControlador` / `MarcaProductoDialogo` son el patron mas limpio y completo del modulo inventario.
 
 ## Estandares para web JSF/PrimeFaces
 ### Base tecnica

@@ -82,6 +82,7 @@ import ec.com.codesoft.codefaclite.servidor.service.TipoProductoService;
 import ec.com.codesoft.codefaclite.servidor.service.UsuarioServicio;
 import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidor.service.VehiculoService;
+import ec.com.codesoft.codefaclite.servidor.service.VarianteService;
 import ec.com.codesoft.codefaclite.servidor.service.ZonaService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraCruceService;
 import ec.com.codesoft.codefaclite.servidor.service.cartera.CarteraDetalleService;
@@ -222,6 +223,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.VehiculoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.VarianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -343,6 +345,7 @@ public abstract class ControllerServiceUtil {
             mapRecursos.put(TurnoService.class, TurnoServiceIf.class);
             mapRecursos.put(VentaService.class, VentaServiceIf.class);
             mapRecursos.put(HerramientasCodefacService .class, HerramientasCodefacServiceIf.class);
+            mapRecursos.put(VarianteService.class, VarianteServiceIf.class);
             mapRecursos.put(MarcaProductoService .class, MarcaProductoServiceIf.class);
             mapRecursos.put(CompraFacturaReembolsoService.class, CompraFacturaReembolsoServiceIf.class);
             mapRecursos.put(LoteService.class, LoteSeviceIf.class);

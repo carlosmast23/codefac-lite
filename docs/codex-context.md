@@ -1,6 +1,6 @@
 # Codefac Lite Context
 
-Ultima actualizacion: 2026-04-22
+Ultima actualizacion: 2026-04-27
 
 ## Proposito del proyecto
 Codefac Lite es una plataforma modular orientada a operacion comercial y administrativa. El codigo evidencia un nucleo fuerte de:
@@ -75,7 +75,7 @@ Puntos clave:
 ### Modulos funcionales principales
 - `workspace/crm`: clientes, proveedores, empresa, rutas, zonas
 - `workspace/facturacion`: factura, proforma, nota de credito, reportes y pantallas de facturacion
-- `workspace/inventario`: productos, bodegas, stock, kardex
+- `workspace/inventario`: productos, bodegas, stock, kardex, variantes de producto
 - `workspace/cartera`: credito, abonos, cruces
 - `workspace/compra`: compras y ordenes
 - `workspace/servicios`: taller, mantenimientos, vehiculos
@@ -110,7 +110,35 @@ Templates y estilos base:
 - Existe un frente web funcional pero secundario frente al escritorio.
 - Tambien existe `workspace_app` como app Android/Gradle y `workspace_movil/codefacMobil` como workspace movil adicional.
 
+## Checklist para agregar una entidad nueva con UI
+
+Al crear una entidad JPA con CRUD completo en este sistema se deben tocar exactamente estos 14 archivos. Omitir cualquiera causa errores silenciosos o de arranque.
+
+| # | Modulo | Archivo | Que hacer |
+|---|--------|---------|-----------|
+| 1 | servidor-interfaz | `entity/XxxEntity.java` | Entidad JPA: @Entity, @Table, campos, getters, equals/hashCode |
+| 2 | recursos/sql | `create_xxx.sql` o `create_kardex.sql` | `CREATE TABLE` con `@AGREGAR_TABLA(VERSION_SISTEMA=X)` |
+| 3 | servidor | `META-INF/persistence.xml` | `<class>...XxxEntity</class>` — sin esto EclipseLink lanza non-entity al arrancar |
+| 4 | servidor-interfaz | `servicios/XxxServiceIf.java` | Interface extends ServiceAbstractIf<T> |
+| 5 | servidor | `facade/XxxFacade.java` | extends AbstractFacade<T> |
+| 6 | servidor | `service/XxxService.java` | implements XxxServiceIf, logica con ejecutarTransaccion/ejecutarConsulta |
+| 7 | servidor | `ControllerServiceUtil.java` | `mapRecursos.put(XxxService.class, XxxServiceIf.class)` — sin esto: NotBoundException RMI |
+| 8 | servidor-interfaz | `controller/ServiceFactory.java` | import + metodo `getXxxServiceIf()` |
+| 9 | controlador | `busqueda/XxxBusqueda.java` | implements InterfaceModelFind<T>, columnas y query JPQL |
+| 10 | controlador | `vista/inventario/XxxControlador.java` | extends ModelControladorAbstract, CRUD, interfaces CommonIf/SwingIf/WebIf |
+| 11 | inventario | `panel/XxxPanel.java` + `XxxPanel.form` | abstract class extends ControladorCodefacInterface, @TextFieldBinding |
+| 12 | inventario | `model/XxxModel.java` | extends XxxPanel, implements ControladorVistaIf + XxxControlador.SwingIf |
+| 13 | servidor-interfaz | `enumerados/VentanaEnum.java` | entrada con clase, codigo 4 letras unico, modulo y categoria |
+| 14 | servidor | `service/PerfilService.java` | agregar VentanaEnum.XXX en perfiles relevantes |
+
+### Versiones SQL
+Usar la version siguiente a la mas alta en todos los archivos SQL del proyecto. Ultima conocida al crear Variante: `1.3.1.3.8`; se uso `1.4.0.6`.
+
+### Columna opcional en tabla existente
+Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(VERSION_SISTEMA=X)*/` en la linea anterior al campo. El campo debe ser nullable para retrocompatibilidad.
+
 ## Decisiones y aprendizajes recientes importantes
+- Se agrego la entidad `Variante` al modulo de inventario (2026-04-27). Permite asociar talla y color a un producto y vincular ese par Producto+Variante directamente en el Kardex (campo `VARIANTE_ID` nullable para retrocompatibilidad). Archivos clave: `Variante.java`, `VarianteService`, `VarianteControlador`, `VariantePanel/Model`, `VarianteBusqueda`. Version SQL usada: `1.4.0.6`.
 - En cliente/CRM, el `PVP_DEFECTO` debe tratarse como alias persistido. La UI no debe asumir que el combo devuelve siempre `Producto.PrecioVenta`; puede venir como string persistido.
 - En nota de credito parcial sobre factura, para afectar inventario correctamente hay que preservar y reutilizar metadata de inventario del detalle original: presentacion, lote, `kardexId` e item especifico.
 - En la pantalla de facturacion, los cambios sobre combos declarados por GUI Builder deben reflejarse tanto en `FacturacionPanel.java` como en `FacturacionPanel.form`.
@@ -140,6 +168,9 @@ Templates y estilos base:
 - `workspace/servidor/src/main/resources/META-INF/persistence.xml`
 - `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/facade/AbstractFacade.java`
 - `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/controller/ServiceFactory.java`
+- `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servicios/controller/ControllerServiceUtil.java`
+- `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/enumerados/VentanaEnum.java`
+- `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/service/PerfilService.java`
 - `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/entity/Persona.java`
 - `workspace/controlador/src/main/java/ec/com/codesoft/codefaclite/controlador/aplicacion/dialog/busqueda/ClienteEstablecimientoBusquedaDialogo.java`
 - `workspace/facturacion/src/main/java/ec/com/codesoft/codefaclite/facturacion/panel/FacturacionPanel.java`

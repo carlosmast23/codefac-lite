@@ -27,6 +27,9 @@ Actualizalos siempre que cambien de forma importante:
 - Base de datos y facades: `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/facade/AbstractFacade.java`
 - Contratos/entidades compartidas: `workspace/servidor-interfaz/src/main/java/...`
 - Cliente RMI: `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/controller/ServiceFactory.java`
+- Registro RMI del servidor: `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servicios/controller/ControllerServiceUtil.java`
+- Registro de pantallas en menu: `workspace/servidor-interfaz/src/main/java/ec/com/codesoft/codefaclite/servidorinterfaz/enumerados/VentanaEnum.java`
+- Permisos de menu por perfil: `workspace/servidor/src/main/java/ec/com/codesoft/codefaclite/servidor/service/PerfilService.java`
 - Shell principal Swing: `workspace/main/src/main/java/ec/com/codesoft/codefaclite/main/model/GeneralPanelModel.java`
 - Web template: `workspace/app-web/codefacweb/src/main/webapp/template/codefac_template.xhtml`
 
@@ -49,6 +52,16 @@ Actualizalos siempre que cambien de forma importante:
 - Para rendimiento, mide en `run`, no en `debug`; en este proyecto el depurador distorsiona mucho las percepciones.
 - No trates las carpetas `workspace/main/Derby2.DB*`, `codefac.jar`, `updater.jar`, `key.codefac*` y archivos similares como codigo fuente. Son datos/runtime y se deben tocar solo si la tarea lo pide.
 - Respeta el target de cada modulo. La mayor parte del escritorio compila a Java 8, pero `workspace/app-web/codefacweb` sigue con `source/target 1.6`.
+
+## Trampa de los 3 pasos al agregar una entidad nueva
+
+Cada vez que se agrega una entidad JPA nueva con UI, hay tres puntos que NO son obvios y causan errores de arranque o de RMI si se olvidan:
+
+1. **`persistence.xml`** — registrar `<class>...NuevaEntidad</class>`. Si falta, EclipseLink lanza `non-entity` al arrancar.
+2. **`ControllerServiceUtil.java`** — agregar `mapRecursos.put(NuevaService.class, NuevaServiceIf.class)`. Si falta, el cliente lanza `NotBoundException` al intentar usar el servicio.
+3. **`VentanaEnum.java` + `PerfilService.java`** — registrar la pantalla en el enum y asignarla a los perfiles. Si falta, la pantalla simplemente no aparece en el menu.
+
+Ver checklist completo de 14 pasos en `docs/codex-context.md`.
 
 ## Hotspots conocidos al retomar
 - Busqueda de clientes/establecimientos en modo academico: `ClienteEstablecimientoBusquedaDialogo` puede volverse lenta por `LEFT JOIN` a estudiantes, `DISTINCT`, `LOWER(...) LIKE` y `FetchType.EAGER` en `Persona.estudiantes`.

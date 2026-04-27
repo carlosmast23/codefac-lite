@@ -113,6 +113,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoDocumentoServi
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoEstablecimientoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.TipoProductoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.VehiculoServiceIf;
+import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.VarianteServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ZonaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaCargoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.cartera.PrestamoCuotaServiceIf;
@@ -245,6 +246,7 @@ public abstract class ServiceFactory {
     public RutaDetalleServiceIf getRutaDetalleServiceIf(){return (RutaDetalleServiceIf) getRecursosRMI(RutaDetalleServiceIf.class);};
     public HerramientasCodefacServiceIf getHerramientasCodefacServiceIf(){return (HerramientasCodefacServiceIf) getRecursosRMI(HerramientasCodefacServiceIf.class);};
     
+    public VarianteServiceIf getVarianteServiceIf(){return (VarianteServiceIf) getRecursosRMI(VarianteServiceIf.class);};
     public MarcaProductoServiceIf getMarcaProductoServiceIf(){return (MarcaProductoServiceIf) getRecursosRMI(MarcaProductoServiceIf.class);};
     public PresentacionProductoServiceIf getPresentacionProductoServiceIf(){return (PresentacionProductoServiceIf) getRecursosRMI(PresentacionProductoServiceIf.class);};
     
