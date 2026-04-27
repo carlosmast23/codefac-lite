@@ -28,6 +28,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoVariante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
@@ -353,6 +354,9 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         
         List<ProductoComponenteDetalle> componenteDetalleList=p.getComponenteList();
         p.setComponenteList(null);
+
+        List<ProductoVariante> varianteDetalleList=p.getVarianteList();
+        p.setVarianteList(null);
         
         List<ProductoActividad> actividadList=p.getActividadList();
         
@@ -387,11 +391,25 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         //Grabar los componentes
         if(componenteDetalleList!=null)
         {
-            for (ProductoComponenteDetalle componente : componenteDetalleList) 
+            for (ProductoComponenteDetalle componente : componenteDetalleList)
             {
                 if(componente.getId()==null)
                 {
                     entityManager.persist(componente);
+                }
+            }
+        }
+
+        //Grabar las variantes nuevas y crear su kardex correspondiente
+        if(varianteDetalleList!=null)
+        {
+            for (ProductoVariante productoVariante : varianteDetalleList)
+            {
+                if(productoVariante.getId()==null)
+                {
+                    entityManager.persist(productoVariante);
+                    entityManager.flush();
+                    kardexService.crearKardexVarianteSiNoExisteSinTransaccion(p, productoVariante.getVariante(), entityManager);
                 }
             }
         }
@@ -469,6 +487,7 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
         p.setProductoProveedorList(productoProveedorList);
         p.setPresentacionList(productoPresentacionList);
         p.setComponenteList(componenteDetalleList);
+        p.setVarianteList(varianteDetalleList);
         //p.setPresentacionList(productoPresentacionList);
 
         //Si no son ensables remover datos para no tener incoherencias

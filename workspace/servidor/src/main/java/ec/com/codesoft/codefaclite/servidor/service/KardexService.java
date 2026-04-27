@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.service;
 import com.sun.mail.handlers.multipart_mixed;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.TallerMecanicoInventarioBusquedaDialogo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
@@ -312,6 +313,37 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     * @throws ServicioCodefacException 
     */
    @Deprecated //TODO: Hacer que funcione con los Lotes
+   public void crearKardexVarianteSiNoExisteSinTransaccion(Producto producto, Variante variante, EntityManager entityManager) throws java.rmi.RemoteException, ServicioCodefacException
+   {
+       if(producto.getEmpresa()==null)
+       {
+           throw new ServicioCodefacException("No se puede crear el kardex de variante de un producto sin empresa");
+       }
+
+       BodegaService bodegaService = new BodegaService();
+       List<Bodega> bodegaList = bodegaService.obtenerActivosPorEmpresa(producto.getEmpresa());
+       if(bodegaList.size()==0)
+       {
+           throw new ServicioCodefacException("Configure primero una bodega");
+       }
+
+       for(Bodega bodega : bodegaList)
+       {
+           Map<String,Object> params = new java.util.HashMap<>();
+           params.put("producto", producto);
+           params.put("bodega", bodega);
+           params.put("variante", variante);
+           List<Kardex> existentes = getFacade().findByMap(params, entityManager);
+
+           if(existentes.size()==0)
+           {
+               Kardex kardex = crearObjeto(bodega, producto, null);
+               kardex.setVariante(variante);
+               entityManager.persist(kardex);
+           }
+       }
+   }
+
    public void crearKardexSiNoExisteSinTransaccion(Producto producto,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException
    {
        //Validar que tengan una empresa creada

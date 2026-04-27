@@ -222,7 +222,10 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
     private List<ProductoComponenteDetalle> componenteList;
-    
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto",fetch = FetchType.EAGER)
+    private List<ProductoVariante> varianteList;
+
     @Transient
     private Path pathFotoTmp;
     
@@ -576,6 +579,14 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
 
     public void setComponenteList(List<ProductoComponenteDetalle> componenteList) {
         this.componenteList = componenteList;
+    }
+
+    public List<ProductoVariante> getVarianteList() {
+        return varianteList;
+    }
+
+    public void setVarianteList(List<ProductoVariante> varianteList) {
+        this.varianteList = varianteList;
     }
 
     
@@ -1036,13 +1047,43 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         {
             this.componenteList=new ArrayList<ProductoComponenteDetalle>();
         }
-        
+
         ProductoComponenteDetalle detalleTmp=new ProductoComponenteDetalle();
         detalleTmp.setProducto(this);
         detalleTmp.setProductoComponente(detalle);
-                
+
         this.componenteList.add(detalleTmp);
-        
+
+    }
+
+    public void addVariante(Variante variante)
+    {
+        if(this.varianteList==null)
+        {
+            this.varianteList=new ArrayList<ProductoVariante>();
+        }
+        ProductoVariante detalle=new ProductoVariante();
+        detalle.setProducto(this);
+        detalle.setVariante(variante);
+        detalle.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+        this.varianteList.add(detalle);
+    }
+
+    public void quitarVariante(ProductoVariante productoVariante)
+    {
+        if(productoVariante!=null)
+        {
+            productoVariante.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+        }
+    }
+
+    public List<ProductoVariante> obtenerVarianteListActivos()
+    {
+        return Optional.ofNullable(varianteList)
+                .orElse(Collections.emptyList())
+                .stream()
+                .filter(v -> GeneralEnumEstado.ACTIVO.equals(v.getEstadoEnum()))
+                .collect(java.util.stream.Collectors.toList());
     }
     
     public void addProductoProveedor(ProductoProveedor productoProveedor)

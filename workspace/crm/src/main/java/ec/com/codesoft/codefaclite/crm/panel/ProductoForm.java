@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoVariante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
@@ -287,6 +288,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         btnQuitarActividad = new javax.swing.JButton();
         lblespacio123214 = new javax.swing.JLabel();
         txtNombreActividad = new javax.swing.JTextField();
+        jPanel14 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        lstVariantes = new javax.swing.JList<>();
+        btnAgregarVariante = new javax.swing.JButton();
+        btnQuitarVariante = new javax.swing.JButton();
+        lblespacio123215 = new javax.swing.JLabel();
 
         btnExportar.setText("Exportar");
 
@@ -1819,6 +1826,45 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
         tabMenu.addTab("Activ", jPanel13);
 
+        jPanel14.setLayout(new java.awt.GridBagLayout());
+
+        btnAgregarVariante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/pequenos/add2.png"))); // NOI18N
+        btnAgregarVariante.setText("Agregar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel14.add(btnAgregarVariante, gridBagConstraints);
+
+        btnQuitarVariante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/cancel-ico.png"))); // NOI18N
+        btnQuitarVariante.setText("Quitar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel14.add(btnQuitarVariante, gridBagConstraints);
+
+        jScrollPane7.setViewportView(lstVariantes);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel14.add(jScrollPane7, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        jPanel14.add(lblespacio123215, gridBagConstraints);
+
+        tabMenu.addTab("Variantes", jPanel14);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -1975,6 +2021,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1989,6 +2036,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
@@ -2011,8 +2059,12 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JLabel lblFoto;
     private javax.swing.JLabel lblespacio123213;
     private javax.swing.JLabel lblespacio123214;
+    private javax.swing.JLabel lblespacio123215;
     private javax.swing.JList<ProductoActividad> lstActividad;
     private javax.swing.JList<ProductoComponenteDetalle> lstComponentes;
+    private javax.swing.JList<ProductoVariante> lstVariantes;
+    private javax.swing.JButton btnAgregarVariante;
+    private javax.swing.JButton btnQuitarVariante;
     private ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona persona1;
     private javax.swing.JPanel pnlCostos;
     private javax.swing.JPanel pnlPresentacionAdicional;
@@ -2856,6 +2908,30 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public JList<ProductoActividad> getLstActividad() {
         return lstActividad;
+    }
+
+    public JList<ProductoVariante> getLstVariantes() {
+        return lstVariantes;
+    }
+
+    public void setLstVariantes(JList<ProductoVariante> lstVariantes) {
+        this.lstVariantes = lstVariantes;
+    }
+
+    public JButton getBtnAgregarVariante() {
+        return btnAgregarVariante;
+    }
+
+    public void setBtnAgregarVariante(JButton btnAgregarVariante) {
+        this.btnAgregarVariante = btnAgregarVariante;
+    }
+
+    public JButton getBtnQuitarVariante() {
+        return btnQuitarVariante;
+    }
+
+    public void setBtnQuitarVariante(JButton btnQuitarVariante) {
+        this.btnQuitarVariante = btnQuitarVariante;
     }
 
     public void setLstActividad(JList<ProductoActividad> lstActividad) {

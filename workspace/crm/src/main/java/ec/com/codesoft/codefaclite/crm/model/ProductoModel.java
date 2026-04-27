@@ -7,6 +7,7 @@ package ec.com.codesoft.codefaclite.crm.model;
 
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoComponenteBusqueda;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.VarianteBusqueda;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.interfaces.ControladorVistaIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -43,6 +44,8 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PresentacionProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoActividad;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponente;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoComponenteDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoVariante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema.Exportacion;
@@ -219,7 +222,8 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         verificarVisibleBotonEditarPresentacion();
         actualizarListaComponente();
         actualizaListaActividades();
-        
+        actualizarListaVariantes();
+
         getCmbPresentacionDefectoCompras().setSelectedItem(null);
         getCmbPresentacionDefectoVentas().setSelectedItem(null);
     }
@@ -727,9 +731,11 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getBtnEditarEnsamble().addActionListener(listenerEditarEnsamble);
         getBtnEliminarEnsamble().addActionListener(listenerEliminarEnsamble);
-        getBtnAgregarComponente().addActionListener(listenerAgregarComponente);           
+        getBtnAgregarComponente().addActionListener(listenerAgregarComponente);
         getBtnAgregarActividad().addActionListener(listenerAgregarActividad);
         getBtnQuitarActividad().addActionListener(listenerBtnQuitarActividad);
+        getBtnAgregarVariante().addActionListener(listenerAgregarVariante);
+        getBtnQuitarVariante().addActionListener(listenerQuitarVariante);
         
     }
     private ActionListener listenerBtnQuitarActividad=new ActionListener() {
@@ -758,7 +764,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         }
     };
     
-    private ActionListener listenerAgregarComponente=new ActionListener() 
+    private ActionListener listenerAgregarComponente=new ActionListener()
     {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -771,6 +777,35 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 controlador.getProducto().addComponente(productoComponente);
                 actualizarListaComponente();
            }
+        }
+    };
+
+    private ActionListener listenerAgregarVariante=new ActionListener()
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            VarianteBusqueda varianteBusqueda=new VarianteBusqueda(session.getEmpresa());
+            BuscarDialogoModel buscarDialogoModel=new BuscarDialogoModel(varianteBusqueda);
+            buscarDialogoModel.setVisible(true);
+            Variante variante=(Variante) buscarDialogoModel.getResultado();
+            if(variante!=null)
+            {
+                controlador.getProducto().addVariante(variante);
+                actualizarListaVariantes();
+            }
+        }
+    };
+
+    private ActionListener listenerQuitarVariante=new ActionListener()
+    {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ProductoVariante seleccionado=getLstVariantes().getSelectedValue();
+            if(seleccionado!=null)
+            {
+                controlador.getProducto().quitarVariante(seleccionado);
+                actualizarListaVariantes();
+            }
         }
     };
     
@@ -852,17 +887,31 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
     }
     
+    private void actualizarListaVariantes()
+    {
+        List<ProductoVariante> varianteList=controlador.getProducto().obtenerVarianteListActivos();
+        DefaultListModel<ProductoVariante> listModel=new DefaultListModel<>();
+        if(varianteList!=null)
+        {
+            for(ProductoVariante productoVariante : varianteList)
+            {
+                listModel.addElement(productoVariante);
+            }
+        }
+        getLstVariantes().setModel(listModel);
+    }
+
     private void actualizarListaComponente()
     {
         List<ProductoComponenteDetalle> componenteList=controlador.getProducto().obtenerComponenteListActivos();
-        DefaultListModel<ProductoComponenteDetalle> listModel = new DefaultListModel<>();                
+        DefaultListModel<ProductoComponenteDetalle> listModel = new DefaultListModel<>();
         if(componenteList!=null)
         {
-            for (ProductoComponenteDetalle productoComponenteDetalle : componenteList) 
+            for (ProductoComponenteDetalle productoComponenteDetalle : componenteList)
             {
                 listModel.addElement(productoComponenteDetalle);
             }
-            
+
         }
         getLstComponentes().setModel(listModel);
         
@@ -996,6 +1045,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         actualizarTablaEmpaques();
         actualizarListaComponente();
         actualizaListaActividades();
+        actualizarListaVariantes();
         verificarVisibleBotonEditarPresentacion();
         cargarDatoKardex(controlador.producto);
         cargarFotoFormulario();
