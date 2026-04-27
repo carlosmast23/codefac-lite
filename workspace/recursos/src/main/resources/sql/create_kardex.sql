@@ -13,7 +13,9 @@ create table KARDEX(
     STOCK decimal(13,5),
     RESERVA decimal(13,5),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.2.8.1.3)*/
-    ESTADO varchar(1), 
+    ESTADO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.6)*/
+    VARIANTE_ID BIGINT,
     primary key (ID)
 );
 
@@ -63,6 +65,17 @@ create table KARDEX_ITEM_ESPECIFICO(
     KARDEX_DETALLE_ID BIGINT,  
     CODIGO_ESPECIFICO varchar(128),
     OBSERVACIONES varchar(128), 
+    ESTADO varchar(1),
+    primary key (ID)
+);
+
+/*@AGREGAR_TABLA(VERSION_SISTEMA=1.4.0.6)*/
+create table VARIANTE(
+    ID BIGINT not null GENERATED ALWAYS AS IDENTITY (START WITH 1),
+    EMPRESA_ID BIGINT,
+    TALLA varchar(64),
+    COLOR varchar(64),    
+    FECHA_CREACION timestamp,
     ESTADO varchar(1),
     primary key (ID)
 );

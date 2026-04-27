@@ -97,7 +97,11 @@ public class Kardex implements Serializable,Cloneable {
     
     @JoinColumn(name = "LOTE_ID")
     //@ManyToOne
-    private Lote lote;    
+    private Lote lote;
+
+    @JoinColumn(name = "VARIANTE_ID")
+    @ManyToOne
+    private Variante variante;
     
     //Variable solo de paso para grabar los detalles que luego necesito para grabar o hacer algun tema temporal
     @Transient
@@ -273,6 +277,14 @@ public class Kardex implements Serializable,Cloneable {
 
     public void setLote(Lote lote) {
         this.lote = lote;
+    }
+
+    public Variante getVariante() {
+        return variante;
+    }
+
+    public void setVariante(Variante variante) {
+        this.variante = variante;
     }
     
     public BigDecimal getPrecioUltimoConIva() {
