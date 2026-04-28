@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -433,6 +434,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 BigDecimal ultimoCosto = (BigDecimal) objeto[5];
                 BigDecimal reserva = (BigDecimal) objeto[6];
                 Long kardexId = (Long) objeto[7];
+                Variante variante = obtenerVarianteResultadoStock(objeto);
                 
                 if(producto.getCatalogoProducto()==null)
                 {
@@ -478,7 +480,7 @@ public class StockReporteModel extends StockMinimoPanel{
                 data.setKardexId(kardexId);
                 data.setCodigo(codigoPersonalizado);
                 data.setCodigo2((producto.getCodigoUPC() != null) ? producto.getCodigoUPC() : "");
-                data.setProducto(producto.getNombre());
+                data.setProducto(Variante.construirNombreConVariante(producto.getNombre(), variante));
                 data.setStock(cantidad.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP) + "");
                 data.setReserva(reserva.setScale(obtenerCantidadDecimales(), RoundingMode.HALF_UP));
                 data.setDisponible(cantidad.add(reserva).setScale(obtenerCantidadDecimales(),RoundingMode.HALF_UP));
@@ -579,6 +581,14 @@ public class StockReporteModel extends StockMinimoPanel{
         }
                 
         return DECIMALES_CANTIDAD_REDONDEAR;
+    }
+
+    private Variante obtenerVarianteResultadoStock(Object[] objeto) {
+        if (objeto.length > 8) {
+            return (Variante) objeto[8];
+        }
+
+        return null;
     }
     
     

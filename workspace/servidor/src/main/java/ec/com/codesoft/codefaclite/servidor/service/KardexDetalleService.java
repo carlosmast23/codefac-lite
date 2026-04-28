@@ -52,7 +52,7 @@ public class KardexDetalleService extends ServiceAbstract<KardexDetalle, KardexD
         return (List<KardexDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
             public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                return consultarPorKardex(kardex);
+                return consultarPorKardex(kardex, entityManager);
             }
         });
     }

@@ -286,6 +286,18 @@ public class Kardex implements Serializable,Cloneable {
     public void setVariante(Variante variante) {
         this.variante = variante;
     }
+
+    public String obtenerNombreProductoConVariante() {
+        if (producto == null) {
+            return Variante.construirNombreConVariante("", variante);
+        }
+
+        return Variante.construirNombreConVariante(producto.getNombre(), variante);
+    }
+
+    public String obtenerDescripcionConVariante(String descripcion) {
+        return Variante.construirNombreConVariante(descripcion, variante);
+    }
     
     public BigDecimal getPrecioUltimoConIva() {
         BigDecimal tarifa=getProducto().getTarifaIva();

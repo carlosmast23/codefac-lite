@@ -99,6 +99,38 @@ public class Variante implements Serializable {
         this.estado = estadoEnum.getEstado();
     }
 
+    public String obtenerDescripcionDetallada() {
+        String descripcion = "";
+
+        if (talla != null && !talla.trim().isEmpty()) {
+            descripcion += "talla " + talla.trim();
+        }
+
+        if (color != null && !color.trim().isEmpty()) {
+            descripcion += descripcion.isEmpty() ? "" : " ";
+            descripcion += "color " + color.trim();
+        }
+
+        return descripcion;
+    }
+
+    public static String construirNombreConVariante(String nombre, Variante variante) {
+        if (nombre == null) {
+            nombre = "";
+        }
+
+        if (variante == null) {
+            return nombre;
+        }
+
+        String descripcionVariante = variante.obtenerDescripcionDetallada();
+        if (descripcionVariante.isEmpty() || nombre.contains("[" + descripcionVariante + "]")) {
+            return nombre;
+        }
+
+        return nombre + " [" + descripcionVariante + "]";
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

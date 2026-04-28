@@ -20,7 +20,8 @@ Ultima actualizacion: 2026-04-27
 - En CRM, el `Pvp Por Defecto` debe resolverse por alias persistido y no asumir un cast directo a `Producto.PrecioVenta`.
 - En nota de credito parcial, el retorno de inventario depende de copiar correctamente metadata del detalle de factura original y de reactivar items especificos cuando aplique.
 - En facturacion, se agrego la opcion `Cliente Recurrente` en `Origen de Venta`; al tocar ese combo hay que mantener `FacturacionPanel.java` y `FacturacionPanel.form` sincronizados.
-- En la busqueda de productos de facturacion que devuelve `Kardex`, la variante se muestra en la columna `Nombre` como `Producto [talla X color Y]`. Por ahora es solo visual: no se amplio la busqueda por talla/color para evitar cambiar el comportamiento del filtro.
+- El nombre estandar de productos con variante es `Producto [talla X color Y]`, construido desde `Variante.construirNombreConVariante(...)` o `Kardex.obtenerDescripcionConVariante(...)`. Ya se aplica en busqueda de facturacion, detalle de factura y stock reporte. Por ahora es solo visual: no se amplio la busqueda por talla/color.
+- Al editar un producto, `ProductoService.editarProducto(...)` sincroniza variantes con kardex: activa/crea kardex para variantes activas y desactiva logicamente kardex producto+variante cuando la variante se marca eliminada.
 
 ## Problemas recientes conocidos
 - Consulta lenta de cliente/establecimiento:
@@ -33,6 +34,7 @@ Ultima actualizacion: 2026-04-27
 - Arranque/persistencia:
   - Derby embebido puede fallar si otra instancia esta usando la base
   - compilacion Maven puede fallar por metadata local danada aunque el codigo este bien
+  - hasta reparar `.m2`, no intentar validar cambios con Maven: actualmente falla antes de compilar por `maven-metadata-local.xml` corrupto en snapshots locales como `mavenCodefacLite` y `utilidades`
 
 ## Proximos focos recomendados
 - Optimizar la busqueda de cliente:

@@ -1837,6 +1837,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 
                 controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
+                actualizarDescripcionDetalleConVariante(kardexSeleccionado);
             }
             else
             {
@@ -5003,7 +5004,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             BigDecimal.ONE,
                             producto.getValorUnitario(),
                             null, //No tiene valor del subsidio
-                            producto.getNombre(),
+                            (kardexSeleccionado != null) ? kardexSeleccionado.obtenerDescripcionConVariante(producto.getNombre()) : producto.getNombre(),
                             producto.getCodigoPersonalizado(),
                             producto.getCodigoUPC(),
                             producto.getCatalogoProducto(),
@@ -5024,12 +5025,24 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 else 
                 {
                     controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
+                    actualizarDescripcionDetalleConVariante(kardexSeleccionado);
                 }
             } catch (ServicioCodefacException ex) {
                 Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
+    }
+
+    private void actualizarDescripcionDetalleConVariante(Kardex kardex) {
+        if (facturaDetalleSeleccionado == null || kardex == null) {
+            return;
+        }
+
+        String descripcion = kardex.obtenerDescripcionConVariante(facturaDetalleSeleccionado.getDescripcion());
+        facturaDetalleSeleccionado.setDescripcion(descripcion);
+        getTxtDescripcion().setText(descripcion);
+        getTxtDescripcion().setCaretPosition(0);
     }
 
     private void addListenerTablas() {

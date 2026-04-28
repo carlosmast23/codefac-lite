@@ -17,6 +17,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.NoResultException;
@@ -340,21 +342,31 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         Producto producto = (Producto) objeto[0];
         Bodega bodega = (Bodega) objeto[3];
         Lote lote = (Lote) objeto[4];
+        Variante variante = obtenerVarianteResultadoStock(objeto);
         
         for (Object[] dato : resultadoList) 
         {
             Producto productoTmp = (Producto) dato[0];
             Bodega bodegaTmp = (Bodega) dato[3];
             Lote loteTmp = (Lote) dato[4];
+            Variante varianteTmp = obtenerVarianteResultadoStock(dato);
             
             //Si coincide estos inidices entonces verifico el lote
             //TODO: Toca tomar que compare con el oparador == los lotes para evitar problemas cuando sea null al comparar
-            if(productoTmp.equals(producto) && bodegaTmp.equals(bodega) && loteTmp==lote )
+            if(productoTmp.equals(producto) && bodegaTmp.equals(bodega) && loteTmp==lote && Objects.equals(varianteTmp, variante))
             {
                 return false;
             }            
         }
         return true;
+    }
+
+    private Variante obtenerVarianteResultadoStock(Object[] objeto) {
+        if (objeto.length > 8) {
+            return (Variante) objeto[8];
+        }
+
+        return null;
     }
     
     /**
@@ -542,7 +554,7 @@ public class KardexFacade extends AbstractFacade<Kardex> {
         String whereLoteActivos="AND (l IS NULL OR l.estado = 'A')";
         //String whereLoteActivos="";
         
-        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id FROM Kardex k LEFT JOIN k.lote l WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+whereLoteActivos+orderBy;
+        String queryString = "SELECT k.producto,k.stock,k.costoPromedio,k.bodega,k.lote,k.precioUltimo,k.reserva,k.id,k.variante FROM Kardex k LEFT JOIN k.lote l WHERE k.producto.manejarInventario=?11 AND k.bodega.estado=?6  AND k.producto IS NOT NULL AND (k.producto.estado<>?4 ) AND k.estado<>?4 "+whereBodega+whereCategoria+whereTipo+whereSegmento+whereNombreProducto+tipoStockWhere+tipoUbicacionWhere+whereCodigoProducto+whereTipoProducto+whereLoteActivos+orderBy;
         Query query = em.createQuery(queryString);
         
         

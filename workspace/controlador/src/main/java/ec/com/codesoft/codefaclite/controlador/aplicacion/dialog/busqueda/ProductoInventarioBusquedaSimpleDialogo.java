@@ -24,7 +24,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Producto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -297,7 +296,7 @@ public class ProductoInventarioBusquedaSimpleDialogo implements InterfaceModelFi
         //Producto producto=kardex.getProducto();
         vector.add(producto.getCodigoPersonalizado());
         vector.add(producto.getCodigoUPC());
-        vector.add(obtenerNombreProductoConVariante(producto, kardex));
+        vector.add(kardex.obtenerDescripcionConVariante(producto.getNombre()));
         //vector.add(producto.obtenerNombrePresentacion());
         
         /*if (kardex.getLote() != null) {
@@ -345,37 +344,6 @@ public class ProductoInventarioBusquedaSimpleDialogo implements InterfaceModelFi
         
         agregarDatosAdicionales(resultado, vector);
         
-    }
-
-    private String obtenerNombreProductoConVariante(Producto producto, Kardex kardex) {
-        String nombre = producto.getNombre();
-        Variante variante = kardex.getVariante();
-
-        if (variante == null) {
-            return nombre;
-        }
-
-        String descripcionVariante = obtenerDescripcionVariante(variante);
-        if (descripcionVariante.isEmpty()) {
-            return nombre;
-        }
-
-        return nombre + " [" + descripcionVariante + "]";
-    }
-
-    private String obtenerDescripcionVariante(Variante variante) {
-        String descripcion = "";
-
-        if (variante.getTalla() != null && !variante.getTalla().trim().isEmpty()) {
-            descripcion += "talla " + variante.getTalla().trim();
-        }
-
-        if (variante.getColor() != null && !variante.getColor().trim().isEmpty()) {
-            descripcion += descripcion.isEmpty() ? "" : " ";
-            descripcion += "color " + variante.getColor().trim();
-        }
-
-        return descripcion;
     }
 
     @Override

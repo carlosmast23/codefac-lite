@@ -151,11 +151,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     }
     
-    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote,EntityManager em) throws java.rmi.RemoteException
+    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Variante variante,Lote lote,EntityManager em) throws java.rmi.RemoteException
     {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bodega", bodega);
         map.put("producto", producto);
+        map.put("variante", variante);
         map.put("producto.estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("estado", GeneralEnumEstado.ACTIVO.getEstado());
         map.put("lote", lote);
@@ -173,6 +174,12 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
 
         return null;
+    }
+    
+    @Deprecated
+    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote,EntityManager em) throws java.rmi.RemoteException
+    {
+        return buscarKardexPorProductoyBodegayLote(bodega, producto, null, lote, em);
     }
     
     //TODO: Solucion temporal para no consultar kardex con lotes eliminados
@@ -341,6 +348,36 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                kardex.setVariante(variante);
                entityManager.persist(kardex);
            }
+           else
+           {
+               for (Kardex kardex : existentes)
+               {
+                   if(GeneralEnumEstado.ELIMINADO.equals(kardex.getEstadoEnum()))
+                   {
+                       kardex.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                       entityManager.merge(kardex);
+                   }
+               }
+           }
+       }
+   }
+
+   public void eliminarKardexVarianteSinTransaccion(Producto producto, Variante variante, EntityManager entityManager) throws java.rmi.RemoteException, ServicioCodefacException
+   {
+       if(producto==null || variante==null)
+       {
+           return;
+       }
+
+       Map<String,Object> params = new java.util.HashMap<>();
+       params.put("producto", producto);
+       params.put("variante", variante);
+       List<Kardex> kardexList = getFacade().findByMap(params, entityManager);
+
+       for (Kardex kardex : kardexList)
+       {
+           kardex.setEstadoEnum(GeneralEnumEstado.ELIMINADO);
+           entityManager.merge(kardex);
        }
    }
 
@@ -1183,7 +1220,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         validarDetallesKardex(detalle,forzarGrabarCantidadCero);
         //Variable para poder actualizar otros adicionales que pueden venir con el kardex por ejemplo los costos
         Kardex kardexTmp=detalle.getKardex();
-        Kardex kardex =buscarKardexPorProductoyBodegayLote(detalle.getKardex().getBodega(), detalle.getKardex().getProducto(), lote,em);
+        Kardex kardex =buscarKardexPorProductoyBodegayLote(detalle.getKardex().getBodega(), detalle.getKardex().getProducto(),detalle.getKardex().getVariante(), lote,em);
 
         //List<Kardex> kardexList = getFacade().findByMap(map);
         //System.out.println("grabando detalles kardex etapa 0... ");

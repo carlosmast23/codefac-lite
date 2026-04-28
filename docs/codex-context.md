@@ -139,7 +139,8 @@ Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(V
 
 ## Decisiones y aprendizajes recientes importantes
 - Se agrego la entidad `Variante` al modulo de inventario (2026-04-27). Permite asociar talla y color a un producto y vincular ese par Producto+Variante directamente en el Kardex (campo `VARIANTE_ID` nullable para retrocompatibilidad). Archivos clave: `Variante.java`, `VarianteService`, `VarianteControlador`, `VariantePanel/Model`, `VarianteBusqueda`. Version SQL usada: `1.4.0.6`.
-- En la busqueda de productos con inventario usada desde facturacion, la variante vinculada al `Kardex` se muestra visualmente dentro de la columna `Nombre` como `Producto [talla X color Y]`, sin agregar columnas ni ampliar el filtro de busqueda por talla/color.
+- El nombre estandar de productos con variante es `Producto [talla X color Y]`, construido con `Variante.construirNombreConVariante(...)` o `Kardex.obtenerDescripcionConVariante(...)`. Ya se usa en la busqueda de facturacion, en el detalle cargado de factura y en `StockReporteModel`; no se amplio el filtro de busqueda por talla/color.
+- Al editar productos, las variantes deben sincronizarse con kardex: una variante activa asegura/crea su kardex por bodega, y una variante eliminada desactiva logicamente (`estado=ELIMINADO`) los kardex producto+variante relacionados. Si se reactiva/agrega de nuevo, el kardex eliminado se vuelve a activar.
 - En cliente/CRM, el `PVP_DEFECTO` debe tratarse como alias persistido. La UI no debe asumir que el combo devuelve siempre `Producto.PrecioVenta`; puede venir como string persistido.
 - En nota de credito parcial sobre factura, para afectar inventario correctamente hay que preservar y reutilizar metadata de inventario del detalle original: presentacion, lote, `kardexId` e item especifico.
 - En la pantalla de facturacion, los cambios sobre combos declarados por GUI Builder deben reflejarse tanto en `FacturacionPanel.java` como en `FacturacionPanel.form`.
@@ -150,7 +151,7 @@ Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(V
   - `workspace/controlador/src/main/java/ec/com/codesoft/codefaclite/controlador/aplicacion/dialog/busqueda/ClienteEstablecimientoBusquedaDialogo.java`
   - combinacion de `SELECT DISTINCT`, `LEFT JOIN u.persona.estudiantes e`, muchos `LOWER(...) LIKE` y `Persona.estudiantes` en `FetchType.EAGER`
 - Riesgo de arranque Derby si ya existe otra instancia usando la base embebida. `Main` y `AbstractFacade` ya contienen manejo para errores tipicos `XSDB6` / `XJ040`.
-- Problemas de compilacion pueden venir de cache local Maven danada, no necesariamente del repo.
+- Problemas de compilacion pueden venir de cache local Maven danada, no necesariamente del repo. Estado actual: no intentar validar con Maven hasta limpiar/reparar metadata local en `.m2` (`maven-metadata-local.xml` de snapshots como `mavenCodefacLite` y `utilidades`); Maven falla antes de compilar codigo.
 - El uso de valores string de negocio en combos y parametros sigue siendo una fuente de fragilidad.
 
 ## Proximos focos recomendados

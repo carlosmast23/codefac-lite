@@ -1027,14 +1027,18 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 List<ProductoComponenteDetalle> componenteList= producto.getComponenteList();
                 producto.setComponenteList(null);
                 
+                List<ProductoVariante> varianteList = producto.getVarianteList();
+                producto.setVarianteList(null);
                 
                 grabarEmpaques(producto, productoPresentacionList,CrudEnum.EDITAR,entityManager);
                 eliminarEmpaques(producto, productoPresentacionList,entityManager);
+                sincronizarVariantesKardex(producto, varianteList, entityManager);
                 
                 
                 //producto.setPresentacion(presentacion);
                 producto.setPresentacionList(productoPresentacionList);
                 producto.setComponenteList(componenteList);
+                producto.setVarianteList(varianteList);
 
                 entityManager.merge(producto.getCatalogoProducto());
                 entityManager.merge(producto);
@@ -1079,6 +1083,43 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
     public List<ProductoActividad> buscarProductoActividadPorProducto(Producto producto,EntityManager em) throws RemoteException, ServicioCodefacException
     {
         return getFacade().buscarActividadPorProducto(producto,em);
+    }
+
+    private void sincronizarVariantesKardex(Producto producto, List<ProductoVariante> varianteList, EntityManager entityManager) throws RemoteException, ServicioCodefacException
+    {
+        if(varianteList==null)
+        {
+            return;
+        }
+
+        for (ProductoVariante productoVariante : varianteList)
+        {
+            productoVariante.setProducto(producto);
+
+            if(GeneralEnumEstado.ACTIVO.equals(productoVariante.getEstadoEnum()))
+            {
+                if(productoVariante.getId()==null)
+                {
+                    entityManager.persist(productoVariante);
+                    entityManager.flush();
+                }
+                else
+                {
+                    entityManager.merge(productoVariante);
+                }
+
+                kardexService.crearKardexVarianteSiNoExisteSinTransaccion(producto, productoVariante.getVariante(), entityManager);
+            }
+            else if(GeneralEnumEstado.ELIMINADO.equals(productoVariante.getEstadoEnum()))
+            {
+                if(productoVariante.getId()!=null)
+                {
+                    entityManager.merge(productoVariante);
+                }
+
+                kardexService.eliminarKardexVarianteSinTransaccion(producto, productoVariante.getVariante(), entityManager);
+            }
+        }
     }
     
     public List<ProductoComponenteDetalle> buscarComponentePorProducto(Producto producto,EntityManager em) throws RemoteException, ServicioCodefacException
