@@ -143,12 +143,12 @@ public class KardexFacade extends AbstractFacade<Kardex> {
 
     }
 
-    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega,Lote lote, Integer cantidadMovimientos,Boolean psicotropico,EntityManager em) {
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Lote lote, Integer cantidadMovimientos, Boolean psicotropico, EntityManager em) {
+        return obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega, lote, null, cantidadMovimientos, psicotropico, em);
+    }
+
+    public List<KardexDetalle> obtenerConsultaPorFechaFacade(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Lote lote, Variante variante, Integer cantidadMovimientos, Boolean psicotropico, EntityManager em) {
         try {
-            //KardexDetalle kd;
-            //kd.getKardex().getProducto().getPsicotropico();
-            //kd.getFechaCreacion();
-            
             String whereLote="";
             if(lote!=null)
             {
@@ -158,22 +158,30 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             {
                 whereLote=" and kd.kardex.lote is null ";
             }
-            
+
+            String whereVariante="";
+            if(variante!=null)
+            {
+                whereVariante=" and kd.kardex.variante=?7 ";
+            }
+            else
+            {
+                whereVariante=" and kd.kardex.variante is null ";
+            }
+
             String whereProducto="";
             if(producto!=null)
             {
                 whereProducto=" and kd.kardex.producto=?4 ";
             }
-            
+
             String wherePsicotropico="";
             if(psicotropico!=null && psicotropico)
             {
                 wherePsicotropico=" and  kd.kardex.producto.psicotropico=?6 ";
             }
 
-
-            //kd.getFechaIngreso();
-            String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 "+whereProducto+whereLote+wherePsicotropico;
+            String queryString = "SELECT kd FROM KardexDetalle kd WHERE kd.kardex.bodega=?3 "+whereProducto+whereLote+whereVariante+wherePsicotropico;
 
             if (fechaInicial != null) {
                 queryString += " and kd.fechaIngreso>=?1 ";
@@ -182,20 +190,14 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             if (fechaFinal != null) {
                 queryString += " and kd.fechaIngreso<=?2 ";
             }
-            
-            //ordenar kardex por fechas de los movimientos
+
             queryString+=" order by kd.kardex.producto, kd.fechaIngreso ";
 
-            //Agregar orden y un limite de la consulta
-            //queryString+=" order by kd.id desc ";
             System.out.println(queryString);
             Query query = em.createQuery(queryString);
 
-            //if (cantidadMovimientos != null) {
-            //    query.setMaxResults(cantidadMovimientos);
-            //}
             query.setParameter(3, bodega);
-            
+
             if (fechaInicial != null) {
                 query.setParameter(1, fechaInicial);
             }
@@ -203,20 +205,25 @@ public class KardexFacade extends AbstractFacade<Kardex> {
             if (fechaFinal != null) {
                 query.setParameter(2, fechaFinal);
             }
-            
+
             if(lote!=null)
             {
                 query.setParameter(5,lote);
             }
-            
-            if (producto != null) 
+
+            if (producto != null)
             {
                 query.setParameter(4, producto);
             }
-            
+
             if(psicotropico!=null && psicotropico)
             {
                 query.setParameter(6,EnumSiNo.SI.getLetra());
+            }
+
+            if(variante!=null)
+            {
+                query.setParameter(7, variante);
             }
 
             return query.getResultList();

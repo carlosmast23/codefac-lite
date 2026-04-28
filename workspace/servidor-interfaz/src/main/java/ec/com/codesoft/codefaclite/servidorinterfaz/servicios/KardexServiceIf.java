@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoEnsamble;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.auxiliar.KardexDetalleTmp;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
@@ -49,6 +50,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void ingresarInventario(List<KardexDetalle> detalles) throws java.rmi.RemoteException,ServicioCodefacException;
     public void ingresarInventario(KardexDetalle detalle,Lote lote) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Lote lote,Integer cantidadMovimientos,Boolean psicotropico) throws java.rmi.RemoteException;
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Lote lote, Variante variante, Integer cantidadMovimientos, Boolean psicotropico) throws java.rmi.RemoteException;
     public List<Object[]> consultarStockMinimo(Bodega bodega,CategoriaProducto categoria,String nombre,String codigo,Empresa empresa,KardexOrdenarEnum ordenEnum) throws java.rmi.RemoteException;
     public List<Kardex> buscarPorProducto(Producto producto) throws java.rmi.RemoteException,ServicioCodefacException;
     public List<Kardex> buscarPorBodega(Bodega bodega) throws java.rmi.RemoteException,ServicioCodefacException;
@@ -92,6 +94,7 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public CostoProductoRespuesta buscarCostoProductoRespuesta(Producto producto) throws java.rmi.RemoteException;
     
     public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException;
+    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Variante variante,Lote lote) throws java.rmi.RemoteException;
     
     public Kardex buscarKardexPorDefectoVenta(Bodega bodega,Producto producto) throws java.rmi.RemoteException;
     

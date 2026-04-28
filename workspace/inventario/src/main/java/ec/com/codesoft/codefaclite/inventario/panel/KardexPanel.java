@@ -72,6 +72,9 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel12 = new javax.swing.JLabel();
         txtLoteNombre = new javax.swing.JTextField();
         btnBuscarLote = new javax.swing.JButton();
+        lblVariante = new javax.swing.JLabel();
+        txtVarianteNombre = new javax.swing.JTextField();
+        btnBuscarVariante = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         txtReserva = new javax.swing.JSpinner();
         chkPsicotropicos = new javax.swing.JCheckBox();
@@ -116,7 +119,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel2.setText("Movimientos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 35;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -157,7 +160,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         btnConsultar.setText("Consultar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(btnConsultar, gridBagConstraints);
 
@@ -165,7 +168,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 11;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
@@ -177,7 +180,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel11.setText("Total:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel11, gridBagConstraints);
@@ -186,7 +189,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         lblTotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(lblTotal, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -229,7 +232,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 5;
         getContentPane().add(jToolBar1, gridBagConstraints);
 
@@ -245,7 +248,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.1;
@@ -257,7 +260,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         txtMovimientos.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -271,7 +274,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         chkTodosMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(chkTodosMovimientos, gridBagConstraints);
@@ -280,7 +283,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         jLabel8.setText("Reserva:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(jLabel8, gridBagConstraints);
@@ -310,11 +313,38 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtUltimoCosto, gridBagConstraints);
 
+        lblVariante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblVariante.setText("Variante:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 35;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(lblVariante, gridBagConstraints);
+
+        txtVarianteNombre.setEditable(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(txtVarianteNombre, gridBagConstraints);
+
+        btnBuscarVariante.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/iconos/find2-ico.png"))); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnBuscarVariante, gridBagConstraints);
+
         jLabel12.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         jLabel12.setText("Bodega:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.ipadx = 35;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -347,7 +377,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         getContentPane().add(jLabel13, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         getContentPane().add(txtReserva, gridBagConstraints);
@@ -361,7 +391,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -377,6 +407,7 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarLote;
+    private javax.swing.JButton btnBuscarVariante;
     private javax.swing.JButton btnConsultar;
     private javax.swing.JButton btnProductoBuscar;
     private javax.swing.JCheckBox chkPsicotropicos;
@@ -406,7 +437,9 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblKardexDetalle;
     private javax.swing.JTextField txtCostoPromedio;
+    private javax.swing.JLabel lblVariante;
     private javax.swing.JTextField txtLoteNombre;
+    private javax.swing.JTextField txtVarianteNombre;
     private javax.swing.JSpinner txtMovimientos;
     private javax.swing.JTextField txtProducto;
     private javax.swing.JSpinner txtReserva;
@@ -549,6 +582,22 @@ public abstract class KardexPanel extends ControladorCodefacInterface {
 
     public void setBtnBuscarLote(JButton btnBuscarLote) {
         this.btnBuscarLote = btnBuscarLote;
+    }
+
+    public JTextField getTxtVarianteNombre() {
+        return txtVarianteNombre;
+    }
+
+    public void setTxtVarianteNombre(JTextField txtVarianteNombre) {
+        this.txtVarianteNombre = txtVarianteNombre;
+    }
+
+    public JButton getBtnBuscarVariante() {
+        return btnBuscarVariante;
+    }
+
+    public void setBtnBuscarVariante(JButton btnBuscarVariante) {
+        this.btnBuscarVariante = btnBuscarVariante;
     }
 
     public JSpinner getTxtReserva() {

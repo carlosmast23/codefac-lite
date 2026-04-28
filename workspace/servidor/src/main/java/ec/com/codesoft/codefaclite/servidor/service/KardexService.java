@@ -135,20 +135,24 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         return null;
     }
     
-    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException    
+    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Lote lote) throws java.rmi.RemoteException
+    {
+        return buscarKardexPorProductoyBodegayLote(bodega, producto, null, lote);
+    }
+
+    public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Variante variante,Lote lote) throws java.rmi.RemoteException
     {
         try {
             return (Kardex) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
                 @Override
                 public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                    return buscarKardexPorProductoyBodegayLote(bodega, producto, lote,entityManager);
+                    return buscarKardexPorProductoyBodegayLote(bodega, producto, variante, lote, entityManager);
                 }
             });
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(KardexService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    
     }
     
     public Kardex buscarKardexPorProductoyBodegayLote(Bodega bodega,Producto producto,Variante variante,Lote lote,EntityManager em) throws java.rmi.RemoteException
@@ -1597,13 +1601,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     }
     
-    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial , Date fechaFinal,Producto producto,Bodega bodega,Lote lote,Integer cantidadMovimientos,Boolean psicotropico) throws java.rmi.RemoteException
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Lote lote, Integer cantidadMovimientos, Boolean psicotropico) throws java.rmi.RemoteException
+    {
+        return obtenerConsultaPorFecha(fechaInicial, fechaFinal, producto, bodega, lote, null, cantidadMovimientos, psicotropico);
+    }
+
+    public List<KardexDetalle> obtenerConsultaPorFecha(Date fechaInicial, Date fechaFinal, Producto producto, Bodega bodega, Lote lote, Variante variante, Integer cantidadMovimientos, Boolean psicotropico) throws java.rmi.RemoteException
     {
         try {
             return (List<KardexDetalle>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
                 @Override
                 public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                    List<KardexDetalle> datosConsulta = getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega, lote, cantidadMovimientos, psicotropico,entityManager);
+                    List<KardexDetalle> datosConsulta = getFacade().obtenerConsultaPorFechaFacade(fechaInicial, fechaFinal, producto, bodega, lote, variante, cantidadMovimientos, psicotropico, entityManager);
                     //Invertir la lista porque los resultados estan invertidos
                     //Collections.reverse(datosConsulta);
                     
