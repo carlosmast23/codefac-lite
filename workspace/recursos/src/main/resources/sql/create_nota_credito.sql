@@ -130,6 +130,8 @@ create table NOTA_CREDITO_DETALLE
     IRBPNR decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.2.3)*/
     TOTAL_FINAL decimal(13,2),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.7)*/
+    VARIANTE_ID BIGINT,
     primary key (ID)
 );
 

@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 
 /**
@@ -89,7 +90,11 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     
     @JoinColumn(name = "LOTE_ID")
     private Lote lote;
-    
+
+    @JoinColumn(name = "VARIANTE_ID")
+    @ManyToOne
+    private Variante variante;
+
     @Column(name = "COSTO_PROMEDIO")
     private BigDecimal costoPromedio;
     
@@ -253,8 +258,14 @@ public class DetalleFacturaNotaCeditoAbstract implements Serializable {
     public void setLote(Lote lote) {
         this.lote = lote;
     }
-    
-    
+
+    public Variante getVariante() {
+        return variante;
+    }
+
+    public void setVariante(Variante variante) {
+        this.variante = variante;
+    }
 
     public Long getKardexId() {
         return kardexId;

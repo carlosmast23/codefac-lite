@@ -1837,6 +1837,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 }
                 
                 controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
+                if(kardexSeleccionado.getVariante() != null && facturaDetalleSeleccionado != null)
+                {
+                    facturaDetalleSeleccionado.setVariante(kardexSeleccionado.getVariante());
+                }
                 actualizarDescripcionDetalleConVariante(kardexSeleccionado);
             }
             else
@@ -5025,6 +5029,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 else 
                 {
                     controlador.agregarProductoVista(producto, lote, null, (kardexSeleccionado != null) ? kardexSeleccionado.getStock() : BigDecimal.ZERO, ultimoCosto, fechaCaducidad);
+                    if(kardexSeleccionado != null && kardexSeleccionado.getVariante() != null && facturaDetalleSeleccionado != null)
+                    {
+                        facturaDetalleSeleccionado.setVariante(kardexSeleccionado.getVariante());
+                    }
                     actualizarDescripcionDetalleConVariante(kardexSeleccionado);
                 }
             } catch (ServicioCodefacException ex) {

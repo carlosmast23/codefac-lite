@@ -42,6 +42,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Mesa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.OrdenTrabajo;
@@ -1618,16 +1619,18 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             
         }
         
-        //Buscar el lote si no tiene un datos
+        //Buscar el lote si no tiene datos
         Lote lote=null;
         if(detalle.getLote()!=null)
         {
             lote=loteService.buscarPorId(detalle.getLote().getId(),entityManager);
         }
 
+        Variante variante = detalle.getVariante();
+
         if(kardex==null)
         {
-            kardex =kardexService.consultarOCrearStockSinPersistencia(producto, bodega,lote,entityManager);
+            kardex = kardexService.consultarOCrearStockSinPersistencia(producto, bodega, lote, variante, entityManager);
         }
         //Kardex kardex = consultarOCrearStock(producto, bodega);
 

@@ -515,29 +515,25 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
-    public  Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega,Lote lote,EntityManager entityManager) throws RemoteException, ServicioCodefacException
+    public Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega, Lote lote, EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
-        
-        //Map<String,Object> mapParametros=new HashMap<String,Object>();
-        //mapParametros.put("producto", producto);
-        KardexService kardexService = new KardexService();
-        //List<Kardex> kardexs = kardexService.buscarKardexPorProductoyBodegayLote(bodega,producto,lote);
-        
-        Kardex kardex = kardexService.buscarKardexPorProductoyBodegayLote(bodega,producto,lote,entityManager);
+        return consultarOCrearStockSinPersistencia(producto, bodega, lote, null, entityManager);
+    }
 
-        //Kardex kardex = null;
-        if (kardex == null) 
+    public Kardex consultarOCrearStockSinPersistencia(Producto producto, Bodega bodega, Lote lote, Variante variante, EntityManager entityManager) throws RemoteException, ServicioCodefacException
+    {
+        KardexService kardexService = new KardexService();
+        Kardex kardex = kardexService.buscarKardexPorProductoyBodegayLote(bodega, producto, variante, lote, entityManager);
+
+        if (kardex == null)
         {
-            kardex = kardexService.crearObjeto(bodega, producto,lote);
+            kardex = kardexService.crearObjeto(bodega, producto, lote);
+            kardex.setVariante(variante);
             entityManager.persist(kardex);
             entityManager.flush();
-        } 
-        //else {
-        //    kardex = kardex.get(0);
-        //}
-        
-        return kardex;
+        }
 
+        return kardex;
     }
     
     
