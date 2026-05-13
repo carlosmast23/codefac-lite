@@ -160,7 +160,10 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     
     @Column(name = "ORIGEN_VENTA_NOTA")
     private String origenVentaNota;
-    
+
+    @Column(name = "PROFORMA_SIN_IVA")
+    private String proformaSinIva;
+
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -645,6 +648,22 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     public void setVentaCreditoEnum(EnumSiNo ventaCreditoEnum) {
         this.ventaCredito = ventaCreditoEnum.getLetra();
+    }
+
+    public EnumSiNo getProformaSinIvaEnum() {
+        return EnumSiNo.getEnumByLetra(proformaSinIva);
+    }
+
+    public void setProformaSinIvaEnum(EnumSiNo proformaSinIvaEnum) {
+        this.proformaSinIva = (proformaSinIvaEnum != null) ? proformaSinIvaEnum.getLetra() : null;
+    }
+
+    public String getProformaSinIva() {
+        return proformaSinIva;
+    }
+
+    public void setProformaSinIva(String proformaSinIva) {
+        this.proformaSinIva = proformaSinIva;
     }
 
     public Integer getDiasCredito() {

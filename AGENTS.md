@@ -66,6 +66,7 @@ Ver checklist completo de 14 pasos en `docs/codex-context.md`.
 ## Hotspots conocidos al retomar
 - Busqueda de clientes/establecimientos en modo academico: `ClienteEstablecimientoBusquedaDialogo` puede volverse lenta por `LEFT JOIN` a estudiantes, `DISTINCT`, `LOWER(...) LIKE` y `FetchType.EAGER` en `Persona.estudiantes`.
 - Facturacion/nota de credito: los cambios parciales deben validar devolucion de inventario y reactivacion de `KardexItemEspecifico`.
+- Proformas sin IVA: el parametro `PROFORMA_GENERAR_SIN_IVA` controla nuevas proformas y la factura guarda `PROFORMA_SIN_IVA`; al convertir una proforma marcada sin IVA a factura se reutiliza `FacturaDetalle.invertirCalculoNVIaFactura(true)` para restaurar IVA como base + impuesto. La restauracion debe ejecutarse tambien en `cargarFacturaDesdeProforma(...)`, no depender solo del listener del combo de documento.
 - Pantallas con combos string-based: hay varios valores de negocio guardados como texto plano y no como enum persistido.
 - Maven puede fallar por metadata/cache local incluso cuando el repo esta bien; si pasa, diferenciar problema del workspace vs. problema del codigo.
 

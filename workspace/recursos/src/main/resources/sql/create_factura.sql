@@ -121,6 +121,8 @@ create table FACTURA
     ORIGEN_VENTA_NOTA varchar(128),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.2)*/
     LOG_SRI varchar(250),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.8)*/
+    PROFORMA_SIN_IVA varchar(1),
     primary key (ID)
     /*CONSTRAINT id_cliente_factura_fk FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 

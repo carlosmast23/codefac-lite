@@ -99,6 +99,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbImpresoraComanda2 = new javax.swing.JComboBox<>();
         jLabel128 = new javax.swing.JLabel();
         cmbImpresoraComanda3 = new javax.swing.JComboBox<>();
+        jLabel129 = new javax.swing.JLabel();
+        cmbProformaGenerarSinIva = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         lblEspacioVertical = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -614,7 +616,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel11.add(cmbReporteDefectoPedido, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -686,6 +688,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel11.add(cmbImpresoraComanda3, gridBagConstraints);
+
+        jLabel129.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel129.setText("Generar Proforma Sin IVA:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel11.add(jLabel129, gridBagConstraints);
+
+        cmbProformaGenerarSinIva.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel11.add(cmbProformaGenerarSinIva, gridBagConstraints);
 
         jTabbedPane1.addTab("Pedido", jPanel11);
 
@@ -2805,6 +2824,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbPermitirEditarNVI;
     private javax.swing.JComboBox<Producto.PrecioVenta> cmbPrecioVentaDefecto;
     private javax.swing.JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces;
+    private javax.swing.JComboBox<EnumSiNo> cmbProformaGenerarSinIva;
     private javax.swing.JComboBox<EnumSiNo> cmbRecalcularEditarPrecioEmpaque;
     private javax.swing.JComboBox<EnumSiNo> cmbRecalcularPrecioPorcentaje;
     private javax.swing.JComboBox<FormatoReporteEnum> cmbReporteDefectoPedido;
@@ -2854,6 +2874,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel126;
     private javax.swing.JLabel jLabel127;
     private javax.swing.JLabel jLabel128;
+    private javax.swing.JLabel jLabel129;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3352,6 +3373,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbProformaFacturarVariasVeces(JComboBox<EnumSiNo> cmbProformaFacturarVariasVeces) {
         this.cmbProformaFacturarVariasVeces = cmbProformaFacturarVariasVeces;
+    }
+
+    public JComboBox<EnumSiNo> getCmbProformaGenerarSinIva() {
+        return cmbProformaGenerarSinIva;
+    }
+
+    public void setCmbProformaGenerarSinIva(JComboBox<EnumSiNo> cmbProformaGenerarSinIva) {
+        this.cmbProformaGenerarSinIva = cmbProformaGenerarSinIva;
     }
 
     public JTextField getTxtNotaVentaInternaAlias() {

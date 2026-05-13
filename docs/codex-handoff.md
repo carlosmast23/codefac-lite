@@ -1,6 +1,6 @@
 # Codex Handoff
 
-Ultima actualizacion: 2026-04-27
+Ultima actualizacion: 2026-05-13
 
 ## Estado actual
 - Monorepo principal activo en `workspace/`.
@@ -20,6 +20,7 @@ Ultima actualizacion: 2026-04-27
 - En CRM, el `Pvp Por Defecto` debe resolverse por alias persistido y no asumir un cast directo a `Producto.PrecioVenta`.
 - En nota de credito parcial, el retorno de inventario depende de copiar correctamente metadata del detalle de factura original y de reactivar items especificos cuando aplique.
 - En facturacion, se agrego la opcion `Cliente Recurrente` en `Origen de Venta`; al tocar ese combo hay que mantener `FacturacionPanel.java` y `FacturacionPanel.form` sincronizados.
+- En facturacion/proforma se agrego el parametro `PROFORMA_GENERAR_SIN_IVA` y el campo `Factura.PROFORMA_SIN_IVA`. Si una proforma se genero sin IVA y luego se convierte a factura, se reutiliza `FacturaDetalle.invertirCalculoNVIaFactura(true)` para restaurar el IVA del catalogo y facturar como base + impuesto. La carga directa desde proforma debe recalcular desde `cargarFacturaDesdeProforma(...)`, porque algunos flujos actualizan el combo sin listener.
 - El nombre estandar de productos con variante es `Producto [talla X color Y]`, construido desde `Variante.construirNombreConVariante(...)` o `Kardex.obtenerDescripcionConVariante(...)`. Ya se aplica en busqueda de facturacion, detalle de factura y stock reporte. Por ahora es solo visual: no se amplio la busqueda por talla/color.
 - Al editar un producto, `ProductoService.editarProducto(...)` sincroniza variantes con kardex: activa/crea kardex para variantes activas y desactiva logicamente kardex producto+variante cuando la variante se marca eliminada.
 

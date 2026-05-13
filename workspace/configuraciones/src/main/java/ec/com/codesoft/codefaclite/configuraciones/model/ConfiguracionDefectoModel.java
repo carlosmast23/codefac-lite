@@ -158,6 +158,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbEnviarNVIalCorreo(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbProformaFacturarVariasVeces(), EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbProformaGenerarSinIva(), EnumSiNo.values());
         
         UtilidadesComboBox.llenarComboBox(getCmbFiltroRapidoBusqueda(), EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbIngresoMayusculas(), EnumSiNo.values());
@@ -423,6 +424,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroReporteDefectoPedido = parametrosTodos.get(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
             FormatoReporteEnum reporteEnumPedido=FormatoReporteEnum.findByName((parametroReporteDefectoPedido != null) ? parametroReporteDefectoPedido.getValor() : null);
             getCmbReporteDefectoPedido().setSelectedItem(reporteEnumPedido);
+
+            ParametroCodefac parametroProformaGenerarSinIva = parametrosTodos.get(ParametroCodefac.PROFORMA_GENERAR_SIN_IVA);
+            EnumSiNo proformaGenerarSinIva = EnumSiNo.getEnumByLetra((parametroProformaGenerarSinIva != null) ? parametroProformaGenerarSinIva.getValor() : null);
+            getCmbProformaGenerarSinIva().setSelectedItem((proformaGenerarSinIva != null) ? proformaGenerarSinIva : EnumSiNo.NO);
             
             ParametroCodefac parametroImpresoraComanda = parametrosTodos.get(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA);
             String nombreImpresora=(parametroImpresoraComanda != null) ? parametroImpresoraComanda.getValor() :null;
@@ -952,6 +957,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         FormatoReporteEnum reporteDefectoPedido =(FormatoReporteEnum) getCmbReporteDefectoPedido().getSelectedItem();
         agregarParametro(ParametroCodefac.REPORTE_DEFECTO_PEDIDO,(reporteDefectoPedido!=null)?reporteDefectoPedido.getNombre():null);
         agregarParametroEditar(ParametroCodefac.REPORTE_DEFECTO_PEDIDO);
+
+        EnumSiNo enumProformaGenerarSinIva = (EnumSiNo) getCmbProformaGenerarSinIva().getSelectedItem();
+        agregarParametro(ParametroCodefac.PROFORMA_GENERAR_SIN_IVA, (enumProformaGenerarSinIva != null) ? enumProformaGenerarSinIva.getLetra() : EnumSiNo.NO.getLetra());
+        agregarParametroEditar(ParametroCodefac.PROFORMA_GENERAR_SIN_IVA);
         
         TipoNegocioEnum tipoNegocioEnum =(TipoNegocioEnum) getCmbTipoNegocio().getSelectedItem();
         agregarParametro(ParametroCodefac.TIPO_NEGOCIO,(tipoNegocioEnum!=null)?tipoNegocioEnum.getLetra():null);

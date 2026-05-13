@@ -1,6 +1,6 @@
 # Codefac Lite Context
 
-Ultima actualizacion: 2026-04-27
+Ultima actualizacion: 2026-05-13
 
 ## Proposito del proyecto
 Codefac Lite es una plataforma modular orientada a operacion comercial y administrativa. El codigo evidencia un nucleo fuerte de:
@@ -144,6 +144,7 @@ Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(V
 - En cliente/CRM, el `PVP_DEFECTO` debe tratarse como alias persistido. La UI no debe asumir que el combo devuelve siempre `Producto.PrecioVenta`; puede venir como string persistido.
 - En nota de credito parcial sobre factura, para afectar inventario correctamente hay que preservar y reutilizar metadata de inventario del detalle original: presentacion, lote, `kardexId` e item especifico.
 - En la pantalla de facturacion, los cambios sobre combos declarados por GUI Builder deben reflejarse tanto en `FacturacionPanel.java` como en `FacturacionPanel.form`.
+- Proformas sin IVA: `ParametroCodefac.PROFORMA_GENERAR_SIN_IVA` permite generar nuevas proformas con detalles IVA 0 aunque el producto grave IVA; la marca historica se guarda en `Factura.PROFORMA_SIN_IVA`. Al convertir una proforma marcada sin IVA a factura se restaura IVA con `FacturaDetalle.invertirCalculoNVIaFactura(true)` para obtener base + IVA. Esta restauracion se dispara desde `cargarFacturaDesdeProforma(...)` cuando el destino explicito es factura, porque los flujos de carga directa pueden saltarse el listener del combo de documento.
 - Para evaluar consultas o UX pesada, `debug` no es una referencia fiable de rendimiento en este proyecto.
 
 ## Problemas recientes conocidos

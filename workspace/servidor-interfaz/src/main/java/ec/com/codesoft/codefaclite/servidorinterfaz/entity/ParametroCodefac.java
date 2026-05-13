@@ -328,6 +328,7 @@ public class ParametroCodefac implements Serializable {
     public static final String DOCUMENTO_GUIA_REMISION_DEFECTO = "documento_guia_remision_defecto";
     
     public static final String PROFORMA_FACTURAR_VARIAS_VECES="proforma_facturar_varias_veces";
+    public static final String PROFORMA_GENERAR_SIN_IVA="PROFORMA_GENERAR_SIN_IVA";
     
     public static final String NUMERO_DECIMAL_PRODUCTO = "numero_decimal_producto";
     
