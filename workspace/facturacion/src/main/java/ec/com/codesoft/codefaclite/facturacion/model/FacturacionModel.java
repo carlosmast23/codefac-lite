@@ -4412,18 +4412,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                                 {
                                     agregarIvaNVI=false;
                                 }
-                                
+
                                 //Cuando se tenga que agregar el iva no tiene que sumar el iva al subtotal
                                 if(!agregarIvaNVI)
-                                {                                                                        
-                                    if (!ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.NVI_TOTAL_CON_IVA, EnumSiNo.NO)) 
+                                {
+                                    if (!ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.NVI_TOTAL_CON_IVA, EnumSiNo.NO))
                                     {
                                         pvp=UtilidadesImpuestos.agregarValorIva(new BigDecimal(ivaPorcentaje),pvp);
                                     }
                                     //Todo: Solucion temporal para no volver a cargar de nuevo el iva del porcentaje
                                     ivaPorcentaje=0;
                                 }
-                                
+
+                            }
+                        }
+                        else if(documentoSeleccionado.equals(DocumentoEnum.PROFORMA))
+                        {
+                            if(ivaPorcentajeTmp>0)
+                            {
+                                Boolean proformaSinIva=ParametroUtilidades.comparar(ParametroCodefac.PROFORMA_GENERAR_SIN_IVA,EnumSiNo.SI,session.getParametrosCodefac());
+                                if(Boolean.TRUE.equals(proformaSinIva))
+                                {
+                                    ivaPorcentaje=0;
+                                }
                             }
                         }
                     }

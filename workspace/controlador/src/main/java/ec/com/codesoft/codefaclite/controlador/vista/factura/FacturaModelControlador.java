@@ -653,9 +653,8 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         }
         
         verificarProductoConNotaVentaInterna(facturaDetalle);
-        
+        verificarProductoConProformaSinIva(facturaDetalle);
 
-        
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
         setearValoresProducto(facturaDetalle);
@@ -798,6 +797,27 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         //producto.setValorUnitario(valorUnitario);
     
     }
+    public void verificarProductoConProformaSinIva(FacturaDetalle facturaDetalle)
+    {
+        DocumentoEnum documentoEnum = interfaz.obtenerDocumentoSeleccionado();
+        if(!DocumentoEnum.PROFORMA.equals(documentoEnum))
+        {
+            return;
+        }
+        if(facturaDetalle.getIvaPorcentaje() == null || facturaDetalle.getIvaPorcentaje() == 0)
+        {
+            return;
+        }
+        Boolean proformaSinIva = ParametroUtilidades.comparar(
+            ParametroCodefac.PROFORMA_GENERAR_SIN_IVA, EnumSiNo.SI, session.getParametrosCodefac());
+        if(Boolean.TRUE.equals(proformaSinIva))
+        {
+            facturaDetalle.setIvaPorcentaje(0);
+            facturaDetalle.setIva(BigDecimal.ZERO);
+            facturaDetalle.calcularTotalesDetallesFactura();
+        }
+    }
+
     public void verificarFacturaConNotaVentaInterna(Factura factura)
     {
         for (FacturaDetalle detalle : factura.getDetalles())

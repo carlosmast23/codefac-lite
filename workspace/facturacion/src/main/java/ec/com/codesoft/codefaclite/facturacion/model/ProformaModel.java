@@ -33,6 +33,7 @@ import ec.com.codesoft.codefaclite.facturacion.panel.FacturacionPanel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.MesEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import static ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO;
@@ -156,6 +157,9 @@ public class ProformaModel extends FacturacionModel{
                     validacionesGrabar(); //Metodo que realiza validaciones previas antes de grabar
                     FacturacionServiceIf servicio = ServiceFactory.getFactory().getFacturacionServiceIf();
                     setearValoresDefaultFactura(CrudEnum.CREAR);
+
+                    Boolean proformaSinIvaActivo=ParametroUtilidades.comparar(ParametroCodefac.PROFORMA_GENERAR_SIN_IVA,EnumSiNo.SI,session.getParametrosCodefac());
+                    factura.setProformaSinIvaEnum(Boolean.TRUE.equals(proformaSinIvaActivo)?EnumSiNo.SI:EnumSiNo.NO);
                     //factura.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
                     
                     Boolean enviarCorreo=getChkEnviarCorreo().isSelected();
