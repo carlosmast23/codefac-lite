@@ -429,6 +429,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
 
         controlador.verificarFacturaConNotaVentaInterna(factura);
+
+        DocumentoEnum documentoDestino = (documentoEnum != null) ? documentoEnum : obtenerDocumentoSeleccionado();
+        if (DocumentoEnum.FACTURA.equals(documentoDestino) && EnumSiNo.SI.equals(factura.getProformaSinIvaEnum())) {
+            controlador.invertirCalculoDetallesAFactura(factura, true);
+        }
+
         //Todo: revisar que el cambio sea correcto
         //Actualizo con los nuevo valores del cliente si se modifico y viene de un presupuesto
         //setearValoresCliente();
@@ -4659,11 +4665,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 agregarValorIva = true;
             }
             
-            for (FacturaDetalle detalle : factura.getDetalles()) 
-            {
-                //Hacer el calculo inverso asumiendo que en los productos que tiene IVA, ya esta agregado el iva en el valor Unitario
-                detalle.invertirCalculoNVIaFactura(agregarValorIva);
-            }
+            controlador.invertirCalculoDetallesAFactura(factura, agregarValorIva);
         }
         
     }

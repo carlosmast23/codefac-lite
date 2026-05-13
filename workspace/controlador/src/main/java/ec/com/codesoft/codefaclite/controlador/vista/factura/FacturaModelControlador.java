@@ -800,9 +800,19 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     }
     public void verificarFacturaConNotaVentaInterna(Factura factura)
     {
-        for (FacturaDetalle detalle : factura.getDetalles()) 
+        for (FacturaDetalle detalle : factura.getDetalles())
         {
             verificarFacturaDetalleConNotaVentaInterna(detalle);
+        }
+        factura.calcularTotalesDesdeDetalles();
+    }
+
+    public void invertirCalculoDetallesAFactura(Factura factura, boolean agregarValorIva)
+    {
+        for (FacturaDetalle detalle : factura.getDetalles())
+        {
+            detalle.invertirCalculoNVIaFactura(agregarValorIva);
+            detalle.calcularTotalesDetallesFactura();
         }
         factura.calcularTotalesDesdeDetalles();
     }

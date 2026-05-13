@@ -44,6 +44,13 @@ Actualizalos siempre que cambien de forma importante:
 - `workspace_app`: app Android/Gradle.
 - `workspace_movil`: workspace movil adicional/legado.
 
+## Principios de codigo
+
+- **Reutilizable antes que duplicado.** Cuando un bloque de logica aparece en dos sitios, o tiene probabilidad alta de aparecer, extraelo a un metodo en la capa correcta antes de que se duplique.
+- **La capa correcta para logica de calculo/transformacion de entidades es `FacturaModelControlador` (y sus equivalentes por modulo), no el Model de la pantalla.** El Model orquesta UI; el Controlador encapsula operaciones sobre el grafo de entidades.
+- **Patron establecido para invertir calculos de IVA sobre detalles:** usar `controlador.invertirCalculoDetallesAFactura(factura, agregarValorIva)` definido en `FacturaModelControlador`. Este metodo itera los detalles llamando `invertirCalculoNVIaFactura` + `calcularTotalesDetallesFactura` y luego `calcularTotalesDesdeDetalles`. No replicar ese loop directamente en el Model.
+- **Cuando se modifica `ivaPorcentaje` en un detalle, siempre llamar `calcularTotalesDetallesFactura()` inmediatamente despues.** `calcularTotalesDesdeDetalles` en `Factura` lee `totalFinal` del detalle para derivar el IVA del comprobante; si `totalFinal` esta desactualizado el IVA total queda en cero.
+
 ## Reglas de trabajo recomendadas
 - Prioriza `workspace/` salvo que la tarea apunte explicitamente a `workspace_app` o `workspace_movil`.
 - Sigue el flujo completo antes de cambiar logica: `Panel/Form` -> `Model/Controlador` -> `ServiceFactory/ServiceIf` -> `servidor/service` -> entidad/persistencia.
