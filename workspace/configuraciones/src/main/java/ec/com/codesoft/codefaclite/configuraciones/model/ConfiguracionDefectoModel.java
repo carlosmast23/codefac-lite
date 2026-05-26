@@ -30,6 +30,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModuloCodefacEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VisualizadorReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionIvaServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.SriRetencionRentaServiceIf;
@@ -189,6 +190,8 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbConfiguracionImpresora(),ConfiguracionImpresoraEnum.values());
         getCmbConfiguracionImpresora().setSelectedItem(ConfiguracionImpresoraEnum.NINGUNA);
+        UtilidadesComboBox.llenarComboBox(getCmbVisualizadorReporte(), VisualizadorReporteEnum.values());
+        getCmbVisualizadorReporte().setSelectedItem(VisualizadorReporteEnum.PERSONALIZADO_CODEFAC);
         
         UtilidadesComboBox.llenarComboBox(getCmbPrecioVentaDefecto(),Producto.PrecioVenta.getListadoPrecios());
         
@@ -559,6 +562,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroImpresoraTicketVenta = parametrosTodos.get(ParametroCodefac.IMPRESORA_TICKETS_VENTAS);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroImpresoraTicketVenta != null) ? parametroImpresoraTicketVenta.getValor() : null);
             getChkImpresoraTickets().setSelected((enumSiNo!=null)?enumSiNo.getBool():false);
+
+            parametro = parametrosTodos.get(ParametroCodefac.VISUALIZADOR_REPORTE);
+            VisualizadorReporteEnum visualizadorReporte = VisualizadorReporteEnum.buscarPorLetra((parametro != null) ? parametro.getValor() : null);
+            getCmbVisualizadorReporte().setSelectedItem((visualizadorReporte != null) ? visualizadorReporte : VisualizadorReporteEnum.PERSONALIZADO_CODEFAC);
             
             
             parametro = parametrosTodos.get(ParametroCodefac.VARIABLES_GENERAL_COMPROBANTES_ELECTRONICOS);
@@ -923,6 +930,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         ConfiguracionImpresoraEnum configuracionImpresoraEnum =(ConfiguracionImpresoraEnum) getCmbConfiguracionImpresora().getSelectedItem();
         agregarParametro(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA,configuracionImpresoraEnum.getLetra());
         agregarParametroEditar(ParametroCodefac.CONFIGURACION_IMPRESORA_FACTURA);
+
+        VisualizadorReporteEnum visualizadorReporteEnum = (VisualizadorReporteEnum) getCmbVisualizadorReporte().getSelectedItem();
+        agregarParametro(ParametroCodefac.VISUALIZADOR_REPORTE, (visualizadorReporteEnum != null) ? visualizadorReporteEnum.getLetra() : VisualizadorReporteEnum.PERSONALIZADO_CODEFAC.getLetra());
+        agregarParametroEditar(ParametroCodefac.VISUALIZADOR_REPORTE);
         
         String pvpDefecto =(String) getCmbPrecioVentaDefecto().getSelectedItem();
         agregarParametro(ParametroCodefac.PRECIO_VENTA_DEFECTO,pvpDefecto);

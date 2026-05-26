@@ -1285,7 +1285,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         panelDatosLavado.add(jLabel49, gridBagConstraints);
 
-        cmbLavadoDiaEntrega.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes" }));
+        cmbLavadoDiaEntrega.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado", "Domingo" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;

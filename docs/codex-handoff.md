@@ -21,6 +21,7 @@ Ultima actualizacion: 2026-05-13
 - En nota de credito parcial, el retorno de inventario depende de copiar correctamente metadata del detalle de factura original y de reactivar items especificos cuando aplique.
 - En facturacion, se agrego la opcion `Cliente Recurrente` en `Origen de Venta`; al tocar ese combo hay que mantener `FacturacionPanel.java` y `FacturacionPanel.form` sincronizados.
 - En facturacion/proforma se agrego el parametro `PROFORMA_GENERAR_SIN_IVA` y el campo `Factura.PROFORMA_SIN_IVA`. Si una proforma se genero sin IVA y luego se convierte a factura, se reutiliza `FacturaDetalle.invertirCalculoNVIaFactura(true)` para restaurar el IVA del catalogo y facturar como base + impuesto. La carga directa desde proforma debe recalcular desde `cargarFacturaDesdeProforma(...)`, porque algunos flujos actualizan el combo sin listener.
+- Visor de reportes Jasper: se agrego `ParametroCodefac.VISUALIZADOR_REPORTE` y `VisualizadorReporteEnum` para elegir entre el visor personalizado de Codefac y el visor estandar de Jasper/JRViewer. La opcion esta en Configuraciones por Defecto -> Ventas -> Visualizador de Reportes; por defecto queda `Personalizado Codefac` para no cambiar comportamiento existente.
 - El nombre estandar de productos con variante es `Producto [talla X color Y]`, construido desde `Variante.construirNombreConVariante(...)` o `Kardex.obtenerDescripcionConVariante(...)`. Ya se aplica en busqueda de facturacion, detalle de factura y stock reporte. Por ahora es solo visual: no se amplio la busqueda por talla/color.
 - Al editar un producto, `ProductoService.editarProducto(...)` sincroniza variantes con kardex: activa/crea kardex para variantes activas y desactiva logicamente kardex producto+variante cuando la variante se marca eliminada.
 
@@ -36,6 +37,7 @@ Ultima actualizacion: 2026-05-13
   - Derby embebido puede fallar si otra instancia esta usando la base
   - compilacion Maven puede fallar por metadata local danada aunque el codigo este bien
   - hasta reparar `.m2`, no intentar validar cambios con Maven: actualmente falla antes de compilar por `maven-metadata-local.xml` corrupto en snapshots locales como `mavenCodefacLite` y `utilidades`
+  - el reactor completo puede avanzar mas, pero al forzar recompilacion tambien se observo `javac: invalid target release: 1.8`; revisar JAVA_HOME/Maven antes de tomarlo como error de codigo
 
 ## Proximos focos recomendados
 - Optimizar la busqueda de cliente:

@@ -145,6 +145,7 @@ Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(V
 - En nota de credito parcial sobre factura, para afectar inventario correctamente hay que preservar y reutilizar metadata de inventario del detalle original: presentacion, lote, `kardexId` e item especifico.
 - En la pantalla de facturacion, los cambios sobre combos declarados por GUI Builder deben reflejarse tanto en `FacturacionPanel.java` como en `FacturacionPanel.form`.
 - Proformas sin IVA: `ParametroCodefac.PROFORMA_GENERAR_SIN_IVA` permite generar nuevas proformas con detalles IVA 0 aunque el producto grave IVA; la marca historica se guarda en `Factura.PROFORMA_SIN_IVA`. Al convertir una proforma marcada sin IVA a factura se restaura IVA con `FacturaDetalle.invertirCalculoNVIaFactura(true)` para obtener base + IVA. Esta restauracion se dispara desde `cargarFacturaDesdeProforma(...)` cuando el destino explicito es factura, porque los flujos de carga directa pueden saltarse el listener del combo de documento.
+- Visor de reportes Jasper: `ParametroCodefac.VISUALIZADOR_REPORTE` permite alternar entre `VisualizadorReporteEnum.PERSONALIZADO_CODEFAC` y `ESTANDAR_JASPER`. El valor por defecto es personalizado para preservar el comportamiento existente; si el boton pequeno de impresora del visor personalizado da problemas, cambiarlo en Configuraciones por Defecto -> Ventas -> Visualizador de Reportes a `Estandar Jasper`.
 - Para evaluar consultas o UX pesada, `debug` no es una referencia fiable de rendimiento en este proyecto.
 
 ## Problemas recientes conocidos
@@ -152,7 +153,7 @@ Agregar dentro del `CREATE TABLE` existente con comentario `/*@AGREGAR_COLUMNA(V
   - `workspace/controlador/src/main/java/ec/com/codesoft/codefaclite/controlador/aplicacion/dialog/busqueda/ClienteEstablecimientoBusquedaDialogo.java`
   - combinacion de `SELECT DISTINCT`, `LEFT JOIN u.persona.estudiantes e`, muchos `LOWER(...) LIKE` y `Persona.estudiantes` en `FetchType.EAGER`
 - Riesgo de arranque Derby si ya existe otra instancia usando la base embebida. `Main` y `AbstractFacade` ya contienen manejo para errores tipicos `XSDB6` / `XJ040`.
-- Problemas de compilacion pueden venir de cache local Maven danada, no necesariamente del repo. Estado actual: no intentar validar con Maven hasta limpiar/reparar metadata local en `.m2` (`maven-metadata-local.xml` de snapshots como `mavenCodefacLite` y `utilidades`); Maven falla antes de compilar codigo.
+- Problemas de compilacion pueden venir de cache local Maven danada, no necesariamente del repo. Estado actual: no intentar validar con Maven hasta limpiar/reparar metadata local en `.m2` (`maven-metadata-local.xml` de snapshots como `mavenCodefacLite` y `utilidades`); Maven falla antes de compilar codigo en compiles por modulo. En el reactor completo tambien puede fallar al recompilar con `javac: invalid target release: 1.8` por la configuracion local del JDK/Maven.
 - El uso de valores string de negocio en combos y parametros sigue siendo una fuente de fragilidad.
 
 ## Proximos focos recomendados

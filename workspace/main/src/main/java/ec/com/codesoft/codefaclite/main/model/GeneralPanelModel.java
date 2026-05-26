@@ -84,6 +84,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.AccesoDirecto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VisualizadorReporteEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AccesoDirectoServiceIf;
 import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.ParametroCodefacServiceIf;
@@ -2976,8 +2977,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     
     @Override
     public void crearReportePantalla(JasperPrint jasperPrint,String nombrePantalla,ConfiguracionImpresoraEnum configuracionImpresora) {
-        //JRViewer viewer=new  JRViewer(jasperPrint);
-        JRViewer viewer=new VisualizadorJRViewer(jasperPrint);
+        JRViewer viewer = crearVisualizadorReporte(jasperPrint);
         viewer.setZoomRatio(0.6f);
         
         
@@ -3116,6 +3116,19 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         agregarVentanaAbierta(internal,true);
         //getjMenuVentanasActivas().add(internal);as
         //asdasd
+    }
+
+    private JRViewer crearVisualizadorReporte(JasperPrint jasperPrint) {
+        VisualizadorReporteEnum visualizador = ParametroUtilidades.obtenerValorParametroEnum(
+                sessionCodefac.getEmpresa(),
+                ParametroCodefac.VISUALIZADOR_REPORTE,
+                VisualizadorReporteEnum.PERSONALIZADO_CODEFAC);
+
+        if (visualizador == null || visualizador.equals(VisualizadorReporteEnum.PERSONALIZADO_CODEFAC)) {
+            return new VisualizadorJRViewer(jasperPrint);
+        }
+
+        return new JRViewer(jasperPrint);
     }
 
     /**

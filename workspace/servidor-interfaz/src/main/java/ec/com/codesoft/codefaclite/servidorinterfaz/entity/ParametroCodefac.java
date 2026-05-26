@@ -219,6 +219,7 @@ public class ParametroCodefac implements Serializable {
     public static final String DATOS_COMPARTIDOS_EMPRESA="datos_compartidos_empresa";
     
     public static final String CONFIGURACION_IMPRESORA_FACTURA="config_impresora_factura";
+    public static final String VISUALIZADOR_REPORTE="visualizador_reporte";
     
     public static final String PRECIO_VENTA_DEFECTO="precio_venta_defecto";
     

@@ -21,6 +21,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.RideNombrePrincipalEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoNegocioEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VisualizadorReporteEnum;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -171,6 +172,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         txtAjustarMargenTicket = new javax.swing.JSpinner();
         jLabel126 = new javax.swing.JLabel();
         txtValorMinimoSorteo = new javax.swing.JSpinner();
+        lblVisualizadorReporte = new javax.swing.JLabel();
+        cmbVisualizadorReporte = new javax.swing.JComboBox<>();
         jPanel15 = new javax.swing.JPanel();
         jLabel22 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
@@ -1292,6 +1295,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(txtValorMinimoSorteo, gridBagConstraints);
+
+        lblVisualizadorReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblVisualizadorReporte.setText("Visualizador de Reportes:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(lblVisualizadorReporte, gridBagConstraints);
+
+        cmbVisualizadorReporte.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbVisualizadorReporte, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2835,6 +2855,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumento;
     private javax.swing.JComboBox<TipoDocumentoEnum> cmbTipoDocumentoCompra;
     private javax.swing.JComboBox<TipoNegocioEnum> cmbTipoNegocio;
+    private javax.swing.JComboBox<VisualizadorReporteEnum> cmbVisualizadorReporte;
     private javax.swing.JComboBox<EnumSiNo> cmbVendedorObligatorioVenta;
     private javax.swing.JComboBox<EnumSiNo> cmbVentaProductoModoDescuento;
     private javax.swing.JComboBox<EnumSiNo> cmbVentanasMultiples;
@@ -3006,6 +3027,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel lblEspacioBlanco2;
     private javax.swing.JLabel lblEspacioVertical;
     private javax.swing.JLabel lblEspacioVertical1;
+    private javax.swing.JLabel lblVisualizadorReporte;
     private javax.swing.JLabel lblMensaje;
     private javax.swing.JSpinner txtAjustarMargenTicket;
     private javax.swing.JSpinner txtAlertaDiasPorCaducarProducto;
@@ -3237,6 +3259,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbConfiguracionImpresora(JComboBox<ConfiguracionImpresoraEnum> cmbConfiguracionImpresora) {
         this.cmbConfiguracionImpresora = cmbConfiguracionImpresora;
+    }
+
+    public JComboBox<VisualizadorReporteEnum> getCmbVisualizadorReporte() {
+        return cmbVisualizadorReporte;
+    }
+
+    public void setCmbVisualizadorReporte(JComboBox<VisualizadorReporteEnum> cmbVisualizadorReporte) {
+        this.cmbVisualizadorReporte = cmbVisualizadorReporte;
     }
 
     public JComboBox<SriFormaPago> getCmbFormaPagoDefecto() {
