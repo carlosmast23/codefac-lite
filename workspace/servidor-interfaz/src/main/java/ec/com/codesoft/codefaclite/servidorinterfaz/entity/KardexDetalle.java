@@ -106,6 +106,12 @@ public class KardexDetalle implements Serializable {
     
     @Column(name = "COSTO_PERSONALIZADO")
     private BigDecimal costoPersonalizado;
+
+    /**
+     * Porcentaje de IVA de la compra de origen. Solo se usa en memoria para el cálculo del costo con IVA.
+     */
+    @jakarta.persistence.Transient
+    private Integer ivaPorcentaje;
     
     /**
      * Variable para almacenar el tipo de documento de la referencia para luego poder hacar una consulta
@@ -315,6 +321,14 @@ public class KardexDetalle implements Serializable {
 
     public void setCostoPersonalizado(BigDecimal costoPersonalizado) {
         this.costoPersonalizado = costoPersonalizado;
+    }
+
+    public Integer getIvaPorcentaje() {
+        return ivaPorcentaje;
+    }
+
+    public void setIvaPorcentaje(Integer ivaPorcentaje) {
+        this.ivaPorcentaje = ivaPorcentaje;
     }
 
     public BigDecimal getReserva() {

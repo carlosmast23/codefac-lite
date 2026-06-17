@@ -14,7 +14,9 @@ import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.NombreCampoAgrupadoIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -99,8 +101,11 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     protected String credito;
     
     protected String componenteProducto;
-    
+
     protected String porcentajeIva;
+
+    private Map<String, String> datosAdicionalesMap;
+    private List<String> camposAdicionalesOrden;
     
     public ReporteFacturaData() {
     }
@@ -500,6 +505,22 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         this.presentacionProducto = presentacionProducto;
     }
 
+    public Map<String, String> getDatosAdicionalesMap() {
+        return datosAdicionalesMap;
+    }
+
+    public void setDatosAdicionalesMap(Map<String, String> datosAdicionalesMap) {
+        this.datosAdicionalesMap = datosAdicionalesMap;
+    }
+
+    public List<String> getCamposAdicionalesOrden() {
+        return camposAdicionalesOrden;
+    }
+
+    public void setCamposAdicionalesOrden(List<String> camposAdicionalesOrden) {
+        this.camposAdicionalesOrden = camposAdicionalesOrden;
+    }
+
     
     
     
@@ -560,7 +581,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
         tiposDatos.add(new TipoDato(this.porcentajeIva, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.codigoProducto, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.presentacionProducto, Excel.TipoDataEnum.TEXTO));
-        
+
+        if (camposAdicionalesOrden != null) {
+            for (String campo : camposAdicionalesOrden) {
+                String valor = (datosAdicionalesMap != null) ? datosAdicionalesMap.getOrDefault(campo, "") : "";
+                tiposDatos.add(new TipoDato(valor, Excel.TipoDataEnum.TEXTO));
+            }
+        }
+
         return tiposDatos;
     }
     

@@ -378,6 +378,11 @@ public class ParametroCodefac implements Serializable {
      * Calcular la utilidad de con el ultimo costo y no con el costo promedio
      */
     public static final String CALCULAR_UTILIDAD_ULTIMO_COSTO="calcular_utilidad_ultimo_costo";
+
+    /**
+     * Permite incluir el IVA de la compra al momento de calcular el costo promedio del kardex
+     */
+    public static final String CALCULAR_COSTO_CON_IVA="calcular_costo_con_iva";
     
     /**
      * Mostrar precios con iva en las pantallas

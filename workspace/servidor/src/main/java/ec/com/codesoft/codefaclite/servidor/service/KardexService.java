@@ -860,6 +860,14 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardex.setPrecioUltimo(kardex.getPrecioUltimo().setScale(4, RoundingMode.HALF_UP));
                 }
 
+                //Aplicar IVA al precioUltimo si el parametro esta activado
+                if(kardex.getPrecioUltimo()!=null
+                        && ParametroUtilidades.comparar(kardex.getProducto().getEmpresa(), ParametroCodefac.CALCULAR_COSTO_CON_IVA, EnumSiNo.SI)
+                        && kardexDetalle.getIvaPorcentaje() != null && kardexDetalle.getIvaPorcentaje() > 0)
+                {
+                    kardex.setPrecioUltimo(aplicarIva(kardex.getPrecioUltimo(), kardexDetalle.getIvaPorcentaje()));
+                }
+
                 //System.out.println(kardex.getCostoPromedio());
                 //System.out.println(kardexDetalle.obtenerPrecioUnitarioConDescuento());
                 
@@ -869,15 +877,22 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardex.setCostoPromedio(BigDecimal.ZERO);
                 }
 
+                BigDecimal precioEfectivoParaCosto = kardexDetalle.obtenerPrecioUnitarioConDescuento();
+                if(ParametroUtilidades.comparar(kardex.getProducto().getEmpresa(), ParametroCodefac.CALCULAR_COSTO_CON_IVA, EnumSiNo.SI)
+                        && kardexDetalle.getIvaPorcentaje() != null && kardexDetalle.getIvaPorcentaje() > 0)
+                {
+                    precioEfectivoParaCosto = aplicarIva(precioEfectivoParaCosto, kardexDetalle.getIvaPorcentaje());
+                }
+
                 //Calcular el precio promedio con respecto al nuevo valor
                 if(kardex.getCostoPromedio().compareTo(BigDecimal.ZERO)>0)
                 {
-                    costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle);
-                    kardex.setCostoPromedio(costoPonderado);            
+                    costoPonderado=calcularPrecioPonderado(kardex,kardexDetalle,precioEfectivoParaCosto);
+                    kardex.setCostoPromedio(costoPonderado);
                 }
                 else
                 {
-                    kardex.setCostoPromedio(kardexDetalle.obtenerPrecioUnitarioConDescuento());
+                    kardex.setCostoPromedio(precioEfectivoParaCosto);
                 }
             }
             else
@@ -932,13 +947,22 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         
     }
     
+    private BigDecimal aplicarIva(BigDecimal precio, Integer ivaPorcentaje)
+    {
+        BigDecimal factorIva = new BigDecimal(ivaPorcentaje.toString())
+                .divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP)
+                .add(BigDecimal.ONE);
+        return precio.multiply(factorIva).setScale(4, RoundingMode.HALF_UP);
+    }
+
     /**
      * Formula general para calcular el precio ponderado del producto
      * @param kardex
      * @param kardexDetalle
-     * @return 
+     * @param precioEfectivo precio ya con descuento e IVA aplicados
+     * @return
      */
-    private BigDecimal calcularPrecioPonderado(Kardex kardex,KardexDetalle kardexDetalle)
+    private BigDecimal calcularPrecioPonderado(Kardex kardex,KardexDetalle kardexDetalle,BigDecimal precioEfectivo)
     {
         /**
          * =================> VALIDACIONES PARA EVITAR ERROES <===============
@@ -960,7 +984,7 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         BigDecimal costoPonderado=kardex.getCostoPromedio();
         
         BigDecimal cantidadUnitaria=kardexDetalle.getCantidad();
-        BigDecimal precioUnitario=kardexDetalle.obtenerPrecioUnitarioConDescuento();
+        BigDecimal precioUnitario=precioEfectivo;
         
         //Primero calculo el numerador 
         BigDecimal resultadoCosto= costoPonderado.multiply(stock).add(precioUnitario.multiply(cantidadUnitaria));

@@ -151,7 +151,8 @@ public class FacturaReporteModel extends FacturaReportePanel {
 
         controladorReporte.setPuntoEmision(puntoEmisionReporte);
         controladorReporte.setAgregarCostos(getChkAgregarCostos().isSelected());
-        
+        controladorReporte.setAgregarDatosAdicionales(getChkAgregarDatosAdicionales().isSelected());
+
         controladorReporte.setProductoFiltro(productoFiltro);
         controladorReporte.setCategoriaFiltro(categoriaFiltro);
         controladorReporte.setResponsableFiltro((Empleado) getCmbResponsable().getSelectedItem());
@@ -404,7 +405,13 @@ public class FacturaReporteModel extends FacturaReportePanel {
         titulos.add(3,"Producto");
         titulos.add(4,"Cant Producto");
         //}
-        
+
+        if (controladorReporte != null && Boolean.TRUE.equals(controladorReporte.getAgregarDatosAdicionales())) {
+            for (String campo : controladorReporte.getCamposAdicionalesUnicos()) {
+                titulos.add(titulos.size(), campo);
+            }
+        }
+
         return titulos;
     }
     

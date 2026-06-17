@@ -327,7 +327,8 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
             {
                 kardexDetalle.setPrecioUnitario(detalle.getPrecioUnitario());
             }
-            
+
+            kardexDetalle.setIvaPorcentaje(detalle.getIvaPorcentaje());
             kardexDetalle.lote=detalle.getLote();
             
             kardexDetalle.seleccion=true;

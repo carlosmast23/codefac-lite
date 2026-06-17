@@ -46,6 +46,11 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.WebServiceException;
 import org.jfree.util.Log;
 
@@ -73,6 +78,49 @@ public class ServicioSri {
     //private String uri="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     private String uri_recepcion;
     private String uri_autorizacion;
+
+    static {
+        configurarSslSri();
+    }
+
+    /**
+     * El SRI redirige sus endpoints HTTPS a IPs (ej: 181.113.227.222). El certificado
+     * esta emitido para el dominio sri.gob.ec, no para la IP, por lo que Java rechaza
+     * la conexion despues del redirect. Este verifier acepta la IP si el certificado
+     * del servidor pertenece al dominio sri.gob.ec.
+     */
+    private static void configurarSslSri() {
+        // Fuerza TLS 1.2: Java 8 negocia TLS 1.0 por defecto y el SRI puede rechazar la conexion
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            sslContext.init(null, null, null);
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+        } catch (Exception e) {
+            Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING, "No se pudo configurar TLSv1.2 para conexiones SRI", e);
+        }
+
+        final HostnameVerifier verifierOriginal = HttpsURLConnection.getDefaultHostnameVerifier();
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                if (hostname.matches("^\\d+\\.\\d+\\.\\d+\\.\\d+$")) {
+                    try {
+                        java.security.cert.Certificate[] certs = session.getPeerCertificates();
+                        if (certs.length > 0 && certs[0] instanceof java.security.cert.X509Certificate) {
+                            java.security.cert.X509Certificate x509 = (java.security.cert.X509Certificate) certs[0];
+                            String cn = x509.getSubjectX500Principal().getName();
+                            if (cn.contains("sri.gob.ec")) {
+                                return true;
+                            }
+                        }
+                    } catch (Exception e) {
+                        Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING, "No se pudo verificar certificado SRI en IP: " + hostname, e);
+                    }
+                }
+                return verifierOriginal.verify(hostname, session);
+            }
+        });
+    }
     
     private RecepcionComprobantesOfflineService servicio;
     private AutorizacionComprobantesOfflineService servicioAutorizacion;
@@ -178,15 +226,17 @@ public class ServicioSri {
     public boolean verificarConexionAutorizar()
     {
         try {
-            URL url = new URL(uri_autorizacion);
+            // Carga el WSDL desde el classpath para evitar el problema SSL del SRI
+            // (el servidor SRI redirige a una IP cuyo certificado no tiene ese IP como SAN)
+            URL wsdlUrl = ServicioSri.class.getClassLoader().getResource("META-INF/wsdl/AutorizacionComprobantesOffline.wsdl");
+            if (wsdlUrl == null) {
+                Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, "No se encontro el WSDL de autorizacion en el classpath");
+                return false;
+            }
             QName qname = new QName(namespaceAutorizarURI,localPortAutorizacion);
-            servicioAutorizacion=new AutorizacionComprobantesOfflineService(url,qname);
+            servicioAutorizacion = new AutorizacionComprobantesOfflineService(wsdlUrl, qname);
             System.out.println("si existe servicio con sri autorizacion");
             return true;
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("no existe servicio");
-            return false;
         } catch(javax.xml.ws.WebServiceException ex)
         {
             Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,12 +288,21 @@ public class ServicioSri {
                 //todo: mejorar esta parte para tener clasificados mensajes y esos código del sri
                 //nota: 70-CLAVE DE ACCESO EN PROCESAMIENTO -La clave de acceso 1902202601239005588100110011000000144760000000017  esta en procesamiento VALOR DEVUELTO POR EL PROCEDIMIENTO: SI
                 if ("DEVUELTA".equals(estado)) {
-                    //hacer una verificación adicional porque el Sri manda con código 70 diciendo si esta procesando en este momento
-                    if (mensajes != null && !mensajes.isEmpty() && "70".equals(mensajes.get(0).getIdentificador())) {
+                    String identificador = (mensajes != null && !mensajes.isEmpty()) ? mensajes.get(0).getIdentificador() : null;
+                    String mensajeSri = (mensajes != null && !mensajes.isEmpty()) ? mensajes.get(0).getMensaje() : "";
+
+                    if ("70".equals(identificador)) {
                         Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING, "CLAVE DE ACCESO EN PROCESAMIENTO, el Sri esta procesando y se esta demorando pero el procesa sigue en marcha de forma correcta");
                         return true;
+                    } else if (mensajeSri != null && mensajeSri.toUpperCase().contains("CLAVE ACCESO REGISTRADA")) {
+                        // El SRI ya tiene el comprobante de un envio anterior sin respuesta.
+                        // No es rechazo: se continua a ETAPA_AUTORIZAR para consultar su estado.
+                        Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING,
+                            "SRI responde CLAVE ACCESO REGISTRADA (identificador={0}, info={1}). Se procede a consultar autorizacion.",
+                            new Object[]{identificador, mensajes.get(0).getInformacionAdicional()});
+                        return true;
                     } else {
-                        //Si no es ninguno de los 2 estados asumo que es un error del Sri
+                        //Si no es ninguno de los casos anteriores asumo que es un error del Sri
                         throw new ComprobanteElectronicoException(mensajes.get(0).getMensaje()+": "+mensajes.get(0).getInformacionAdicional(), "Rechazado Sri", ComprobanteElectronicoException.RECHAZADO,CARPETA_FIRMADOS_SIN_ENVIAR);
                     }
 
@@ -339,6 +398,11 @@ public class ServicioSri {
        if(verificarConexionAutorizar())
        {
            AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
+           // Sobreescribe el endpoint para soportar modo prueba/produccion
+           // (el WSDL local tiene la URL de produccion; hay que apuntar al correcto segun configuracion)
+           ((BindingProvider) port).getRequestContext().put(
+               BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+               uri_autorizacion.replace("?wsdl", ""));
            for(int i=0;i<INTENTOS_AUTORIZACION;i++)
            {
                
@@ -377,13 +441,18 @@ public class ServicioSri {
                            
                        }
                    }
+               } catch (ComprobanteElectronicoException ex) {
+                   throw ex;
                } catch (InterruptedException ex) {
                    Logger.getLogger(ServicioSri.class.getName()).log(Level.SEVERE, null, ex);
                    throw new ComprobanteElectronicoException(ex.getMessage()," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
-               } catch (Exception ex)
-               {
-                   ex.printStackTrace();
-                   throw new ComprobanteElectronicoException(ex.getMessage()," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+               } catch (Exception ex) {
+                   // Error de red (Connection reset, timeout, etc.) - reintenta hasta agotar intentos
+                   Logger.getLogger(ServicioSri.class.getName()).log(Level.WARNING, "Error de red autorizando (intento "+(i+1)+" de "+INTENTOS_AUTORIZACION+"): "+ex.getMessage());
+                   if (i + 1 >= INTENTOS_AUTORIZACION) {
+                       throw new ComprobanteElectronicoException(ex.getMessage()," Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
+                   }
+                   try { Thread.sleep(TIEMPO_ESPERA_AUTORIZACION); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
                }
            }
            
@@ -420,6 +489,9 @@ public class ServicioSri {
            {
                try {
                    AutorizacionComprobantesOffline port= servicioAutorizacion.getAutorizacionComprobantesOfflinePort();
+                   ((BindingProvider) port).getRequestContext().put(
+                       BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                       uri_autorizacion.replace("?wsdl", ""));
                    RespuestaLote respuesta=port.autorizacionComprobanteLote(claveAcceso);
                    autorizaciones=respuesta.getAutorizaciones().getAutorizacion();
                    if(autorizaciones.size()==0)

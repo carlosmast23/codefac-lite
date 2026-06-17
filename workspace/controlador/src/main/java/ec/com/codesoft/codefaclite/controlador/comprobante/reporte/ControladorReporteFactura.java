@@ -20,6 +20,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empleado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -95,6 +97,8 @@ public class ControladorReporteFactura {
     private List<Factura> datafact;
     
     private Boolean agregarCostos;
+    private Boolean agregarDatosAdicionales;
+    private List<String> camposAdicionalesUnicos;
     private Producto productoFiltro;
     private CategoriaProducto categoriaFiltro;
     private Empleado responsableFiltro;
@@ -108,14 +112,18 @@ public class ControladorReporteFactura {
         this.data = new ArrayList<ReporteFacturaData>();
         this.reporteConDetallesFactura=false;
         this.agregarCostos=false;
+        this.agregarDatosAdicionales=false;
+        this.camposAdicionalesUnicos=new ArrayList<>();
     }
-    
+
     public ControladorReporteFactura(Empresa empresa, Usuario usuario){
         this.empresa = empresa;
         this.usuario = usuario;
         this.data = new ArrayList<ReporteFacturaData>();
         this.reporteConDetallesFactura=false;
         this.agregarCostos=false;
+        this.agregarDatosAdicionales=false;
+        this.camposAdicionalesUnicos=new ArrayList<>();
     }
     
     
@@ -135,6 +143,8 @@ public class ControladorReporteFactura {
         this.sucursal=sucursal;
         this.reporteConDetallesFactura=false;
         this.agregarCostos=false;
+        this.agregarDatosAdicionales=false;
+        this.camposAdicionalesUnicos=new ArrayList<>();
     }
     
     /**
@@ -186,7 +196,22 @@ public class ControladorReporteFactura {
             {
                 mapCostos=fs.obtenerCostoFacturas(datafact);
             }
-            
+
+            camposAdicionalesUnicos = new ArrayList<>();
+            if (agregarDatosAdicionales) {
+                LinkedHashSet<String> camposSet = new LinkedHashSet<>();
+                for (Factura f : datafact) {
+                    if (f.getDatosAdicionales() != null) {
+                        for (FacturaAdicional da : f.getDatosAdicionales()) {
+                            if (da.getCampo() != null && !da.getCampo().isEmpty()) {
+                                camposSet.add(da.getCampo());
+                            }
+                        }
+                    }
+                }
+                camposAdicionalesUnicos.addAll(camposSet);
+            }
+
             /**
              * =====================================================================
              *          SERVICIO PARA BUSCAR LAS NOTAS DE CREDITO SEGUN LOS FILTROS
@@ -362,6 +387,18 @@ public class ControladorReporteFactura {
                         reporteData.setRuta((factura.getRutaNombre()!=null)?factura.getRutaNombre():"");
                         //TipoDocumentoEnum tipoDocumentoEnum=factura.getCodigoTipoDocumentoEnum();
                         reporteData.setTipoDocumento((factura.getNombreTipoDocumento()!=null)?factura.getNombreTipoDocumento():"");
+                        if (agregarDatosAdicionales) {
+                            Map<String, String> datosMap = new HashMap<>();
+                            if (factura.getDatosAdicionales() != null) {
+                                for (FacturaAdicional da : factura.getDatosAdicionales()) {
+                                    if (da.getCampo() != null) {
+                                        datosMap.put(da.getCampo(), da.getValor() != null ? da.getValor() : "");
+                                    }
+                                }
+                            }
+                            reporteData.setDatosAdicionalesMap(datosMap);
+                            reporteData.setCamposAdicionalesOrden(camposAdicionalesUnicos);
+                        }
                         if(!UtilidadesTextos.verificarNullOVacio(preimpresoNotaCreditoAfecta))
                         {
                             reporteData.setEstadoFactura("Anulado N/C");
@@ -1190,6 +1227,18 @@ public class ControladorReporteFactura {
 
     public void setAgregarCostos(Boolean agregarCostos) {
         this.agregarCostos = agregarCostos;
+    }
+
+    public Boolean getAgregarDatosAdicionales() {
+        return agregarDatosAdicionales;
+    }
+
+    public void setAgregarDatosAdicionales(Boolean agregarDatosAdicionales) {
+        this.agregarDatosAdicionales = agregarDatosAdicionales;
+    }
+
+    public List<String> getCamposAdicionalesUnicos() {
+        return camposAdicionalesUnicos;
     }
 
     public Producto getProductoFiltro() {

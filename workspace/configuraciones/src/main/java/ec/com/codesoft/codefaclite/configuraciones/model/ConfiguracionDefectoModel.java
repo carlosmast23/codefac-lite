@@ -238,6 +238,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         UtilidadesComboBox.llenarComboBox(getCmbAdvertenciaActualizarCostos(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbBuscadorSoloInventario(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalculaDescuentoCostos(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbCalcularCostoConIva(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalcularUtilidadUltimoCosto(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbMostrarPreciosConIva(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbRecalcularPrecioPorcentaje(),EnumSiNo.values());
@@ -771,7 +772,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroCalcularDescuentoCosto = parametrosTodos.get(ParametroCodefac.CALCULAR_DESCUENTO_COSTO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroCalcularDescuentoCosto != null) ? parametroCalcularDescuentoCosto.getValor() : null);
             getCmbCalculaDescuentoCostos().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
-            
+
+            ParametroCodefac parametroCalcularCostoConIva = parametrosTodos.get(ParametroCodefac.CALCULAR_COSTO_CON_IVA);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroCalcularCostoConIva != null) ? parametroCalcularCostoConIva.getValor() : null);
+            getCmbCalcularCostoConIva().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
+
             ParametroCodefac parametroCalcularUtilidadUltimoCosto = parametrosTodos.get(ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroCalcularUtilidadUltimoCosto != null) ? parametroCalcularUtilidadUltimoCosto.getValor() : null);
             getCmbCalcularUtilidadUltimoCosto().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
@@ -1081,7 +1086,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbCalculaDescuentoCostos().getSelectedItem();
         agregarParametro(ParametroCodefac.CALCULAR_DESCUENTO_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.CALCULAR_DESCUENTO_COSTO);
-        
+
+        enumSiNo = (EnumSiNo) getCmbCalcularCostoConIva().getSelectedItem();
+        agregarParametro(ParametroCodefac.CALCULAR_COSTO_CON_IVA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.CALCULAR_COSTO_CON_IVA);
+
         enumSiNo = (EnumSiNo) getCmbCalcularUtilidadUltimoCosto().getSelectedItem();
         agregarParametro(ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.CALCULAR_UTILIDAD_ULTIMO_COSTO);

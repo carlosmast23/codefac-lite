@@ -83,6 +83,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         chkAfectaNotaDebito = new javax.swing.JCheckBox();
         chkAfectaNotaCredito = new javax.swing.JCheckBox();
         chkAgregarCostos = new javax.swing.JCheckBox();
+        chkAgregarDatosAdicionales = new javax.swing.JCheckBox();
         lblReferido = new javax.swing.JLabel();
         txtReferido = new javax.swing.JTextField();
         btnBuscarReferido = new javax.swing.JButton();
@@ -468,6 +469,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         panelOpciones.add(chkAgregarCostos, gridBagConstraints);
 
+        chkAgregarDatosAdicionales.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        chkAgregarDatosAdicionales.setText("Agregar Datos Adicionales");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        panelOpciones.add(chkAgregarDatosAdicionales, gridBagConstraints);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 0;
@@ -851,6 +860,7 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
     private javax.swing.JCheckBox chkAfectaNotaCredito;
     private javax.swing.JCheckBox chkAfectaNotaDebito;
     private javax.swing.JCheckBox chkAgregarCostos;
+    private javax.swing.JCheckBox chkAgregarDatosAdicionales;
     private javax.swing.JCheckBox chkPuntoEmisionTodos;
     private javax.swing.JCheckBox chkReporteAgrupadoReferido;
     private javax.swing.JCheckBox chkSucursalTodos;
@@ -1114,6 +1124,14 @@ public abstract class FacturaReportePanel extends ControladorCodefacInterface {
 
     public void setChkAgregarCostos(JCheckBox chkAgregarCostos) {
         this.chkAgregarCostos = chkAgregarCostos;
+    }
+
+    public JCheckBox getChkAgregarDatosAdicionales() {
+        return chkAgregarDatosAdicionales;
+    }
+
+    public void setChkAgregarDatosAdicionales(JCheckBox chkAgregarDatosAdicionales) {
+        this.chkAgregarDatosAdicionales = chkAgregarDatosAdicionales;
     }
 
     public JButton getBtnBuscarProducto() {
