@@ -502,7 +502,7 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="17">
+		<band height="31">
 			<textField isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="89" y="5" width="34" height="12" backcolor="#E3E3E3" uuid="2d6b6a10-679d-437e-9599-e07fc84c2f28"/>
 				<box>
@@ -530,6 +530,21 @@
 				</textElement>
 				<text><![CDATA[Total Formas de Pago:]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="19" width="88" height="12" forecolor="#FFFFFF" backcolor="#444444" uuid="d3e4f5a6-b7c8-40d9-e0f1-a2b3c4d5e6f7"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Total en Caja:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="89" y="19" width="34" height="12" forecolor="#FFFFFF" backcolor="#444444" uuid="e4f5a6b7-c8d9-41e0-f1a2-b3c4d5e6f7a8"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{valor_cierre_practico}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
