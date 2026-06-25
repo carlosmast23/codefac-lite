@@ -74,6 +74,8 @@ create table GUIA_REMISION
     PUNTO_EMISION_ID BIGINT,
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.2.0)*/
     OBSERVACION varchar(512),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.1.1)*/
+    LOG_SRI varchar(250),
     primary key (ID)
 
 );

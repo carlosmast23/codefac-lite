@@ -58,26 +58,18 @@ public class ClienteNotaCreditoImplComprobante extends UnicastRemoteObject imple
     public void termino(byte[] byteJasperPrint,List<AlertaComprobanteElectronico> alertas) throws RemoteException {
 
         try {
-            
             JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(byteJasperPrint);
-            monitorData.getBarraProgreso().setForeground(Color.GREEN);
-            monitorData.getBtnAbrir().setEnabled(true);
-            monitorData.getBtnCerrar().setEnabled(true);
-            //monitorData.getBtnAbrir().removeActionListener(l);
-            /*monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                    notaCreditoModel.panelPadre.crearReportePantalla(jasperPrint, notaCreditoProcesando.getPreimpreso());
-                }
-            });*/
         } catch (IOException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteNotaCreditoImplComprobante.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            // Siempre completar la barra y habilitar botones aunque falle la deserializacion del reporte
+            monitorData.getBarraProgreso().setValue(100);
+            monitorData.getBarraProgreso().setForeground(Color.GREEN);
+            monitorData.getBtnAbrir().setEnabled(true);
+            monitorData.getBtnCerrar().setEnabled(true);
         }
-        
-        notaCreditoModel.panelPadre.actualizarNotificacionesCodefac();
 
     }
 

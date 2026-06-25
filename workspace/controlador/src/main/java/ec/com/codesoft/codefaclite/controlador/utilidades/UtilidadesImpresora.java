@@ -16,6 +16,7 @@ import javax.print.attribute.HashPrintServiceAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.PrintServiceAttributeSet;
 import javax.print.attribute.standard.Copies;
+import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.PrinterName;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -40,7 +41,7 @@ public abstract class UtilidadesImpresora {
         try {
             // TODO Auto-generated method stub
             PrintRequestAttributeSet printRequestAttributeSet = new HashPrintRequestAttributeSet();
-            // printRequestAttributeSet.add(MediaSizeName.ISO_A4); //setting page size
+            printRequestAttributeSet.add(MediaSizeName.ISO_A4);
             printRequestAttributeSet.add(new Copies(1));
             
             PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
