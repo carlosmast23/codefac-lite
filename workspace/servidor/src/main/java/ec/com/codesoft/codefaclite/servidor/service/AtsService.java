@@ -367,13 +367,17 @@ public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Ser
         String identificacion = (compra.getIdentificacion() != null && !compra.getIdentificacion().isEmpty()) ? compra.getIdentificacion() : compra.getProveedor().getIdentificacion();
 
         if (compra.getCodigoSustentoSri() == null) {
-            if (compra.getDetalles().get(0).getCodigoSustentoSriEnum() == null) //Si tampoco en el detalle tiene un dato definido lo pongo como null 
+            
+            if(compra.getDetalles().size()>0)
             {
-                compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
-            } else {
-                //TODO: Esta parte toca revisar porque solo estoy seleccionado por el momento el primer item para obtener ekl codigo de sustento tributario
-                //TODO: Pero lo correcto es si tiene distintos valores por cada detalle hacer varios registros agrupando los similares
-                compraAts.setCodSustento((compra.getDetalles().get(0).getCodigoSustentoSri()));
+                if (compra.getDetalles().get(0).getCodigoSustentoSriEnum() == null) //Si tampoco en el detalle tiene un dato definido lo pongo como null 
+                {
+                    compraAts.setCodSustento(SriSustentoComprobanteEnum.CREDITO_TRIBUTARIO_IVA.getCodigo()); //TODO: Por defecto dejo este valor para tener retrocompatiblidad con datos anteriores
+                } else {
+                    //TODO: Esta parte toca revisar porque solo estoy seleccionado por el momento el primer item para obtener ekl codigo de sustento tributario
+                    //TODO: Pero lo correcto es si tiene distintos valores por cada detalle hacer varios registros agrupando los similares
+                    compraAts.setCodSustento((compra.getDetalles().get(0).getCodigoSustentoSri()));
+                }
             }
         } else {
             compraAts.setCodSustento(compra.getCodigoSustentoSri());
@@ -703,7 +707,7 @@ public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Ser
         DocumentoEnum documentoEnum=DocumentoEnum.obtenerPorCodigoSri(compraAts.getTipoComprobante());
         SriSustentoComprobanteEnum sustentoSriEnum=SriSustentoComprobanteEnum.obtenerPorCodigo(compraAts.getCodSustento());
         
-        if(documentoEnum==null)
+        if(documentoEnum==null || sustentoSriEnum==null)
         {
             alertas.add(generarFormatoAlerta(documentoEnum.getNombre(),compraAts.getPreimpreso(),"Documento vacio"));
             return false;

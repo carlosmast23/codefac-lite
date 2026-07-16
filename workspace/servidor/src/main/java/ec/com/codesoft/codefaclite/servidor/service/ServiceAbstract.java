@@ -325,6 +325,9 @@ public abstract class ServiceAbstract<Entity,Facade> extends UnicastRemoteObject
             return resultadoTransaccion;
 
         } catch (Exception e) {
+            
+            e.printStackTrace();
+            
             // Si hay una transacción activa, revertirla
             if (transaccion != null && transaccion.isActive()) {
                 try {

@@ -1285,8 +1285,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
      */
     private void asignarVendedorAutomatico(Factura factura) throws ServicioCodefacException, RemoteException
     {
+        if(factura.getVendedor()!=null)
+        {
+            return; //Ya tiene un vendedor asignado de forma manual, no sobrescribir
+        }
+
         Empleado vendedor=factura.getUsuario().getEmpleado();
-        if(vendedor!=null && vendedor.getDepartamento()!=null && vendedor.getDepartamento().getTipoEnum().equals(Departamento.TipoEnum.Ventas))
+        if(factura.getVendedor()==null && vendedor.getDepartamento()!=null && vendedor.getDepartamento().getTipoEnum().equals(Departamento.TipoEnum.Ventas))
         {
             Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Grabado vendedor de forma automatica");
             factura.setVendedor(vendedor);
