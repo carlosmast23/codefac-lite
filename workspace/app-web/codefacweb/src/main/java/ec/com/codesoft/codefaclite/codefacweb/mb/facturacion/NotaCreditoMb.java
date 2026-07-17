@@ -90,7 +90,6 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCreditoDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
-import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PuntoEmisionUsuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoDocumento;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -947,10 +946,13 @@ public class NotaCreditoMb  extends GeneralAbstractMb implements Serializable,No
     private void cargarDatosLista() {
         
         try {
-            List<PuntoEmisionUsuario> puntosEmisionUsuario=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerActivoPorUsuario(sessionMb.getSession().getUsuario(),sessionMb.getSession().getSucursal());
-            List<PuntoEmision> puntosEmision=new ArrayList<PuntoEmision>();
-            for (PuntoEmisionUsuario puntoEmisionUsuario : puntosEmisionUsuario) {
-                puntosEmision.add(puntoEmisionUsuario.getPuntoEmision());
+            //Primero buscar los puntos de emision asignados por el modulo de caja
+            List<PuntoEmision> puntosEmision=ServiceFactory.getFactory().getCajaPermisoServiceIf().buscarPuntosEmisionPorCajas(sessionMb.getSession().getUsuario());
+
+            //Si el usuario no tiene puntos de emision asignados por caja, buscar los asignados directamente al usuario
+            if(puntosEmision==null || puntosEmision.isEmpty())
+            {
+                puntosEmision=ServiceFactory.getFactory().getPuntoEmisionUsuarioServiceIf().obtenerPuntosEmisionPorUsuario(sessionMb.getSession().getUsuario(),sessionMb.getSession().getSucursal());
             }
             //puntosEmision = ServiceFactory.getFactory().getPuntoVentaServiceIf().obtenerActivosPorSucursal(sessionMb.getSession().getSucursal());
             this.puntosEmision=puntosEmision;
