@@ -223,6 +223,11 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      */
     private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,CrudEnum crudEnum,Boolean afectarCaja,EntityManager entityManager) throws ServicioCodefacException,java.rmi.RemoteException
     {
+        grabarCarteraSinTransaccion(cartera, cruces, crudEnum, afectarCaja, entityManager, ModoProcesarEnum.NORMAL);
+    }
+
+    private void grabarCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,CrudEnum crudEnum,Boolean afectarCaja,EntityManager entityManager,ModoProcesarEnum modo) throws ServicioCodefacException,java.rmi.RemoteException
+    {
         /**
          * ===========================================================
          *                   VALIDAR LA CARTERA
@@ -254,7 +259,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
        
         //Actuaizar Saldo de las entidades de cartera afectada en los cruces
-        actualizarSaldosCarteraSinTrasaccion(cruces,entityManager);        
+        actualizarSaldosCarteraSinTrasaccion(cruces,entityManager,modo);
         
         //TODO:Metodo temporal para actualizar las referencias de los cruces y que esten actualizadas las listas que tienen referencias
         actualizarReferenciasCartera(cartera,entityManager);
@@ -533,51 +538,51 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
      * Metodo que me permite actualizar los saldos de los cruces
      * @param cruces 
      */
-    private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces,EntityManager entityManager) throws ServicioCodefacException
+    private void actualizarSaldosCarteraSinTrasaccion(List<CarteraCruce> cruces,EntityManager entityManager,ModoProcesarEnum modo) throws ServicioCodefacException
     {
         if(cruces.size()>0)
         {
-            for (CarteraCruce cruce : cruces) 
+            for (CarteraCruce cruce : cruces)
             {
                 //TODO: En los 2 casos asumo que los cruces siempre son con 2 carteras , pero analizar si pueden haber mas de 2 carteras que esten siendo afectadas
                 Cartera carteraAfectada=cruce.getCarteraAfectada(); //Solo busco el primer dato de la cartera que afecta porque en los demas debe apuntar al mismo
                 Cartera carteraQueAfecta= cruce.getCarteraDetalle().getCartera();
-                
+
                 System.out.println("Cartara Afecta: "+carteraAfectada.getPreimpreso()+", total: "+carteraAfectada.getTotal());
-                
-                ///Generar el valor del saldo 
+
+                ///Generar el valor del saldo
                 BigDecimal valorCruzadoCarteraAfectada=  getFacade().obtenerValorCruceCarteraAfecta(carteraAfectada,entityManager);
                 BigDecimal saldocarteraAfectada=carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada);
-                validarSaldoNegativo(saldocarteraAfectada);
-                carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));            
+                validarSaldoNegativo(saldocarteraAfectada,modo);
+                carteraAfectada.setSaldo(carteraAfectada.getTotal().subtract(valorCruzadoCarteraAfectada));
                 entityManager.merge(carteraAfectada);
 
                 //Generar el valor del saldo del documento que esta afectando
                 BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(carteraQueAfecta,entityManager);
                 BigDecimal saldoCarteraQueAfecta=carteraQueAfecta.getTotal().subtract(valorCruzadoCarteraQueAfecta);
-                validarSaldoNegativo(saldoCarteraQueAfecta);
-                carteraQueAfecta.setSaldo(saldoCarteraQueAfecta);            
+                validarSaldoNegativo(saldoCarteraQueAfecta,modo);
+                carteraQueAfecta.setSaldo(saldoCarteraQueAfecta);
                 entityManager.merge(carteraQueAfecta);
             }
-            
+
             //Modificar los saldos de los detalles
-            for (CarteraCruce cruce : cruces) 
+            for (CarteraCruce cruce : cruces)
             {
                 //Recalcular los saldo de cada detalle
                 BigDecimal valorCruzadoDetalle=getFacade().obtenerValorCruceCarteraDetalle(cruce.getCarteraDetalle(),entityManager);
                 System.out.println("Cartera Detalle Total: "+cruce.getCarteraDetalle().getTotal());
                 BigDecimal saldoCarteraDetalle=cruce.getCarteraDetalle().getTotal().subtract(valorCruzadoDetalle);
-                validarSaldoNegativo(saldoCarteraDetalle);
+                validarSaldoNegativo(saldoCarteraDetalle,modo);
                 cruce.getCarteraDetalle().setSaldo(saldoCarteraDetalle);
                 entityManager.merge(cruce.getCarteraDetalle());
-                
+
             }
-            
+
         }
-        
+
     }
     
-    private void validarSaldoNegativo(BigDecimal saldo) throws ServicioCodefacException 
+    private void validarSaldoNegativo(BigDecimal saldo,ModoProcesarEnum modo) throws ServicioCodefacException
     {
         //Esta parte es para optimizar y hacer una sola consulta pero toca optimizar
         if(CARTERA_ACTIVA==null)
@@ -591,7 +596,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 CARTERA_ACTIVA=false;
             }
         }
-        
+
         //Si no esta activa la cartera no tiene sentido hacer validaciones
         if(!CARTERA_ACTIVA)
         {
@@ -602,6 +607,12 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         saldo=saldo.setScale(2, RoundingMode.DOWN);
         if(saldo.compareTo(BigDecimal.ZERO)<0)
         {
+            //En modo forzado se permite grabar aunque la cartera quede en saldo negativo, para que el usuario lo corrija manualmente despues
+            if(ModoProcesarEnum.FORZADO.equals(modo))
+            {
+                System.out.println("Advertencia: se fuerza el guardado con saldo negativo [ "+saldo+" ]");
+                return;
+            }
             throw new ServicioCodefacException("Error al procesar la cartera por que el movimiento va a generar saldos negativos . Saldo negativo [ "+saldo+" ]",ServicioCodefacException.TipoExcepcionEnum.NC_SALDO_NEGATIVO);
         }
     }
@@ -696,7 +707,7 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                         //carteraTmp.setTotal(valorCuota);
                         //carteraTmp.setSaldo(valorCuota);
                         carteraTmp.actualizarTotalySaldo(valorCuota, valorCuota);
-                        grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR,true,entityManager);
+                        grabarCarteraSinTransaccion(carteraTmp, cruces,CrudEnum.CREAR,true,entityManager,modoProcesar);
                     }
 
 
@@ -706,8 +717,8 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         
         if(crearCarteraUnica)
         {
-            //Grabar el documento con los cruces generados        
-            grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR,true,entityManager);
+            //Grabar el documento con los cruces generados
+            grabarCarteraSinTransaccion(cartera, cruces,CrudEnum.CREAR,true,entityManager,modoProcesar);
         }
     }
     

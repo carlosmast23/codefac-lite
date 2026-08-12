@@ -85,11 +85,16 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
     }
     
     public Retencion grabar(Retencion entity) throws ServicioCodefacException, RemoteException {
-        
+        return grabar(entity,ModoProcesarEnum.NORMAL);
+    }
+
+    @Override
+    public Retencion grabar(Retencion entity,ModoProcesarEnum modoProcesar) throws ServicioCodefacException, RemoteException {
+
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                
+
                 validarRetencion(entity,CrudEnum.CREAR,entityManager);
                 
                 
@@ -137,27 +142,27 @@ public class RetencionService extends ServiceAbstract<Retencion, RetencionFacade
 
                 entityManager.persist(entity);
                 entityManager.flush();
-                
-                grabarCartera(entity,entityManager);
+
+                grabarCartera(entity,modoProcesar,entityManager);
 
                 //Despues de grabar genero inmediatamente un flush para evitar perder la transacción por causas como perdida de energia
-                entityManager.flush();               
+                entityManager.flush();
 
             }
         });
 
         //EntityTransaction transaction = getTransaccion();
-        //transaction.begin();        
+        //transaction.begin();
         //transaction.commit();
         ArchivoComprobacionCodefac.getInstance().grabarDatosComprobacion();
         return entity;
     }
-    
-    private void grabarCartera(Retencion retencion,EntityManager entityManager) throws RemoteException, ServicioCodefacException
+
+    private void grabarCartera(Retencion retencion,ModoProcesarEnum modoProcesar,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
         //Grabar en la cartera si todo el proceso anterior fue correcto
         CarteraService carteraService = new CarteraService();
-        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,ModoProcesarEnum.NORMAL,entityManager);
+        carteraService.grabarDocumentoCartera(retencion, Cartera.TipoCarteraEnum.PROVEEDORES,null,CrudEnum.CREAR,modoProcesar,entityManager);
     }
     
     private void validarRetencion(Retencion retencion,CrudEnum crudEnum,EntityManager em) throws ServicioCodefacException, RemoteException

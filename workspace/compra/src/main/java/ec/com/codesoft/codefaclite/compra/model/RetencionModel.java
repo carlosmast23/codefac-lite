@@ -46,6 +46,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionIva;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriRetencionRenta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ModoProcesarEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
@@ -135,37 +136,56 @@ public class RetencionModel extends RetencionPanel implements ComponenteDatosCom
     @Override
     public void grabar() throws ExcepcionCodefacLite {
         try {
-            validarSetearDatos();
-            retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion);
-            DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
-                    
-            RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
-            //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
-            if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
-                RetencionImplNoCallBack noCallBack=new RetencionImplNoCallBack(retencion,this);
-                noCallBack.iniciar();
-                ric=null;
-            }
-            
-            ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
-            
-            //ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
-            //comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
-            ComprobanteDataRetencion comprobanteData =(ComprobanteDataRetencion) obtenerComprobanteData();
-            
-            comprobanteServiceIf.procesarComprobante(comprobanteData, retencion, session.getUsuario(), ric);
-            
-            
-                    
+            grabarRetencion(ModoProcesarEnum.NORMAL);
         } catch (ServicioCodefacException ex) {
-            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
+
+            //Si la excepcion es por saldos negativos preguntar si quiere forzar y grabar de todas formas dejando la cartera en saldo negativo
+            if (ex.getTipoExcepcionEnum() != null && ex.getTipoExcepcionEnum().equals(ServicioCodefacException.TipoExcepcionEnum.NC_SALDO_NEGATIVO)
+                    && DialogoCodefac.dialogoPregunta(new CodefacMsj("Desea grabar de todas formas ? La cartera quedara con SALDO NEGATIVO y debera corregirla manualmente.", CodefacMsj.TipoMensajeEnum.ADVERTENCIA))) {
+                try {
+                    grabarRetencion(ModoProcesarEnum.FORZADO);
+                    return;
+                } catch (ServicioCodefacException ex1) {
+                    DialogoCodefac.mensaje("Error", ex1.getMessage(), DialogoCodefac.MENSAJE_INCORRECTO);
+                    Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex1);
+                    throw new ExcepcionCodefacLite("error: "+ex1.getMessage());
+                } catch (RemoteException ex1) {
+                    DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
+                    Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex1);
+                    throw new ExcepcionCodefacLite("error");
+                }
+            }
+
+            DialogoCodefac.mensaje("Error",ex.getMessage(),DialogoCodefac.MENSAJE_INCORRECTO);
             throw new ExcepcionCodefacLite("error: "+ex.getMessage());
         } catch (RemoteException ex) {
             DialogoCodefac.mensaje(MensajeCodefacSistema.ErrorComunicacion.ERROR_COMUNICACION_SERVIDOR);
             Logger.getLogger(RetencionModel.class.getName()).log(Level.SEVERE, null, ex);
             throw new ExcepcionCodefacLite("error");
         }
+    }
+
+    private void grabarRetencion(ModoProcesarEnum modoProcesar) throws ExcepcionCodefacLite, ServicioCodefacException, RemoteException {
+        validarSetearDatos();
+        retencion=ServiceFactory.getFactory().getRetencionServiceIf().grabar(retencion,modoProcesar);
+        DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
+
+        RetencionImplCallBack ric=new RetencionImplCallBack(retencion, this);
+        //ParametrosClienteEscritorio.tipoClienteEnum=ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO;
+        if (ParametrosClienteEscritorio.tipoClienteEnum.equals(ParametrosClienteEscritorio.TipoClienteSwingEnum.REMOTO)) {
+            RetencionImplNoCallBack noCallBack=new RetencionImplNoCallBack(retencion,this);
+            noCallBack.iniciar();
+            ric=null;
+        }
+
+        ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
+
+        //ComprobanteDataRetencion comprobanteData = new ComprobanteDataRetencion(retencion);
+        //comprobanteData.setMapInfoAdicional(getMapAdicional(retencion));
+        ComprobanteDataRetencion comprobanteData =(ComprobanteDataRetencion) obtenerComprobanteData();
+
+        comprobanteServiceIf.procesarComprobante(comprobanteData, retencion, session.getUsuario(), ric);
     }
     
     private Map<String,String> getMapAdicional(Retencion retencion)

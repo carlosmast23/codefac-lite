@@ -1291,10 +1291,13 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
 
         Empleado vendedor=factura.getUsuario().getEmpleado();
-        if(factura.getVendedor()==null && vendedor.getDepartamento()!=null && vendedor.getDepartamento().getTipoEnum().equals(Departamento.TipoEnum.Ventas))
+        if(vendedor!=null)
         {
-            Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Grabado vendedor de forma automatica");
-            factura.setVendedor(vendedor);
+            if(factura.getVendedor()==null && vendedor.getDepartamento()!=null && vendedor.getDepartamento().getTipoEnum().equals(Departamento.TipoEnum.Ventas))
+            {
+                Logger.getLogger(FacturacionService.class.getName()).log(Level.INFO,"Grabado vendedor de forma automatica");
+                factura.setVendedor(vendedor);
+            }
         }
     }
     
