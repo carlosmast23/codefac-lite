@@ -1780,15 +1780,11 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
             ComprobanteElectronico comprobante= comprobanteData.getComprobante();
             //Agregando informacionTributaria
             comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
-            
-            //Validacion para verificar que si no existen datos adicionales no se agregue nada
-            List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
-            if (informacionAdicional != null && informacionAdicional.size() > 0) {
-                comprobante.setInformacionAdicional(informacionAdicional);
-            }
-            
+
+            comprobante.setInformacionAdicional(getInformacionAdicionalConProveedorSistema(comprobanteData));
+
             comprobantesElectronico.add(comprobante);
-        }        
+        }
         //Agregar datos adicionales del Reporte
         comprobanteElectronico.setMapAdicionalReporte(mapReportePlantilla(null));
         
@@ -1814,27 +1810,14 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     private ComprobanteElectronico convertirComprobanteDatoToComprobateElectronico(ComprobanteDataInterface comprobanteData) throws RemoteException
     {
         ComprobanteElectronico comprobante= comprobanteData.getComprobante();
-        
+
         //Agregando informacionTributaria
         comprobante.setInformacionTributaria(getInfoInformacionTributaria(comprobanteData));
-        
-        //Validacion para verificar que si no existen datos adicionales no se agregue nada
-        List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
-        if (informacionAdicional != null && informacionAdicional.size() > 0) 
-        {
-            //Validar que si son mas de 15 datos solo coja los 15 primeros por que no permite enviar más para la facturación electrónica
-            if(informacionAdicional.size()>15)
-            {
-                comprobante.setInformacionAdicional(informacionAdicional.subList(0,15));
-            }
-            else
-            {
-                comprobante.setInformacionAdicional(informacionAdicional);
-            }
-        }
-        
+
+        comprobante.setInformacionAdicional(getInformacionAdicionalConProveedorSistema(comprobanteData));
+
         return comprobante;
-        
+
     }
     
     private ComprobanteElectronicoService cargarConfiguracionesInicialesComprobantes(ComprobanteDataInterface comprobanteData,Usuario usuario) throws RemoteException
@@ -1981,6 +1964,31 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
         }
         
         return infoTributaria;
+    }
+
+    /**
+     * Arma la lista de infoAdicional del comprobante agregando siempre, como primer elemento,
+     * el RUC del proveedor del sistema exigido por la Resolución NAC-DGERCGC26-00000027 del SRI.
+     * Si el comprobante ya tiene campos manuales suficientes para llegar al límite de la SRI,
+     * se recortan los campos manuales (nunca el del proveedor) para no exceder el límite.
+     */
+    private List<InformacionAdicional> getInformacionAdicionalConProveedorSistema(ComprobanteDataInterface comprobanteData) {
+        List<InformacionAdicional> informacionAdicional = getInformacionAdicional(comprobanteData);
+        if (informacionAdicional == null) {
+            informacionAdicional = new ArrayList<InformacionAdicional>();
+        }
+
+        int limiteCamposManuales = ParametrosSistemaCodefac.ComprobantesElectronicos.LIMITE_CAMPOS_ADICIONALES - 1;
+        if (informacionAdicional.size() > limiteCamposManuales) {
+            informacionAdicional = informacionAdicional.subList(0, limiteCamposManuales);
+        }
+
+        InformacionAdicional campoProveedorSistema = new InformacionAdicional(
+                ParametrosSistemaCodefac.ComprobantesElectronicos.NOMBRE_CAMPO_PROVEEDOR_SISTEMA,
+                ParametrosSistemaCodefac.ComprobantesElectronicos.RUC_PROVEEDOR_SISTEMA);
+        informacionAdicional.add(0, campoProveedorSistema);
+
+        return informacionAdicional;
     }
 
     private List<InformacionAdicional> getInformacionAdicional(ComprobanteDataInterface comprobanteData) {

@@ -241,7 +241,10 @@
                                     <div class="p-col-3 p-md-4 p-lg-2" >
                                         <p:commandButton  process="@this,:formulario:acordionCabecera:cmbDocumento" icon="fa fa-search"  styleClass="white-button" action="#{proformaMb.abrirDialogoBusquedaProducto()}" style="width: 100%" title="Buscar Producto"  >
                                             <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarProducto}"  update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle,cmbPreciosVenta,formulario:tabDatosFactura:lblStock"  />
-                                        </p:commandButton>                                        
+                                        </p:commandButton>
+                                        <p:commandButton widgetVar="btnAbrirDialogoItemEspecifico" style="display:none;" process="@this" action="#{proformaMb.abrirDialogoItemEspecifico}">
+                                            <p:ajax event="dialogReturn" listener="#{proformaMb.seleccionarItemEspecifico}" update="txtProducto,txtValorUnitario,txtCantidad,txtDescuento,txtDescripcion,cmbIncluyeIvaDetalle,cmbPreciosVenta,formulario:tabDatosFactura:lblStock" />
+                                        </p:commandButton>
                                     </div>
                                     <div class="p-col-2 p-md-2 p-lg-2" >
                                         <!-- Combo box para seleccionar cuando tiene varios listado de precios -->

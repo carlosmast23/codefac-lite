@@ -40,13 +40,14 @@ public class ProductoInventarioEspecificoDialogo implements InterfaceModelFind<K
     @Override
     public QueryDialog getConsulta(String filter,Map<Integer,Object> mapFiltro) {
         //KardexItemEspecifico kie;
-        //kie.getEstado()
+        //kie.getCodigoEspecifico()
                  
-        String queryConsulta="SELECT kie FROM Kardex k,KardexDetalle kd,KardexItemEspecifico kie where kie.kardexDetalle=kd and kd.kardex=k and k.producto=?1 and kie.estado=?2 ";
+        
+        String queryConsulta="SELECT kie FROM Kardex k,KardexDetalle kd,KardexItemEspecifico kie where kie.kardexDetalle=kd and kd.kardex=k and k.producto=?1 and kie.estado=?2 and ( CONCAT(kie.codigoEspecifico, '') like ?3 ) ";
         QueryDialog queryDialog=new QueryDialog(queryConsulta);
         queryDialog.agregarParametro(1,producto);
         queryDialog.agregarParametro(2,GeneralEnumEstado.ACTIVO.getEstado());
-        //queryDialog.agregarParametro(2,filter);
+        queryDialog.agregarParametro(3,filter);
         return queryDialog;
     }
 
@@ -58,7 +59,10 @@ public class ProductoInventarioEspecificoDialogo implements InterfaceModelFind<K
 
     @Override
     public Vector<String> getNamePropertysObject() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Vector<String> propiedades = new Vector<>();
+        propiedades.add("codigoEspecifico");
+        propiedades.add("estadoEnum.nombre");
+        return propiedades;
     }
     
 }

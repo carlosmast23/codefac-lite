@@ -19,6 +19,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.Comand
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.FacturaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoImagenBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProformaBusqueda;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.MensajeCodefacSistema;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
@@ -86,6 +87,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CategoriaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Presupuesto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
@@ -511,13 +513,46 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
     public void seleccionarProducto(SelectEvent event) {
         System.out.println("Metodo ejecutando seleccionar producto");
         //System.out.println("Documento seleccionado : "+documentoSeleccionado.getNombre());
-        productoSeleccionado = (Producto) event.getObject(); 
+        productoSeleccionado = (Producto) event.getObject();
         kardexProductoSeleccionado=controlador.obtenerKardexDesdeProducto(productoSeleccionado);
         System.out.println("kardexSeleccionado: "+kardexProductoSeleccionado);
         //System.out.println("kardex Stock: "+kardexProductoSeleccionado.getStock().setScale(2, RoundingMode.HALF_UP));
+
+        try {
+            if (productoSeleccionado.getGarantiaEnum() != null
+                    && productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI)) {
+                int cantidadItemsIndividuales = ServiceFactory.getFactory()
+                        .getItemEspecificoServiceIf()
+                        .obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
+
+                if (cantidadItemsIndividuales > 0) {
+                    //El agregado del producto se completa en seleccionarItemEspecifico() cuando vuelva el segundo dialogo
+                    PrimeFaces.current().executeScript("PF('btnAbrirDialogoItemEspecifico').jq.click();");
+                    return;
+                }
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(ProformaMb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
         controlador.agregarProductoVista(productoSeleccionado,null,null,BigDecimal.ZERO,null,null);
-        //cargarDetalleFacturaAgregar(productoSeleccionado); 
+        //cargarDetalleFacturaAgregar(productoSeleccionado);
+    }
+
+    public void abrirDialogoItemEspecifico() {
+        ProductoInventarioEspecificoDialogo dialogModel = new ProductoInventarioEspecificoDialogo(productoSeleccionado);
+        UtilidadesDialogo.abrirDialogoBusqueda(dialogModel);
+    }
+
+    public void seleccionarItemEspecifico(SelectEvent event) {
+        KardexItemEspecifico itemEspecifico = (KardexItemEspecifico) event.getObject();
+        productoSeleccionado.setNombre("[" + itemEspecifico.getCodigoEspecifico() + "] " + productoSeleccionado.getNombre());
+
+        precioVentaOriginalSeleccionada=productoSeleccionado.getValorUnitario();
+        controlador.agregarProductoVista(productoSeleccionado,null,itemEspecifico,BigDecimal.ZERO,null,null);
     }
     
     public void seleccionarDatoAdicional(SelectEvent event) {

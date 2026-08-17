@@ -220,6 +220,24 @@ public abstract class ParametrosSistemaCodefac {
     public abstract class ComprobantesElectronicos
     {
         public static final String LOGO_SIN_FOTO="sin_imagen.jpg";
+
+        /**
+         * RUC del proveedor del sistema (CodeSoft), exigido en el campo adicional del XML de comprobantes
+         * electrónicos según la Resolución NAC-DGERCGC26-00000027 del SRI (28/07/2026)
+         */
+        public static final String RUC_PROVEEDOR_SISTEMA = "1724218951001";
+
+        /**
+         * TODO: Nombre provisional. El SRI aún no publica la Ficha Técnica de Comprobantes Electrónicos
+         * actualizada con el nombre exacto exigido para este campo (Resolución NAC-DGERCGC26-00000027).
+         * Actualizar este valor apenas el SRI lo confirme.
+         */
+        public static final String NOMBRE_CAMPO_PROVEEDOR_SISTEMA = "RUC Proveedor Sistema";
+
+        /**
+         * Cantidad máxima de campoAdicional que acepta el SRI en infoAdicional
+         */
+        public static final int LIMITE_CAMPOS_ADICIONALES = 15;
     }
     
     public abstract class MensajesSistemaCodefac
