@@ -1117,6 +1117,12 @@ public class ProformaMb extends GeneralAbstractMb implements FacturaModelInterfa
         fechaEmision = UtilidadesFecha.getFechaHoy();
         documentos = new ArrayList<DocumentoEnum>();
 
+        //Precarga la placa configurada por defecto (operadoras de transporte), editable por el usuario
+        String placaDefecto = ParametroUtilidades.obtenerValorParametro(sessionMb.getSession().getEmpresa(), ParametroCodefac.PLACA_TRANSPORTE_DEFECTO);
+        if (!UtilidadesTextos.verificarNullOVacio(placaDefecto)) {
+            factura.setPlaca(placaDefecto);
+        }
+
         //TODO: Mejorar este metodo para cargar otras formas de pago de forma dinamica , pensar en la solucion de permisos de documentos
         if (tipoPaginaEnum.equals(TipoPaginaEnum.PROFORMA)) 
         {

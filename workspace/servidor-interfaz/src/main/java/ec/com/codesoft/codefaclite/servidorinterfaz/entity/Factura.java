@@ -164,6 +164,14 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     @Column(name = "PROFORMA_SIN_IVA")
     private String proformaSinIva;
 
+    /**
+     * Placa del vehículo con el que se prestó el servicio de transporte, exigida en el campo "placa"
+     * de la factura electrónica según la Resolución NAC-DGERCGC26-00000024 del SRI, para operadoras
+     * de transporte terrestre comercial (excepto taxis)
+     */
+    @Column(name = "PLACA")
+    private String placa;
+
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
     private List<FacturaDetalle> detalles;
@@ -664,6 +672,14 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     public void setProformaSinIva(String proformaSinIva) {
         this.proformaSinIva = proformaSinIva;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
 
     public Integer getDiasCredito() {

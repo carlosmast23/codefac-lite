@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
     "totalDescuento",
     "totalImpuestos",
     "importeTotal",
+    "placa",
     "formaPagos"})
 public class InformacionFactura extends InformacionComprobanteAbstract{
 
@@ -41,6 +42,7 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
     private String identificacionComprador;
     private String direccionComprador;
     private BigDecimal totalSubsidio;
+    private String placa;
     
    
     public InformacionFactura() {
@@ -80,13 +82,27 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
         return direccionComprador;
     }
 
-    @XmlElement(name = "totalSubsidio")   
+    @XmlElement(name = "totalSubsidio")
     public BigDecimal getTotalSubsidio() {
         return totalSubsidio;
     }
 
     public void setTotalSubsidio(BigDecimal totalSubsidio) {
         this.totalSubsidio = totalSubsidio;
+    }
+
+    /**
+     * Placa del vehículo con el que se prestó el servicio de transporte. Requisito obligatorio de
+     * llenado según la Resolución NAC-DGERCGC26-00000024 del SRI para operadoras de transporte
+     * terrestre comercial, excepto taxis (Anexo 12 de la Ficha Técnica de Comprobantes Electrónicos).
+     */
+    @XmlElement(name = "placa")
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
     
     

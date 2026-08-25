@@ -358,6 +358,13 @@ public class ParametroCodefac implements Serializable {
     public static final String AGREGAR_PVP_ANTERIOR="agregar_pvp_anterior";
     
     public static final String LEYENDA_ADICIONAL_COMPROBANTE="leyenda_adicional_comprobante";
+
+    /**
+     * Placa por defecto que se precarga en la pantalla de facturación, para operadoras de transporte
+     * terrestre comercial que deben incluir la placa del vehículo en el campo "placa" de la factura
+     * electrónica (Resolución NAC-DGERCGC26-00000024 del SRI). El usuario puede modificarla por factura.
+     */
+    public static final String PLACA_TRANSPORTE_DEFECTO="placa_transporte_defecto";
     
     /**
      * Metodo que me permite activar o desactivar la opcion para poder actualizar los precios de venta cuando se modifican los costos

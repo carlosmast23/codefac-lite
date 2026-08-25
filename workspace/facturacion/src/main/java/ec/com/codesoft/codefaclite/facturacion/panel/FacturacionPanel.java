@@ -279,6 +279,9 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
         chkActivarFechaVencimiento = new javax.swing.JCheckBox();
         jScrollPane6 = new javax.swing.JScrollPane();
         tblReembolso = new javax.swing.JTable();
+        pnlOtro = new javax.swing.JPanel();
+        jLabel53 = new javax.swing.JLabel();
+        txtPlaca = new javax.swing.JTextField();
         pnlVuelto = new javax.swing.JPanel();
         txtValorRecibido = new javax.swing.JTextField();
         jLabel31 = new javax.swing.JLabel();
@@ -1751,6 +1754,27 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
         jTabCartera.addTab("Reembolso", pnlReembolso);
 
+        pnlOtro.setLayout(new java.awt.GridBagLayout());
+
+        jLabel53.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel53.setText("Placa:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        pnlOtro.add(jLabel53, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.ipadx = 200;
+        gridBagConstraints.insets = new java.awt.Insets(4, 4, 4, 4);
+        pnlOtro.add(txtPlaca, gridBagConstraints);
+
+        jTabCartera.addTab("Otro", pnlOtro);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -2152,6 +2176,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -2218,6 +2243,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTabbedPane panelTabDatos1;
     private javax.swing.JPanel pnlCosto;
     private javax.swing.JPanel pnlDetalles;
+    private javax.swing.JPanel pnlOtro;
     private javax.swing.JPanel pnlPrincipal;
     private javax.swing.JPanel pnlReembolso;
     private javax.swing.JPanel pnlVuelto;
@@ -2244,6 +2270,7 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
     private javax.swing.JTextArea txtNotaMesa;
     private javax.swing.JSpinner txtNumeroCuotas;
     private javax.swing.JTextField txtOrigenVentaNota;
+    private javax.swing.JTextField txtPlaca;
     private javax.swing.JTextField txtReferenciaContacto;
     private javax.swing.JTextField txtValorRecibido;
     private javax.swing.JTextField txtValorTotal;
@@ -3039,6 +3066,14 @@ public abstract class FacturacionPanel extends ControladorCodefacInterface {
 
     public JTextField getTxtOrigenVentaNota() {
         return txtOrigenVentaNota;
+    }
+
+    public JTextField getTxtPlaca() {
+        return txtPlaca;
+    }
+
+    public void setTxtPlaca(JTextField txtPlaca) {
+        this.txtPlaca = txtPlaca;
     }
 
     public void setTxtOrigenVentaNota(JTextField txtOrigenVentaNota) {

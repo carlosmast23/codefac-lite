@@ -225,6 +225,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         cmbModoFacturasGuiaRemision = new javax.swing.JComboBox<>();
         jLabel48 = new javax.swing.JLabel();
         cmbDocumentoGuiaRemisionDefecto = new javax.swing.JComboBox<>();
+        jLabel130 = new javax.swing.JLabel();
+        txtPlacaTransporteDefecto = new javax.swing.JTextField();
         jPanel10 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
         cmbFormaPagoDefecto = new javax.swing.JComboBox<>();
@@ -1665,7 +1667,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel5.setLayout(new java.awt.GridBagLayout());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 0.1;
@@ -1733,6 +1735,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel5.add(cmbDocumentoGuiaRemisionDefecto, gridBagConstraints);
+
+        jLabel130.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel130.setText("Placa Por Defecto:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(jLabel130, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 300;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel5.add(txtPlacaTransporteDefecto, gridBagConstraints);
 
         jTabbedPane1.addTab("Transporte", jPanel5);
 
@@ -2917,6 +2936,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel127;
     private javax.swing.JLabel jLabel128;
     private javax.swing.JLabel jLabel129;
+    private javax.swing.JLabel jLabel130;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -3070,6 +3090,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JSpinner txtNumeroDecimalesRide;
     private javax.swing.JTextField txtNumeroMaximoDetalleFactura;
     private javax.swing.JTextArea txtOrdenTrabajoReporte;
+    private javax.swing.JTextField txtPlacaTransporteDefecto;
     private javax.swing.JTextField txtProductoF1;
     private javax.swing.JTextField txtProductoF10;
     private javax.swing.JTextField txtProductoF11;
@@ -3156,6 +3177,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public JTextField getTxtMotivoTrasladoGuiaRemision() {
         return txtMotivoTrasladoGuiaRemision;
+    }
+
+    public JTextField getTxtPlacaTransporteDefecto() {
+        return txtPlacaTransporteDefecto;
+    }
+
+    public void setTxtPlacaTransporteDefecto(JTextField txtPlacaTransporteDefecto) {
+        this.txtPlacaTransporteDefecto = txtPlacaTransporteDefecto;
     }
 
     public JComboBox<SriRetencionIva> getCmbRetencionIva() {

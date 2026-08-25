@@ -694,6 +694,9 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             
             parametro=parametrosTodos.get(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
             getTxtLeyendaAdicionalComprobante().setText((parametro != null) ? parametro.getValor():"");
+
+            parametro=parametrosTodos.get(ParametroCodefac.PLACA_TRANSPORTE_DEFECTO);
+            getTxtPlacaTransporteDefecto().setText((parametro != null) ? parametro.getValor():"");
             
             
             ParametroCodefac parametroEditarDescripcionFactura = parametrosTodos.get(ParametroCodefac.EDITAR_DESCRIPCION_FACTURA);
@@ -1375,7 +1378,10 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         
         agregarParametro(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE, getTxtLeyendaAdicionalComprobante().getText());
-        agregarParametroEditar(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);  
+        agregarParametroEditar(ParametroCodefac.LEYENDA_ADICIONAL_COMPROBANTE);
+
+        agregarParametro(ParametroCodefac.PLACA_TRANSPORTE_DEFECTO, getTxtPlacaTransporteDefecto().getText());
+        agregarParametroEditar(ParametroCodefac.PLACA_TRANSPORTE_DEFECTO);
 
         /**
          * @author Carlos Sanchez

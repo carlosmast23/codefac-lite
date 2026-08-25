@@ -180,8 +180,12 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         }
         
         informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTextoFacturacionElectronica(razonSocial));
-        
-       
+
+        //Placa del vehículo de transporte, exigida por la Resolución NAC-DGERCGC26-00000024 del SRI
+        if (informacionComprobante instanceof InformacionFactura) {
+            ((InformacionFactura) informacionComprobante).setPlaca(formatearPlaca(factura.getPlaca()));
+        }
+
         informacionComprobante.setImporteTotal(factura.getTotal());
 
         BigDecimal descuentoTotal = factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());
@@ -337,6 +341,24 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         return comprobante;
     }
     
+    /**
+     * Normaliza la placa al formato exigido por el Anexo 12 de la Ficha Técnica de Comprobantes
+     * Electrónicos del SRI: sin espacios y, cuando corresponde a una placa vehicular estándar de 3
+     * letras + 3 dígitos, se antepone un cero para completar los 4 dígitos (caso 2 de la Tabla 29).
+     * Otros formatos (cuantía doméstica, ZZZ9999, maquinaria MAQN, etc.) se dejan tal cual los ingresó
+     * el usuario.
+     */
+    private static String formatearPlaca(String placaIngresada) {
+        if (UtilidadesTextos.verificarNullOVacio(placaIngresada)) {
+            return null;
+        }
+        String placa = placaIngresada.trim().toUpperCase().replace(" ", "").replace("-", "");
+        if (placa.matches("[A-Z]{3}\\d{3}")) {
+            placa = placa.substring(0, 3) + "0" + placa.substring(3);
+        }
+        return placa;
+    }
+
     private void agregarDatosReembolso(ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobanteData)
     {
         //Si es una liquidacion de compra no tiene que hacer ese proceso

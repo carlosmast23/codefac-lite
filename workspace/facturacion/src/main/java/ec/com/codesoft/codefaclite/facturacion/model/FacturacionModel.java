@@ -2938,6 +2938,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         //cargar datos del restaurante
         getCmbMesaComanda().setSelectedItem(factura.getMesa());
         getTxtNotaMesa().setText(factura.getNota());
+        getTxtPlaca().setText(factura.getPlaca());
         getTxtValorRecibido().setText(factura.getValorRecibido()+"");
         if(factura.getNumeroOrden()!=null)
         {
@@ -3712,7 +3713,10 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         factura.setPuntoEstablecimiento(new BigDecimal(session.getSucursal().getCodigoSucursal().toString()));
         
         //Datos seteados del tema de la comanda
-        factura.setNota(getTxtNotaMesa().getText());        
+        factura.setNota(getTxtNotaMesa().getText());
+
+        //Placa del vehículo de transporte, exigida por la Resolución NAC-DGERCGC26-00000024 del SRI
+        factura.setPlaca(getTxtPlaca().getText());
         factura.setMesa((Mesa) getCmbMesaComanda().getSelectedItem());
         factura.setNumeroOrden((Integer) getSpnNumeroOrdenComanda().getValue());
         
@@ -3937,7 +3941,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         
         controlador.nuevo();
-        
+
+        //Precarga la placa configurada por defecto (operadoras de transporte), editable por el usuario
+        String placaDefecto = ParametroUtilidades.obtenerValorParametro(session.getEmpresa(), ParametroCodefac.PLACA_TRANSPORTE_DEFECTO);
+        getTxtPlaca().setText(!UtilidadesTextos.verificarNullOVacio(placaDefecto) ? placaDefecto : "");
+
     }
 
     @Override
