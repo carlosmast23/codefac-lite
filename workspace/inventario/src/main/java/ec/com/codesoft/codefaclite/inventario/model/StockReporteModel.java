@@ -34,6 +34,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoPresentacionD
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Variante;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
@@ -81,6 +82,8 @@ import net.sf.jasperreports.engine.JasperReport;
 public class StockReporteModel extends StockMinimoPanel{
     
     private static final int COLUMNA_STOCK=8;
+    private static final int COLUMNA_ULTIMO_COSTO=13;
+    private static final int COLUMNA_COSTO_PROMEDIO=14;
     
     private List<Object[]> listaStock;
     private List<StockMinimoData> listaData;
@@ -210,29 +213,39 @@ public class StockReporteModel extends StockMinimoPanel{
 
     @Override
     public void grabar() throws ExcepcionCodefacLite, RemoteException {
-        
+
         try {
             Map<Long,BigDecimal> datosModificados= StockMinimoData.obtenerKardexModificadoStock(listaData);
-            
-            if(datosModificados.size()==0)
+            Map<Long,CostoProductoRespuesta> datosCostosModificados= StockMinimoData.obtenerKardexModificadoCostos(listaData);
+
+            if(datosModificados.size()==0 && datosCostosModificados.size()==0)
             {
-                throw new ExcepcionCodefacLite("No existen datos para modificar el Stock");
+                throw new ExcepcionCodefacLite("No existen datos para modificar");
             }
-            
-            Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("Está seguro de que quiere actualizar el STOCK de "+datosModificados.size()+" productos ?", CodefacMsj.TipoMensajeEnum.CORRECTO));
+
+            Boolean continuar=DialogoCodefac.dialogoPregunta(new CodefacMsj("Está seguro de que quiere actualizar el STOCK/COSTOS de "+(datosModificados.size()+datosCostosModificados.size())+" productos ?", CodefacMsj.TipoMensajeEnum.CORRECTO));
             if(!continuar)
             {
                 throw new ExcepcionCodefacLite("Proceso cancelado ...");
             }
-            
-            ServiceFactory.getFactory().getKardexServiceIf().actualizarKardexLote(datosModificados,session.getUsuario());
+
+            if(datosModificados.size()>0)
+            {
+                ServiceFactory.getFactory().getKardexServiceIf().actualizarKardexLote(datosModificados,session.getUsuario());
+            }
+
+            if(datosCostosModificados.size()>0)
+            {
+                ServiceFactory.getFactory().getKardexServiceIf().actualizarCostosKardexLote(datosCostosModificados);
+            }
+
             DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(StockReporteModel.class.getName()).log(Level.SEVERE, null, ex);
-            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));            
+            DialogoCodefac.mensaje(new CodefacMsj(ex.getMessage(), CodefacMsj.TipoMensajeEnum.ERROR));
             throw new ExcepcionCodefacLite(ex.getMessage());
         }
-        
+
     }
 
     @Override
@@ -668,8 +681,36 @@ public class StockReporteModel extends StockMinimoPanel{
                         Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.INFO,"Erro al ingresar el stock con el formato del numero");
                     }
                 }
-                
-                
+                else if(columnaModificada==COLUMNA_ULTIMO_COSTO)
+                {
+                    StockMinimoData objeto=(StockMinimoData) modeloTabla.getValueAt(filaModificada,0);
+                    try
+                    {
+                        BigDecimal ultimoCostoNumero=new BigDecimal(datoModificado+"");
+                        objeto.setUltimoCosto(ultimoCostoNumero+"");
+                        objeto.setActualizarUltimoCostoTmp(true);
+                    }
+                    catch(NumberFormatException nfe)
+                    {
+                        Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.INFO,"Error al ingresar el último costo con el formato del numero");
+                    }
+                }
+                else if(columnaModificada==COLUMNA_COSTO_PROMEDIO)
+                {
+                    StockMinimoData objeto=(StockMinimoData) modeloTabla.getValueAt(filaModificada,0);
+                    try
+                    {
+                        BigDecimal costoPromedioNumero=new BigDecimal(datoModificado+"");
+                        objeto.setCosto(costoPromedioNumero+"");
+                        objeto.setActualizarCostoPromedioTmp(true);
+                    }
+                    catch(NumberFormatException nfe)
+                    {
+                        Logger.getLogger(GestionInventarioModel.class.getName()).log(Level.INFO,"Error al ingresar el costo promedio con el formato del numero");
+                    }
+                }
+
+
             }
         });
     }

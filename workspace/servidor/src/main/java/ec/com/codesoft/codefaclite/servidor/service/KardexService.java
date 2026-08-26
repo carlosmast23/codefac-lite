@@ -2148,15 +2148,61 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     
     public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException
     {
-        ejecutarTransaccion(new MetodoInterfaceTransaccion() 
+        ejecutarTransaccion(new MetodoInterfaceTransaccion()
         {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                System.out.println("Ultimo: "+kardex.getPrecioUltimo());
-                System.out.println("Costo Promedio: "+kardex.getCostoPromedio());
-                entityManager.merge(kardex);
+                actualizarKardexSinTransaccion(kardex, entityManager);
             }
         });
+    }
+
+    /**
+     * Merge directo del kardex sin pasar por el recálculo de costo ponderado ni por el historial de
+     * movimientos auditados. Reutilizado tanto por la corrección individual (pantalla de Kardex) como
+     * por la corrección en lote (actualizarCostosKardexLote).
+     */
+    private void actualizarKardexSinTransaccion(Kardex kardex, EntityManager entityManager)
+    {
+        System.out.println("Ultimo: "+kardex.getPrecioUltimo());
+        System.out.println("Costo Promedio: "+kardex.getCostoPromedio());
+        entityManager.merge(kardex);
+    }
+
+    /**
+     * Permite corregir en lote el Último Costo y/o Costo Promedio de varios kardex (ej. datos mal migrados
+     * o mal calculados), reutilizando el mismo mecanismo de corrección directa de la pantalla de Kardex.
+     * A diferencia de esa pantalla, acá se busca el kardex fresco en el servidor (no el que trae el
+     * cliente) para no arrastrar un Stock desactualizado en el merge. Solo se actualiza el campo que
+     * venga distinto de null en el CostoProductoRespuesta de cada kardex.
+     */
+    public void actualizarCostosKardexLote(Map<Long,CostoProductoRespuesta> costosMap) throws RemoteException,ServicioCodefacException
+    {
+        for (Map.Entry<Long, CostoProductoRespuesta> entry : costosMap.entrySet())
+        {
+            Long kardexId = entry.getKey();
+            CostoProductoRespuesta costos = entry.getValue();
+
+            ejecutarTransaccion(new MetodoInterfaceTransaccion() {
+                @Override
+                public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    KardexService kardexService = new KardexService();
+                    Kardex kardex = kardexService.buscarPorId(kardexId, entityManager);
+
+                    if(costos.costoPromedio!=null)
+                    {
+                        kardex.setCostoPromedio(costos.costoPromedio);
+                    }
+
+                    if(costos.costoUltimo!=null)
+                    {
+                        kardex.setPrecioUltimo(costos.costoUltimo);
+                    }
+
+                    actualizarKardexSinTransaccion(kardex, entityManager);
+                }
+            });
+        }
     }
     
     public void grabarProductosReservadosSinTransaccion(Factura factura,EntityManager entityManager) throws RemoteException,ServicioCodefacException

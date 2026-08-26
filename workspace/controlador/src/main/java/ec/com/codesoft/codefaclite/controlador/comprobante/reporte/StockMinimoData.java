@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterfa
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SegmentoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.TipoProducto;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.CostoProductoRespuesta;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +57,10 @@ public class StockMinimoData implements ExcelDatosInterface{
     
     //Variable temporal que solo me sirve para saber si fue modificado un stock
     private Boolean actualizarStockTmp=false;
+
+    //Variables temporales para saber si se corrigió el Último Costo y/o el Costo Promedio del kardex
+    private Boolean actualizarUltimoCostoTmp=false;
+    private Boolean actualizarCostoPromedioTmp=false;
     
     private List<StockUnicoData> detalles;
     private List<PresentacionPrecioData> presentacionList;
@@ -160,6 +165,14 @@ public class StockMinimoData implements ExcelDatosInterface{
 
     public void setActualizarStockTmp(Boolean actualizarStockTmp) {
         this.actualizarStockTmp = actualizarStockTmp;
+    }
+
+    public void setActualizarUltimoCostoTmp(Boolean actualizarUltimoCostoTmp) {
+        this.actualizarUltimoCostoTmp = actualizarUltimoCostoTmp;
+    }
+
+    public void setActualizarCostoPromedioTmp(Boolean actualizarCostoPromedioTmp) {
+        this.actualizarCostoPromedioTmp = actualizarCostoPromedioTmp;
     }
     
     
@@ -365,8 +378,8 @@ public class StockMinimoData implements ExcelDatosInterface{
     public static Map<Long,BigDecimal> obtenerKardexModificadoStock(List<StockMinimoData> lista)
     {
         Map<Long,BigDecimal> mapStock=new HashMap<Long, BigDecimal>();
-        
-        for (StockMinimoData stockMinimoData : lista) 
+
+        for (StockMinimoData stockMinimoData : lista)
         {
             if(stockMinimoData.actualizarStockTmp)
             {
@@ -375,5 +388,36 @@ public class StockMinimoData implements ExcelDatosInterface{
         }
         return mapStock;
     }
-    
+
+    /**
+     * Arma el mapa de correcciones de Último Costo / Costo Promedio para los kardex que fueron editados
+     * en la grilla. Solo se incluye el campo que realmente fue editado en cada fila (el otro queda null),
+     * para que el servidor solo toque lo que corresponde.
+     */
+    public static Map<Long,CostoProductoRespuesta> obtenerKardexModificadoCostos(List<StockMinimoData> lista)
+    {
+        Map<Long,CostoProductoRespuesta> mapCostos=new HashMap<Long, CostoProductoRespuesta>();
+
+        for (StockMinimoData stockMinimoData : lista)
+        {
+            if(stockMinimoData.actualizarUltimoCostoTmp || stockMinimoData.actualizarCostoPromedioTmp)
+            {
+                CostoProductoRespuesta costos=new CostoProductoRespuesta(null,null);
+
+                if(stockMinimoData.actualizarCostoPromedioTmp)
+                {
+                    costos.costoPromedio=new BigDecimal(stockMinimoData.costo);
+                }
+
+                if(stockMinimoData.actualizarUltimoCostoTmp)
+                {
+                    costos.costoUltimo=new BigDecimal(stockMinimoData.ultimoCosto);
+                }
+
+                mapCostos.put(stockMinimoData.getKardexId(),costos);
+            }
+        }
+        return mapCostos;
+    }
+
 }

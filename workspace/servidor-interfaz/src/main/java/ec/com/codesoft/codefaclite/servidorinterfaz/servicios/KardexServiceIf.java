@@ -108,6 +108,14 @@ public interface KardexServiceIf extends ServiceAbstractIf<Kardex>
     public void actualizarKardex(Kardex kardex) throws RemoteException,ServicioCodefacException;
     
     public void actualizarKardexLote(Map<Long,BigDecimal> stockMap,Usuario usuario) throws RemoteException,ServicioCodefacException;
+
+    /**
+     * Permite corregir en lote el Último Costo y/o Costo Promedio de varios kardex (ej. datos mal migrados
+     * o mal calculados). Reutiliza el mismo mecanismo de la pantalla de Kardex (actualizarKardex): un merge
+     * directo sin pasar por el recálculo de costo ponderado ni por el historial de movimientos auditados.
+     * Por cada kardex solo se actualiza el campo que venga distinto de null en el CostoProductoRespuesta.
+     */
+    public void actualizarCostosKardexLote(Map<Long,CostoProductoRespuesta> costosMap) throws RemoteException,ServicioCodefacException;
     
     public void eliminarPorId(Long kardexId) throws RemoteException,ServicioCodefacException;
     
