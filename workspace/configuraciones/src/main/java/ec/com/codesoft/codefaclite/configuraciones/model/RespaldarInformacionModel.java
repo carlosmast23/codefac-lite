@@ -69,6 +69,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
     
     private ParametroCodefac parametroHoraProgramada;
     private ParametroCodefac parametroRespaldarSalir;
+    private ParametroCodefac parametroNotificarRespaldoVencido;
     
     
     
@@ -104,20 +105,28 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
         try {
             parametroHoraProgramada=service.getParametroByNombre(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA, session.getEmpresa());
             parametroRespaldarSalir=service.getParametroByNombre(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR, session.getEmpresa());
-            
+            parametroNotificarRespaldoVencido=service.getParametroByNombre(ParametroCodefac.ParametrosRespaldoDB.NOTIFICAR_RESPALDO_VENCIDO, session.getEmpresa());
+
             //Si los valores son nulos entonces creo las variables en balnco
             if(parametroHoraProgramada==null)
             {
                 parametroHoraProgramada=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_HORA_PROGRAMADA,"");
                 parametroHoraProgramada.setEmpresaTmp(session.getEmpresa());
             }
-            
+
             if(parametroRespaldarSalir==null)
             {
                 parametroRespaldarSalir=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.DB_RESPALDO_AUTOMATICO_SALIR,"");
                 parametroRespaldarSalir.setEmpresaTmp(session.getEmpresa());
             }
-            
+
+            //Por defecto viene en SI para no cambiar el comportamiento de quienes no lo hayan configurado
+            if(parametroNotificarRespaldoVencido==null)
+            {
+                parametroNotificarRespaldoVencido=new ParametroCodefac(ParametroCodefac.ParametrosRespaldoDB.NOTIFICAR_RESPALDO_VENCIDO,EnumSiNo.SI.getLetra());
+                parametroNotificarRespaldoVencido.setEmpresaTmp(session.getEmpresa());
+            }
+
         } catch (RemoteException ex) {
             Logger.getLogger(RespaldarInformacionModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -153,7 +162,7 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
                     parametroDirectorio.setValor(getTxtUbicacionRespaldo().getText());
                                         
                     ParametroCodefacServiceIf parametroCodefacServiceIf= ServiceFactory.getFactory().getParametroCodefacServiceIf();
-                    List<ParametroCodefac> parametrosList=Arrays.asList(parametroDirectorio,parametroHoraProgramada,parametroRespaldarSalir);
+                    List<ParametroCodefac> parametrosList=Arrays.asList(parametroDirectorio,parametroHoraProgramada,parametroRespaldarSalir,parametroNotificarRespaldoVencido);
                     parametroCodefacServiceIf.editarParametros(parametrosList);                        
                     
                     DialogoCodefac.mensaje("Actualizado datos", "Los datos de los parametros fueron actualizados", DialogoCodefac.MENSAJE_CORRECTO);
@@ -447,6 +456,14 @@ public class RespaldarInformacionModel extends RespaldarInformacionPanel
 
     public void setParametroRespaldarSalir(ParametroCodefac parametroRespaldarSalir) {
         this.parametroRespaldarSalir = parametroRespaldarSalir;
+    }
+
+    public ParametroCodefac getParametroNotificarRespaldoVencido() {
+        return parametroNotificarRespaldoVencido;
+    }
+
+    public void setParametroNotificarRespaldoVencido(ParametroCodefac parametroNotificarRespaldoVencido) {
+        this.parametroNotificarRespaldoVencido = parametroNotificarRespaldoVencido;
     }
 
     

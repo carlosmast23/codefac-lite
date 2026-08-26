@@ -212,6 +212,12 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
      */
     private AlertaResponse obtenerNotificacionFechaRespaldo(Empresa empresa)
     {
+        //Si la empresa desactivó las notificaciones de respaldo (ej. respalda por otro medio como Google Drive) no se genera la alerta
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.ParametrosRespaldoDB.NOTIFICAR_RESPALDO_VENCIDO,EnumSiNo.NO))
+        {
+            return null;
+        }
+
         String fechaStr=ParametroUtilidades.obtenerValorParametro(empresa,ParametroCodefac.ParametrosRespaldoDB.FECHA_ULTIMO_ENVIO_RESPALDO_SISTEMA);
         if(!UtilidadesTextos.verificarNullOVacio(fechaStr))
         {
@@ -227,8 +233,14 @@ public class AlertaService extends UnicastRemoteObject implements Serializable,A
         //ParametrosSistemaCodefac.TOLERACION_DIAS_SIN_RESPALDO;
     }
     
-    private AlertaResponse obtenerNotificacionProblemasConEnvioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException 
+    private AlertaResponse obtenerNotificacionProblemasConEnvioRespaldo(Empresa empresa) throws RemoteException,ServicioCodefacException
     {
+        //Si la empresa desactivó las notificaciones de respaldo (ej. respalda por otro medio como Google Drive) no se genera la alerta
+        if(ParametroUtilidades.comparar(empresa, ParametroCodefac.ParametrosRespaldoDB.NOTIFICAR_RESPALDO_VENCIDO,EnumSiNo.NO))
+        {
+            return null;
+        }
+
         if(ParametroUtilidades.comparar(empresa, ParametroCodefac.ParametrosRespaldoDB.PROBLEMA_ULTIMO_ENVIO_RESPALDO,EnumSiNo.SI))
         {
             AlertaResponse alerta=new AlertaResponse(AlertaResponse.TipoAdvertenciaEnum.ADVERTENCIA,"Error Enviar Último Respaldo","Llamar Soporte");

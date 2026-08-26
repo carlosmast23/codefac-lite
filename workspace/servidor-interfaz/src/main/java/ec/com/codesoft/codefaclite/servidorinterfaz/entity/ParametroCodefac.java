@@ -601,6 +601,13 @@ public class ParametroCodefac implements Serializable {
          * Variable que me va a permitir saber si los respaldos fueron enviados la última vez o tiene algún problema con el envio
          */
         public static final String PROBLEMA_ULTIMO_ENVIO_RESPALDO="problema_ultimo_envio_respaldo";
+
+        /**
+         * Permite activar o desactivar las notificaciones de respaldo (días sin enviar respaldo y error
+         * al enviar el último respaldo) en la pantalla inicial, para empresas que respaldan por otro medio
+         * (ej. Google Drive) y no requieren que el sistema controle el respaldo automático interno
+         */
+        public static final String NOTIFICAR_RESPALDO_VENCIDO="notificar_respaldo_vencido";
     }
     
     public static class AliasNombresDocumentos
