@@ -38,6 +38,7 @@ public class FacturaElectronicaReporte extends FacturaLiquidacionCompraAbstractR
         map.put("direccion_comprador",facturaComprobante.getInformacionFactura().getDireccionComprador());
         map.put("cliente_identificacion",facturaComprobante.getInformacionFactura().getIdentificacionComprador());
         map.put("telefonos_cliente", facturaComprobante.obtenerTelefonoCliente());
+        map.put("placa", facturaComprobante.getInformacionFactura().getPlaca());
         /**
          * TODO: Esta parte de subsidios solo esta programado para productos que no llevan iva por ejemplo el gas, falta terminar para productos con iva
          * POSIBLE SOLUCION: Recorrer cada detalle y calcular el subsidio solo de los productos 

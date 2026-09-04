@@ -181,11 +181,6 @@ public class FacturaReporteModel extends FacturaReportePanel {
         System.out.println("El tiempo en generar el reporte es: " + segundosDemora);
 
         data = controladorReporte.getData();
-        
-        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE) || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE))
-        {
-            controladorReporte.intercambiarInfoProductosReporte();
-        }
 
         imprimirTabla();
 

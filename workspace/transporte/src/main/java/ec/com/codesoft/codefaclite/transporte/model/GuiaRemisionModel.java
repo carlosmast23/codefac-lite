@@ -1089,10 +1089,16 @@ public class GuiaRemisionModel extends GuiaRemisionPanel implements ComponenteDa
         if(transportista!=null)
         {
             guiaRemision.setTransportista(transportista);
-            guiaRemision.setIdentificacion(transportista.getIdentificacion());
             guiaRemision.setDireccion(transportista.getDireccion());
-            guiaRemision.setRazonSocial(transportista.getRazonSocial());
             guiaRemision.setPlaca(transportista.getPlacaVehiculo());
+        }
+
+        //La identificación/razón social del comprobante debe corresponder al cliente (destinatario), no al transportista
+        if(guiaRemision.getDestinatarios()!=null && !guiaRemision.getDestinatarios().isEmpty())
+        {
+            DestinatarioGuiaRemision primerDestinatario=guiaRemision.getDestinatarios().get(0);
+            guiaRemision.setIdentificacion(primerDestinatario.getIdentificacion());
+            guiaRemision.setRazonSocial(primerDestinatario.getRazonSocial());
         }
 
         DocumentoEnum documentoEnum=(DocumentoEnum) getCmbDocumento().getSelectedItem();

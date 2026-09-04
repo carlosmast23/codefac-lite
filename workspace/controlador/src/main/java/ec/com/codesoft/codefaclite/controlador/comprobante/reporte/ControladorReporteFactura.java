@@ -784,12 +784,31 @@ public class ControladorReporteFactura {
         String titulo = "Ventas "+tipoReporteEnum.getNombre();
         InputStream path=getReporteAgrupado();
         //List<AgrupadoReporteIf> datosProcesar=(ArrayList<AgrupadoReporteIf>)(ArrayList<?>)data;
-        
+
+        boolean esReporteDetalle=tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_DETALLE) || tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE);
+        if(esReporteDetalle)
+        {
+            //El PDF reutiliza la columna de razón social para mostrar el producto (encabezado dinámico "titulo_adicional");
+            //debe ejecutarse antes de obtenerDatosReporteAgrupado porque AGRUPADO_POR_CAMPO_ADICIONAL_DETALLE agrupa usando razonSocialTmp
+            intercambiarInfoProductosReporte();
+        }
+
         //tipoReporteEnum.procesarDatosReporte(datosProcesar);
         UtilidadReporteJasper.obtenerDatosReporteAgrupado(tipoReporteEnum, data);
-        
-        //ordenarListaPorPrecio(data);
-        ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(tipoReporteEnum), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+
+        try
+        {
+            //ordenarListaPorPrecio(data);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(tipoReporteEnum), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+        }
+        finally
+        {
+            if(esReporteDetalle)
+            {
+                //Restaurar la razón social real para que la tabla en pantalla y el Excel no queden con el nombre del producto
+                restaurarInfoProductosReporte();
+            }
+        }
     }
     
     
@@ -921,14 +940,22 @@ public class ControladorReporteFactura {
     
     public void intercambiarInfoProductosReporte()
     {
-        for (ReporteFacturaData reporteFacturaData : data) 
+        for (ReporteFacturaData reporteFacturaData : data)
         {
             //Propiedad temporal para no perder el campo de la razon social
             reporteFacturaData.razonSocialTmp=reporteFacturaData.getRazonSocialCliente();
             reporteFacturaData.setRazonSocialCliente(reporteFacturaData.getNombreProducto());
         }
     }
-    
+
+    public void restaurarInfoProductosReporte()
+    {
+        for (ReporteFacturaData reporteFacturaData : data)
+        {
+            reporteFacturaData.setRazonSocialCliente(reporteFacturaData.razonSocialTmp);
+        }
+    }
+
     
     public Map<String,Object> mapParametrosReportePdf(TipoReporteEnum tipoReporteEnum)
     {

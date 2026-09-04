@@ -87,6 +87,7 @@
 	<parameter name="tipoRegimen" class="java.lang.String"/>
 	<parameter name="SUBREPORT_CABECERA" class="java.lang.Object"/>
 	<parameter name="telefonos_cliente" class="java.lang.String"/>
+	<parameter name="placa" class="java.lang.String"/>
 	<parameter name="ivaCinco" class="java.lang.String"/>
 	<parameter name="subtotal_cinco" class="java.lang.String"/>
 	<queryString>
@@ -310,6 +311,23 @@
 				<connectionExpression><![CDATA[]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_CABECERA}]]></subreportExpression>
 			</subreport>
+			<staticText>
+				<reportElement x="220" y="272" width="90" height="13" uuid="8f3f1c2f-1a4e-4b7d-9a3e-5c6d7e8f9a0b">
+					<printWhenExpression><![CDATA[new Boolean($P{placa}!=null && !$P{placa}.isEmpty() )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<text><![CDATA[Placa:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="312" y="272" width="70" height="13" uuid="1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{placa}]]></textFieldExpression>
+			</textField>
 			<staticText>
 				<reportElement x="385" y="272" width="70" height="13" uuid="eba88364-7b61-474e-976f-0109a600297b"/>
 				<textElement textAlignment="Right">
