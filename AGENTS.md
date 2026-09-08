@@ -70,6 +70,12 @@ Cada vez que se agrega una entidad JPA nueva con UI, hay tres puntos que NO son 
 
 Ver checklist completo de 14 pasos en `docs/codex-context.md`.
 
+## Comprobantes electronicos (SRI)
+
+El XML de los comprobantes electronicos (factura, nota de credito, liquidacion de compra, guia de remision, retencion) se genera con **JAXB**, no con StringBuilder. Las clases estan en `workspace/facturacionElectronica/src/main/java/ec/com/codesoft/codefaclite/facturacionelectronica/jaxb/*` (ej. `InformacionFactura`, `InformacionNotaCredito`, `InformacionLiquidacionCompra`), son POJOs escritos a mano con `@XmlType(propOrder = {...})` + `@XmlElement`. **El orden de los tags en el XML final lo define solo el array `propOrder`**, no el orden de los metodos. El marshalling ocurre en `ComprobanteElectronicoService.generarXml`. Los XSD oficiales del SRI estan guardados como referencia en `recursos/sri/esquemasXsd/` y `recursos/sri/esquemasXml/`; antes de agregar un campo nuevo, confirmar ahi la posicion exacta y a que tipos de comprobante aplica.
+
+`ComprobanteDataFactura.java` y `ComprobanteDataCompra.java` (en `workspace/servidor-interfaz/.../comprobantesElectronicos/`) tienen logica **duplicada**: ambas construyen `informacionComprobante` como `InformacionFactura` o `InformacionLiquidacionCompra` segun el tipo de documento. Cualquier campo que dependa del tipo concreto (ej. `placa`, `moneda`) hay que setearlo con `instanceof` en **los dos archivos**, no solo en uno.
+
 ## Hotspots conocidos al retomar
 - Busqueda de clientes/establecimientos en modo academico: `ClienteEstablecimientoBusquedaDialogo` puede volverse lenta por `LEFT JOIN` a estudiantes, `DISTINCT`, `LOWER(...) LIKE` y `FetchType.EAGER` en `Persona.estudiantes`.
 - Facturacion/nota de credito: los cambios parciales deben validar devolucion de inventario y reactivacion de `KardexItemEspecifico`.

@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
     "totalImpuestos",
     "importeTotal",
     "placa",
+    "moneda",
     "formaPagos"})
 public class InformacionFactura extends InformacionComprobanteAbstract{
 
@@ -43,6 +44,7 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
     private String direccionComprador;
     private BigDecimal totalSubsidio;
     private String placa;
+    private String moneda;
     
    
     public InformacionFactura() {
@@ -104,8 +106,17 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
     public void setPlaca(String placa) {
         this.placa = placa;
     }
-    
-    
+
+    @XmlElement(name = "moneda")
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+
 
     public void setDireccionComprador(String direccionComprador) {
         this.direccionComprador = direccionComprador;

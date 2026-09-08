@@ -209,8 +209,14 @@ public class ComprobanteDataCompra extends ComprobanteDataFacturaNotaCreditoAbst
         }
         
         informacionComprobante.setRazonSocial(UtilidadValidador.normalizarTextoFacturacionElectronica(razonSocial));
-        
-       
+
+        //Moneda del comprobante, el sistema solo maneja dólares
+        if (informacionComprobante instanceof InformacionFactura) {
+            ((InformacionFactura) informacionComprobante).setMoneda("DOLAR");
+        } else if (informacionComprobante instanceof InformacionLiquidacionCompra) {
+            ((InformacionLiquidacionCompra) informacionComprobante).setMoneda("DOLAR");
+        }
+
         informacionComprobante.setImporteTotal(factura.getTotal());
 
         BigDecimal descuentoTotal = factura.getDescuentoImpuestos().add(factura.getDescuentoSinImpuestos());

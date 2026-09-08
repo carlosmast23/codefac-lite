@@ -27,12 +27,14 @@ import javax.xml.bind.annotation.XmlType;
     "totalDescuento",
     "totalImpuestos",
     "importeTotal",
+    "moneda",
     "formaPagos"})
 public class InformacionLiquidacionCompra extends InformacionComprobanteAbstract{
     private String tipoIdentificacionProveedor;
     private String razonSocialProveedor;
     private String identificacionProveedor;
     private String direccionProveedor;
+    private String moneda;
 
     public InformacionLiquidacionCompra() {
     }
@@ -71,6 +73,15 @@ public class InformacionLiquidacionCompra extends InformacionComprobanteAbstract
 
     public void setDireccionProveedor(String direccionProveedor) {
         this.direccionProveedor = direccionProveedor;
+    }
+
+    @XmlElement(name = "moneda")
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
 
     @Override
