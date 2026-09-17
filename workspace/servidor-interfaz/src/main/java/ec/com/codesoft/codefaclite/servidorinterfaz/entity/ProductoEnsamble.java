@@ -124,7 +124,12 @@ public class ProductoEnsamble implements Serializable{
         /**
          * Enumardo que indica que se quito el ensamble por un usuario
          */
-        QUITAR
+        QUITAR,
+        /**
+         * Reversa de CONSTRUIR_FACTURA: se usa al eliminar una factura o hacer una nota de credito
+         * de un producto ensamble, para restaurar el stock de los componentes que se descontaron al vender
+         */
+        REVERTIR_FACTURA
     }
     
 }

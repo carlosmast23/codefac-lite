@@ -70,11 +70,35 @@ Cada vez que se agrega una entidad JPA nueva con UI, hay tres puntos que NO son 
 
 Ver checklist completo de 14 pasos en `docs/codex-context.md`.
 
+## Productos tipo Ensamble (kits) y el parametro CONSTRUIR_ENSAMBLES_FACTURAR
+
+Un producto `TipoProductoEnum.EMSAMBLE` (si, con ese typo en el codigo) esta compuesto de otros productos (`Producto.getDetallesEnsamble()` -> `ProductoEnsamble`, con `cantidad` + `componenteEnsamble`). Cuando el parametro `ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR = SI`, el ensamble **no maneja stock propio en absoluto** — su kardex nunca deberia tocarse. Solo se descuenta/restaura el stock de sus componentes, por `cantidad_facturada x cantidad_definida_en_el_ensamble`.
+
+Puntos donde esto se resuelve (los tres tienen que ir de la mano, es facil arreglar uno y olvidar los otros):
+
+1. **Venta:** `FacturacionService.afectarInventario` detecta EMSAMBLE+parametro y llama a `KardexService.descontarComponentesEnsamblePorVenta(...)` en vez del flujo normal — nunca genera movimiento sobre el kardex del ensamble.
+2. **Eliminar factura / Nota de credito:** ambos flujos comparten el metodo generico `KardexService.afectarInventario(Bodega, Lote, cantidad, ...)` (distinto del de arriba, es el usado por `NotaCreditoService.anularProcesoFactura`). Ahi tambien hay que detectar EMSAMBLE+parametro y llamar a `KardexService.restaurarComponentesEnsamblePorAnulacion(...)` en vez de restaurar stock al producto referenciado (que seria el ensamble).
+3. **Pantalla manual de Inventario > Ensamble** (armar/desarmar stock a mano, acciones `AGREGAR`/`QUITAR` de `ProductoEnsamble.EnsambleAccionEnum`) sigue un camino aparte y **si** maneja `reserva` ademas de `stock` — es un comportamiento distinto a proposito, no unificar sin confirmar con el usuario.
+
+Toda esta logica de componentes vive en un solo metodo compartido: `KardexService.getKardexModificados(productoEnsamble, cantidad, bodega, accion, entityManager)`, con un `if/else` por cada valor de `EnsambleAccionEnum` (`CONSTRUIR_FACTURA`, `REVERTIR_FACTURA`, `AGREGAR`, `QUITAR`) que decide si toca `stock`, `reserva`, o ambos. `CONSTRUIR_FACTURA`/`REVERTIR_FACTURA` (venta y su reversa) solo tocan `stock`; `AGREGAR`/`QUITAR` (pantalla manual) tocan `stock` y `reserva`.
+
+**Why:** El bug original era que la venta descontaba el kardex del ensamble Y ademas no restauraba los componentes al anular — quedaba el ensamble con stock fantasma y los componentes con faltante permanente. `restaurarComponentesEnsamblePorAnulacion`/`REVERTIR_FACTURA` existen especificamente para que la reversa sea simetrica a la venta (solo `stock`, nunca `reserva`, nunca el kardex del propio ensamble).
+
 ## Comprobantes electronicos (SRI)
 
 El XML de los comprobantes electronicos (factura, nota de credito, liquidacion de compra, guia de remision, retencion) se genera con **JAXB**, no con StringBuilder. Las clases estan en `workspace/facturacionElectronica/src/main/java/ec/com/codesoft/codefaclite/facturacionelectronica/jaxb/*` (ej. `InformacionFactura`, `InformacionNotaCredito`, `InformacionLiquidacionCompra`), son POJOs escritos a mano con `@XmlType(propOrder = {...})` + `@XmlElement`. **El orden de los tags en el XML final lo define solo el array `propOrder`**, no el orden de los metodos. El marshalling ocurre en `ComprobanteElectronicoService.generarXml`. Los XSD oficiales del SRI estan guardados como referencia en `recursos/sri/esquemasXsd/` y `recursos/sri/esquemasXml/`; antes de agregar un campo nuevo, confirmar ahi la posicion exacta y a que tipos de comprobante aplica.
 
 `ComprobanteDataFactura.java` y `ComprobanteDataCompra.java` (en `workspace/servidor-interfaz/.../comprobantesElectronicos/`) tienen logica **duplicada**: ambas construyen `informacionComprobante` como `InformacionFactura` o `InformacionLiquidacionCompra` segun el tipo de documento. Cualquier campo que dependa del tipo concreto (ej. `placa`, `moneda`) hay que setearlo con `instanceof` en **los dos archivos**, no solo en uno.
+
+## Reportes de facturacion (JasperReports)
+
+Los tickets/facturas impresas son `.jrxml` en `workspace/recursos/src/main/resources/reportes/facturacion/` y `reportes/comprobantes_electronicos/` (RIDE del SRI). No es texto plano ni ESC/POS: son reportes JasperReports con `<parameter>` + `<textField>`/`<staticText>` posicionados por coordenadas x/y fijas (banda `summary` para los totales).
+
+- `comprobante_venta_ticket.jrxml` es compartido por los formatos **POS 80, A2, A5 y A6** (ver el mapeo en `FacturaModelControlador.java` ~linea 2519-2522) — cualquier cambio ahi afecta a los 4 formatos a la vez.
+- Los datos (subtotales, IVA por tasa, etc.) se arman en `FacturaModelControlador.getMapParametrosReporte(Factura)` (~linea 2024+), que usa `Factura.obtenerIvaCinco()` (`@Deprecated` pero funcional) para separar los detalles de factura por `ivaPorcentaje` (solo contempla 5 y 15, hardcodeado).
+- El RIDE electronico (`facturaReporte.jrxml`) es la referencia mas completa para el patron de desglose multi-tasa de IVA (subtotal + iva por cada tasa) — al agregar un desglose nuevo a un ticket, conviene copiar el patron de ahi en vez de inventar uno.
+- Layout en banda `summary`: filas espaciadas cada ~9 unidades en `y`, columna de labels a la izquierda y de valores en `x=129` (con `<box>` de bordes). Los campos condicionales (que solo aparecen si esa tasa de IVA existe en la venta) usan `printWhenExpression` sobre si el parametro viene no-null/no-vacio, no sobre datos crudos de la factura.
+- **Los `<group>` de Jasper NO ordenan los datos, solo detectan cuando la `groupExpression` cambia entre filas consecutivas.** Si la lista que llega desde Java no viene pre-ordenada por ese mismo criterio, el grupo se corta y repite en vez de quedar en una sola seccion. Ver `CerrarCajaModel.generarReporteCaja` (`workspace/pos/.../model/`): el reporte de cierre de caja (`reporteCierreCaja.jrxml` A4 y `cierreCajaTicket.jrxml` ticket) agrupa primero por `signo` (INGRESOS/EGRESOS, grupo `signo`, declarado antes que `GROUP_FORMA_PAGO`/`forma_pago` para quedar como grupo externo) y dentro por forma de pago — el `Comparator` en Java ordena por signo y luego por forma de pago exactamente en ese orden para que coincida.
 
 ## Hotspots conocidos al retomar
 - Busqueda de clientes/establecimientos en modo academico: `ClienteEstablecimientoBusquedaDialogo` puede volverse lenta por `LEFT JOIN` a estudiantes, `DISTINCT`, `LOWER(...) LIKE` y `FetchType.EAGER` en `Persona.estudiantes`.

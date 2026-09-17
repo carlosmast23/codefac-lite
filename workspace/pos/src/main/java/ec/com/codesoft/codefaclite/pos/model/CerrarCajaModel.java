@@ -374,9 +374,16 @@ public class CerrarCajaModel extends CajaSessionModel
             }
         }
         
+        //Ordena primero por signo (Ingresos "+" antes que Egresos "-") para que el reporte
+        //pueda mostrarlos en secciones separadas, y dentro de cada seccion por forma de pago
         UtilidadesLista.ordenarLista(detalleData,new Comparator<VentaReporteData>() {
             @Override
             public int compare(VentaReporteData o1, VentaReporteData o2) {
+                int comparacionSigno = o1.getSigno().compareTo(o2.getSigno());
+                if(comparacionSigno != 0)
+                {
+                    return comparacionSigno;
+                }
                 return o1.getFormaPago().compareTo(o2.getFormaPago());
             }
         });

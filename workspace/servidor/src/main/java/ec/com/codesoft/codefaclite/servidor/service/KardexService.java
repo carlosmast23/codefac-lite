@@ -469,7 +469,19 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     //Este paso lo hago porque cuando seteo un valor a una entidad cuando esta asociado automaticamente se refleja en la base de datos
                     //ServiceAbstract.desasociarEntidadRecursivo(kardexComponente);
                     
-                    if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR)  || accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA))
+                    if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA))
+                    {
+                        //Al vender un ensamble solo se descuenta el stock de los componentes.
+                        //La reserva NO participa aca, tiene otro uso (ordenes/POS en espera, ver Factura.procesarReserva)
+                        kardexComponente.setStock(kardexComponente.getStock().subtract(cantidadTotal));
+                    }
+                    else if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.REVERTIR_FACTURA))
+                    {
+                        //Reversa de CONSTRUIR_FACTURA (factura eliminada o nota de credito de un ensamble):
+                        //solo se restaura el stock, la reserva tampoco participa aca porque CONSTRUIR_FACTURA nunca la toco
+                        kardexComponente.setStock(kardexComponente.getStock().add(cantidadTotal));
+                    }
+                    else if(accion.equals(ProductoEnsamble.EnsambleAccionEnum.AGREGAR))
                     {
                         kardexComponente.setReserva(kardexComponente.getReserva().add(cantidadTotal));
                         kardexComponente.setStock(kardexComponente.getStock().subtract(cantidadTotal));
@@ -590,21 +602,8 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         }
 
         //CALCULAR EL COSTO DEL ENSAMBLE
-        BigDecimal costoIndividualEnsamble = BigDecimal.ZERO;
-        List<ProductoEnsamble> listaComponentes = kardexEnsamble.getProducto().getDetallesEnsamble();
-        for (ProductoEnsamble componenteEmsamble : listaComponentes) {
-            parametrosMap = new HashMap<String, Object>();
-            parametrosMap.put("bodega", bodegaDestino);
-            parametrosMap.put("producto", componenteEmsamble.getComponenteEnsamble());
-            kardexList = obtenerPorMap(parametrosMap,entityManager);
-            
-            //Solo calculo el costo del ensamble si los otros productos ya estana ingresados en el kardex
-            if(kardexList.size()>0)
-            {
-                costoIndividualEnsamble = costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
-            }
-        }
-        
+        BigDecimal costoIndividualEnsamble = calcularCostoIndividualEnsamble(kardexEnsamble.getProducto(), bodegaDestino, entityManager);
+
         
         ///Actualizar los totales del emsamble
         //kardex.setPrecioPromedio(kardex.getPrecioPromedio().add(costoIndividualEnsamble).divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP));
@@ -652,12 +651,70 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
     }
     
     /**
+     * Calcula el costo del ensamble sumando el costo (precioUltimo del kardex) de cada componente
+     * multiplicado por la cantidad que se necesita de ese componente para armar una unidad del ensamble.
+     */
+    private BigDecimal calcularCostoIndividualEnsamble(Producto productoEnsamble, Bodega bodega, EntityManager entityManager) throws java.rmi.RemoteException, ServicioCodefacException
+    {
+        BigDecimal costoIndividualEnsamble = BigDecimal.ZERO;
+        for (ProductoEnsamble componenteEmsamble : productoEnsamble.getDetallesEnsamble()) {
+            Map<String, Object> parametrosMap = new HashMap<String, Object>();
+            parametrosMap.put("bodega", bodega);
+            parametrosMap.put("producto", componenteEmsamble.getComponenteEnsamble());
+            List<Kardex> kardexList = obtenerPorMap(parametrosMap, entityManager);
+
+            //Solo calculo el costo del ensamble si los otros productos ya estana ingresados en el kardex
+            if (kardexList.size() > 0) {
+                costoIndividualEnsamble = costoIndividualEnsamble.add(new BigDecimal(componenteEmsamble.getCantidad().toString()).multiply(kardexList.get(0).getPrecioUltimo()));
+            }
+        }
+        return costoIndividualEnsamble;
+    }
+
+    /**
+     * Descuenta el stock de los componentes de un producto ensamble para cubrir una venta, SIN generar
+     * ningun movimiento sobre el kardex del producto ensamble en si. Se usa cuando el parametro
+     * CONSTRUIR_ENSAMBLES_FACTURAR esta activo: en ese modo el stock del ensamble no se maneja/rastrea,
+     * solo el de sus componentes, que se descuentan por la cantidad total facturada del ensamble.
+     * @return el costo total de los componentes usados, para registrarlo como costo del detalle de factura
+     */
+    public BigDecimal descontarComponentesEnsamblePorVenta(Bodega bodega, Producto productoEnsamble, BigDecimal cantidad, boolean validarStockComponentes, EntityManager entityManager) throws java.rmi.RemoteException, ServicioCodefacException
+    {
+        if (validarStockComponentes && ParametroUtilidades.comparar(bodega.getEmpresa(), ParametroCodefac.FACTURAR_INVENTARIO_NEGATIVO, EnumSiNo.NO))
+        {
+            //verifica que EXISTA STOCK EN LOS COMPONENTES PARA CUBRIR LA VENTA//
+            validarEnsambleComponentes(productoEnsamble, bodega, cantidad, entityManager);
+        }
+
+        List<Kardex> componentesKardex = getKardexModificados(productoEnsamble, cantidad, bodega, ProductoEnsamble.EnsambleAccionEnum.CONSTRUIR_FACTURA, entityManager);
+        //Actualizar los detalles de los componentes del kardex
+        for (Kardex kardexComponente : componentesKardex) {
+            entityManager.merge(kardexComponente);
+        }
+
+        return calcularCostoIndividualEnsamble(productoEnsamble, bodega, entityManager);
+    }
+
+    /**
+     * Reversa de {@link #descontarComponentesEnsamblePorVenta}: se usa al eliminar una factura o hacer una
+     * nota de credito de un producto ensamble, para restaurar el stock de los componentes que se descontaron
+     * al vender. Al igual que en la venta, el kardex del propio ensamble NO se toca.
+     */
+    public void restaurarComponentesEnsamblePorAnulacion(Bodega bodega, Producto productoEnsamble, BigDecimal cantidad, EntityManager entityManager) throws java.rmi.RemoteException, ServicioCodefacException
+    {
+        List<Kardex> componentesKardex = getKardexModificados(productoEnsamble, cantidad, bodega, ProductoEnsamble.EnsambleAccionEnum.REVERTIR_FACTURA, entityManager);
+        for (Kardex kardexComponente : componentesKardex) {
+            entityManager.merge(kardexComponente);
+        }
+    }
+
+    /**
      * Metodo que permite verificar si tiene el ensamble tiene la cantidad necesario de stock de sus componentes
      * @param productoEnsamble
      * @param bodega
      * @param cantidad
      * @throws java.rmi.RemoteException
-     * @throws ServicioCodefacException 
+     * @throws ServicioCodefacException
      */
     private void validarEnsambleComponentes( Producto productoEnsamble,Bodega bodega,BigDecimal cantidad,EntityManager em) throws java.rmi.RemoteException,ServicioCodefacException
     {        
@@ -2008,9 +2065,18 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
         try {
             //productoFacade.
             Producto producto=productoFacade.find(referenciaProductoId,entityManager);
-            
+
+            //Si es un ensamble construido al facturar, su propio kardex nunca se toco al vender (ver
+            //FacturacionService.afectarInventario), asi que al anular (eliminar factura / nota de credito)
+            //tampoco se debe tocar: solo se restaura el stock de los componentes.
+            if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(bodega.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
+            {
+                restaurarComponentesEnsamblePorAnulacion(bodega, producto, cantidad, entityManager);
+                return null;
+            }
+
             //TODO: Unificar con el mismo metodo al momento de grabar
-            if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE)) 
+            if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
             {
                 ProductoConversionPresentacionRespuesta respuesta = productoFacade.convertirProductoEmpaqueSecundarioEnPrincipal(producto, cantidad,precioUnitario);
 

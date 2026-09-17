@@ -8,6 +8,7 @@ package ec.com.codesoft.codefaclite.servidor.facade;
 import ec.com.codesoft.codefaclite.servidor.service.FacturacionService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
+import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,25 @@ public class ParametroCodefacFacade extends AbstractFacade<ParametroCodefac>
     {
         try
         {
+            String queryEmpresa="";
+            if(empresa!=null)
+            {
+                queryEmpresa=" AND p.empresaId=?2 ";
+            }
+            
             //ParametroCodefac pc;pc.getEmpresaId()
             //Este Order o hago por si existen datos repetidos seleccionar el último guardado        
-            String queryString = "SELECT p FROM ParametroCodefac p WHERE p.empresaId=?2 AND p.nombre=?1 ORDER BY p.id desc ";
+            String queryString = "SELECT p FROM ParametroCodefac p WHERE p.nombre=?1 "+ queryEmpresa+" ORDER BY p.id desc ";
+            
+            
+            
             Query query = em.createQuery(queryString);
             query.setParameter(1,nombre); 
-            query.setParameter(2,empresa.getId()); 
+            
+            if(empresa!=null)
+            {
+                query.setParameter(2,empresa.getId()); 
+            }
 
             List<ParametroCodefac> resultadoList=query.getResultList();
             if(resultadoList.size()>0)

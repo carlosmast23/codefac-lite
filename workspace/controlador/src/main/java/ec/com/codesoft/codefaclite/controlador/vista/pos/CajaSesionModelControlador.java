@@ -102,7 +102,15 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         
         //Consultar las cajas session que tenga activas
         if (cajaSessionList!=null && cajaSessionList.size() > 0) {
+            //Si el usuario logueado tiene su propia caja abierta, esa debe quedar seleccionada por defecto
+            //(por ejemplo un supervisor que puede ver las cajas abiertas de todos los cajeros de la sucursal)
             cajaSessionSeleccionada = cajaSessionList.get(0);
+            for (CajaSession cajaSessionItem : cajaSessionList) {
+                if (cajaSessionItem.getUsuario() != null && cajaSessionItem.getUsuario().equals(session.getUsuario())) {
+                    cajaSessionSeleccionada = cajaSessionItem;
+                    break;
+                }
+            }
             if(formatear)
             {
                 cargarDatosPantalla(cajaSessionSeleccionada);
@@ -336,6 +344,9 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
 
     public void setCajaSessionSeleccionada(CajaSession cajaSessionSeleccionada) {
         this.cajaSessionSeleccionada = cajaSessionSeleccionada;
+        //Al cambiar la caja seleccionada en el combo hay que refrescar la pantalla (fechas, denominaciones,
+        //valor teorico/real) con los datos de la nueva sesion, si no se queda mostrando los de la anterior
+        cargarDatosPantalla(cajaSessionSeleccionada);
     }
 
     

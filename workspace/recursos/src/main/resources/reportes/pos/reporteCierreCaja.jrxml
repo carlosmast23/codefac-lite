@@ -67,6 +67,56 @@
 	<variable name="TOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
 		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
 	</variable>
+	<variable name="TOTAL_SIGNO" class="java.math.BigDecimal" resetType="Group" resetGroup="signo" calculation="Sum">
+		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
+	</variable>
+	<group name="signo">
+		<groupExpression><![CDATA[$F{signo}]]></groupExpression>
+		<groupHeader>
+			<band height="26">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="4" width="555" height="18" forecolor="#FFFFFF" backcolor="#666666" uuid="b2c3d4e5-0000-4b00-8b00-000000000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{signo}.equals("+") ? "INGRESOS" : "EGRESOS"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="381" y="0" width="130" height="17" forecolor="#FFFFFF" backcolor="#444444" uuid="b2c3d4e5-0001-4b01-8b01-000000000001"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+						<paragraph rightIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total " + ($F{signo}.equals("+") ? "Ingresos" : "Egresos") + ": "]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement mode="Opaque" x="511" y="0" width="44" height="17" forecolor="#FFFFFF" backcolor="#444444" uuid="b2c3d4e5-0002-4b02-8b02-000000000002"/>
+					<box>
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_SIGNO}.abs()]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
 	<group name="GROUP_FORMA_PAGO">
 		<groupExpression><![CDATA[$F{formaPago}]]></groupExpression>
 		<groupHeader>
