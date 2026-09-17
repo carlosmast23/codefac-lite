@@ -332,8 +332,17 @@ public class CarteraModel extends CarteraPanel{
     public void cargarDatosPantalla(Object entidad) {
         Cartera cartera=(Cartera) entidad;
         this.cartera=cartera;
-        this.cruces=cartera.getCruces();
-        
+
+        //Reiniciar las listas de cruces/documentos antes de volver a cargarlas: si no se limpian aca,
+        //al cargar un comprobante distinto en la misma pantalla se van acumulando los cruces y
+        //documentos del comprobante anterior, mezclandose con los del que se acaba de abrir
+        this.cruces=new ArrayList<CarteraCruce>();
+        if(cartera.getCruces()!=null)
+        {
+            this.cruces.addAll(cartera.getCruces());
+        }
+        this.carteraDocumentosCruzar=new ArrayList<Cartera>();
+
         getCmbTipoCartera().setSelectedItem(this.cartera.getTipoCarteraEnum());
         CarteraCategoriaEnum carteraCategoria=CarteraCategoriaEnum.buscarPorTipoYDocumentoCategoria(this.cartera.getTipoCarteraEnum(),this.cartera.getCarteraDocumentoEnum().getCategoria());
                 
@@ -612,8 +621,10 @@ public class CarteraModel extends CarteraPanel{
         }
         
         //BigDecimal documentoTotalCruzar=documentoCruzar.getTotal();
+        //getSaldo() ya viene neto de los cruces ya persistidos (de esta u otras carteras); solo hay que
+        //restar lo que se agrego en esta sesion y todavia no se ha grabado (ver buscarValorCruceDocumentoSinGrabar)
         BigDecimal documentoTotalCruzar=documentoCruzar.getSaldo();
-        BigDecimal valorCruceDocumento=buscarValorCruceDocumento(documentoCruzar);
+        BigDecimal valorCruceDocumento=buscarValorCruceDocumentoSinGrabar(documentoCruzar);
         BigDecimal saldoDocumento=documentoTotalCruzar.subtract(valorCruceDocumento);
         if(saldoDocumento.compareTo(BigDecimal.ZERO)==0)
         {
@@ -964,21 +975,59 @@ public class CarteraModel extends CarteraPanel{
         }
         return valorCruce;
     }
-    
+
+    /**
+     * Igual que buscarValorCruceDocumento(Cartera), pero solo suma los cruces que todavia NO se han
+     * grabado (agregados en esta sesion de edicion, sin ID todavia). Se usa para mostrar el saldo
+     * pendiente en pantalla, porque getSaldo() del documento ya viene neto de TODOS los cruces
+     * persistidos (de esta u otras carteras) - sumar tambien esos aca los contaria dos veces.
+     */
+    private BigDecimal buscarValorCruceDocumentoSinGrabar(Cartera cartera)
+    {
+        BigDecimal valorCruce=BigDecimal.ZERO;
+        for (CarteraCruce cruce : cruces) {
+            if(cruce.getId()==null && cruce.getCarteraAfectada().equals(cartera))
+            {
+                valorCruce=valorCruce.add(cruce.getValor());
+            }
+        }
+        return valorCruce;
+    }
+
+    /**
+     * Igual que buscarValorCruceDocumento(CarteraDetalle), pero solo suma los cruces que todavia NO se
+     * han grabado. Ver el comentario de buscarValorCruceDocumentoSinGrabar(Cartera).
+     */
+    private BigDecimal buscarValorCruceDocumentoSinGrabar(CarteraDetalle carteraDetalle)
+    {
+        BigDecimal valorCruce=BigDecimal.ZERO;
+        for (CarteraCruce cruce : cruces) {
+            if(cruce.getId()==null && cruce.getCarteraDetalle().equals(carteraDetalle))
+            {
+                valorCruce=valorCruce.add(cruce.getValor());
+            }
+        }
+        return valorCruce;
+    }
+
     public void actualizarTablaDocumentosCruzar()
     {
         String[] titulo = {"", "Preimpreso","Total","Saldo Pendiente"};
         DefaultTableModel modelTabla = UtilidadesTablas.crearModeloTabla(titulo, new Class[]{Cartera.class, String.class, String.class, String.class});
         
         for (Cartera cartera : carteraDocumentosCruzar){
-            //Buscar si existe un cruce anterior para esta cartera
-            BigDecimal valorCruzado=buscarValorCruceDocumento(cartera);
-            
+            //Buscar si hay cruces nuevos (todavia no grabados) hechos en esta sesion contra este documento.
+            //getSaldo() del servidor ya viene neto de todos los cruces YA PERSISTIDOS (de esta u otras
+            //carteras), asi que aca solo hay que restar lo que se agrego en esta pantalla y no se ha
+            //guardado todavia - restar tambien los cruces ya persistidos volvia a contarlos dos veces.
+            BigDecimal valorCruzado=buscarValorCruceDocumentoSinGrabar(cartera);
+            BigDecimal saldoPendiente=cartera.getSaldo().subtract(valorCruzado);
+
             modelTabla.addRow(new Object[]
             {cartera,
             cartera.getPreimpreso(),
             cartera.getTotal().toString(),
-            cartera.getSaldo().subtract(valorCruzado).toString()});
+            saldoPendiente.toString()});
         }
         
         getTblDocumentosCruzar().setModel(modelTabla);
@@ -997,15 +1046,20 @@ public class CarteraModel extends CarteraPanel{
             //Solo aparecen los detalles que tiene un saldo superior a 0 para poder cruzar con los documento
             if(carteraDetalle.getSaldo().compareTo(BigDecimal.ZERO)>0)
             {
-                BigDecimal valorCruzado=buscarValorCruceDocumento(carteraDetalle);
-                
+                //Igual que en actualizarTablaDocumentosCruzar(): getSaldo() del servidor ya viene neto de
+                //TODOS los cruces ya persistidos, asi que aca solo se resta lo agregado en esta sesion y
+                //todavia no grabado - restar tambien los cruces ya persistidos volvia a contarlos dos veces
+                //y el saldo disponible quedaba en 0 apenas se volvia a abrir un detalle con un cruce ya guardado.
+                BigDecimal valorCruzado=buscarValorCruceDocumentoSinGrabar(carteraDetalle);
+                BigDecimal saldoDisponible=carteraDetalle.getSaldo().subtract(valorCruzado);
+
                 modelTabla.addRow(new Object[]{
                     carteraDetalle,
                     true,
                     carteraDetalle.getDescripcion(),
                     carteraDetalle.getTotal().toString(),
-                    carteraDetalle.getSaldo().subtract(valorCruzado).toString(),
-                    carteraDetalle.getSaldo().subtract(valorCruzado).toString()});                
+                    saldoDisponible.toString(),
+                    saldoDisponible.toString()});
             }
         } 
         

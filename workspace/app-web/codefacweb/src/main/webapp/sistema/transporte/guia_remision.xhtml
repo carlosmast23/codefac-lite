@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsf/composite/componentes">
+
+    <ui:composition template="/template/codefac_template.xhtml">
+
+        <ui:define name="opciones">
+        </ui:define>
+
+        <ui:define name="vistaControlador">
+            <f:event listener="#{controllerCodefacMb.agregarVista(guiaRemisionMb)}" type="preRenderComponent" />
+        </ui:define>
+
+        <ui:define name="contenido">
+
+            <p:accordionPanel multiple="true" id="acordionCabecera" activeIndex="0,1,2">
+                <p:tab title="Datos Cabecera">
+                    <div class="p-grid" style="text-align: left">
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:outputLabel value="Documento:" />
+                            <p:selectOneMenu id="cmbDocumento" value="#{guiaRemisionMb.documentoSeleccionado}" converter="documentoEnumConverter" style="width: 70%">
+                                <f:selectItems value="#{guiaRemisionMb.documentos}" var="documento" itemValue="#{documento.codigo}" itemLabel="#{documento.nombre}" />
+                            </p:selectOneMenu>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:outputLabel value="Punto Emisión:" />
+                            <p:selectOneMenu id="cmbPuntoEmision" value="#{guiaRemisionMb.puntoEmisionSeleccionado}" converter="puntoEmisionConverter" style="width: 70%">
+                                <f:selectItems value="#{guiaRemisionMb.puntosEmision}" var="puntoEmision" itemValue="#{puntoEmision.id.toString()}" />
+                            </p:selectOneMenu>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:outputLabel value="Fecha Inicio Transporte:" />
+                            <p:datePicker id="fechaInicio" value="#{guiaRemisionMb.fechaInicioTransporte}" showIcon="true" style="width: 70%" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:outputLabel value="Fecha Fin Transporte:" />
+                            <p:datePicker id="fechaFin" value="#{guiaRemisionMb.fechaFinTransporte}" showIcon="true" style="width: 70%" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <p:outputLabel value="Dirección de Partida:" />
+                            <p:inputText id="txtDireccionPartida" value="#{guiaRemisionMb.direccionPartida}" style="width: 90%" />
+                        </div>
+                    </div>
+                </p:tab>
+
+                <p:tab title="Transportista">
+                    <div class="p-grid" style="text-align: left">
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <p:inputText id="txtTransportista" placeholder="Identificación Transportista" value="#{guiaRemisionMb.transportistaSeleccionado.identificacion}" style="width: 70%" disabled="true" />
+                            <p:commandButton process="@this" icon="fa fa-search" styleClass="white-button" action="#{guiaRemisionMb.abrirDialogoBuscarTransportista}">
+                                <p:ajax event="dialogReturn" listener="#{guiaRemisionMb.seleccionarTransportista}" update="txtTransportista,lblTransportistaNombre,lblTransportistaPlaca,chkCorreoTransportista" />
+                            </p:commandButton>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <h:outputLabel style="font-weight: bold">Razón Social: </h:outputLabel>
+                            <h:outputLabel id="lblTransportistaNombre" value="#{guiaRemisionMb.transportistaSeleccionado.razonSocial}" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <h:outputLabel style="font-weight: bold">Placa: </h:outputLabel>
+                            <h:outputLabel id="lblTransportistaPlaca" value="#{guiaRemisionMb.transportistaSeleccionado.placaVehiculo}" />
+                        </div>
+
+                        <div class="p-col-12">
+                            <p:selectBooleanCheckbox id="chkCorreoTransportista" value="#{guiaRemisionMb.enviarCorreoTransportista}" itemLabel="Enviar comprobante por correo al transportista" />
+                        </div>
+                    </div>
+                </p:tab>
+
+                <p:tab title="Destinatario y Detalle">
+                    <div class="p-grid" style="text-align: left">
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <p:inputText id="txtDestinatario" placeholder="Identificación Destinatario" value="#{guiaRemisionMb.destinatarioSeleccionado.identificacion}" style="width: 70%" disabled="true" />
+                            <p:commandButton process="@this" icon="fa fa-search" styleClass="white-button" action="#{guiaRemisionMb.abrirDialogoBuscarDestinatario}">
+                                <p:ajax event="dialogReturn" listener="#{guiaRemisionMb.seleccionarDestinatario}" update="txtDestinatario,lblDestinatarioNombre,txtDireccionDestino,chkCorreoDestinatario" />
+                            </p:commandButton>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <h:outputLabel style="font-weight: bold">Razón Social: </h:outputLabel>
+                            <h:outputLabel id="lblDestinatarioNombre" value="#{guiaRemisionMb.destinatarioSeleccionado.razonSocial}" />
+                        </div>
+
+                        <div class="p-col-12">
+                            <p:selectBooleanCheckbox id="chkCorreoDestinatario" value="#{guiaRemisionMb.enviarCorreoDestinatario}" itemLabel="Enviar comprobante por correo al destinatario" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <p:outputLabel value="Dirección Destino:" />
+                            <p:inputText id="txtDireccionDestino" value="#{guiaRemisionMb.direccionDestino}" style="width: 90%" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <p:outputLabel value="Motivo del Traslado:" />
+                            <p:inputText id="txtMotivoTraslado" value="#{guiaRemisionMb.motivoTraslado}" style="width: 90%" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <p:outputLabel value="Ruta:" />
+                            <p:inputText id="txtRuta" value="#{guiaRemisionMb.ruta}" style="width: 90%" />
+                        </div>
+                    </div>
+
+                    <p:separator />
+
+                    <div class="p-grid" style="text-align: left">
+                        <div class="p-col-12 p-md-6 p-lg-3">
+                            <p:outputLabel value="Producto:" />
+                            <p:inputText id="txtCodigoDetalle" placeholder="Código" value="#{guiaRemisionMb.codigoDetalle}" style="width: 70%" />
+                            <p:commandButton process="@this" icon="fa fa-search" styleClass="white-button" action="#{guiaRemisionMb.abrirDialogoBusquedaProducto()}">
+                                <p:ajax event="dialogReturn" listener="#{guiaRemisionMb.seleccionarProducto}" update="txtCodigoDetalle,txtCantidadDetalle,txtDescripcionDetalle" />
+                            </p:commandButton>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-2">
+                            <p:outputLabel value="Cantidad:" />
+                            <p:inputText id="txtCantidadDetalle" value="#{guiaRemisionMb.cantidadDetalle}" style="width: 90%" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-4">
+                            <p:outputLabel value="Descripción:" />
+                            <p:inputText id="txtDescripcionDetalle" value="#{guiaRemisionMb.descripcionDetalle}" style="width: 90%" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-3" style="text-align: center">
+                            <p:commandButton
+                                style="width: 60%"
+                                title="Agregar Detalle"
+                                process="@this,txtCodigoDetalle,txtCantidadDetalle,txtDescripcionDetalle"
+                                update="tblDetalleProductos,txtCodigoDetalle,txtCantidadDetalle,txtDescripcionDetalle,:formulario:messages"
+                                icon="fa fa-plus"
+                                styleClass="white-button"
+                                action="#{guiaRemisionMb.agregarDetalle()}" />
+                        </div>
+                    </div>
+
+                    <p:dataTable id="tblDetalleProductos" var="detalle" value="#{guiaRemisionMb.detalleProductos}" style="margin-top: 15px">
+                        <f:facet name="header">Detalle de Productos</f:facet>
+
+                        <p:column headerText="Código">
+                            <h:outputText value="#{detalle.codigoInterno}" />
+                        </p:column>
+
+                        <p:column headerText="Descripción">
+                            <h:outputText value="#{detalle.descripcion}" />
+                        </p:column>
+
+                        <p:column headerText="Cantidad">
+                            <h:outputText value="#{detalle.cantidad}" />
+                        </p:column>
+
+                        <p:column style="width:35px">
+                            <p:commandButton
+                                ajax="true"
+                                icon="fa fa-close"
+                                title="Eliminar producto"
+                                action="#{guiaRemisionMb.eliminarDetalle(detalle)}"
+                                update="tblDetalleProductos" />
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+            </p:accordionPanel>
+
+        </ui:define>
+
+    </ui:composition>
+</html>

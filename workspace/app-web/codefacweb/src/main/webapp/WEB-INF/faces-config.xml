@@ -139,7 +139,24 @@
             </redirect>
         </navigation-case>
         <!--- FIN FACTURACION -->
-        
+
+        <!---
+            TRANSPORTE
+                ->GUIA DE REMISION
+        -->
+
+        <navigation-case>
+            <from-outcome>guia_remision</from-outcome>
+            <to-view-id>sistema/transporte/guia_remision.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+        <!--- FIN TRANSPORTE -->
+
         <navigation-case>
             <from-outcome>cliente</from-outcome>
             <to-view-id>sistema/crm/cliente.xhtml</to-view-id>

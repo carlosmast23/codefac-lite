@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xargs grep *)"
+      "Bash(xargs grep *)",
+      "Bash(python -c \"import xml.etree.ElementTree as ET; ET.parse\\('workspace/app-web/codefacweb/src/main/webapp/sistema/transporte/guia_remision.xhtml'\\); print\\('XML OK'\\)\")",
+      "Bash(python -c \"import xml.etree.ElementTree as ET; ET.parse\\('workspace/app-web/codefacweb/src/main/webapp/WEB-INF/faces-config.xml'\\); print\\('XML OK'\\)\")"
     ]
   }
 }
