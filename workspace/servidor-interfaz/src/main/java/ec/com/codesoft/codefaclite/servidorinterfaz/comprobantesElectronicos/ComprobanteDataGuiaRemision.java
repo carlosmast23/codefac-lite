@@ -111,7 +111,7 @@ public class ComprobanteDataGuiaRemision implements ComprobanteDataInterface,Ser
         info.setFechaIniTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaIniciaTransporte()));
         info.setFechaFinTransporte(ComprobantesElectronicosUtil.dateToString(guiaRemision.getFechaFinTransporte()));
         info.setDirPartida(UtilidadValidador.normalizarTexto(guiaRemision.getDireccionPartida()));
-        info.setRazonSocialTransportista(UtilidadValidador.normalizarTexto(guiaRemision.getRazonSocial()));
+        info.setRazonSocialTransportista(UtilidadValidador.normalizarTexto(guiaRemision.getTransportista().getRazonSocial()));
         //info.setTipoIdentificacionTransportista(""); //Buscar tipo de identificacion
         info.setRucTransportista(guiaRemision.getTransportista().getIdentificacion());
         //info.setRise(""); TODO:Analizar en que caso debe salir

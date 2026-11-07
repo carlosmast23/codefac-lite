@@ -21,8 +21,11 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,23 +70,16 @@ public abstract class ComprobantesElectronicosUtil {
             //file.mkdir();
         }
 
-        FileWriter fw = null;
-        try {
-            //file.createNewFile();
-            fw = new FileWriter(file);
-            //fw.write(xml.toString());
-            String contenidoUtf8=normalizarDescripcionDetalleFacura(xml.toString()); //Este metodo me permite eliminar caracteres que no puedo usar con Utf8
-            contenidoUtf8=new String(contenidoUtf8.toString().getBytes("UTF-8"));            
-            fw.write(contenidoUtf8);
-            fw.close();
+        //IMPORTANTE: FileWriter (sin charset) usa el charset por defecto de la JVM/SO, no UTF-8.
+        //En Windows en español eso suele ser Cp1252, que no puede representar ciertos caracteres
+        //(ej. comillas tipograficas " ' de Word/celulares) y los reemplaza silenciosamente por '?',
+        //generando un XML invalido que el SRI rechaza al firmar (MalformedByteSequenceException).
+        //Por eso se escribe explicitamente en UTF-8 con OutputStreamWriter.
+        try (Writer fw = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8)) {
+            String contenido = normalizarDescripcionDetalleFacura(xml.toString());
+            fw.write(contenido);
         } catch (IOException ex) {
             Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                fw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ComprobantesElectronicosUtil.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
         return file;
     }

@@ -107,8 +107,17 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
             }
             
             CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
-            
-            LoteBusqueda loteBusqueda= new LoteBusqueda(session.getEmpresa(),compraDetalle.getProductoProveedor().getProducto());            
+
+            //Si el producto enlazado es una presentacion (EMPAQUE), el lote debe buscarse/crearse sobre
+            //el producto original, igual que en CompraModel; de lo contrario el lote queda enganchado a
+            //la presentacion y desaparece de Ajuste Inventario/Compra al buscarlo desde el producto base
+            Producto productoLote=compraDetalle.getProductoProveedor().getProducto().buscarProductoEmpaquePrincipal();
+            if(productoLote==null)
+            {
+                productoLote=compraDetalle.getProductoProveedor().getProducto();
+            }
+
+            LoteBusqueda loteBusqueda= new LoteBusqueda(session.getEmpresa(),productoLote);
             InterfaceModelFind busquedaInterface=new ProductoComponenteBusqueda();
             BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(loteBusqueda);
             buscarDialogoModel.setVisible(true);
@@ -138,7 +147,13 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
             CompraDetalle compraDetalle = (CompraDetalle) getTblDetalles().getValueAt(fila, COLUMNA_OBJETO);
             
             Object[] paramPostConstruct = new Object[1];
-            Producto productoCrearLote= compraDetalle.getProductoProveedor().getProducto();
+            //Igual que en listenerBuscarLote: si el producto enlazado es una presentacion (EMPAQUE),
+            //crear el lote sobre el producto original, no sobre la presentacion
+            Producto productoCrearLote= compraDetalle.getProductoProveedor().getProducto().buscarProductoEmpaquePrincipal();
+            if(productoCrearLote==null)
+            {
+                productoCrearLote=compraDetalle.getProductoProveedor().getProducto();
+            }
             paramPostConstruct[0] = productoCrearLote;
             
             ObserverUpdateInterface observerCreate=new ObserverUpdateInterface<Lote>() 

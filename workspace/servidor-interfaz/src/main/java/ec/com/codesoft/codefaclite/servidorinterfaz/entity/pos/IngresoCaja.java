@@ -11,6 +11,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.SriFormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.SignoEnum;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -92,11 +93,19 @@ public class IngresoCaja implements Serializable
     @Column(name = "SIGNO")    
     private Integer signoIngreso;
     
-    @Column(name = "FECHA_HORA")    
+    @Column(name = "FECHA_HORA")
     private java.util.Date fechaHora;
-    
-    
-    
+
+    /**
+     * Indica que este movimiento no debe sumar/restar al total teorico de la caja (CajaSession.calcularValorCierreTeorico),
+     * aunque si debe listarse en el detalle del cierre. Caso de uso: Factura generada al convertir una Nota de Venta
+     * Interna (o varias) en Factura - el efectivo ya se cobro los dias que se grabaron las NVI, asi que este nuevo
+     * movimiento es solo informativo/trazabilidad, no debe contar como dinero nuevo en la caja de hoy.
+     */
+    @Column(name = "INFORMATIVO")
+    private String informativo;
+
+
     /*
     * Get and Set
     */
@@ -233,6 +242,23 @@ public class IngresoCaja implements Serializable
 
     public void setCajaSessionId(Long cajaSessionId) {
         this.cajaSessionId = cajaSessionId;
+    }
+
+    public EnumSiNo getInformativoEnum() {
+        return EnumSiNo.getEnumByLetra(informativo);
+    }
+
+    public void setInformativoEnum(EnumSiNo informativoEnum) {
+        this.informativo = (informativoEnum!=null)?informativoEnum.getLetra():null;
+    }
+
+    /**
+     * true si este movimiento no debe sumar/restar al total teorico de la caja (ver calcularValorCierreTeorico).
+     * Null/no seteado (registros anteriores a este campo) se trata como false, sin cambiar el comportamiento actual.
+     */
+    public boolean esInformativo() {
+        EnumSiNo enumValor = getInformativoEnum();
+        return enumValor!=null && Boolean.TRUE.equals(enumValor.getBool());
     }
     
     

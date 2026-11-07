@@ -549,8 +549,10 @@ public class VentasDiariasModel extends WidgetVentasDiarias
         initModelTablaDetalleFactura();
         //Limpiar valores totales
         getLblSubtotal12().setText("");
+        getLblSubtotal5().setText("");
         getLblSubtotal0().setText("");
         getLblIva12().setText("");
+        getLblIva5().setText("");
         getLblValorTotal().setText("");
     }
     
@@ -658,9 +660,15 @@ public class VentasDiariasModel extends WidgetVentasDiarias
     
     public void mostrarTotales()
     {
-        this.getLblSubtotal12().setText(""+this.factura.getSubtotalImpuestos());
+        //factura.getSubtotalImpuestos()/getIva() son agregados de TODAS las tasas gravadas juntas (5%+15%);
+        //obtenerIvaCinco() separa por detalle segun ivaPorcentaje, igual que en FacturacionModel.cargarTotalesVista()
+        Factura.ImpuestoTotal impuestoTotal = this.factura.obtenerIvaCinco();
+        this.getLblSubtotal5().setText(""+impuestoTotal.subtotalCinco);
+        this.getLblIva5().setText(""+impuestoTotal.ivaCinco);
+        this.getLblSubtotal12().setText(""+impuestoTotal.subtotalQuince);
+        this.getLblIva12().setText(""+impuestoTotal.ivaQuince);
+
         this.getLblSubtotal0().setText(""+this.factura.getSubtotalSinImpuestos());
-        this.getLblIva12().setText(""+this.factura.getIva());
         this.getLblValorTotal().setText(""+this.factura.getTotal());
     }
     

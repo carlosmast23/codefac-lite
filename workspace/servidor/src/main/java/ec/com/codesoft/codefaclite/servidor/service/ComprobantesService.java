@@ -538,7 +538,12 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     }
     
     
-    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo,Empresa empresa) throws RemoteException,ServicioCodefacException 
+    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo,Empresa empresa) throws RemoteException,ServicioCodefacException
+    {
+        return procesarComprobantesPendienteLote(etapaInicial, etapaLimite, mapClaveAccesoYCorreos, enviarCorreo, empresa, false);
+    }
+
+    public List<String> procesarComprobantesPendienteLote(Integer etapaInicial,Integer etapaLimite,Map<String,List<String>> mapClaveAccesoYCorreos,Boolean enviarCorreo,Empresa empresa,Boolean sinValidarFecha) throws RemoteException,ServicioCodefacException
     {
         List<String> errores=new ArrayList<String>();
         for (Map.Entry<String, List<String>> entry : mapClaveAccesoYCorreos.entrySet()) {
@@ -558,7 +563,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 public void error(ComprobanteElectronicoException cee, String claveAcceso) throws RemoteException {
                     errores.add("Clave Acceso:"+claveAcceso+"\nError:"+cee.getMessage());
                 }
-            }, enviarCorreo,false,empresa,null); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono            
+            }, enviarCorreo,false,empresa,null,sinValidarFecha); //todo: ver si se hace parametrizable este valor de asincrono o no asincrono , por defecto esta no asincrono
         }
         return errores; //Esta opcion va a permitir que espera a que se termine el proceso y no funcione en segundo plano
     
@@ -566,12 +571,18 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     
     public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa,Boolean modoProduccionDefecto) throws RemoteException
     {
+        return procesarComprobantesPendiente(etapaInicial, etapaLimite, claveAcceso, correos, callbackClientObject, enviarCorreo, asincrono, empresa, modoProduccionDefecto, false);
+    }
+
+    public boolean procesarComprobantesPendiente(Integer etapaInicial,Integer etapaLimite,String claveAcceso, List<String> correos,ClienteInterfaceComprobante callbackClientObject,Boolean enviarCorreo,Boolean asincrono,Empresa empresa,Boolean modoProduccionDefecto,Boolean sinValidarFecha) throws RemoteException
+    {
         //Empresa empresa=obtenerEmpresaPorClaveAcceso(claveAcceso);
         ComprobanteElectronicoService comprobanteElectronico= new ComprobanteElectronicoService();
         cargarConfiguraciones(comprobanteElectronico,empresa,modoProduccionDefecto);
-        
+
         comprobanteElectronico.setCorreosElectronicos(correos);
         comprobanteElectronico.setEnviarCorreos(enviarCorreo);
+        comprobanteElectronico.setSinValidarFecha(Boolean.TRUE.equals(sinValidarFecha));
         
         //Esta validacion la realizo para cuando quieran enviar por correo y la etapa sea superior a la de enviar normalmente , envio al final del proceso
         if(etapaInicial>ComprobanteElectronicoService.ETAPA_ENVIO_COMPROBANTE && enviarCorreo)
@@ -1010,7 +1021,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
     public ComprobanteDataInterface convertirComprobanteEntityToDataFacturacionElectronica(ComprobanteEntity comprobanteEntity)
     {
                 
-        if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
         {
             if(comprobanteEntity instanceof Factura)
             {
@@ -1025,7 +1036,7 @@ public class ComprobantesService extends ServiceAbstract<ComprobanteEntity,Compr
                 ComprobanteDataCompra comprobanteData=new ComprobanteDataCompra(compra);
                 return comprobanteData;
             }
-        } 
+        }
         else if(comprobanteEntity.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
         {
             Factura factura=(Factura) comprobanteEntity;

@@ -67,6 +67,11 @@ workspace/main/codefac.ini
 /workspace/main/key.codefac.original
 /workspace/main/key.codefac
 /workspace/main/comprobacion.codefac
+/workspace/main/cp.txt
+/workspace/main/debug_cp_output.txt
+
+#Carpeta huerfana generada por accidente en la raiz del repo (no pertenece a ningun modulo Maven)
+/META-INF/
 /workspace/main/key.codefac.bk
 /workspace/main/key.codefac.bk2
 /workspace/main/key.codefac.bk2

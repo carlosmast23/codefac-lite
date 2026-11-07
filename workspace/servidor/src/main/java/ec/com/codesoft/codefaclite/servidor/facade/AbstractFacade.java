@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.Persisten
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoBaseDatosEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -264,7 +265,14 @@ public abstract class AbstractFacade<T>
     
     public static List<Object> findStaticDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo,EntityManager em) {
         Query query = ejecutarConsultaConParametros(queryStr, map,tipoQueryEnum, limiteMinimo, limiteMaximo,em);
-        return query.getResultList();
+        List<Object>[] resultadoHolder=new List[1];
+        UtilidadVarios.medirTiempoProceso("SERVIDOR findStaticDialog.getResultList (EclipseLink, incluye fetch EAGER) | "+queryStr, new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                resultadoHolder[0]=query.getResultList();
+            }
+        });
+        return resultadoHolder[0];
     }
     
     public static Long findStaticSizeDialog(String queryStr,Map<Integer,Object> map,TipoQueryEnum tipoQueryEnum,int limiteMinimo,int limiteMaximo,EntityManager em) {
@@ -310,8 +318,15 @@ public abstract class AbstractFacade<T>
             Object value = entry.getValue();
             query.setParameter(key, value);
         }
-        
-        return (Long) query.getSingleResult();
+
+        Long[] resultadoHolder=new Long[1];
+        UtilidadVarios.medirTiempoProceso("SERVIDOR findCountStaticDialog.getSingleResult | "+queryStr, new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                resultadoHolder[0]=(Long) query.getSingleResult();
+            }
+        });
+        return resultadoHolder[0];
     }
     
     /**

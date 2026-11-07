@@ -1223,18 +1223,48 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         }
     }
     
-    private void asignarProformaAFactura(Factura factura,EntityManager entityManager)
+    private void asignarProformaAFactura(Factura factura,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException
     {
+        if(ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
+        {
+            return;
+        }
+
+        //El origen "principal" (con referencia persistida via PEDIDO_ID)
         Factura proforma=factura.getProforma();
         if(proforma!=null)
         {
-            if(!ParametrosSistemaCodefac.PROFORMA_MODO_PRUEBA)
+            marcarDocumentoOrigenComoFacturado(proforma,entityManager);
+        }
+
+        //Origenes ADICIONALES cuando se consolidan varias Notas de Venta Interna en una sola Factura
+        //(ver Factura.documentosOrigenAdicionales). No tienen referencia persistida, solo se procesan aqui.
+        if(factura.getDocumentosOrigenAdicionales()!=null)
+        {
+            for (Factura documentoAdicional : factura.getDocumentosOrigenAdicionales())
             {
-                //Cambio el estado de la proforma a facturado para saber que ya no puedo volver a utilizar
-                proforma.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
-                entityManager.merge(proforma);
+                marcarDocumentoOrigenComoFacturado(documentoAdicional,entityManager);
             }
         }
+    }
+
+    private void marcarDocumentoOrigenComoFacturado(Factura documentoOrigen,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        //Si el documento origen es una NOTA DE VENTA INTERNA, a diferencia de la Proforma/Comanda, ya genero
+        //movimiento de kardex y cartera al grabarse, por lo que hay que revertirlo aqui para que no quede
+        //duplicado con el que va a generar esta Factura nueva al grabarse.
+        //NO se debe generar movimiento de CAJA en esta reversa: el efectivo de la NVI ya estaba cobrado y
+        //esto es solo una conversion de documento, no una devolucion de dinero (ver crearCrucesFactura/
+        //esFacturaConvertidaDesdeNotaVentaInterna en CarteraService, que ya marca el abono de la Factura
+        //nueva como informativo para que no vuelva a sumar).
+        if(DocumentoEnum.NOTA_VENTA_INTERNA.equals(documentoOrigen.getCodigoDocumentoEnum()))
+        {
+            revertirInventarioYCarteraFactura(documentoOrigen,entityManager,false);
+        }
+
+        //Cambio el estado de la proforma/nota de venta interna a facturado para saber que ya no puedo volver a utilizar
+        documentoOrigen.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.FACTURADO_PROFORMA);
+        entityManager.merge(documentoOrigen);
     }
     
     private void asignarClaveAccesoDocumentosNoElectronicos(Factura factura)
@@ -1643,9 +1673,12 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         //Kardex kardex = consultarOCrearStock(producto, bodega);
 
         /**
-         * Si el producto es un ensamble y esta activo "construir ensambles al facturar", el
-         * stock del propio ensamble NO se debe afectar: se descuenta directamente el stock de
-         * sus componentes por la cantidad total facturada y se termina aqui el proceso.
+         * Si el producto es un ensamble y esta activo "construir ensambles al facturar", el stock
+         * real del propio ensamble NO se maneja: se descuenta directamente el stock de sus
+         * componentes por la cantidad total facturada. Para trazabilidad se deja un par de
+         * movimientos en el kardex del propio ensamble (ingreso por construccion + venta, neto
+         * cero) que explica como se genero y se vendio - la reversa simetrica esta en
+         * KardexService.afectarInventario (eliminar factura / nota de credito).
          */
         if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(kardex.getBodega().getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
         {
@@ -1653,7 +1686,24 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
             //No valida nada aparte porque si este proceso falla automaticamente debe generar la excepcion interior, por ejemplo cuando no existe la cantidad necesaria de los componentes para construir el ensamble
             BigDecimal costoComponentes = kardexService.descontarComponentesEnsamblePorVenta(kardex.getBodega(), producto, cantidad, validarStockComponentes, entityManager);
             detalle.setCostoPromedio(costoComponentes);
-            //Persiste cualquier ajuste de reserva hecho sobre el kardex del ensamble (ver bloque de detalle.getReservadoEnum() arriba); su stock no se toca
+
+            KardexDetalle kardexDetalleConstruir = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.ENSAMBLE_CONSTRUIR_VENTA, costoComponentes, cantidad, detalle.getFactura().getUsuario());
+            kardexService.recalcularValoresKardex(kardex, kardexDetalleConstruir);
+            entityManager.persist(kardexDetalleConstruir);
+            kardex.addDetalleKardex(kardexDetalleConstruir);
+
+            KardexDetalle kardexDetalleVenta = kardexService.crearKardexDetalleSinPersistencia(kardex, TipoDocumentoEnum.VENTA_INVENTARIO, precioUnitario, cantidad, detalle.getFactura().getUsuario());
+            kardexDetalleVenta.setReferenciaDocumentoId(detalle.getFactura().getId());
+            kardexDetalleVenta.setPuntoEmision(detalle.getFactura().getPuntoEmision().toString());
+            kardexDetalleVenta.setPuntoEstablecimiento(detalle.getFactura().getPuntoEstablecimiento().toString());
+            kardexDetalleVenta.setSecuencial(detalle.getFactura().getSecuencial());
+            kardexDetalleVenta.setFechaDocumento(UtilidadesFecha.castDateUtilToSql(detalle.getFactura().getFechaEmision()));
+            kardexDetalleVenta.setRazonSocial(detalle.getFactura().getRazonSocial());
+            kardexService.recalcularValoresKardex(kardex, kardexDetalleVenta);
+            entityManager.persist(kardexDetalleVenta);
+            kardex.addDetalleKardex(kardexDetalleVenta);
+
+            //Persiste cualquier ajuste de reserva hecho sobre el kardex del ensamble (ver bloque de detalle.getReservadoEnum() arriba) y los dos movimientos de arriba; el stock neto del ensamble no cambia
             entityManager.merge(kardex);
             return;
         }
@@ -1876,58 +1926,82 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
     
     public void eliminarFactura(Factura factura) throws java.rmi.RemoteException,ServicioCodefacException
     {
-        
+
             ejecutarTransaccion(new MetodoInterfaceTransaccion() {
                 @Override
                 public void transaccion(EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException {
-                        
+
                         factura.setEstadoEnum(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO);
                         ComprobantesService comprobanteService=new ComprobantesService();
                         comprobanteService.eliminarComprobanteSinTransaccion(factura,entityManager);
-                        
+
                         //factura.setEstado(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO.getEstado()); //Cambio el estado de las facturas a eliminad
                         entityManager.merge(factura); //actualizar los datos de la factura
-                        
-                        NotaCreditoService servicioNotaCredito=new NotaCreditoService();
-                        for (FacturaDetalle detalle : factura.getDetalles()) {
-                            //Anulo los datos segun el tipo de modulo relacionado
-                            //servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
-                            servicioNotaCredito.anularProcesoFactura(detalle,entityManager);
-                        }
-                        
-                        //ELIMINAR el registro de la CARTERA
-                        CarteraService carteraService=new CarteraService();
-                        
-                        List<Cartera> carteraFacturaList=carteraService.buscarCarteraPorReferenciaTodos(
-                        factura.getId(),
-                        factura.getCodigoDocumentoEnum(),
-                        GeneralEnumEstado.ACTIVO,
-                        Cartera.TipoCarteraEnum.CLIENTE,
-                        factura.getSucursalEmpresa(),
-                        entityManager);
-                        
-                        for (Cartera carteraFactura : carteraFacturaList) 
-                        {
-                            if(carteraFactura!=null)
-                            {
-                                //Obtengo el usuario de la factura esto es importante porque con ese usuario igual va a interactuar con la caja
-                                //carteraFactura.setUsuario(factura.getUsuario());
-                                //tambien eliminar los cruces para evitar inconsistencias
-                                carteraService.eliminarCrucesPorCartera(carteraFactura,Boolean.TRUE,entityManager);
-                                
-                                carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO,entityManager);
-                            }
-                        }
-                        
+
+                        //Revertir inventario y cartera generados por esta factura
+                        revertirInventarioYCarteraFactura(factura,entityManager);
+
                         //Crear un registro negativo en la caja session esta validación dejo sin usar por el momento
                         //(factura,SignoEnum.NEGATIVO,entityManager);
-                        
+
                         imprimirLogFactura(factura, CrudEnum.ELIMINAR);
-                    
+
                 }
             });
-        
-        
+
+
+    }
+
+    /**
+     * Revierte el inventario (kardex, incluido el caso de productos ENSAMBLE) y la cartera que haya generado
+     * una factura/nota de venta interna al grabarse. Usado tanto al eliminar un comprobante como al convertir
+     * una Nota de Venta Interna en Factura (ahi la NVI origen se revierte para que no quede el movimiento
+     * duplicado, ya que la Factura nueva va a generar su propio movimiento de kardex al grabarse).
+     * Sobrecarga que mantiene el comportamiento anterior (si genera movimiento de caja).
+     */
+    private void revertirInventarioYCarteraFactura(Factura factura,EntityManager entityManager) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        revertirInventarioYCarteraFactura(factura,entityManager,true);
+    }
+
+    /**
+     * @param generarMovimientoCaja false cuando la reversa es por convertir una NVI en Factura: el efectivo ya
+     * esta cobrado y la conversion no devuelve dinero, asi que la eliminacion de la cartera de la NVI origen
+     * NO debe generar un egreso en caja (ver marcarDocumentoOrigenComoFacturado). true para una eliminacion
+     * real de comprobante (eliminarFactura), donde si corresponde reflejar la reversa en caja.
+     */
+    private void revertirInventarioYCarteraFactura(Factura factura,EntityManager entityManager,boolean generarMovimientoCaja) throws java.rmi.RemoteException,ServicioCodefacException
+    {
+        NotaCreditoService servicioNotaCredito=new NotaCreditoService();
+        for (FacturaDetalle detalle : factura.getDetalles()) {
+            //Anulo los datos segun el tipo de modulo relacionado
+            //servicioNotaCredito.anularProcesoFactura(detalle.getTipoDocumentoEnum(),detalle.getReferenciaId(),detalle.getTotal());
+            servicioNotaCredito.anularProcesoFactura(detalle,entityManager);
+        }
+
+        //ELIMINAR el registro de la CARTERA
+        CarteraService carteraService=new CarteraService();
+
+        List<Cartera> carteraFacturaList=carteraService.buscarCarteraPorReferenciaTodos(
+        factura.getId(),
+        factura.getCodigoDocumentoEnum(),
+        GeneralEnumEstado.ACTIVO,
+        Cartera.TipoCarteraEnum.CLIENTE,
+        factura.getSucursalEmpresa(),
+        entityManager);
+
+        for (Cartera carteraFactura : carteraFacturaList)
+        {
+            if(carteraFactura!=null)
+            {
+                //Obtengo el usuario de la factura esto es importante porque con ese usuario igual va a interactuar con la caja
+                //carteraFactura.setUsuario(factura.getUsuario());
+                //tambien eliminar los cruces para evitar inconsistencias
+                carteraService.eliminarCrucesPorCartera(carteraFactura,Boolean.TRUE,entityManager);
+
+                carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO,entityManager,generarMovimientoCaja);
+            }
+        }
     }
     /*
     public Long obtenerSecuencialProforma() throws java.rmi.RemoteException

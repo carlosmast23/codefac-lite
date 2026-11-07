@@ -14,6 +14,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Usuario;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.FechaCaducidadData;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.ReportDataAbstract;
@@ -57,7 +58,15 @@ public class LoteService extends ServiceAbstract<Lote, LoteFacade> implements Lo
         {
             throw new ServicioCodefacException("No se puede grabar sin una Fecha de Vencimiento");
         }
-        
+
+        //Un lote nunca debe quedar enganchado a una presentacion (EMPAQUE) en vez del producto original,
+        //porque las pantallas de busqueda de lote (Ajuste Inventario, Compra) filtran por el producto
+        //original exacto y el stock quedaria invisible ahi aunque el Kardex si este correcto
+        if(lote.getProducto()!=null && lote.getProducto().getTipoProductoEnum().equals(TipoProductoEnum.EMPAQUE))
+        {
+            throw new ServicioCodefacException("No se puede grabar un lote sobre un producto de tipo Empaque/Presentación, debe usar el producto original");
+        }
+
         //Verificar que el lote no se encuentre repetido para grabar
         Map<String,Object> mapParametros=new HashMap<String,Object>();
         mapParametros.put("codigo", lote.getCodigo());

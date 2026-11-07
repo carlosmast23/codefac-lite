@@ -181,6 +181,18 @@ public abstract class GeneralPanelInterface extends javax.swing.JInternalFrame i
     {
         throw new UnsupportedOperationException("Metodo no implementado"); //To change body of generated methods, choose Tools | Templates.
     }
+
+    /**
+     * Metodo generico para pantallas que necesiten ofrecer opciones adicionales desde el menu "Otras Opciones"
+     * del menu auxiliar del panel principal. Cada pantalla que lo necesite debe sobrescribir este metodo
+     * (por ejemplo para mostrar un JPopupMenu propio con sus opciones).
+     * @throws ExcepcionCodefacLite
+     * @throws RemoteException
+     */
+    public void otrasOpciones() throws ExcepcionCodefacLite,RemoteException
+    {
+        throw new UnsupportedOperationException("Metodo no implementado"); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     /**

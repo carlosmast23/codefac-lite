@@ -114,7 +114,7 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
         queryString += " AND ( CONCAT(u.secuencial, '') like ?2 "+queryBuscarCliente+" )";
         queryString += " ORDER BY u.id DESC ";
         QueryDialog queryDialog = new QueryDialog(queryString);
-        queryDialog.agregarParametro(1, ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        queryDialog.agregarParametro(1, getEstadoBuscar().getEstado());
         
         if(mostrarFacturados)
         {
@@ -137,6 +137,16 @@ public class ProformaBusqueda implements InterfaceModelFind<Factura>, Interfaces
     public DocumentoEnum getDocumentoBuscar()
     {
         return DocumentoEnum.PROFORMA;
+    }
+
+    /**
+     * Estado del comprobante a buscar. Las Proformas/Comandas se graban como AUTORIZADO, pero hay documentos
+     * (como la Nota de Venta Interna) que nunca pasan por un proceso de autorizacion y se graban con otro estado;
+     * las subclases de ese tipo de documento deben sobrescribir este metodo.
+     */
+    public ComprobanteEnumEstado getEstadoBuscar()
+    {
+        return ComprobanteEnumEstado.AUTORIZADO;
     }
 
     @Override

@@ -143,7 +143,7 @@ public class CarteraData {
                     data.setPreimpreso(cruce.getCarteraAfectada().getPreimpreso());
                     data.setSaldoDocCruzado(cruce.getCarteraAfectada().getSaldo().setScale(2, RoundingMode.HALF_UP).toString());
                     data.setTotalDocCruzado(cruce.getCarteraAfectada().getTotal().setScale(2, RoundingMode.HALF_UP).toString());
-                    data.setValorCruzado(cruce.getValor().toString());
+                    data.setValorCruzado(cruce.getValor().setScale(2, RoundingMode.HALF_UP).toString());
                     resultadoData.add(data);                    
                     ningunCruce=false;
                 }

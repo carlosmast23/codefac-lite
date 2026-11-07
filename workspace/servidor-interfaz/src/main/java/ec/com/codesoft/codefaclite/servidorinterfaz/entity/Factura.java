@@ -41,6 +41,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -106,6 +107,17 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     @JoinColumn(name = "PEDIDO_ID")
     private Factura proforma;
+
+    /**
+     * Documentos origen ADICIONALES cuando se consolidan varias Notas de Venta Interna en una sola Factura
+     * (la primera/principal sigue yendo en el campo "proforma" de arriba, con su columna PEDIDO_ID).
+     * Es un campo transitorio: no se persiste (no tiene sentido mas alla del momento de grabar), solo viaja
+     * por RMI junto con la Factura para que el servidor sepa, ademas del origen principal, que otros
+     * documentos tiene que anular (revertir inventario/cartera) al grabar esta Factura.
+     * Ver FacturacionService.asignarProformaAFactura.
+     */
+    @Transient
+    private List<Factura> documentosOrigenAdicionales;
 
     @Column(name = "ZONA_ID")
     private Long zonaId;
@@ -173,7 +185,10 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     private String placa;
 
 
+    //Con esto, cualquier lugar del sistema que lea getDetalles() directo (sin pasar por getDetallesOrdenados())
+    //ya recibe la lista ordenada por ORDEN - no depende de que cada lugar se acuerde de ordenar manualmente.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
+    @OrderBy("orden ASC")
     private List<FacturaDetalle> detalles;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "factura", fetch = FetchType.EAGER)
@@ -339,14 +354,22 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         this.estadoNotaCredito=estadoNotaCreditoEnum.getEstado();
     }
 
-    public void addDetalle(FacturaDetalle detalle,Boolean inicio) 
+    public void addDetalle(FacturaDetalle detalle,Boolean inicio)
     {
-        if (this.detalles == null) 
+        if (this.detalles == null)
         {
             this.detalles = new ArrayList<FacturaDetalle>();
         }
         detalle.setFactura(this);
-        
+
+        //Asignar el ORDEN de despliegue una sola vez (si ya viene seteado, ej. un detalle clonado o recargado
+        //desde la base, se respeta tal cual). Esto es lo que garantiza el orden visual final, independiente
+        //del ID que termine asignandole la base de datos al grabar.
+        if(detalle.getOrden()==null)
+        {
+            detalle.setOrden(calcularSiguienteOrdenDetalle(inicio));
+        }
+
         if(inicio!=null)
         {
             if(inicio)
@@ -355,19 +378,47 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
                 return;
             }
         }
-        
+
         //Por defecto agrego al último
         this.detalles.add(detalle);
     }
-    
+
     public void addDetalle(FacturaDetalle detalle) {
-        if(this.detalles==null)
+        addDetalle(detalle,false);
+    }
+
+    /**
+     * Calcula el siguiente valor de ORDEN para un detalle nuevo: el maximo actual + 1 (se agrega al final,
+     * caso normal), o el minimo actual - 1 si se esta agregando al inicio (ParametroCodefac.AGREGAR_DETALLE_INICIO).
+     * Si no hay ningun detalle con ORDEN todavia (documento nuevo), arranca en 1 (o -1 si es al inicio).
+     */
+    private Long calcularSiguienteOrdenDetalle(Boolean inicio)
+    {
+        Long minOrden=null;
+        Long maxOrden=null;
+        if(this.detalles!=null)
         {
-            this.detalles=new ArrayList<FacturaDetalle>();            
+            for (FacturaDetalle existente : this.detalles)
+            {
+                if(existente.getOrden()!=null)
+                {
+                    if(minOrden==null || existente.getOrden()<minOrden)
+                    {
+                        minOrden=existente.getOrden();
+                    }
+                    if(maxOrden==null || existente.getOrden()>maxOrden)
+                    {
+                        maxOrden=existente.getOrden();
+                    }
+                }
+            }
         }
-        
-        detalle.setFactura(this);
-        this.detalles.add(detalle);
+
+        if(Boolean.TRUE.equals(inicio))
+        {
+            return (minOrden!=null)?(minOrden-1):-1L;
+        }
+        return (maxOrden!=null)?(maxOrden+1):1L;
     }
 
     /**
@@ -628,6 +679,25 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
 
     public void setProforma(Factura proforma) {
         this.proforma = proforma;
+    }
+
+    public List<Factura> getDocumentosOrigenAdicionales() {
+        return documentosOrigenAdicionales;
+    }
+
+    public void setDocumentosOrigenAdicionales(List<Factura> documentosOrigenAdicionales) {
+        this.documentosOrigenAdicionales = documentosOrigenAdicionales;
+    }
+
+    /**
+     * Agrega un documento origen adicional (ej. otra Nota de Venta Interna que se esta consolidando junto con
+     * la principal) para que el servidor tambien lo anule (revierta inventario/cartera) al grabar esta Factura.
+     */
+    public void agregarDocumentoOrigenAdicional(Factura documentoOrigen) {
+        if (this.documentosOrigenAdicionales == null) {
+            this.documentosOrigenAdicionales = new ArrayList<Factura>();
+        }
+        this.documentosOrigenAdicionales.add(documentoOrigen);
     }
 
     public String getVentaCredito() {
@@ -1115,13 +1185,25 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
     public void agregarDetalleDesdeOtraFactura(Factura facturaAdicional)
     {
         List<FacturaDetalle> detalles= facturaAdicional.getDetalles();
-        
-        for (FacturaDetalle detalle : detalles) 
+
+        for (FacturaDetalle detalle : detalles)
         {
-            this.addDetalle(detalle);
+            //IMPORTANTE: Se clona el detalle en vez de reutilizar la misma instancia. Si se reutilizara la
+            //misma instancia, addDetalle() le reasigna su referencia "factura" hacia ESTA factura, pero el
+            //objeto facturaAdicional (ej. la Nota de Venta Interna origen) sigue teniendo esa misma instancia
+            //en su propia lista de detalles. Si luego ese documento origen se vuelve a grabar/mergear (p.ej.
+            //para anularlo), EclipseLink intentaria volver a persistir en cascada ese detalle "robado",
+            //generando inserciones fantasma. Clonando se evita compartir el mismo objeto entre ambas facturas.
+            try {
+                FacturaDetalle copiaDetalle = (FacturaDetalle) detalle.clone();
+                this.addDetalle(copiaDetalle);
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+                this.addDetalle(detalle); //Respaldo: comportamiento anterior si por algun motivo no se pudo clonar
+            }
         }
         this.calcularTotalesDesdeDetalles();
-        
+
     }
     
     public List<FacturaDetalle> getDetallesOrdenados()
@@ -1129,17 +1211,25 @@ public class Factura extends ComprobanteVentaNotaCreditoAbstract<FacturaAdiciona
         List<FacturaDetalle> facturaDetalleList=detalles;
         UtilidadesLista.ordenarLista(facturaDetalleList, new Comparator<FacturaDetalle>() {
             @Override
-            public int compare(FacturaDetalle facturaDetalle1, FacturaDetalle facturaDetalle2) 
+            public int compare(FacturaDetalle facturaDetalle1, FacturaDetalle facturaDetalle2)
             {
+                //ORDEN es el criterio correcto: se asigna una sola vez al agregar el detalle y nunca cambia,
+                //a diferencia del ID que depende de en que momento/orden se persistio cada detalle.
+                if(facturaDetalle1.getOrden()!=null && facturaDetalle2.getOrden()!=null)
+                {
+                    return facturaDetalle1.getOrden().compareTo(facturaDetalle2.getOrden());
+                }
+                //Respaldo para detalles muy antiguos que por algun motivo no tengan ORDEN (no deberia pasar
+                //despues del backfill de la migracion, pero se deja como red de seguridad)
                 if(facturaDetalle1.getId()!=null && facturaDetalle2.getId()!=null)
                 {
                     return facturaDetalle1.getId().compareTo(facturaDetalle2.getId());
                 }
                 else
                 {
-                    return 0; //Si no tienen un id se asume que son iguales
+                    return 0; //Si no tienen ni orden ni id se asume que son iguales
                 }
-                
+
             }
         });
         return facturaDetalleList;

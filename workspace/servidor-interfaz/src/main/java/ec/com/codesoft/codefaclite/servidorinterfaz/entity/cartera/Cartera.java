@@ -40,6 +40,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 /**
  *
@@ -155,7 +156,17 @@ public class Cartera implements Serializable{
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "carteraAfectada", fetch = FetchType.EAGER)
     private List<CarteraCruce> cruces;
-    
+
+    /**
+     * Campo transitorio (no se persiste): marca que el IngresoCaja que se va a generar a partir de esta cartera
+     * (el cruce automatico de tipo ABONOS que arma CarteraService.crearCrucesFactura) es solo informativo y no debe
+     * sumar/restar al total teorico de la caja. Caso de uso: la Factura que origina este abono viene de convertir
+     * una Nota de Venta Interna (ya cobrada en su momento), asi que este "cobro" no es dinero nuevo hoy.
+     * Ver CarteraService.grabarMovimientosCaja / CajaSession.calcularValorCierreTeorico.
+     */
+    @Transient
+    private Boolean informativoCaja;
+
         public Cartera() {
     }
 
@@ -401,8 +412,16 @@ public class Cartera implements Serializable{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
+
+    public Boolean getInformativoCaja() {
+        return informativoCaja;
+    }
+
+    public void setInformativoCaja(Boolean informativoCaja) {
+        this.informativoCaja = informativoCaja;
+    }
+
+
     
     
     

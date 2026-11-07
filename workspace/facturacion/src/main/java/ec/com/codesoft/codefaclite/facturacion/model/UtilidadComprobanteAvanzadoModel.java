@@ -297,7 +297,7 @@ public class UtilidadComprobanteAvanzadoModel extends UtilidadComprobantePanel {
                 ComprobanteServiceIf comprobanteServiceIf = ServiceFactory.getFactory().getComprobanteServiceIf();
                 ClienteUtilidadImplComprobante callBack = new ClienteUtilidadImplComprobante(this);
                 
-                List<String> errores=comprobanteServiceIf.procesarComprobantesPendienteLote(etapaInicial, etapaLimite, getMapClaveAccesoYCorreos(),getChkEnvioCorreo().isSelected(),session.getEmpresa());                
+                List<String> errores=comprobanteServiceIf.procesarComprobantesPendienteLote(etapaInicial, etapaLimite, getMapClaveAccesoYCorreos(),getChkEnvioCorreo().isSelected(),session.getEmpresa(),getChkSinValidarFecha().isSelected());
                 //Mostrar los errores del Sistema
                 String errorMsg="";
                 if(errores.size()>0)

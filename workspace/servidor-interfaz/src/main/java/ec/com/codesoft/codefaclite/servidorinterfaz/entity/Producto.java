@@ -1489,7 +1489,24 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     {
         PresentacionProducto presentacionDefecto;
         try {
-            presentacionDefecto = ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(empresa,this.getCodigoPresentacionDefectoVenta());
+            final PresentacionProducto[] presentacionDefectoHolder=new PresentacionProducto[1];
+            final RemoteException[] exHolder=new RemoteException[1];
+            final ServicioCodefacException[] exHolder2=new ServicioCodefacException[1];
+            ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios.medirTiempoProceso("buscarProductoPorPresentacionPvpDefecto.buscarPorNombre (producto="+this.getCodigoPersonalizado()+")", new ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios.ProcesoTiempoIf() {
+                @Override
+                public void proceso() {
+                    try {
+                        presentacionDefectoHolder[0]=ServiceFactory.getFactory().getPresentacionProductoServiceIf().buscarPorNombre(empresa,Producto.this.getCodigoPresentacionDefectoVenta());
+                    } catch (RemoteException ex) {
+                        exHolder[0]=ex;
+                    } catch (ServicioCodefacException ex) {
+                        exHolder2[0]=ex;
+                    }
+                }
+            });
+            if(exHolder[0]!=null) throw exHolder[0];
+            if(exHolder2[0]!=null) throw exHolder2[0];
+            presentacionDefecto = presentacionDefectoHolder[0];
             if(presentacionDefecto!=null)
             {
                 return buscarProductoPorPresentacion(presentacionDefecto);
@@ -1511,8 +1528,8 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             {
             return this;
             }
-            
-            if(presentacionList!=null) 
+
+            if(presentacionList!=null)
             {
             for (ProductoPresentacionDetalle detalle : presentacionList)
             {
@@ -1522,12 +1539,29 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
             }
             }
             }*/
-            ProductoPresentacionDetalle presentacionDetalle= ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(presentacion, this);
+            final ProductoPresentacionDetalle[] presentacionDetalleHolder=new ProductoPresentacionDetalle[1];
+            final RemoteException[] exHolder=new RemoteException[1];
+            final ServicioCodefacException[] exHolder2=new ServicioCodefacException[1];
+            ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios.medirTiempoProceso("buscarProductoPorPresentacion.buscarProductoPorPresentacion (producto="+this.getCodigoPersonalizado()+")", new ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios.ProcesoTiempoIf() {
+                @Override
+                public void proceso() {
+                    try {
+                        presentacionDetalleHolder[0]=ServiceFactory.getFactory().getProductoServiceIf().buscarProductoPorPresentacion(presentacion, Producto.this);
+                    } catch (RemoteException ex) {
+                        exHolder[0]=ex;
+                    } catch (ServicioCodefacException ex) {
+                        exHolder2[0]=ex;
+                    }
+                }
+            });
+            if(exHolder[0]!=null) throw exHolder[0];
+            if(exHolder2[0]!=null) throw exHolder2[0];
+            ProductoPresentacionDetalle presentacionDetalle= presentacionDetalleHolder[0];
             if(presentacionDetalle!=null)
             {
                 return presentacionDetalle.getProductoEmpaquetado();
             }
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(Producto.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ServicioCodefacException ex) {

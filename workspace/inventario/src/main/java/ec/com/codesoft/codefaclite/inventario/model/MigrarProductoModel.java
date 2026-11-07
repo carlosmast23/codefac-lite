@@ -625,6 +625,16 @@ public class MigrarProductoModel extends MigrarModel {
                             detallePresentacion.setProductoOriginal(producto);
                             detallePresentacion.setTipoEnum(ProductoPresentacionDetalle.TipoPresentacionEnum.ADICIONAL);
 
+                            //Sin un codigoTmp propio, ProductoService.grabarEmpaques clona el producto original
+                            //y el EMPAQUE (la presentacion CAJA) se queda con el MISMO codigoPersonalizado del
+                            //original, generando un producto activo duplicado con el mismo codigo de barras
+                            //(detectado en produccion: 459 codigos con esta duplicacion, todos 1 'p' + 1 'm')
+                            String codigoCaja = producto.getCodigoPersonalizado() + "-CJ";
+                            if (codigoCaja.length() > Producto.TAMANIO_MAX_CODIGO) {
+                                codigoCaja = codigoCaja.substring(0, Producto.TAMANIO_MAX_CODIGO);
+                            }
+                            detallePresentacion.setCodigoTmp(codigoCaja);
+
                             Double pvpPresentacionCaja = (Double) obtenerDatoPlantilla(fila, ExcelMigrarProductos.Enum.PVP_PRESENTACION);
 
                             if(pvpPresentacionCaja!=null)

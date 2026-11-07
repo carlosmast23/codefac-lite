@@ -21,6 +21,9 @@ import ec.com.codesoft.codefaclite.corecodefaclite.dialog.ObserverUpdateInterfac
 import ec.com.codesoft.codefaclite.corecodefaclite.excepcion.ExcepcionCodefacLite;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
+import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.ConfiguracionImpresoraEnum;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.FormatoHojaEnum;
 import ec.com.codesoft.codefaclite.recursos.RecursoCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
@@ -215,10 +218,24 @@ public class CarteraModel extends CarteraPanel{
     
     private void imprimirCartera(Cartera cartera)
     {
-        //InputStream path = RecursoCodefac.JASPER_CARTERA.getResourceInputStream("comprobante_ingreso_egreso.jrxml");
-        //Map<String,Object> parameters=CarteraData.mapParametros(cartera);
+        //Preguntar primero el tamanio de hoja, igual que en Cerrar Caja (CerrarCajaModel.generarReporteCaja)
+        String[] opciones = {"A4", "Ticket", "Cancelar"};
+        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+        switch (opcionSeleccionada)
+        {
+            case 0:
+                imprimirCarteraFormatoA4(cartera);
+                break;
+            case 1:
+                imprimirCarteraFormatoTicket(cartera);
+                break;
+        }
+    }
+
+    private void imprimirCarteraFormatoA4(Cartera cartera)
+    {
         List<CarteraData> data=CarteraData.castCarteraData(cartera);
-        
+
         DialogoCodefac.dialogoReporteOpciones(new ReporteDialogListener() {
             @Override
             public void excel() {
@@ -235,12 +252,18 @@ public class CarteraModel extends CarteraPanel{
 
             @Override
             public void pdf() {
-                //ReporteCodefac.generarReporteInternalFramePlantilla(path, parameters, data, panelPadre, getNombreReporte());
                 imprimirPdf(cartera);
             }
         });
     }
-    
+
+    private void imprimirCarteraFormatoTicket(Cartera cartera)
+    {
+        Map<String,Object> parameters=CarteraData.mapParametros(cartera);
+        List<CarteraData> data=CarteraData.castCarteraData(cartera);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_CARTERA,"comprobante_ingreso_egreso_ticket.jrxml", parameters, data, panelPadre, getNombreReporte(), OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET, ConfiguracionImpresoraEnum.NINGUNA);
+    }
+
     private void imprimirPdf(Cartera cartera)
     {
         InputStream path = RecursoCodefac.JASPER_CARTERA.getResourceInputStream("comprobante_ingreso_egreso.jrxml");

@@ -27,14 +27,18 @@ import javax.xml.bind.annotation.XmlType;
     "tipoIdentificacionComprador",
     "razonSocialComprador",
     "identificacionComprador",
-    "direccionComprador",    
+    "direccionComprador",
     "totalSinImpuestos",
     "totalSubsidio",
     "totalDescuento",
+    "codDocReemb",
+    "totalComprobantesReembolso",
+    "totalBaseImponibleReembolso",
+    "totalImpuestoReembolso",
     "totalImpuestos",
     "importeTotal",
-    "placa",
     "moneda",
+    "placa",
     "formaPagos"})
 public class InformacionFactura extends InformacionComprobanteAbstract{
 
@@ -45,6 +49,10 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
     private BigDecimal totalSubsidio;
     private String placa;
     private String moneda;
+    private String codDocReemb;
+    private BigDecimal totalComprobantesReembolso;
+    private BigDecimal totalBaseImponibleReembolso;
+    private BigDecimal totalImpuestoReembolso;
     
    
     public InformacionFactura() {
@@ -114,6 +122,42 @@ public class InformacionFactura extends InformacionComprobanteAbstract{
 
     public void setMoneda(String moneda) {
         this.moneda = moneda;
+    }
+
+    @XmlElement(name = "codDocReemb")
+    public String getCodDocReemb() {
+        return codDocReemb;
+    }
+
+    public void setCodDocReemb(String codDocReemb) {
+        this.codDocReemb = codDocReemb;
+    }
+
+    @XmlElement(name = "totalComprobantesReembolso")
+    public BigDecimal getTotalComprobantesReembolso() {
+        return totalComprobantesReembolso;
+    }
+
+    public void setTotalComprobantesReembolso(BigDecimal totalComprobantesReembolso) {
+        this.totalComprobantesReembolso = totalComprobantesReembolso;
+    }
+
+    @XmlElement(name = "totalBaseImponibleReembolso")
+    public BigDecimal getTotalBaseImponibleReembolso() {
+        return totalBaseImponibleReembolso;
+    }
+
+    public void setTotalBaseImponibleReembolso(BigDecimal totalBaseImponibleReembolso) {
+        this.totalBaseImponibleReembolso = totalBaseImponibleReembolso;
+    }
+
+    @XmlElement(name = "totalImpuestoReembolso")
+    public BigDecimal getTotalImpuestoReembolso() {
+        return totalImpuestoReembolso;
+    }
+
+    public void setTotalImpuestoReembolso(BigDecimal totalImpuestoReembolso) {
+        this.totalImpuestoReembolso = totalImpuestoReembolso;
     }
 
 

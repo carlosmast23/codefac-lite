@@ -92,34 +92,20 @@ public class CajaSesionService extends ServiceAbstract<CajaSession, CajaSesionFa
     }
     
     @Override
-    public void editar(CajaSession entity) throws ServicioCodefacException, RemoteException 
+    public void editar(CajaSession entity) throws ServicioCodefacException, RemoteException
     {
         ejecutarTransaccion(new MetodoInterfaceTransaccion() {
             @Override
             public void transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
-                
-                BigDecimal totalVentas = BigDecimal.ZERO;
-                boolean grabarAunqueNoTengaVentas = false;
-                
-                if(entity.getIngresosCaja() == null || entity.getIngresosCaja().isEmpty())
-                {
-                    grabarAunqueNoTengaVentas = true;
-                }
-                
-                totalVentas = entity.getValorApertura();
-                
-                if(!grabarAunqueNoTengaVentas)
-                {
-                    for(IngresoCaja ingresoCaja: entity.getIngresosCaja())
-                    {
-                        totalVentas = totalVentas.add(ingresoCaja.getValor());
-                    }
-                }
 
-                entity.setValorCierre(totalVentas);
+                //ANTES: este metodo sumaba directamente ingresoCaja.getValor() de TODOS los ingresos sin filtrar
+                //(ni por forma de pago Efectivo, ni por estado del comprobante, ni por movimientos informativos como
+                //las Facturas convertidas desde NVI), quedando desincronizado de calcularValorCierreTeorico() que
+                //ya usa cerrarCaja(). Se unifica para usar siempre el mismo calculo, con las mismas reglas.
+                entity.setValorCierre(entity.calcularValorCierreTeorico());
                 entity.setEstadoSessionEnum(CajaSessionEnum.FINALIZADO);
                 entity.setFechaHoraCierre(UtilidadesFecha.getFechaHoyTimeStamp());
-               
+
                 entityManager.merge(entity);
             }
         });

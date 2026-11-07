@@ -260,15 +260,17 @@ public abstract class UtilidadVarios {
     
     public static void medirTiempoProceso(ProcesoTiempoIf procesoIf)
     {
+        medirTiempoProceso("proceso", procesoIf);
+    }
+
+    public static void medirTiempoProceso(String etiqueta, ProcesoTiempoIf procesoIf)
+    {
         long inicio = System.currentTimeMillis();
         procesoIf.proceso();
         long fin = System.currentTimeMillis();
         double tiempo = (fin - inicio) / 1000.0;
-        
-        //Obtiene el nombre del metodo del contesto actual
-        String nombreMetodo = new Object(){}.getClass().getEnclosingMethod().getName();
-        
-        //Logger.getLogger(UtilidadVarios.class.getName()).log(Level.INFO,"Tiempo del proceso: "+nombreMetodo+" |"+tiempo+" segundos");
+
+        Logger.getLogger(UtilidadVarios.class.getName()).log(Level.INFO,"[DIAG-TIEMPO] "+etiqueta+" | "+tiempo+" segundos");
     }
     
     public interface ProcesoTiempoIf

@@ -142,7 +142,7 @@ public class ReporteFechaCaducidadModel extends StockReporteModel{
                     try {
                         Excel excel = new Excel();
                         String[] titulos={"Código","Bodega","Lote","Nombre Producto","Fecha Vencimiento","Stock","Valor Unitario"};
-                        excel.gestionarIngresoInformacionExcel(titulos, new ArrayList());
+                        excel.gestionarIngresoInformacionExcel(titulos, (List) reporte.getDetalleList());
                         excel.abrirDocumento();
                     } catch (Exception exc) {
                         exc.printStackTrace();

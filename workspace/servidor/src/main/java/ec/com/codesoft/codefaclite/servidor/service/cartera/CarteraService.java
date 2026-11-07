@@ -280,19 +280,31 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
     
     private void grabarMovimientosCaja(Cartera cartera,Boolean eliminar,EntityManager entityManager) throws RemoteException, ServicioCodefacException
     {
+        grabarMovimientosCaja(cartera, eliminar, null, null, entityManager);
+    }
+
+    /**
+     * Permite generar (eliminar=false) o revertir con un movimiento compensatorio (eliminar=true) el ingreso/egreso
+     * de caja de una cartera tipo ABONOS/NOTA_CREDITO, con una descripcion propia y la sesion de caja de un usuario
+     * distinto al dueño original de la cartera (ej. correccion manual al editar un documento ya grabado).
+     * Si no se especifica descripcionOverride ni usuarioSesion se comporta igual que la version original.
+     */
+    private void grabarMovimientosCaja(Cartera cartera,Boolean eliminar,String descripcionOverride,Usuario usuarioSesion,EntityManager entityManager) throws RemoteException, ServicioCodefacException
+    {
         //TODO: Los únicos movimientos que pueden generar movimiento en cartera van a ser los ingresos y egresos
         DocumentoEnum documentoEnum = cartera.getCarteraDocumentoEnum();
         boolean generarMovimientoCaja =
                 DocumentoEnum.ABONOS.equals(documentoEnum)
                 || DocumentoEnum.NOTA_CREDITO.equals(documentoEnum);
-        
+
         if(!generarMovimientoCaja)
         {
             return;
         }
-        
-        CajaSession cajaSession = cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(null, cartera.getUsuario(),entityManager);
-        
+
+        Usuario usuarioParaSesion = (usuarioSesion!=null) ? usuarioSesion : cartera.getUsuario();
+        CajaSession cajaSession = cajaSesionService.obtenerCajaSessionPorPuntoEmisionYUsuario(null, usuarioParaSesion,entityManager);
+
         if(cajaSession == null)
         {
             //Si no tiene caja configurada no hacer ningun movimiento en la caja
@@ -304,10 +316,17 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         IngresoCaja ingresoCaja=new IngresoCaja();
         ingresoCaja.setFechaHora(UtilidadesFecha.getFechaHoraHoy());
         ingresoCaja.setCajaSession(cajaSession);
-        ingresoCaja.setValor(cartera.getTotal());        
+        ingresoCaja.setValor(cartera.getTotal());
         ingresoCaja.setCartera(cartera);
         ingresoCaja.setFormaPago(cartera.getSriFormaPago());
         //ingresoCaja.setSecuencial(secuencial);
+
+        //Movimiento informativo (ej. Factura convertida desde Nota de Venta Interna ya cobrada): se lista en el
+        //detalle del cierre de caja pero no suma/resta al total teorico. Ver Cartera.informativoCaja.
+        if(Boolean.TRUE.equals(cartera.getInformativoCaja()))
+        {
+            ingresoCaja.setInformativoEnum(EnumSiNo.SI);
+        }
         
         if(cartera.getTipoCarteraEnum().equals(Cartera.TipoCarteraEnum.CLIENTE))
         {
@@ -329,28 +348,46 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
         //String descripcionIngreso="S/N";
         
 
-        ingresoCaja.setDescripcion(cartera.getDetalles().get(0).getDescripcion());
-        
-        if(eliminar)
+        if(descripcionOverride!=null)
         {
-            if(cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
-            {
-                ingresoCaja.setDescripcion("[ Nota de Crédito ] #"+cartera.getSecuencial());
-            }
-            else
-            {
-                ingresoCaja.setDescripcion("[ Anulación ] "+ingresoCaja.getDescripcion());
-            }
-            
+            ingresoCaja.setDescripcion(descripcionOverride);
         }
-        
+        else
+        {
+            ingresoCaja.setDescripcion(cartera.getDetalles().get(0).getDescripcion());
+
+            if(eliminar)
+            {
+                if(cartera.getCarteraDocumentoEnum().equals(DocumentoEnum.NOTA_CREDITO))
+                {
+                    ingresoCaja.setDescripcion("[ Nota de Crédito ] #"+cartera.getSecuencial());
+                }
+                else
+                {
+                    ingresoCaja.setDescripcion("[ Anulación ] "+ingresoCaja.getDescripcion());
+                }
+
+            }
+        }
+
         ingresoCaja.setSecuencial(cartera.getReferenciaManual());
         
         
         entityManager.persist(ingresoCaja);
-        
+
     }
-    
+
+    /**
+     * Permite corregir manualmente el "Pagar con Caja" de un abono ya existente (ej. al editar una compra/factura
+     * y cambiar ese check despues de grabado). eliminar=false genera el ingreso/egreso real; eliminar=true genera
+     * el movimiento compensatorio inverso (no borra el original, igual que la anulacion de cartera).
+     * El movimiento siempre queda fechado "ahora" y en la sesion de caja abierta del usuario indicado.
+     */
+    public void registrarCorreccionPagoCaja(Cartera abono,Boolean eliminar,String descripcion,Usuario usuarioSesion,EntityManager entityManager) throws RemoteException, ServicioCodefacException
+    {
+        grabarMovimientosCaja(abono, eliminar, descripcion, usuarioSesion, entityManager);
+    }
+
     private void grabarDetallesCarteraSinTransaccion(Cartera cartera,List<CarteraCruce> cruces,EntityManager entityManager) throws ServicioCodefacException,java.rmi.RemoteException
     {
         //BigDecimal valorCruzadoCarteraQueAfecta=  getFacade().obtenerValorCruceCarteraAfectados(cartera);
@@ -857,9 +894,17 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 carteraDetalleAbono.setTotal(formaPago.getTotal());
                 
                 carteraAbono.setReferenciaManual(facturaOriginal.getSecuencial()+"");
-                
+
                 carteraAbono.addDetalle(carteraDetalleAbono);
-                
+
+                //Si la Factura viene de convertir una Nota de Venta Interna, el efectivo ya se cobro los dias
+                //que se grabaron las NVI origen - este abono/cruce automatico no es dinero nuevo hoy, es solo
+                //trazabilidad. Se marca para que el IngresoCaja que se genere no sume al cierre de caja.
+                if(esFacturaConvertidaDesdeNotaVentaInterna(factura))
+                {
+                    carteraAbono.setInformativoCaja(true);
+                }
+
                 //Grabar la NUEVA CARTERA DEL ABONO
                 grabarCarteraSinTransaccion(carteraAbono, new ArrayList<CarteraCruce>(),CrudEnum.CREAR,carteraParametro.pagarConCaja,entityManager);
                 
@@ -942,11 +987,41 @@ public class CarteraService extends ServiceAbstract<Cartera,CarteraFacade> imple
                 Logger.getLogger(CarteraService.class.getName()).log(Level.SEVERE, null, ex);
             }
         
-        }    
-        
-        
+        }
+
+
     }
-    
+
+    /**
+     * true si la Factura viene de convertir una (o varias) Nota de Venta Interna - ver FacturacionModel.convertirNotaVentaInternaEnFactura.
+     * El efectivo de esas ventas ya se cobro los dias que se grabaron las NVI origen, asi que el abono/cruce
+     * automatico que se genera al grabar esta Factura nueva no debe contarse como dinero nuevo en la caja de hoy.
+     */
+    private boolean esFacturaConvertidaDesdeNotaVentaInterna(Factura factura)
+    {
+        if(factura==null)
+        {
+            return false;
+        }
+
+        if(factura.getProforma()!=null && DocumentoEnum.NOTA_VENTA_INTERNA.equals(factura.getProforma().getCodigoDocumentoEnum()))
+        {
+            return true;
+        }
+
+        if(factura.getDocumentosOrigenAdicionales()!=null)
+        {
+            for (Factura documentoOrigen : factura.getDocumentosOrigenAdicionales()) {
+                if(documentoOrigen!=null && DocumentoEnum.NOTA_VENTA_INTERNA.equals(documentoOrigen.getCodigoDocumentoEnum()))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void crearCarteraFactura(ComprobanteEntity comprobante,Cartera cartera,List<CarteraCruce> cruces,Cartera.TipoCarteraEnum tipo,CarteraParametro carteraParametro,EntityManager entityManager) throws ServicioCodefacException, RemoteException
     {
         //Termina de generar los campos restantes para facturas de venta y compra

@@ -86,6 +86,8 @@ create table COMPRA
     DESCUENTO_IVA_ADICIONAL decimal(13,2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.0.2)*/
     LOG_SRI varchar(250),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.1.6)*/
+    PAGAR_CON_CAJA varchar(1),
     primary key (ID)
     /*CONSTRAINT id_cliente_compra_fk FOREIGN KEY (PROVEEDOR_ID) REFERENCES CLIENTE(CLIENTE_ID)*/
 

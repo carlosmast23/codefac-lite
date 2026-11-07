@@ -471,8 +471,15 @@ public class CajaSession implements Serializable
         
         if(ingresoCajaList!=null)
         {
-            for (IngresoCaja ingresoCaja : ingresoCajaList) 
+            for (IngresoCaja ingresoCaja : ingresoCajaList)
             {
+                //Movimiento informativo (ej. Factura convertida desde Nota de Venta Interna ya cobrada): se lista
+                //en el detalle del cierre pero no debe sumar/restar al total teorico de la caja
+                if(ingresoCaja.esInformativo())
+                {
+                    continue;
+                }
+
                 if(ingresoCaja.getFactura()!=null)
                 {
                     if(!ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO) && !ingresoCaja.getFactura().getEstadoEnum().equals(ComprobanteEntity.ComprobanteEnumEstado.ELIMINADO_SRI) )

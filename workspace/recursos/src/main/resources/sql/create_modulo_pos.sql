@@ -123,6 +123,8 @@ create table INGRESO_CAJA(
     SECUENCIAL varchar(32),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.1.5)*/
     FECHA_HORA timestamp,
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.1.4)*/
+    INFORMATIVO varchar(1),
 
 
     primary key (ID),

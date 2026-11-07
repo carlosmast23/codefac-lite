@@ -6,6 +6,9 @@
 package ec.com.codesoft.codefaclite.servidorinterfaz.reportData;
 
 
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.Excel;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ExcelDatosInterface;
+import ec.com.codesoft.codefaclite.servidorinterfaz.controller.TipoDato;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -16,7 +19,7 @@ import java.util.List;
  *
  * @author CARLOS_CODESOFT
  */
-public class FechaCaducidadData  implements Serializable{
+public class FechaCaducidadData  implements Serializable, ExcelDatosInterface{
     
     private String codigoPersonalizado;
     private String nombreBodega;
@@ -93,21 +96,20 @@ public class FechaCaducidadData  implements Serializable{
         this.valorUnitario = valorUnitario;
     }
 
-    /*@Override
+    @Override
     public List<TipoDato> getDatos() {
-        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();        
-        tiposDatos.add(new TipoDato(this.codigoPersonalizado,Excel.TipoDataEnum.TEXTO));        
+        List<TipoDato> tiposDatos = new ArrayList<TipoDato>();
+        tiposDatos.add(new TipoDato(this.codigoPersonalizado,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreBodega,Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.codigoLote, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.nombreProducto, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.fechaCaducidad, Excel.TipoDataEnum.TEXTO));
         tiposDatos.add(new TipoDato(this.stock,Excel.TipoDataEnum.NUMERO));
         tiposDatos.add(new TipoDato(this.valorUnitario, Excel.TipoDataEnum.NUMERO));
-        
-        
+
+
         return tiposDatos;
     }
-    */
     
     
 }

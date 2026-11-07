@@ -276,27 +276,14 @@ public class DescuentoService extends ServiceAbstract<Descuento,DescuentoFacade>
     {
         return (List<BigDecimal>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
             @Override
-            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {                
-                List<DescuentoProductoDetalle> detalleDescuento = getFacade().consultarDescuentosPorProductoFacade(producto,entityManager);
-
-                List<BigDecimal> descuentoList = new ArrayList<BigDecimal>();
-                for (DescuentoProductoDetalle descuentoProductoDetalle : detalleDescuento) {
-
-                    //OPTIMIZAR ESTA PARTE PARA HACER DIRECTO EN LA CONSULTA
-                    List<DescuentoCondicionPrecio> condicionList = descuentoProductoDetalle.getDescuento().getCondicionPrecioList();
-                    for (DescuentoCondicionPrecio condicion : condicionList) {
-                        if (condicion.getNumeroPrecio() != null && condicion.getNumeroPrecio().equals(numeroPrecio)) {
-                            descuentoList.add(condicion.getPorcentajeDescuento());
-                        }
-                    }
-
-                }
-
-                return descuentoList;
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                //Consulta directa que proyecta los porcentajes sin cargar las entidades Descuento/DescuentoProductoDetalle
+                //completas (evita el fetch EAGER en cascada de Descuento.productoList)
+                return getFacade().consultarPorcentajesDescuentoPorProductoFacade(producto,numeroPrecio,entityManager);
             }
         });
-        
-        
+
+
     }
  
     

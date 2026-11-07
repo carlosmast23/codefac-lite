@@ -123,6 +123,7 @@ public class ComprobanteEntityFacade extends AbstractFacade<ComprobanteEntity> {
         switch(documentoEnum)
         {
             case FACTURA:
+            case FACTURA_REEMBOLSO:
                 nombreTabla="Factura";
                 break;
 

@@ -13,6 +13,7 @@ import ec.com.codesoft.codefaclite.controlador.reportes.AgrupadoReporteIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.EnumReporteAgruparIf;
 import ec.com.codesoft.codefaclite.controlador.reportes.NombreCampoAgrupadoIf;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +82,27 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
     protected String precioUnitarioReporte;
     
     protected String formaPago;
-    
+
+    /**
+     * Desglose de las formas de pago reales de la factura (puede tener mas de una si el pago fue mixto).
+     * Se usa solo para el reporte AGRUPADO_POR_FORMA_PAGO, que divide esta fila en una por cada forma de
+     * pago con su monto proporcional - ver ControladorReporteFactura.expandirPorFormaPago. El resto de
+     * agrupaciones ignora este campo y sigue usando "formaPago" (la primera forma de pago) tal cual.
+     */
+    protected List<FormaPagoResumen> formasPagoDetalle;
+
+    public static class FormaPagoResumen
+    {
+        public final String nombre;
+        public final BigDecimal total;
+
+        public FormaPagoResumen(String nombre, BigDecimal total)
+        {
+            this.nombre = nombre;
+            this.total = total;
+        }
+    }
+
     /**
      * Datos para empresas de distribucion
      */
@@ -407,6 +428,14 @@ public class ReporteFacturaData implements ExcelDatosInterface,Cloneable,Agrupad
 
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
+    }
+
+    public List<FormaPagoResumen> getFormasPagoDetalle() {
+        return formasPagoDetalle;
+    }
+
+    public void setFormasPagoDetalle(List<FormaPagoResumen> formasPagoDetalle) {
+        this.formasPagoDetalle = formasPagoDetalle;
     }
 
     public String getZona() {

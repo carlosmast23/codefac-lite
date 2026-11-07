@@ -5,9 +5,11 @@
  */
 package ec.com.codesoft.codefaclite.facturacionelectronica.reporte;
 
+import ec.com.codesoft.codefaclite.facturacionelectronica.ComprobanteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.ComprobanteElectronicoFacturaAndLiquidacionAbstract;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.DetalleFacturaComprobante;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.FormaPagoComprobante;
+import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.factura.InformacionFactura;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.TotalImpuesto;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,6 +35,24 @@ public abstract class FacturaLiquidacionCompraAbstractReport extends Comprobante
     
     
     
+    @Override
+    protected Map<String,Object> getMapInfoTributaria(Map<ComprobanteEnum, String> aliasNombreDocumentosMap)
+    {
+        Map<String,Object> map=super.getMapInfoTributaria(aliasNombreDocumentosMap);
+
+        //Diferenciar visualmente en el titulo del RIDE cuando la factura tiene reembolsos, aunque ante el Sri sigue siendo codDoc=01 (Factura)
+        if(comprobante.getInformacionComprobante() instanceof InformacionFactura)
+        {
+            InformacionFactura informacionFactura=(InformacionFactura) comprobante.getInformacionComprobante();
+            if("41".equals(informacionFactura.getCodDocReemb()))
+            {
+                map.put("nombre_documento","FACTURA REEMBOLSO");
+            }
+        }
+
+        return map;
+    }
+
     @Override
     public Map<String,Object> getMapInfoCliente()
     {

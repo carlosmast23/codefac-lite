@@ -56,6 +56,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         jLabel8 = new javax.swing.JLabel();
         lblEspacioUtilidad = new javax.swing.JLabel();
         chkEnvioCorreo = new javax.swing.JCheckBox();
+        chkSinValidarFecha = new javax.swing.JCheckBox();
         chkSeleccionarTodo = new javax.swing.JCheckBox();
 
         setClosable(true);
@@ -214,6 +215,15 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         getContentPane().add(chkEnvioCorreo, gridBagConstraints);
 
+        chkSinValidarFecha.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        chkSinValidarFecha.setText("Procesar sin validar fecha (caída del SRI)");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        getContentPane().add(chkSinValidarFecha, gridBagConstraints);
+
         chkSeleccionarTodo.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         chkSeleccionarTodo.setText("Seleccionar Todo");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -236,6 +246,7 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
     private javax.swing.JButton btnEliminarCorreo;
     private javax.swing.JButton btnSiguienteEtapa;
     private javax.swing.JCheckBox chkEnvioCorreo;
+    private javax.swing.JCheckBox chkSinValidarFecha;
     private javax.swing.JCheckBox chkSeleccionarTodo;
     private javax.swing.JComboBox<String> cmbCarpetaComprobante;
     private javax.swing.JComboBox<String> cmbEstadoLimiteProcesar;
@@ -306,6 +317,10 @@ public abstract class UtilidadComprobantePanel extends ControladorCodefacInterfa
 
     public JCheckBox getChkEnvioCorreo() {
         return chkEnvioCorreo;
+    }
+
+    public JCheckBox getChkSinValidarFecha() {
+        return chkSinValidarFecha;
     }
 
     public void setChkEnvioCorreo(JCheckBox chkEnvioCorreo) {

@@ -355,6 +355,8 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         jPanel14 = new javax.swing.JPanel();
         jLabel112 = new javax.swing.JLabel();
         cmbVisualizarCierreCaja = new javax.swing.JComboBox<>();
+        jLabelImprimirNotaEntregaAutomatico = new javax.swing.JLabel();
+        cmbImprimirNotaEntregaAutomatico = new javax.swing.JComboBox<>();
         lblEspacio14355 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
         jLabel118 = new javax.swing.JLabel();
@@ -1316,6 +1318,23 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel4.add(cmbVisualizadorReporte, gridBagConstraints);
+
+        jLabelImprimirNotaEntregaAutomatico.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabelImprimirNotaEntregaAutomatico.setText("Imprimir Nota de Entrega Automático: ");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(jLabelImprimirNotaEntregaAutomatico, gridBagConstraints);
+
+        cmbImprimirNotaEntregaAutomatico.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        jPanel4.add(cmbImprimirNotaEntregaAutomatico, gridBagConstraints);
 
         jTabbedPane1.addTab("Ventas", jPanel4);
 
@@ -2900,6 +2919,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JComboBox<EnumSiNo> cmbVentaProductoModoDescuento;
     private javax.swing.JComboBox<EnumSiNo> cmbVentanasMultiples;
     private javax.swing.JComboBox<EnumSiNo> cmbVisualizarCierreCaja;
+    private javax.swing.JComboBox<EnumSiNo> cmbImprimirNotaEntregaAutomatico;
     private javax.swing.JComboBox<EnumSiNo> jComboFiltrarFacturaPorUsuario;
     private javax.swing.JEditorPane jEditorPanelVistaPrevia;
     private javax.swing.JLabel jLabel1;
@@ -2918,6 +2938,7 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
     private javax.swing.JLabel jLabel110;
     private javax.swing.JLabel jLabel111;
     private javax.swing.JLabel jLabel112;
+    private javax.swing.JLabel jLabelImprimirNotaEntregaAutomatico;
     private javax.swing.JLabel jLabel113;
     private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel115;
@@ -4159,6 +4180,14 @@ public abstract class ConfiguracionDefectoPanel extends ControladorCodefacInterf
 
     public void setCmbVisualizarCierreCaja(JComboBox<EnumSiNo> cmbVisualizarCierreCaja) {
         this.cmbVisualizarCierreCaja = cmbVisualizarCierreCaja;
+    }
+
+    public JComboBox<EnumSiNo> getCmbImprimirNotaEntregaAutomatico() {
+        return cmbImprimirNotaEntregaAutomatico;
+    }
+
+    public void setCmbImprimirNotaEntregaAutomatico(JComboBox<EnumSiNo> cmbImprimirNotaEntregaAutomatico) {
+        this.cmbImprimirNotaEntregaAutomatico = cmbImprimirNotaEntregaAutomatico;
     }
 
     public JSpinner getTxtValorMinimoSorteo() {

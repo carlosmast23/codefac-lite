@@ -273,6 +273,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     private List<IconoPanel> listaIconos;
     
     private JMenuItem menuCopiar;
+    private JMenuItem menuOtrasOpciones;
     private JMenuItem menuItemHistorialCambios;
     
     /**
@@ -290,6 +291,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
         getjPanelSeleccion().setVisible(false);//Asumo que cuando se abre por primera vez la pantalla esta oculta
         mapPantallaAbiertas=new HashMap<GeneralPanelInterface, JMenuItem>();
         this.menuCopiar=new JMenuItem("Copiar");
+        this.menuOtrasOpciones=new JMenuItem("Otras Opciones");
         this.menuItemHistorialCambios = new JMenuItem("Historial de cambios");
         this.menuItemHistorialCambios.setFont(new Font("Arial", Font.PLAIN, 13));
         getjMenuAyuda().add(this.menuItemHistorialCambios, 1);
@@ -1181,6 +1183,21 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 }
             }
         });
+
+        menuOtrasOpciones.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    JInternalFrame frame = getjDesktopPane1().getSelectedFrame();
+                    ControladorCodefacInterface frameInterface = (ControladorCodefacInterface) frame;
+                    frameInterface.otrasOpciones();
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(GeneralPanelModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         
         getBtnImprimir().addActionListener(new ActionListener() {
             @Override
@@ -1253,10 +1270,8 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         // Crear el menú emergente
         JPopupMenu popupMenu = new JPopupMenu();
-        //JMenuItem menuItem1 = new JMenuItem("Opción 1");
-        JMenuItem menuItem2 = new JMenuItem("Otras Opciones");
         popupMenu.add(menuCopiar);
-        popupMenu.add(menuItem2);
+        popupMenu.add(menuOtrasOpciones);
         return popupMenu;
     }
     

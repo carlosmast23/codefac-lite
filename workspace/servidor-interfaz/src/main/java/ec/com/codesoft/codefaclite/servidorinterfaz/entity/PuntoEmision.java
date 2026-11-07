@@ -328,6 +328,7 @@ public class PuntoEmision implements Serializable{
     {
         switch (documentoEnum) {
             case FACTURA:
+            case FACTURA_REEMBOLSO:
                 return getSecuencialFactura();
 
             case NOTA_VENTA:
@@ -357,6 +358,7 @@ public class PuntoEmision implements Serializable{
     {
         switch (documentoEnum) {
             case FACTURA:
+            case FACTURA_REEMBOLSO:
                 setSecuencialFactura(secuencial);
                 break;
 

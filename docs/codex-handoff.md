@@ -1,6 +1,6 @@
 # Codex Handoff
 
-Ultima actualizacion: 2026-05-13
+Ultima actualizacion: 2026-10-23
 
 ## Estado actual
 - Monorepo principal activo en `workspace/`.
@@ -24,6 +24,11 @@ Ultima actualizacion: 2026-05-13
 - Visor de reportes Jasper: se agrego `ParametroCodefac.VISUALIZADOR_REPORTE` y `VisualizadorReporteEnum` para elegir entre el visor personalizado de Codefac y el visor estandar de Jasper/JRViewer. La opcion esta en Configuraciones por Defecto -> Ventas -> Visualizador de Reportes; por defecto queda `Personalizado Codefac` para no cambiar comportamiento existente.
 - El nombre estandar de productos con variante es `Producto [talla X color Y]`, construido desde `Variante.construirNombreConVariante(...)` o `Kardex.obtenerDescripcionConVariante(...)`. Ya se aplica en busqueda de facturacion, detalle de factura y stock reporte. Por ahora es solo visual: no se amplio la busqueda por talla/color.
 - Al editar un producto, `ProductoService.editarProducto(...)` sincroniza variantes con kardex: activa/crea kardex para variantes activas y desactiva logicamente kardex producto+variante cuando la variante se marca eliminada.
+- **(2026-10-23) Conversion NVI -> Factura:** nueva opcion "Convertir NVI en Factura" en Facturacion (menu "Otras Opciones", hook `GeneralPanelInterface.otrasOpciones()` antes sin usar). Consolida una o varias Notas de Venta Interna en una Factura nueva; al grabar, anula el inventario/cartera de cada NVI origen (`FacturacionService.asignarProformaAFactura` + `revertirInventarioYCarteraFactura`, extraido de `eliminarFactura`) para no duplicar el movimiento. Fix relacionado importante: `Factura.agregarDetalleDesdeOtraFactura` ahora clona cada `FacturaDetalle` (antes reutilizaba la misma instancia y generaba un INSERT fantasma de Factura al volver a mergear el documento origen). Ver detalle completo en `docs/codex-context.md`.
+- **(2026-10-23) Caja — movimientos informativos:** las ventas "ya cobradas" (conversion NVI) no deben sumar al cierre de caja pero si listarse. Nuevo campo `IngresoCaja.informativo` + `Cartera.informativoCaja` (transitorio). Se corrigieron 3 puntos que no heredaban el filtro: `CajaSesionService.editar()` (tenia su propia suma manual duplicada), y los `.jrxml` de cierre de caja (A4 y ticket), cuyos `<variable calculation="Sum">` suman el dataset por su cuenta sin enterarse del calculo en Java. El punto real donde se genera `IngresoCaja` es `CarteraService.grabarMovimientosCaja` via la Cartera "ABO" automatica — no `FacturacionService.agregarDatosParaCajaSession`, que esta muerto/comentado.
+- **(2026-10-23) Maven si funciona:** la nota anterior de "no validar con Maven por .m2 danado" quedo obsoleta. El Maven embebido de NetBeans con JDK 1.8 compila el reactor completo sin problema. Usar siempre `clean install` al verificar un cambio puntual (un `install` sin `clean` puede no detectar que un archivo cambio).
+- Esta instalacion de desarrollo corre sobre **Derby embebido** (no MySQL); para consultar la base directamente hay que parar la app (solo admite una conexion).
+- **(2026-10-23) Cartera — formato Ticket:** se agrego opcion de impresion en ticket para Abono/Ingreso/Egreso de Cartera, mismo patron "A4/Ticket/Cancelar" que ya usaba Cerrar Caja. Nuevo `comprobante_ingreso_egreso_ticket.jrxml`, reutiliza `CarteraData` sin cambios de datos. De paso se corrigio que `CarteraData.valorCruzado` no redondeaba a 2 decimales (mostraba hasta 6) — afectaba tambien al reporte A4 existente.
 
 ## Problemas recientes conocidos
 - Consulta lenta de cliente/establecimiento:
@@ -34,10 +39,8 @@ Ultima actualizacion: 2026-05-13
 - Nota de credito parcial:
   - revisar siempre si el kardex sube stock del item correcto, si conserva lote/presentacion y si reabre `KardexItemEspecifico` cuando corresponde
 - Arranque/persistencia:
-  - Derby embebido puede fallar si otra instancia esta usando la base
-  - compilacion Maven puede fallar por metadata local danada aunque el codigo este bien
-  - hasta reparar `.m2`, no intentar validar cambios con Maven: actualmente falla antes de compilar por `maven-metadata-local.xml` corrupto en snapshots locales como `mavenCodefacLite` y `utilidades`
-  - el reactor completo puede avanzar mas, pero al forzar recompilacion tambien se observo `javac: invalid target release: 1.8`; revisar JAVA_HOME/Maven antes de tomarlo como error de codigo
+  - Derby embebido puede fallar si otra instancia esta usando la base (solo admite una conexion)
+  - el `mvn` del PATH del sistema es viejo y no sirve; usar el Maven embebido de NetBeans + JDK 1.8 (ver nota arriba) — esto ya no es un problema abierto
 
 ## Proximos focos recomendados
 - Optimizar la busqueda de cliente:

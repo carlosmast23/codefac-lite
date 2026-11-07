@@ -191,7 +191,9 @@ public class KardexFacade extends AbstractFacade<Kardex> {
                 queryString += " and kd.fechaIngreso<=?2 ";
             }
 
-            queryString+=" order by kd.kardex.producto, kd.fechaIngreso ";
+            //kd.id como desempate: kd.fechaIngreso es Timestamp de milisegundo y varias filas creadas en la
+            //misma transaccion (ej. los pares de trazabilidad del ensamble) pueden compartir el mismo valor
+            queryString+=" order by kd.kardex.producto, kd.fechaIngreso, kd.id ";
 
             System.out.println(queryString);
             Query query = em.createQuery(queryString);

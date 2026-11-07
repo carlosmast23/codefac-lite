@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="comprobante_ingreso_egreso_ticket" pageWidth="180" pageHeight="400" columnWidth="170" leftMargin="5" rightMargin="5" topMargin="10" bottomMargin="10" isIgnorePagination="true" uuid="b7a1c2d3-4e5f-4061-8071-9091a0b1c2d3">
+	<property name="ireport.zoom" value="2.8481237518744824"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pl_fecha_hora" class="java.lang.String"/>
+	<parameter name="pl_direccion" class="java.lang.String"/>
+	<parameter name="pl_nombre_empresa" class="java.lang.String"/>
+	<parameter name="pl_telefonos" class="java.lang.String"/>
+	<parameter name="pl_usuario" class="java.lang.String"/>
+	<parameter name="pl_titulo" class="java.lang.String"/>
+	<parameter name="pl_url_img1" class="java.lang.Object"/>
+	<parameter name="pl_img_facebook" class="java.lang.Object"/>
+	<parameter name="pl_img_whatsapp" class="java.lang.Object"/>
+	<parameter name="pl_img_telefono" class="java.lang.Object"/>
+	<parameter name="pl_img_logo_pie" class="java.lang.Object"/>
+	<parameter name="pl_url_cabecera" class="java.lang.Object"/>
+	<parameter name="pl_url_piepagina" class="java.lang.Object"/>
+	<parameter name="pl_facebook" class="java.lang.String"/>
+	<parameter name="pl_adicional" class="java.lang.String"/>
+	<parameter name="pl_celular" class="java.lang.String"/>
+	<parameter name="pl_rimpe" class="java.lang.String"/>
+	<parameter name="codigo" class="java.lang.String"/>
+	<parameter name="cliente" class="java.lang.String"/>
+	<parameter name="cedula" class="java.lang.String"/>
+	<parameter name="direccion" class="java.lang.String"/>
+	<parameter name="telefonos" class="java.lang.String"/>
+	<parameter name="estado" class="java.lang.String"/>
+	<parameter name="fechaIngreso" class="java.lang.String"/>
+	<parameter name="empleado" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="valor" class="java.lang.String"/>
+	<field name="saldo" class="java.lang.String"/>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="documento" class="java.lang.String"/>
+	<field name="preimpreso" class="java.lang.String"/>
+	<field name="valorCruzado" class="java.lang.String"/>
+	<field name="totalDocCruzado" class="java.lang.String"/>
+	<field name="saldoDocCruzado" class="java.lang.String"/>
+	<group name="detalle_cartera">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band height="36">
+				<textField isStretchWithOverflow="true">
+					<reportElement mode="Opaque" x="0" y="0" width="170" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="c1a2b3c4-d5e6-4071-8081-909192a3b4c5"/>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+						<paragraph leftIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="13" width="40" height="11" uuid="d2b3c4d5-e6f7-4182-9192-a0b1c2d3e4f5"/>
+					<textElement>
+						<font size="7" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Ingresado:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="40" y="13" width="55" height="11" uuid="e3c4d5e6-f7a8-4293-a2a3-b1c2d3e4f5a6"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="95" y="13" width="35" height="11" uuid="f4d5e6f7-a8b9-43a4-b3b4-c2d3e4f5a6b7"/>
+					<textElement>
+						<font size="7" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Saldo:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="130" y="13" width="40" height="11" uuid="a5e6f7a8-b9c0-44b5-c4c5-d3e4f5a6b7c8"/>
+					<textElement>
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="26" width="170" height="1" uuid="b6f7a8b9-c0d1-45c6-d5d6-e4f5a6b7c8d9"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="28" width="45" height="8" uuid="c7a8b9c0-d1e2-46d7-e6e7-f5a6b7c8d9e0"/>
+					<textElement>
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Documento]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="45" y="28" width="40" height="8" uuid="a1b2c3d4-5e6f-4789-9a0b-1c2d3e4f5a6b"/>
+					<textElement>
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="85" y="28" width="45" height="8" uuid="d8b9c0d1-e2f3-47e8-f7f8-a6b7c8d9e0f1"/>
+					<textElement>
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Preimpreso]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="130" y="28" width="40" height="8" uuid="e9c0d1e2-f3a4-48f9-a8a9-b7c8d9e0f1a2"/>
+					<textElement textAlignment="Right">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="29" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="156" height="29" uuid="35826285-2ba3-4374-a880-47d8b954ac17"/>
+				<subreportParameter name="pl_direccion">
+					<subreportParameterExpression><![CDATA[$P{pl_direccion}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_nombre_empresa">
+					<subreportParameterExpression><![CDATA[$P{pl_nombre_empresa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_titulo">
+					<subreportParameterExpression><![CDATA[$P{pl_titulo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_fecha_hora">
+					<subreportParameterExpression><![CDATA[$P{pl_fecha_hora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_rimpe">
+					<subreportParameterExpression><![CDATA[$P{pl_rimpe}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_url_img1">
+					<subreportParameterExpression><![CDATA[$P{pl_url_img1}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_cabecera}]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="82" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="1" y="2" width="169" height="12" forecolor="#FFFFFF" backcolor="#666666" uuid="f1a2b3c4-d5e6-4071-8081-909192a3b4c5"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pl_titulo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="16" width="35" height="12" uuid="a2b3c4d5-e6f7-4182-9192-a0b1c2d3e4f5"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Código:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="37" y="16" width="130" height="12" uuid="b3c4d5e6-f7a8-4293-a2a3-b1c2d3e4f5a6"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{codigo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="28" width="35" height="12" uuid="c4d5e6f7-a8b9-43a4-b3b4-c2d3e4f5a6b7"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="37" y="28" width="130" height="12" uuid="d5e6f7a8-b9c0-44b5-c4c5-d3e4f5a6b7c8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fechaIngreso}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="40" width="35" height="12" uuid="e6f7a8b9-c0d1-45c6-d5d6-e4f5a6b7c8d9"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="37" y="40" width="130" height="12" uuid="f7a8b9c0-d1e2-46d7-e6e7-f5a6b7c8d9e0"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="52" width="35" height="12" uuid="a1b2c3d4-9e8f-47e8-f7f8-a6b7c8d9e0f2"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Identif.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="37" y="52" width="130" height="12" uuid="b2c3d4e5-f3a4-48f9-a8a9-b7c8d9e0f1a3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cedula}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="64" width="35" height="12" uuid="a8b9c0d1-e2f3-47e8-f7f8-a6b7c8d9e0f1"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="37" y="64" width="130" height="12" uuid="b9c0d1e2-f3a4-48f9-a8a9-b7c8d9e0f1a2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{estado}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="78" width="170" height="1" uuid="c0d1e2f3-a4b5-49fa-b9ba-c8d9e0f1a2b3"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="4"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="45" height="18" uuid="d1e2f3a4-b5c6-4a0b-cacb-d9e0f1a2b3c4"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="45" y="0" width="40" height="18" uuid="f5a6b7c8-9d0e-4123-a234-b5c6d7e8f9a0"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="85" y="0" width="45" height="18" uuid="e2f3a4b5-c6d7-4b1c-dbdc-e0f1a2b3c4d5"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{preimpreso}==null || $F{preimpreso}.isEmpty()) ? "" : $F{preimpreso}.substring($F{preimpreso}.lastIndexOf("-")+1)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="130" y="0" width="40" height="18" uuid="f3a4b5c6-d7e8-4c2d-ecdd-f1a2b3c4d5e6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorCruzado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="41" splitType="Stretch">
+			<subreport>
+				<reportElement x="-1" y="0" width="157" height="40" uuid="7968d49c-a764-40cd-8900-3f9f7f1947c8"/>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_celular">
+					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_adicional">
+					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="118">
+			<subreport>
+				<reportElement x="1" y="36" width="155" height="80" uuid="308e3f4c-60b9-4fdc-9fe8-42c13167ef87"/>
+				<subreportParameter name="pl_img_whatsapp">
+					<subreportParameterExpression><![CDATA[$P{pl_img_whatsapp}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_telefonos">
+					<subreportParameterExpression><![CDATA[$P{pl_telefonos}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_logo_pie">
+					<subreportParameterExpression><![CDATA[$P{pl_img_logo_pie}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_telefono">
+					<subreportParameterExpression><![CDATA[$P{pl_img_telefono}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_img_facebook">
+					<subreportParameterExpression><![CDATA[$P{pl_img_facebook}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_celular">
+					<subreportParameterExpression><![CDATA[$P{pl_celular}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_usuario">
+					<subreportParameterExpression><![CDATA[$P{pl_usuario}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pl_adicional">
+					<subreportParameterExpression><![CDATA[$P{pl_adicional}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{pl_url_piepagina}]]></subreportExpression>
+			</subreport>
+		</band>
+	</lastPageFooter>
+</jasperReport>

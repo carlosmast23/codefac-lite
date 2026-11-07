@@ -514,7 +514,10 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
                     kardexDetalle.setFechaIngreso(UtilidadesFecha.getFechaHoyTimeStamp());
                     
                     kardexComponente.addDetalleKardex(kardexDetalle);
-                    
+                    //NOTA: Kardex.detallesKardex es @Transient, no hay cascada de JPA - hay que persistir
+                    //el detalle explicitamente o se pierde en memoria (igual que en afectarInventario)
+                    entityManager.persist(kardexDetalle);
+
                     kardeList.add(kardexComponente);
                     
                 }
@@ -2066,12 +2069,39 @@ public class KardexService extends ServiceAbstract<Kardex,KardexFacade> implemen
             //productoFacade.
             Producto producto=productoFacade.find(referenciaProductoId,entityManager);
 
-            //Si es un ensamble construido al facturar, su propio kardex nunca se toco al vender (ver
-            //FacturacionService.afectarInventario), asi que al anular (eliminar factura / nota de credito)
-            //tampoco se debe tocar: solo se restaura el stock de los componentes.
+            //Si es un ensamble construido al facturar, su stock real nunca se toco al vender (ver
+            //FacturacionService.afectarInventario): solo se restaura el stock de los componentes.
+            //El kardex propio del ensamble si lleva un par de movimientos de trazabilidad (ingreso por
+            //construccion + venta, neto cero) que al anular (eliminar factura / nota de credito) hay
+            //que revertir simetricamente, o quedaria el historial incompleto.
             if (producto.getTipoProductoEnum().equals(TipoProductoEnum.EMSAMBLE) && ParametroUtilidades.comparar(bodega.getEmpresa(), ParametroCodefac.CONSTRUIR_ENSAMBLES_FACTURAR, EnumSiNo.SI))
             {
                 restaurarComponentesEnsamblePorAnulacion(bodega, producto, cantidad, entityManager);
+
+                Kardex kardexEnsamble = consultarOCrearStockSinPersistencia(producto, bodega, lote, entityManager);
+
+                //Reversa de la venta (ingreso): usa el mismo tipoDocumento que recibe este metodo
+                //(ELIMINADO_FACTURA o NOTA_CREDITO_INVENTARIO), igual que para un producto normal
+                KardexDetalle kardexDetalleReversaVenta = crearKardexDetalleSinPersistencia(kardexEnsamble, tipoDocumento, precioUnitario, cantidad, null);
+                kardexDetalleReversaVenta.setUsuarioNick(usuarioNick);
+                kardexDetalleReversaVenta.setReferenciaDocumentoId(referenciaKardexId);
+                kardexDetalleReversaVenta.setPuntoEmision(puntoEmision);
+                kardexDetalleReversaVenta.setPuntoEstablecimiento(puntoEstablecimiento);
+                kardexDetalleReversaVenta.setSecuencial(secuencial);
+                kardexDetalleReversaVenta.setFechaDocumento(fechaDocumento);
+                recalcularValoresKardex(kardexEnsamble, kardexDetalleReversaVenta);
+                entityManager.persist(kardexDetalleReversaVenta);
+                kardexEnsamble.addDetalleKardex(kardexDetalleReversaVenta);
+
+                //Reversa del ingreso por construccion (egreso)
+                BigDecimal costoComponentes = calcularCostoIndividualEnsamble(producto, bodega, entityManager);
+                KardexDetalle kardexDetalleReversaConstruir = crearKardexDetalleSinPersistencia(kardexEnsamble, TipoDocumentoEnum.ENSAMBLE_EGRESO, costoComponentes, cantidad, null);
+                kardexDetalleReversaConstruir.setUsuarioNick(usuarioNick);
+                recalcularValoresKardex(kardexEnsamble, kardexDetalleReversaConstruir);
+                entityManager.persist(kardexDetalleReversaConstruir);
+                kardexEnsamble.addDetalleKardex(kardexDetalleReversaConstruir);
+
+                entityManager.merge(kardexEnsamble);
                 return null;
             }
 

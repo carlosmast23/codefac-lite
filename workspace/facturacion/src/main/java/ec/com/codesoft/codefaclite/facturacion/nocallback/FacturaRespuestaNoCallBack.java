@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
+import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -66,6 +67,11 @@ public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
                 byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(clave,comprobante.getEmpresa());
                 JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
                 facturacionModel.panelPadre.crearReportePantalla(jasperPrint, clave);
+            }
+
+            if(ParametroUtilidades.comparar(comprobante.getEmpresa(), ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO, EnumSiNo.SI))
+            {
+                FacturaModelControlador.imprimirNotaEntrega((Factura) comprobante, facturacionModel.panelPadre);
             }
             //facturacionModel.panelPadre.crearReportePantalla(jasperPrint, facturaProcesando.getPreimpreso());
         } catch (RemoteException ex) {

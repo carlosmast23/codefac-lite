@@ -78,6 +78,7 @@ public class ServicioSri {
     //private String uri="https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl";
     private String uri_recepcion;
     private String uri_autorizacion;
+    private boolean sinValidarFecha=false;
 
     static {
         configurarSslSri();
@@ -393,6 +394,10 @@ public class ServicioSri {
        //comprobantesNoRecibidos return new ArrayList<Comprobante>();
     }    
    
+    public void setSinValidarFecha(boolean sinValidarFecha) {
+        this.sinValidarFecha = sinValidarFecha;
+    }
+
     public boolean autorizar(String claveAcceso) throws ComprobanteElectronicoException
     {
        if(verificarConexionAutorizar())
@@ -457,8 +462,11 @@ public class ServicioSri {
            }
            
            
-           validacionPostComprobarAutorizacion(new ClaveAcceso(claveAcceso));
-           
+           if(!sinValidarFecha)
+           {
+               validacionPostComprobarAutorizacion(new ClaveAcceso(claveAcceso));
+           }
+
            //Si sale del bucle sin retornar asumo que excedio el tiempo de espera y lanzo una advertencia
            throw new ComprobanteElectronicoException("Se excedio el tiempo de espera para autorizar el documento , Por favor inténtelo mas tarde","Autorizando",ComprobanteElectronicoException.ERROR_COMPROBANTE);
        }

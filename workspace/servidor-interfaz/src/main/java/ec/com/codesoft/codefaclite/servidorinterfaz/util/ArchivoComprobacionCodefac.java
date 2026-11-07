@@ -143,6 +143,9 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
                 
             } catch (RemoteException ex) {
                 Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RuntimeException ex) {
+                //Una entrada con datos inconsistentes no debe abortar la comprobacion de las demas ni el arranque del sistema
+                Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE, "Error inesperado comprobando integridad de un comprobante, se continua con los demas", ex);
             }
         }
         return errores;
@@ -177,6 +180,14 @@ public class ArchivoComprobacionCodefac extends ArchivoConfiguracion{
     
     private void compararSecuencialConDocumento(String nombreDocumento,Integer secuencialArchivo,Integer secuencialBaseDatos,List<String> errores)
     {
+        //En bases de datos antiguas el secuencial de un tipo de comprobante puede no haberse inicializado nunca (columna null);
+        //en ese caso se asume 0 (ningun comprobante emitido de ese tipo) para poder comparar sin NPE
+        if (secuencialBaseDatos == null) {
+            secuencialBaseDatos = 0;
+        }
+        if (secuencialArchivo == null) {
+            secuencialArchivo = 0;
+        }
         if (!secuencialBaseDatos.equals(secuencialArchivo)) {
             Logger.getLogger(ArchivoComprobacionCodefac.class.getName()).log(Level.SEVERE,"Error de comprobacion secuencial: "+nombreDocumento+" | SecuencialDB: "+secuencialBaseDatos+" | SecuencialArchivo: "+secuencialArchivo);
             errores.add(nombreDocumento + "[" + (secuencialArchivo-secuencialBaseDatos) + "]");

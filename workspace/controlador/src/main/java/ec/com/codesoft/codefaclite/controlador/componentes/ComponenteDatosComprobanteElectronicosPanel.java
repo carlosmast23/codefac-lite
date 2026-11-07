@@ -401,6 +401,7 @@ public class ComponenteDatosComprobanteElectronicosPanel extends javax.swing.JPa
         
         switch (comprobante.getComprobante().getCodigoDocumentoEnum()) {
             case FACTURA:
+            case FACTURA_REEMBOLSO:
                 Factura factura=(Factura) comprobante.getComprobante();
                 identificacionReceptor=factura.getCliente().getIdentificacion();
                 correoReceptor=factura.getCliente().getCorreoElectronico();

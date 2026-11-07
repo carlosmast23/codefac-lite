@@ -353,6 +353,13 @@ public class CerrarCajaModel extends CajaSessionModel
                         fechaHoraStr=dateFormatHora.format(ingresoCaja.getFechaHora());
                     }
 
+                    //Movimiento informativo (ej. Factura convertida desde NVI ya cobrada): se etiqueta para que
+                    //quede claro por que aparece en el detalle pero no suma al total teorico de la caja
+                    if(ingresoCaja.esInformativo())
+                    {
+                        ingresoDescripcionTmp = ingresoDescripcionTmp+" (Ya cobrado - Conversión NVI)";
+                    }
+
                     VentaReporteData compraData = new VentaReporteData(
                             ingresoCaja.getId()+"",
                             referenciaSecuencial,
@@ -365,6 +372,7 @@ public class CerrarCajaModel extends CajaSessionModel
                             fechaHoraStr,
                             ingresoCaja.getSignoIngresoEnum() + ""
                     );
+                    compraData.setInformativo(ingresoCaja.esInformativo()?"true":"false");
                     detalleData.add(compraData);
 
                 }

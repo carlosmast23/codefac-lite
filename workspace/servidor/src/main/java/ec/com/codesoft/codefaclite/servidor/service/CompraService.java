@@ -45,6 +45,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ProductoProveedor;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.academico.CatalogoProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.Cartera;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.cartera.CarteraCruce;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.CrudEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
@@ -590,7 +591,14 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                 
                 
                 validarDatosCompra(compra,CrudEnum.EDITAR,entityManager);
-                
+
+                //Valor anterior de "Pagar con Caja" para detectar si realmente cambio y corregir el movimiento de caja
+                String pagarConCajaAnteriorRaw = entityManager.createQuery("SELECT c.pagarConCaja FROM Compra c WHERE c.id = :id", String.class)
+                        .setParameter("id", compra.getId())
+                        .getSingleResult();
+                Boolean pagarConCajaAnterior = EnumSiNo.getEnumByLetra(pagarConCajaAnteriorRaw)!=null && EnumSiNo.getEnumByLetra(pagarConCajaAnteriorRaw).getBool();
+                Boolean pagarConCajaNuevo = compra.getPagarConCajaEnum()!=null && compra.getPagarConCajaEnum().getBool();
+
                 //Recorro todos los detalles para verificar si existe todos los productos proveedor o los grabo o los edito con los nuevos valores
                     for (CompraDetalle compraDetalle : compra.getDetalles()) 
                     {
@@ -612,7 +620,7 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                     }
 
                     entityManager.merge(compra);
-                    
+
                     //Modificar datos de la cartera en el caso que se haya modificado
                     //TODO: por el momento solo tengo en cuenta el cliente
                     CarteraService carteraService=new CarteraService();
@@ -622,12 +630,50 @@ public class CompraService extends ServiceAbstract<Compra,CompraFacade> implemen
                         carteraCompra.setPersona(compra.getProveedor());
                         entityManager.merge(carteraCompra);
                     }
-                    
+
+                    //Si cambio el check de "Pagar con Caja" respecto a lo que ya estaba grabado, corrijo el movimiento real en caja
+                    if(!pagarConCajaAnterior.equals(pagarConCajaNuevo))
+                    {
+                        corregirPagoCajaCompraEditada(compra,carteraCompra,pagarConCajaNuevo,carteraService,entityManager);
+                    }
+
                     //Eliminar detalles que fueron eliminados en la vista
                     eliminarDetallesCompra(compra,entityManager);
-                    
+
             }
         });
+    }
+
+    /**
+     * Corrige el ingreso/egreso de caja cuando se modifica "Pagar con Caja" al editar una compra ya grabada.
+     * Reutiliza el abono automatico del 100% creado en grabarCompra (crearCrucesFactura); si la compra fue a
+     * credito nunca se genero ese abono, por lo que no hay nada que corregir.
+     */
+    private void corregirPagoCajaCompraEditada(Compra compra,Cartera carteraCompra,Boolean nuevoValorPagarConCaja,CarteraService carteraService,EntityManager entityManager) throws RemoteException, ServicioCodefacException
+    {
+        if(carteraCompra==null || carteraCompra.getCruces()==null)
+        {
+            return; //Compra a credito o sin modulo de cartera activo: no existe abono que corregir
+        }
+
+        Cartera abono=null;
+        for (CarteraCruce cruce : carteraCompra.getCruces())
+        {
+            if(cruce.getCarteraDetalle()!=null && cruce.getCarteraDetalle().getCartera()!=null)
+            {
+                abono=cruce.getCarteraDetalle().getCartera();
+                break;
+            }
+        }
+
+        if(abono==null)
+        {
+            return; //Compra a credito: nunca se genero el abono automatico del 100%
+        }
+
+        String descripcion = (nuevoValorPagarConCaja ? "[ Corrección edición ] " : "[ Corrección edición - reversa ] ") + "Compra #"+compra.getSecuencial();
+        //eliminar=true genera el movimiento compensatorio (revierte), eliminar=false genera el movimiento real
+        carteraService.registrarCorreccionPagoCaja(abono, !nuevoValorPagarConCaja, descripcion, compra.getUsuario(), entityManager);
     }
     
     private void eliminarDetallesCompra(Compra compra,EntityManager entityManager) throws RemoteException, ServicioCodefacException

@@ -27,6 +27,12 @@ public class VentaReporteData implements ExcelDatosInterface{
     private String hora;
     private String signo;
     private String descripcion;
+    /**
+     * "true" cuando el movimiento es informativo (ej. Factura convertida desde Nota de Venta Interna ya cobrada) y
+     * no debe sumar en los <variable calculation="Sum"> del reporte, aunque si debe listarse. Ver IngresoCaja.informativo.
+     * Default "false" para no afectar los otros 2 lugares que construyen VentaReporteData (compras, abonos/cartera normales).
+     */
+    private String informativo="false";
 
     public VentaReporteData(String id,String secuencial, String identificacion,String descripcion, String cliente, String total,String estado,String formaPago,String hora,String signo) {
         this.id=id;
@@ -121,6 +127,14 @@ public class VentaReporteData implements ExcelDatosInterface{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getInformativo() {
+        return informativo;
+    }
+
+    public void setInformativo(String informativo) {
+        this.informativo = informativo;
     }
     
     

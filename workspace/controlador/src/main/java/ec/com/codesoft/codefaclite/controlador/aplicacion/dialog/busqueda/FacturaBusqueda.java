@@ -177,14 +177,15 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
     
     public String getQueryDocumentos()
     {
-        return " AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4 OR  u.codigoDocumento=?5 ) ";
+        return " AND (u.codigoDocumento=?3 OR  u.codigoDocumento=?4 OR  u.codigoDocumento=?5 OR u.codigoDocumento=?6 ) ";
     }
-    
+
     public void setParameterQuery(QueryDialog queryDialog)
     {
         queryDialog.agregarParametro(3,DocumentoEnum.FACTURA.getCodigo());
         queryDialog.agregarParametro(4,DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
         queryDialog.agregarParametro(5,DocumentoEnum.NOTA_VENTA.getCodigo());
+        queryDialog.agregarParametro(6,DocumentoEnum.FACTURA_REEMBOLSO.getCodigo());
     }
 
     @Override
@@ -229,6 +230,7 @@ public class FacturaBusqueda implements InterfaceModelFind<Factura>,InterfacesPr
         
         List<DocumentoEnum> documentoList=new ArrayList<DocumentoEnum>();
         documentoList.add(DocumentoEnum.FACTURA);
+        documentoList.add(DocumentoEnum.FACTURA_REEMBOLSO);
         documentoList.add(DocumentoEnum.NOTA_VENTA_INTERNA);
         
         ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"documento: ",97,documentoList);

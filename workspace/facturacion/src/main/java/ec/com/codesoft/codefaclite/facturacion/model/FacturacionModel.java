@@ -9,6 +9,7 @@ import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInte
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.CategoriaProductoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ClienteEstablecimientoBusquedaDialogo;
 import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ComandaBusquedaDialogo;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.NotaVentaInternaBusqueda;
 import ec.com.codesoft.codefaclite.controlador.model.DatoAdicionalModel;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
@@ -108,6 +109,7 @@ import java.rmi.RemoteException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -431,7 +433,11 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         controlador.verificarFacturaConNotaVentaInterna(factura);
 
         DocumentoEnum documentoDestino = (documentoEnum != null) ? documentoEnum : obtenerDocumentoSeleccionado();
-        if (DocumentoEnum.FACTURA.equals(documentoDestino) && EnumSiNo.SI.equals(factura.getProformaSinIvaEnum())) {
+        //Si el origen es una Nota de Venta Interna, sus detalles pueden venir con el precio "todo incluido" (ivaPorcentaje en cero)
+        //segun el parametro NOTA_VENTA_INTERNA_IVA; al convertir a Factura hay que reversar ese calculo igual que se hace
+        //para la proforma sin iva, para que la Factura quede con el IVA desglosado correctamente
+        boolean esOrigenNotaVentaInterna = DocumentoEnum.NOTA_VENTA_INTERNA.equals(proforma.getCodigoDocumentoEnum());
+        if (DocumentoEnum.FACTURA.equals(documentoDestino) && (EnumSiNo.SI.equals(factura.getProformaSinIvaEnum()) || esOrigenNotaVentaInterna)) {
             controlador.invertirCalculoDetallesAFactura(factura, true);
         }
 
@@ -794,8 +800,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     //System.out.println(panelPadre.validarPorGrupo("detalles"));
                     DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                     verificarIngresoCantidadConPresentacion(getTxtCantidad().getText());
-                    Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();                    
+                    Producto.PrecioVenta precioVenta=(Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();
                     String codigoPresentacion=obtenerCodigoPresentacionSeleccionado();
+                    diagLogEstadoPvp("AgregarDetalle-click");
                     controlador.agregarDetallesFactura(facturaDetalleSeleccionado,null,documentoSeleccionado,kardexSeleccionado,null,null,(precioVenta!=null)?precioVenta.getNumero():null,codigoPresentacion);
                     
                 } catch (ServicioCodefacException ex) {
@@ -827,7 +834,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 btnListenerEditar();
             }
         });
-        
+
 
         getBtnAgregarCliente().addActionListener(new ActionListener() {
             @Override
@@ -1059,7 +1066,43 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         }
         return null;
     }
-    
+
+    /**
+     * TEMPORAL: log de diagnostico para rastrear el bug de precio/PVP inconsistente con la presentacion.
+     * Quitar una vez identificado el origen.
+     */
+    private void diagLogEstadoPvp(String origen)
+    {
+        try
+        {
+            StringBuilder sb=new StringBuilder();
+            sb.append("[DIAG-PVPBUG] origen=").append(origen);
+            sb.append(" | productoSeleccionado=").append((productoSeleccionado!=null)?(productoSeleccionado.getIdProducto()+"/"+productoSeleccionado.getCodigoPersonalizado()+"/"+productoSeleccionado.getNombre()):"null");
+            sb.append(" | txtValorUnitario=").append(getTxtValorUnitario().getText());
+            sb.append(" | txtCantidad=").append(getTxtCantidad().getText());
+            sb.append(" | cmbPresentacion.seleccionado=").append(getCmbPresentacionProducto().getSelectedItem());
+            sb.append(" | cmbPresentacion.items=[");
+            for(int i=0;i<getCmbPresentacionProducto().getItemCount();i++)
+            {
+                sb.append(getCmbPresentacionProducto().getItemAt(i)).append(" ");
+            }
+            sb.append("]");
+            sb.append(" | cmbPreciosVenta.seleccionado=").append(getCmbPreciosVenta().getSelectedItem());
+            sb.append(" | cmbPreciosVenta.items=[");
+            for(int i=0;i<getCmbPreciosVenta().getItemCount();i++)
+            {
+                Producto.PrecioVenta item=(Producto.PrecioVenta) getCmbPreciosVenta().getItemAt(i);
+                sb.append(item.alias).append(":").append(item.numero).append("=").append(item.precio).append(" ");
+            }
+            sb.append("]");
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO, sb.toString());
+        }
+        catch(Exception ex)
+        {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, "[DIAG-PVPBUG] error al generar el log de diagnostico", ex);
+        }
+    }
+
     private void seleccionarFilaTablaDetalleFactura()
     {
         int fila = getTblDetalleFactura().getSelectedRow();
@@ -1098,7 +1141,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getBtnAgregarDetalleFactura().setEnabled(false);
             getBtnAgregarProducto().setEnabled(false);
             getBtnCrearProducto().setEnabled(false);
-            
+
             //Cargar los datos de producto cuando sea el caso
             Producto producto=facturaDetalle.consultarProductoEnlazado();
             if(producto!=null)
@@ -1377,6 +1420,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 
                 DocumentoEnum documentoSeleccionado=(DocumentoEnum) getCmbDocumento().getSelectedItem();
                 Producto.PrecioVenta precioVenta= (Producto.PrecioVenta) getCmbPreciosVenta().getSelectedItem();
+                diagLogEstadoPvp("EditarDetalle-click");
                 if(controlador.agregarDetallesFactura(facturaDetalle,null,documentoSeleccionado,kardexSeleccionado,null,null,(precioVenta!=null)?precioVenta.getNumero():null,codigoPresentacion))
                 {
                     habilitarModoIngresoDatos();
@@ -1395,13 +1439,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
     }
-    
+
     private void btnListenerEliminar() {
         int fila = getTblDetalleFactura().getSelectedRow();
         if(fila>=0)
         {
             if(getChkFacturaReembolso().isSelected())
-            {                
+            {
                 DialogoCodefac.mensaje(new CodefacMsj("Función no disponible para facturas de Reembolso, se recomienda VOLVER A REALIZAR LA FACTURA nuevamente", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
             }
             else
@@ -1416,14 +1460,48 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }
     }
-    
+
     private void eliminarDetalleModelo(int fila)
     {
         DefaultTableModel modeloTablaDetallesProductos=(DefaultTableModel) getTblDetalleFactura().getModel();
         modeloTablaDetallesProductos.removeRow(fila);
         factura.getDetalles().remove(fila);
     }
-    
+
+    /**
+     * Sube o baja el detalle seleccionado una posicion, intercambiando su ORDEN con el del vecino
+     * (fila-1 si desplazamiento es -1, fila+1 si es 1). Util para corregir manualmente el orden de
+     * despliegue sin tener que eliminar y volver a agregar los detalles (ver Factura.addDetalle).
+     * Se invoca desde el menu contextual (clic derecho) de la tabla de detalle.
+     */
+    private void moverDetalleSeleccionado(int desplazamiento)
+    {
+        int fila = getTblDetalleFactura().getSelectedRow();
+        if(fila<0)
+        {
+            return;
+        }
+
+        int filaDestino = fila + desplazamiento;
+        List<FacturaDetalle> detalles = factura.getDetalles();
+        if(filaDestino<0 || filaDestino>=detalles.size())
+        {
+            return;
+        }
+
+        FacturaDetalle detalleActual = detalles.get(fila);
+        FacturaDetalle detalleDestino = detalles.get(filaDestino);
+
+        Long ordenTemporal = detalleActual.getOrden();
+        detalleActual.setOrden(detalleDestino.getOrden());
+        detalleDestino.setOrden(ordenTemporal);
+
+        Collections.swap(detalles, fila, filaDestino);
+
+        cargarDatosDetalles();
+        getTblDetalleFactura().setRowSelectionInterval(filaDestino, filaDestino);
+    }
+
     private void btnListenerCrearProducto() {
         TipoDocumentoEnum tipoDocumento=controlador.getTipoDocumentoEnumSeleccionado();
         
@@ -1814,8 +1892,31 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }
 
-        int cantidadItemsIndividuales = ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
-        
+        final int[] cantidadItemsIndividualesHolder=new int[1];
+        final RemoteException[] exHolder=new RemoteException[1];
+        final ServicioCodefacException[] exHolder2=new ServicioCodefacException[1];
+        UtilidadVarios.medirTiempoProceso("cargarProductoInventario.obtenerCantidadItemsEspecificosPorKardex (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                try {
+                    cantidadItemsIndividualesHolder[0]=ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
+                } catch (RemoteException ex) {
+                    exHolder[0]=ex;
+                } catch (ServicioCodefacException ex) {
+                    exHolder2[0]=ex;
+                }
+            }
+        });
+        if(exHolder[0]!=null)
+        {
+            throw exHolder[0];
+        }
+        if(exHolder2[0]!=null)
+        {
+            throw exHolder2[0];
+        }
+        int cantidadItemsIndividuales = cantidadItemsIndividualesHolder[0];
+
         KardexItemEspecifico kardexItemEspecifico =null;
         if (productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales > 0) 
         {
@@ -1842,7 +1943,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     fechaCaducidad=kardexSeleccionado.getLote().getFechaVencimiento();
                 }
                 
-                controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecifico,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidad);
+                final java.sql.Date fechaCaducidadFinal=fechaCaducidad;
+                final KardexItemEspecifico kardexItemEspecificoFinal=kardexItemEspecifico;
+                UtilidadVarios.medirTiempoProceso("cargarProductoInventario.agregarProductoVista (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+                    @Override
+                    public void proceso() {
+                        controlador.agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecificoFinal,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidadFinal);
+                    }
+                });
                 if(kardexSeleccionado.getVariante() != null && facturaDetalleSeleccionado != null)
                 {
                     facturaDetalleSeleccionado.setVariante(kardexSeleccionado.getVariante());
@@ -1881,8 +1989,12 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     
     
     
-    public void cargarPrecios(Producto producto) {        
-        
+    public void cargarPrecios(Producto producto) {
+
+        if(producto!=null)
+        {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO, "[DIAG-PVPBUG] cargarPrecios producto={0}/{1}/{2} pv1={3} pv2={4} pv3={5}", new Object[]{producto.getIdProducto(), producto.getCodigoPersonalizado(), producto.getNombre(), producto.getValorUnitario(), producto.getPrecioDistribuidor(), producto.getPrecioTarjeta()});
+        }
         UtilidadesComboBox.ejecutarProcesoSinListener(getCmbPreciosVenta(),new UtilidadesComboBox.ProcesoComboBoxIf() {
             @Override
             public void proceso() {                
@@ -1912,6 +2024,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         if (presentacion != null) {
             //Obtengo la nueva presentacion para trabajar con los nuevos datos seleccionados
             Producto productoTmp = producto.buscarProductoPorPresentacion(presentacion);
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO, "[DIAG-PVPBUG] cargarNuevaPresentacionVista productoAnterior={0}/{1} presentacionElegida={2} productoNuevo={3}/{4}", new Object[]{producto.getIdProducto(), producto.getCodigoPersonalizado(), presentacion.getNombre(), (productoTmp!=null)?productoTmp.getIdProducto():"NULL", (productoTmp!=null)?productoTmp.getCodigoPersonalizado():"NULL"});
             //Si la presentacion es igual al mismo producto entonces no hago nada mas
             if (productoTmp.equals(producto)) {
                 return;
@@ -1998,8 +2111,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     }
     
     public void cargarPresentaciones(Producto producto)
-    { 
+    {
         PresentacionProducto presentacionProducto=producto.buscarPresentacionProducto();
+        Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO, "[DIAG-PVPBUG] cargarPresentaciones producto={0}/{1} presentacionResuelta={2}", new Object[]{producto.getIdProducto(), producto.getCodigoPersonalizado(), (presentacionProducto!=null)?presentacionProducto.getNombre():"NULL"});
         eliminarTodosListener(getCmbPresentacionProducto());
         
         getCmbPresentacionProducto().removeAllItems();
@@ -2259,14 +2373,16 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 DialogoCodefac.mensaje("Correcto", "La nota de venta interna se grabo correctamente", DialogoCodefac.MENSAJE_CORRECTO);
                 
                 if(factura.getTipoFacturacionEnum()==null ||  factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
-                {                    
+                {
                     FacturaModelControlador.imprimirComprobanteVenta(facturaProcesando,NOMBRE_REPORTE_FACTURA_INTERNA,true,session,panelPadre,getEstadoFormularioEnum());
-                }                
+                }
                 else if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.NORMAL))
                 {
                     reporteVentaManual(factura,documentoEnum,true,false);
                 }
-                
+
+                imprimirNotaEntregaSiHabilitado(factura);
+
                 ////Imprimir el ticket para el sorte
                 imprimirTicketSorteo(factura);
             }
@@ -2278,7 +2394,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             else
             {
                 
-                if((documentoEnum.equals(DocumentoEnum.LIQUIDACION_COMPRA) || documentoEnum.equals(DocumentoEnum.FACTURA)) && puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
+                if((documentoEnum.equals(DocumentoEnum.LIQUIDACION_COMPRA) || documentoEnum.equals(DocumentoEnum.FACTURA) || documentoEnum.equals(DocumentoEnum.FACTURA_REEMBOLSO)) && puntoEmision.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
                     facturarElectricamente(facturaProcesando);
                 }
@@ -2292,10 +2408,13 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                     else
                     {
                         reporteVentaManual(factura,documentoEnum,true,false);
-                    }                        
+                    }
+
+                    imprimirNotaEntregaSiHabilitado(factura);
+
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.GUARDADO);
                 }
-                
+
             }
             
             //actualizaCombosPuntoVenta(); //Metodo para actualizar los secuenciales de los poutnos de venta en cualquier caso
@@ -2804,7 +2923,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 setearValoresDefaultFactura(CrudEnum.EDITAR);
             }       
             
-            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
+            if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
             {
                 if(factura.getTipoFacturacionEnum().equals(TipoEmisionEnum.ELECTRONICA))
                 {
@@ -2816,25 +2935,36 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                             return;
                         }*/
                         
-                        String[] opciones = {"Ride", "Comprobante Venta", "Cancelar"};
-                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
-                        switch (opcionSeleccionada) 
+                        //La opcion de reimprimir Nota de Entrega solo aparece si esta habilitada la configuracion y no es Liquidacion de Compra (no aplica despacho de bodega)
+                        Boolean notaEntregaDisponible = !factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA) && notaEntregaAutomaticaHabilitada();
+                        List<String> opcionesList = new ArrayList<String>();
+                        opcionesList.add("Ride");
+                        opcionesList.add("Comprobante Venta");
+                        if(notaEntregaDisponible)
                         {
-                            case 0: //opcion para RIDE
-                                //byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
-                                byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura,claveAcceso,factura.getEmpresa());
-                                JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
-                                
-                                panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
-                                break;
-
-                            case 1: //opcion para comprobantes Venta
-                                FacturaModelControlador.imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false,session,panelPadre,getEstadoFormularioEnum());
-                                break;
-
-                            case 2: //Cancelar
-                                break;
+                            opcionesList.add("Nota de Entrega");
                         }
+                        opcionesList.add("Cancelar");
+                        String[] opciones = opcionesList.toArray(new String[opcionesList.size()]);
+                        int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Reporte", "Por favor seleccione el tipo de reporte?", DialogoCodefac.MENSAJE_CORRECTO, opciones);
+
+                        if(opcionSeleccionada==0) //opcion para RIDE
+                        {
+                            //byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(claveAcceso,factura.getEmpresa());
+                            byte[] byteReporte= ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(factura,claveAcceso,factura.getEmpresa());
+                            JasperPrint jasperPrint=(JasperPrint) UtilidadesRmi.deserializar(byteReporte);
+
+                            panelPadre.crearReportePantalla(jasperPrint, factura.getPreimpreso());
+                        }
+                        else if(opcionSeleccionada==1) //opcion para comprobantes Venta
+                        {
+                            FacturaModelControlador.imprimirComprobanteVenta(factura, NOMBRE_REPORTE_FACTURA_ELECTRONICA,false,session,panelPadre,getEstadoFormularioEnum());
+                        }
+                        else if(notaEntregaDisponible && opcionSeleccionada==2) //opcion para Nota de Entrega
+                        {
+                            FacturaModelControlador.imprimirNotaEntrega(factura, panelPadre);
+                        }
+                        //Cualquier otro valor (Cancelar o cierre del dialogo) no hace nada
                         
                         //int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada("Alerta", "Por favor seleccione una opción?", DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
 
@@ -2852,13 +2982,14 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                      */
                     try {
                         reporteVentaManual(factura,factura.getCodigoDocumentoEnum(),false,false);
+                        imprimirNotaEntregaSiHabilitado(factura);
                     } catch (ServicioCodefacException ex) {
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
                 imprimirTicketSorteo(factura);
-                
+
             }
             else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
             {
@@ -2882,7 +3013,9 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                
+
+                imprimirNotaEntregaSiHabilitado(factura);
+
                 imprimirTicketSorteo(factura);
             }
             else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.COMANDA))
@@ -2908,9 +3041,27 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                 ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,"ticket_sorteo.jrxml", parametros, new ArrayList(), panelPadre, "Sorteo", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,ConfiguracionImpresoraEnum.IMPRESORA_POR_DEFECTO,ReporteCodefac.ImpresionAutomaticaEnum.COMANDA);
             }
         }
-    
+
     }
-    
+
+    /**
+     * Imprime la Nota de Entrega (sin precios/totales, para que bodega haga el despacho) junto al comprobante de
+     * venta, solo si la empresa tiene habilitado ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO. No aplica a
+     * Liquidacion de Compra (es un documento de compra, no hay despacho de bodega que justifique la nota).
+     */
+    private void imprimirNotaEntregaSiHabilitado(Factura factura)
+    {
+        if(!factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA) && notaEntregaAutomaticaHabilitada())
+        {
+            FacturaModelControlador.imprimirNotaEntrega(factura, panelPadre);
+        }
+    }
+
+    private Boolean notaEntregaAutomaticaHabilitada()
+    {
+        return ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO, EnumSiNo.SI);
+    }
+
 
     @Override
     public void actualizar() {
@@ -3112,7 +3263,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         getBtnAgregarDetalleFactura().setEnabled(true);
         getBtnAgregarProducto().setEnabled(true);
         getBtnCrearProducto().setEnabled(true);
-        
+
         //Borrar los datos del estudiantes y los representantes
         getCmbRepresentante().removeAllItems();
         getTxtEstudiante().setText("");
@@ -3344,7 +3495,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getTblDetalleFactura().setModel(new DefaultTableModel());
             return;
         }
-        
+
         List<FacturaDetalle> detalles = factura.getDetallesOrdenados();
 
         //this.modeloTablaDetallesProductos = new DefaultTableModel(titulo, 0);
@@ -3432,7 +3583,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             }
         }
         getTblDetalleFactura().setModel(modeloTablaDetallesProductos);
-        
+
         UtilidadesTablas.definirTamanioColumnas(getTblDetalleFactura(),new Integer[]{0,130,30,30,80,50,80,580,80,80,100,100}); //Definir los tamanios definidos para la tabla principal
         
         ButtonColumn botonEliminar=new ButtonColumn(getTblDetalleFactura(),new AbstractAction() { //Agregado boton de eliminar a la tabla
@@ -5042,7 +5193,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
 
                     setFacturaDetalleSeleccionado(facturaDetalle);
                     controlador.verificarProductoConNotaVentaInterna(facturaDetalle);
-                    controlador.setearValoresProducto(facturaDetalle);                                        
+                    controlador.setearValoresProducto(facturaDetalle);
+                    diagLogEstadoPvp("DirectoLectorBarras-antesDeAgregar producto="+producto.getIdProducto()+"/"+producto.getCodigoPersonalizado()+" valorUnitarioResuelto="+producto.getValorUnitario());
                     controlador.agregarDetallesFactura(facturaDetalle, null, documentoSeleccionado, kardexSeleccionado, EnumSiNo.NO, BigDecimal.ONE,null);
                     cargarEtiquetaStock(kardexSeleccionado.getStock());
                     editarCeldaFacturaDetalle();
@@ -5206,10 +5358,29 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         });
         
         jPopupMenu.add(jMenuItemResponsable);
-        
+
         agregarPopUpListenerComponenteProducto(jPopupMenu);
+
+        JMenuItem jMenuItemSubirDetalle=new JMenuItem("Subir");
+        jMenuItemSubirDetalle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moverDetalleSeleccionado(-1);
+            }
+        });
+        jPopupMenu.add(jMenuItemSubirDetalle);
+
+        JMenuItem jMenuItemBajarDetalle=new JMenuItem("Bajar");
+        jMenuItemBajarDetalle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moverDetalleSeleccionado(1);
+            }
+        });
+        jPopupMenu.add(jMenuItemBajarDetalle);
+
         getTblDetalleFactura().setComponentPopupMenu(jPopupMenu);
-        
+
     }
     
     private void agregarPopUpListenerComponenteProducto(JPopupMenu jPopupMenu)
@@ -5775,10 +5946,26 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
     @Override
     public void cargarTotalesVista() {
         getLblSubtotalSinImpuesto().setText("" + factura.getSubtotalSinImpuestos().add(factura.getSubtotalImpuestos()));
-        getLblSubtotal12().setText("" + factura.getSubtotalImpuestos());
+
+        //factura.getSubtotalImpuestos()/getIva() son agregados de TODAS las tasas gravadas juntas (5%+15%);
+        //obtenerIvaCinco() separa por detalle segun ivaPorcentaje, igual que ya usa el ticket/reporte impreso
+        Factura.ImpuestoTotal impuestoTotal = factura.obtenerIvaCinco();
+        getLblSubtotal5().setText("" + impuestoTotal.subtotalCinco);
+        getLblIva5().setText("" + impuestoTotal.ivaCinco);
+
+        //Ocultar el desglose de 5% cuando la venta no tiene nada gravado a esa tasa, para no ocupar
+        //espacio de pantalla con una fila que en la mayoria de ventas no aplica (solo 15%/0%)
+        boolean tieneIvaCinco = impuestoTotal.subtotalCinco.compareTo(BigDecimal.ZERO) > 0;
+        getJLabel54().setVisible(tieneIvaCinco);
+        getLblSubtotal5().setVisible(tieneIvaCinco);
+        getJLabel55().setVisible(tieneIvaCinco);
+        getLblIva5().setVisible(tieneIvaCinco);
+
+        getLblSubtotal12().setText("" + impuestoTotal.subtotalQuince);
+        getLblIva12().setText("" + impuestoTotal.ivaQuince);
+
         getLblSubtotal0().setText("" + factura.getSubtotalSinImpuestos());
         getLblValorIce().setText(""+factura.getIce());
-        getLblIva12().setText("" + factura.getIva());
         getTxtValorTotal().setText("" + this.factura.getTotal());
         getLblAhorro().setText(""+factura.calcularDescuentosTotales());
         getLblSubTotalDescuentoConImpuesto().setText("" + factura.getDescuentoImpuestos());
@@ -5882,7 +6069,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
         BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(busquedaInterface);
         buscarDialogoModel.setVisible(true);
         Factura facturaTmp = (Factura) buscarDialogoModel.getResultado();
-        
+
         if(facturaTmp!=null)
         {
             cargarFacturaDesdeProforma(facturaTmp,null,false);
@@ -5890,10 +6077,199 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             factura.setProforma(null);
             //Metodo que me permite quitar datos adicionales que no deberian aparecer porque se va a duplicar la informacion
             factura.eliminarDatosAdicionalesSistema();
-        } 
-        
-        
+        }
+
+
     }
 
-    
+    @Override
+    public void otrasOpciones() throws ExcepcionCodefacLite, RemoteException {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        JMenuItem itemConvertirNVI = new JMenuItem("Convertir NVI en Factura");
+        itemConvertirNVI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    convertirNotaVentaInternaEnFactura();
+                } catch (ExcepcionCodefacLite ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        popupMenu.add(itemConvertirNVI);
+
+        popupMenu.show(this, this.getWidth()/2, 0);
+    }
+
+    /**
+     * Permite buscar una o varias Notas de Venta Interna existentes y convertirlas en Factura: copia sus datos
+     * a una Factura (fecha de hoy) y, al grabarse, cada Nota de Venta Interna origen se anula automaticamente
+     * (revierte su kardex y cartera) para que no quede el movimiento de inventario duplicado.
+     * Se pueden seleccionar varias NVI de una sola vez en el buscador (Ctrl/Shift+click), o ir agregando una
+     * por una: si ya hay un borrador cargado desde una conversion anterior sin grabar todavia, pregunta si se
+     * quiere agregar la nueva seleccion al borrador actual o limpiar y empezar de nuevo.
+     * Ver FacturacionService.asignarProformaAFactura/revertirInventarioYCarteraFactura.
+     */
+    private void convertirNotaVentaInternaEnFactura() throws ExcepcionCodefacLite, RemoteException {
+        NotaVentaInternaBusqueda notaVentaInternaBusqueda = new NotaVentaInternaBusqueda(session.getEmpresa());
+        BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(notaVentaInternaBusqueda);
+        buscarDialogoModel.setVisible(true);
+        List<Object> resultados = buscarDialogoModel.getResultados();
+        if(resultados==null || resultados.isEmpty())
+        {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] buscador cerrado sin seleccion (resultados null o vacio)");
+            return;
+        }
+        List<Factura> seleccionadas = new ArrayList<Factura>();
+        for (Object resultado : resultados) {
+            seleccionadas.add((Factura) resultado);
+        }
+        {
+            StringBuilder idsLog = new StringBuilder();
+            for (Factura s : seleccionadas) { if(idsLog.length()>0) idsLog.append(","); idsLog.append(s.getId()+"/"+s.getSecuencial()); }
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] seleccionadas (id/secuencial): "+idsLog);
+        }
+
+        //Verificar si ya hay un borrador cargado desde una conversion anterior de NVI sin grabar todavia
+        boolean yaHayBorradorNVI = factura.getProforma()!=null
+                && DocumentoEnum.NOTA_VENTA_INTERNA.equals(factura.getProforma().getCodigoDocumentoEnum());
+        Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] yaHayBorradorNVI="+yaHayBorradorNVI
+                +" factura.getProforma()="+(factura.getProforma()!=null?(factura.getProforma().getId()+"/"+factura.getProforma().getSecuencial()+"/"+factura.getProforma().getCodigoDocumentoEnum()):"null")
+                +" factura.getDetalles().size()="+(factura.getDetalles()!=null?factura.getDetalles().size():-1));
+
+        boolean limpiarAntesDeCargar = true;
+        if(yaHayBorradorNVI)
+        {
+            String[] opciones = {"Agregar al documento actual", "Limpiar y cargar nuevo", "Cancelar"};
+            int opcionSeleccionada = DialogoCodefac.dialogoPreguntaPersonalizada(
+                    "Convertir NVI en Factura",
+                    "Ya tiene cargada la Nota de Venta Interna "+factura.getProforma().getSecuencial()+" en este documento. ¿Qué desea hacer con la nueva selección?",
+                    DialogoCodefac.MENSAJE_ADVERTENCIA, opciones);
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] opcionSeleccionada="+opcionSeleccionada);
+            if(opcionSeleccionada==2 || opcionSeleccionada==-1)
+            {
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] cancelado por el usuario");
+                return; //Cancelar
+            }
+            limpiarAntesDeCargar = (opcionSeleccionada==1);
+        }
+        Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] limpiarAntesDeCargar="+limpiarAntesDeCargar);
+
+        //Validar que todas las NVI involucradas sean del mismo cliente (una Factura solo puede tener un cliente)
+        if(!limpiarAntesDeCargar)
+        {
+            Persona clienteActual = factura.getCliente();
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] validacion cliente actual="+(clienteActual!=null?(clienteActual.getIdCliente()+"/"+clienteActual.getRazonSocial()):"null"));
+            for (Factura nvi : seleccionadas) {
+                boolean yaCargado = esDocumentoYaCargado(nvi);
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] validando nvi "+nvi.getId()+"/"+nvi.getSecuencial()
+                        +" cliente="+(nvi.getCliente()!=null?(nvi.getCliente().getIdCliente()+"/"+nvi.getCliente().getRazonSocial()):"null")
+                        +" yaCargado="+yaCargado);
+                if(yaCargado)
+                {
+                    continue; //Se valida/omite mas abajo, no hace falta comparar cliente de algo que ya esta cargado
+                }
+                if(clienteActual!=null && nvi.getCliente()!=null && !clienteActual.getIdCliente().equals(nvi.getCliente().getIdCliente()))
+                {
+                    DialogoCodefac.mensaje("No se puede agregar la Nota de Venta Interna "+nvi.getSecuencial()
+                            +" porque es de un cliente distinto al del documento actual ("+clienteActual.getRazonSocial()+")",
+                            DialogoCodefac.MENSAJE_INCORRECTO);
+                    return;
+                }
+            }
+        }
+        else if(seleccionadas.size()>1)
+        {
+            Persona clientePrimero = seleccionadas.get(0).getCliente();
+            for (Factura nvi : seleccionadas) {
+                if(clientePrimero!=null && nvi.getCliente()!=null && !clientePrimero.getIdCliente().equals(nvi.getCliente().getIdCliente()))
+                {
+                    DialogoCodefac.mensaje("No se pueden consolidar Notas de Venta Interna de clientes distintos en una sola Factura",DialogoCodefac.MENSAJE_INCORRECTO);
+                    return;
+                }
+            }
+        }
+
+        //Mensaje de confirmacion listando todas las NVI que se van a anular
+        StringBuilder secuenciales = new StringBuilder();
+        for (Factura nvi : seleccionadas) {
+            if(secuenciales.length()>0) secuenciales.append(", ");
+            secuenciales.append(nvi.getSecuencial());
+        }
+        if(!DialogoCodefac.dialogoPregunta(
+                "Se va a ANULAR la(s) Nota(s) de Venta Interna "+secuenciales+" (se revierte su inventario y cartera) "
+                + "y se va a "+(limpiarAntesDeCargar?"cargar una Factura nueva":"agregar al documento actual")+" con esos datos. ¿Desea continuar?",
+                DialogoCodefac.MENSAJE_ADVERTENCIA))
+        {
+            return;
+        }
+
+        if(limpiarAntesDeCargar)
+        {
+            Factura primera = seleccionadas.get(0);
+            if(seleccionadas.size()>1)
+            {
+                primera.agregarDetalleDesdeVariasFacturas(seleccionadas);
+            }
+            cargarFacturaDesdeProforma(primera,DocumentoEnum.FACTURA,true);
+            for (int i=1; i<seleccionadas.size(); i++) {
+                factura.agregarDocumentoOrigenAdicional(seleccionadas.get(i));
+            }
+            getCmbPuntoEmision().setSelectedIndex(0);
+        }
+        else
+        {
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] rama AGREGAR - detalles antes="+factura.getDetalles().size());
+            boolean seAgregoAlgunDetalle = false;
+            for (Factura nvi : seleccionadas) {
+                if(esDocumentoYaCargado(nvi))
+                {
+                    Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] omitiendo nvi "+nvi.getId()+"/"+nvi.getSecuencial()+" (ya cargada)");
+                    continue; //Evitar agregar dos veces la misma NVI
+                }
+                int detallesNviOrigen = (nvi.getDetalles()!=null)?nvi.getDetalles().size():-1;
+                factura.agregarDetalleDesdeOtraFactura(nvi);
+                factura.agregarDocumentoOrigenAdicional(nvi);
+                seAgregoAlgunDetalle = true;
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] agregada nvi "+nvi.getId()+"/"+nvi.getSecuencial()
+                        +" (tenia "+detallesNviOrigen+" detalles) -> factura.getDetalles().size() ahora="+factura.getDetalles().size());
+            }
+            Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] rama AGREGAR - seAgregoAlgunDetalle="+seAgregoAlgunDetalle+" detalles final="+factura.getDetalles().size());
+            if(seAgregoAlgunDetalle)
+            {
+                controlador.invertirCalculoDetallesAFactura(factura, true);
+                //Refrescar la tabla de detalles y los totales en pantalla, ya que aqui no se pasa por
+                //cargarFacturaDesdeProforma (que es quien normalmente hace este refresco)
+                cargarDatosDetalles();
+                controlador.cargarTotales(false);
+                Logger.getLogger(FacturacionModel.class.getName()).log(Level.INFO,"[DIAG-NVI] cargarDatosDetalles()+cargarTotales() ejecutados");
+            }
+        }
+    }
+
+    /**
+     * Verifica si una Nota de Venta Interna ya esta cargada en el borrador actual (como origen principal o
+     * como origen adicional), para evitar agregarla dos veces.
+     */
+    private boolean esDocumentoYaCargado(Factura nvi) {
+        if(factura.getProforma()!=null && factura.getProforma().getId().equals(nvi.getId()))
+        {
+            return true;
+        }
+        if(factura.getDocumentosOrigenAdicionales()!=null)
+        {
+            for (Factura existente : factura.getDocumentosOrigenAdicionales()) {
+                if(existente.getId().equals(nvi.getId()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
 }

@@ -76,6 +76,7 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
             case LIQUIDACION_COMPRA:
             case NOTA_VENTA:
             case FACTURA:
+            case FACTURA_REEMBOLSO:
                 Factura factura=(Factura) comprobante;
                 return ServiceFactory.getFactory().getFacturacionServiceIf().buscarPorId(factura.getId());
                             

@@ -258,7 +258,7 @@ public class ProductoFacade extends AbstractFacade<Producto>
         }
                 
         
-        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 and ( p.tipoProductoCodigo=?7 or p.tipoProductoCodigo=?8 or p.tipoProductoCodigo=?9 ) "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
+        String queryString = "SELECT p FROM Producto p WHERE p.estado=?2 and ( p.tipoProductoCodigo=?7 or p.tipoProductoCodigo=?8 or p.tipoProductoCodigo=?9 or p.tipoProductoCodigo=?10 ) "+wherePresentaciones+whereEmpresa +whereCodigo+whereNombre;
         
         Query query = em.createQuery(queryString);
         if(!ParametroUtilidades.comparar(empresa,ParametroCodefac.DATOS_COMPARTIDOS_EMPRESA,EnumSiNo.SI))
@@ -286,6 +286,10 @@ public class ProductoFacade extends AbstractFacade<Producto>
         query.setParameter(7, "p");
         query.setParameter(8, "e");
         query.setParameter(9, "m");
+        //Faltaba el tipo SERVICIO en este filtro: un producto y un servicio podian compartir el mismo
+        //codigoPersonalizado sin que la validacion de "dato repetido" lo detectara nunca (bug real
+        //encontrado: producto 251060 duplicado entre un Servicio y un Producto)
+        query.setParameter(10, TipoProductoEnum.SERVICIO.getLetra());
         
         //Cuando este configurado como datos compartidos no tomo en cuenta de donde esta cogiendo la empresa
         

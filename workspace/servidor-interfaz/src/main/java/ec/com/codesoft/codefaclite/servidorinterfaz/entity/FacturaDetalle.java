@@ -72,7 +72,17 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
     
     @Column(name = "DESCRIPCION_ORIGINAL")
     private String descripcionOriginal;
-    
+
+    /**
+     * Orden de despliegue del detalle dentro de la factura/proforma. Se asigna una sola vez al agregar el
+     * detalle (ver Factura.addDetalle) y nunca cambia despues, a diferencia del ID (que es un efecto
+     * secundario del auto-incremento y puede no reflejar el orden real en que el usuario agrego cada item,
+     * sobre todo en documentos editados en varias sesiones). Factura.detalles usa @OrderBy("orden ASC") para
+     * que cualquier lugar del sistema que lea getDetalles() ya reciba la lista en el orden correcto.
+     */
+    @Column(name = "ORDEN")
+    private Long orden;
+
     @Transient
     private Boolean responsableRequerido;
     
@@ -124,7 +134,15 @@ public class FacturaDetalle extends DetalleFacturaNotaCeditoAbstract implements 
         this.id = id;
     }
 
-    
+    public Long getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Long orden) {
+        this.orden = orden;
+    }
+
+
     public Factura getFactura() {
         return factura;
     }

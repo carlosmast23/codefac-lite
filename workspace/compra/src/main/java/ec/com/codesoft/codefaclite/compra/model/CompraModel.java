@@ -269,7 +269,8 @@ public class CompraModel extends CompraPanel{
             );      
             
             carteraParametro.pagarConCaja=getChkPagarCaja().isSelected();
-            
+            compra.setPagarConCaja(EnumSiNo.getEnumByBoolean(getChkPagarCaja().isSelected()).getLetra());
+
             servicio.grabarCompra(compra,carteraParametro);
             DialogoCodefac.mensaje("Correcto","La compra fue guardada correctamente",DialogoCodefac.MENSAJE_CORRECTO);
         } catch (ServicioCodefacException ex) {
@@ -358,10 +359,11 @@ public class CompraModel extends CompraPanel{
             if (!validarDatosGrabar()) {
                 throw new ExcepcionCodefacLite("Error de validación");
             }
-            setearValores();            
-            
+            setearValores();
+            compra.setPagarConCaja(EnumSiNo.getEnumByBoolean(getChkPagarCaja().isSelected()).getLetra());
+
             //Verificar que el producto aun no este ingresado en el inventario o si no le debe pedir clave de autorizacion
-            if (EnumSiNo.SI.equals(compra.getInventarioIngresoEnum())) 
+            if (EnumSiNo.SI.equals(compra.getInventarioIngresoEnum()))
             {
                 //Hacer una verificacion basica con los totales solo para verificar que no fueron modificados los totales significa en teria que los detalles son iguales
                 Compra compraOriginal=ServiceFactory.getFactory().getCompraServiceIf().buscarPorId(compra.getId());                        
@@ -538,6 +540,9 @@ public class CompraModel extends CompraPanel{
             getCmbEmitirRetencion().setSelectedItem(EnumSiNo.SI);
         }
         
+        //Pagar con Caja
+        getChkPagarCaja().setSelected(compra.getPagarConCajaEnum()!=null && compra.getPagarConCajaEnum().getBool());
+
         mostrarDatosTotales();
         desbloquearIngresoDetalleProducto();
         mostrarDatosFacturasReembolso();
@@ -633,6 +638,7 @@ public class CompraModel extends CompraPanel{
         }
         
         getChkCompraCredito().setSelected(false);
+        getChkPagarCaja().setSelected(false);
         getTxtDiasCredito().setValue(0);
         getCmbSustentoComprobante().setSelectedIndex(0); //Selecionar el primer sustento despues de agregar
         mostrarDatosFacturasReembolso();

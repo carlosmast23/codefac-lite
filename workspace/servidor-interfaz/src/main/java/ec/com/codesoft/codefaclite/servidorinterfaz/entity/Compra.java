@@ -126,6 +126,9 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     
     @Column(name ="INVENTARIO_INGRESO")
     private String inventarioIngreso;
+
+    @Column(name ="PAGAR_CON_CAJA")
+    private String pagarConCaja;
     
     //@Column(name ="OBSERVACION")
     //private String observacion;
@@ -496,6 +499,14 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
         this.inventarioIngreso = inventarioIngreso;
     }
 
+    public String getPagarConCaja() {
+        return pagarConCaja;
+    }
+
+    public void setPagarConCaja(String pagarConCaja) {
+        this.pagarConCaja = pagarConCaja;
+    }
+
     public String getEstadoRetencion() {
         return estadoRetencion;
     }
@@ -780,7 +791,12 @@ public class Compra extends ComprobanteVentaNotaCreditoAbstract<FacturaAdicional
     {
         return EnumSiNo.getEnumByLetra(inventarioIngreso);
     }
-    
+
+    public EnumSiNo getPagarConCajaEnum()
+    {
+        return EnumSiNo.getEnumByLetra(pagarConCaja);
+    }
+
 
     public String getPreimpreso()
     {

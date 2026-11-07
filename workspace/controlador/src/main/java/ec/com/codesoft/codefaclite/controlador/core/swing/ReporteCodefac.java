@@ -845,7 +845,8 @@ public class ReporteCodefac {
     public enum ImpresionAutomaticaEnum
     {
         COMANDA(ParametroCodefac.IMPRESORA_DEFECTO_COMANDA,ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_2,ParametroCodefac.IMPRESORA_DEFECTO_COMANDA_3,ParametroCodefac.COPIAS_IMPRESORA_COMANDA),
-        VENTA(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA,ParametroCodefac.COPIAS_IMPRESORA_VENTA);
+        VENTA(ParametroCodefac.IMPRESORA_DEFECTO_FACTURA,ParametroCodefac.COPIAS_IMPRESORA_VENTA),
+        NOTA_ENTREGA(ParametroCodefac.IMPRESORA_DEFECTO_NOTA_ENTREGA,ParametroCodefac.COPIAS_IMPRESORA_NOTA_ENTREGA);
         
         private String nombreParametroImpresora;
         private String nombreParametroImpresora2;

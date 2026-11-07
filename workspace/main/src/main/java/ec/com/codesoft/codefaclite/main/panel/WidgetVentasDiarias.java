@@ -75,6 +75,10 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         lblSubtotal12 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lblSubtotal0 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        lblSubtotal5 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        lblIva5 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         lblValorTotal = new javax.swing.JLabel();
@@ -325,11 +329,47 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         jPanel3.add(lblSubtotal0, gridBagConstraints);
 
+        jLabel17.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel17.setText("SUBTOTAL 5%");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(1, 20, 1, 2);
+        jPanel3.add(jLabel17, gridBagConstraints);
+
+        lblSubtotal5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblSubtotal5.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        jPanel3.add(lblSubtotal5, gridBagConstraints);
+
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel18.setText("IVA 5%");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(1, 20, 1, 2);
+        jPanel3.add(jLabel18, gridBagConstraints);
+
+        lblIva5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblIva5.setText("0.00");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
+        jPanel3.add(lblIva5, gridBagConstraints);
+
         jLabel15.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel15.setText("IVA 15%");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 20, 1, 2);
         jPanel3.add(jLabel15, gridBagConstraints);
@@ -338,7 +378,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         jLabel16.setText("VALOR TOTAL");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(1, 20, 1, 2);
         jPanel3.add(jLabel16, gridBagConstraints);
@@ -347,7 +387,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         lblValorTotal.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         jPanel3.add(lblValorTotal, gridBagConstraints);
@@ -356,7 +396,7 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         lblIva12.setText("0.00");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         jPanel3.add(lblIva12, gridBagConstraints);
@@ -483,6 +523,8 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -499,8 +541,10 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPanel;
     private javax.swing.JLabel lblIva12;
+    private javax.swing.JLabel lblIva5;
     private javax.swing.JLabel lblSubtotal0;
     private javax.swing.JLabel lblSubtotal12;
+    private javax.swing.JLabel lblSubtotal5;
     private javax.swing.JLabel lblValorTotal;
     private javax.swing.JPanel panelTitulo;
     private javax.swing.JTextField txtCantidadProdiucto;
@@ -517,6 +561,14 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
         this.lblIva12 = lblIva12;
     }
 
+    public JLabel getLblIva5() {
+        return lblIva5;
+    }
+
+    public void setLblIva5(JLabel lblIva5) {
+        this.lblIva5 = lblIva5;
+    }
+
     public JLabel getLblSubtotal0() {
         return lblSubtotal0;
     }
@@ -531,6 +583,14 @@ public abstract class WidgetVentasDiarias extends ObjetoEscritorioAbstract{
 
     public void setLblSubtotal12(JLabel lblSubtotal12) {
         this.lblSubtotal12 = lblSubtotal12;
+    }
+
+    public JLabel getLblSubtotal5() {
+        return lblSubtotal5;
+    }
+
+    public void setLblSubtotal5(JLabel lblSubtotal5) {
+        this.lblSubtotal5 = lblSubtotal5;
     }
 
     public JLabel getLblValorTotal() {

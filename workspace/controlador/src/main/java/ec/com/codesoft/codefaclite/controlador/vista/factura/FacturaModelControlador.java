@@ -76,6 +76,7 @@ import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.reporte.UtilidadesJasper;
 import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadVarios;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadIva;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesImpuestos;
@@ -214,7 +215,7 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     @Deprecated
     public static ComprobanteDataInterface obtenerComprobanteData(Factura factura)
     {
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
         {
             ComprobanteDataFactura comprobanteData = new ComprobanteDataFactura(factura);
             comprobanteData.setMapInfoAdicional(factura.getMapAdicional());
@@ -520,7 +521,14 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         BigDecimal valorUnitario=productoSeleccionado.buscarPrecioPorNombre(pvpDefecto);
         
         //Consultar los descuentos que se deben cargar segun el precio seleccionado
-        List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
+        final List<BigDecimal>[] descuentosHolder=new List[1];
+        UtilidadVarios.medirTiempoProceso("agregarProductoVista.consultarDescuentoPorProducto (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                descuentosHolder[0]=consultarDescuentoPorProducto(productoSeleccionado, pvpDefecto);
+            }
+        });
+        List<BigDecimal> descuentos=descuentosHolder[0];
         
         //Verificar si se debe calcular el ahorro como DESCUENTO o como VALOR 
         if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.VENTA_PRODUCTO_MODO_DESCUENTO, EnumSiNo.SI)) {
@@ -538,7 +546,12 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         interfaz.cargarPrecios(productoSeleccionado);
         //List<BigDecimal> descuentos=consultarDescuentoPorProducto(productoSeleccionado,1);
         interfaz.cargarPreciosPorcentaje(descuentos,true);
-        interfaz.cargarPresentaciones(productoSeleccionado);
+        UtilidadVarios.medirTiempoProceso("agregarProductoVista.interfaz.cargarPresentaciones (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                interfaz.cargarPresentaciones(productoSeleccionado);
+            }
+        });
         
         //Solo ejecutar cuando no se esta recargando presentaciones desde el combo box
         /*if(!recargarPresentacion)
@@ -579,9 +592,9 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         {
             if(ParametroUtilidades.comparar(session.getEmpresa(),ParametroCodefac.MOSTRAR_COSTO_CON_IVA, EnumSiNo.SI))
             {
-                //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
-                //String tarifaStr=ParametrosSistemaCodefac.IVA_DEFECTO;
-                costo= UtilidadesImpuestos.agregarValorIva(ParametrosSistemaCodefac.obtenerIvaDefecto(), costo);
+                //Usar la tarifa de IVA propia del producto (venta), no la tarifa por defecto del sistema,
+                //para que un producto con IVA 0% no muestre el costo inflado con la tarifa general
+                costo= UtilidadesImpuestos.agregarValorIva(productoSeleccionado.getTarifaIva(), costo);
                 interfaz.setearCostoDetalleTxt(costo.setScale(2, RoundingMode.HALF_UP)+"");
             }
             else
@@ -652,15 +665,24 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
             facturaDetalle.setResponsableRequerido(productoSeleccionado.getResponsableRequeridoEnum().getBool());
         }
         
-        verificarProductoConNotaVentaInterna(facturaDetalle);
-        verificarProductoConProformaSinIva(facturaDetalle);
+        UtilidadVarios.medirTiempoProceso("agregarProductoVista.verificarProductoConNotaVentaInterna+ProformaSinIva (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                verificarProductoConNotaVentaInterna(facturaDetalle);
+                verificarProductoConProformaSinIva(facturaDetalle);
+            }
+        });
 
         //interfaz.setearValoresProducto(productoSeleccionado.getValorUnitario(),descripcion,productoSeleccionado.getCodigoPersonalizado(),productoSeleccionado.getCatalogoProducto());
         interfaz.setFacturaDetalleSeleccionado(facturaDetalle);
-        setearValoresProducto(facturaDetalle);
-        
-        //Seleccionar el precio por defecto para cargar en la vista
-        interfaz.seleccionarPvpPorNombre(pvpDefecto);
+        UtilidadVarios.medirTiempoProceso("agregarProductoVista.setearValoresProducto+seleccionarPvpPorNombre (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                setearValoresProducto(facturaDetalle);
+                //Seleccionar el precio por defecto para cargar en la vista
+                interfaz.seleccionarPvpPorNombre(pvpDefecto);
+            }
+        });
     }
     
     public Kardex obtenerKardexDesdeProducto(Producto producto)
@@ -1698,6 +1720,22 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando,false); 
         //JasperPrint jasperPrint = ReporteCodefac.construirReporte(path, mapParametros, dataReporte, sessionMb.getSession(), "Comanda", OrientacionReporteEnum.VERTICAL, FormatoHojaEnum.TICKET);
         ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,"comanda_ticket_40.jrxml", mapParametros, dataReporte, panelPadre, "Comanda", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,null,ImpresionAutomaticaEnum.COMANDA);
+    }
+
+    /**
+     * Imprime la Nota de Entrega (documento interno sin precios/totales, para que bodega haga el despacho).
+     * Se dispara junto al comprobante de venta solo si esta habilitado ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO.
+     */
+    public static void imprimirNotaEntrega(Factura facturaProcesando,InterfazComunicacionPanel panelPadre)
+    {
+        if(facturaProcesando.getDetalles().size()==0)
+        {
+            return ;
+        }
+
+        Map<String, Object> mapParametros =getMapParametrosReporte(facturaProcesando);
+        List<ComprobanteVentaData> dataReporte = getDetalleDataReporte(facturaProcesando,false);
+        ReporteCodefac.generarReporteInternalFramePlantilla(RecursoCodefac.JASPER_FACTURACION,"nota_entrega_ticket.jrxml", mapParametros, dataReporte, panelPadre, "Nota de Entrega", OrientacionReporteEnum.VERTICAL,FormatoHojaEnum.TICKET,null,ImpresionAutomaticaEnum.NOTA_ENTREGA);
     }
     
     /**

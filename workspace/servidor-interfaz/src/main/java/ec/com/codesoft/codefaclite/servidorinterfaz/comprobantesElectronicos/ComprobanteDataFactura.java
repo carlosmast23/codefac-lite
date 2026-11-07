@@ -73,7 +73,7 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
 
     @Override
     public String getCodigoComprobante() {
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA))
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO))
         {
             return ComprobanteEnum.FACTURA.getCodigo();
         }else if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.LIQUIDACION_COMPRA))
@@ -144,8 +144,8 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         ComprobanteElectronicoFacturaAndLiquidacionAbstract comprobante = null;
 
         InformacionComprobanteAbstract informacionComprobante = null;
-        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
-        {  
+        if(factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.FACTURA_REEMBOLSO) || factura.getCodigoDocumentoEnum().equals(DocumentoEnum.NOTA_VENTA_INTERNA))
+        {
             informacionComprobante = new InformacionFactura();
             comprobante=new FacturaComprobante();
         }else
@@ -375,9 +375,12 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
         }
         
         FacturaComprobante facturaComprobante=(FacturaComprobante) comprobanteData;
-        if(factura.getReembolsoList()!=null)
+        if(factura.getReembolsoList()!=null && !factura.getReembolsoList().isEmpty())
         {
-            for (ReembolsoDetalle reembolsoDetalle : factura.getReembolsoList()) 
+            BigDecimal totalBaseImponibleReembolso=BigDecimal.ZERO;
+            BigDecimal totalImpuestoReembolso=BigDecimal.ZERO;
+
+            for (ReembolsoDetalle reembolsoDetalle : factura.getReembolsoList())
             {
                 ReembolsoDetalleComprobante rembolsoDetalleData=new ReembolsoDetalleComprobante();
                 rembolsoDetalleData.setTipoIdentificacionProveedorReembolso("04");
@@ -416,15 +419,26 @@ public class ComprobanteDataFactura extends ComprobanteDataFacturaNotaCreditoAbs
                     }
                     
                     BigDecimal baseImponibleReembolso=impuestoDetalle.getBaseImponible().setScale(2, RoundingMode.HALF_UP);
+                    BigDecimal porcentajeIva=new BigDecimal(impuestoDetalle.getPorcentajeIva());
+                    BigDecimal valorImpuestoReembolso=baseImponibleReembolso.multiply(porcentajeIva).divide(new BigDecimal(100)).setScale(2, RoundingMode.HALF_UP);
                     impuestoDetalleData.setBaseImponibleReembolso(baseImponibleReembolso+"");
-                    impuestoDetalleData.setImpuestoReembolso(baseImponibleReembolso+"");
+                    impuestoDetalleData.setImpuestoReembolso(valorImpuestoReembolso+"");
                     rembolsoDetalleData.agregarDetalleImpuesto(impuestoDetalleData);
-                } 
-                
+
+                    totalBaseImponibleReembolso=totalBaseImponibleReembolso.add(baseImponibleReembolso);
+                    totalImpuestoReembolso=totalImpuestoReembolso.add(valorImpuestoReembolso);
+                }
+
                 //Agregar el reembolso al detalle de la factura del comprobante
                 facturaComprobante.agregarDetalleRembolso(rembolsoDetalleData);
             }
-            
+
+            //Totales obligatorios en infoFactura cuando la factura tiene reembolsos (Anexo 5 Ficha Técnica SRI)
+            InformacionFactura informacionFactura=facturaComprobante.getInformacionFactura();
+            informacionFactura.setCodDocReemb("41");
+            informacionFactura.setTotalBaseImponibleReembolso(totalBaseImponibleReembolso);
+            informacionFactura.setTotalImpuestoReembolso(totalImpuestoReembolso);
+            informacionFactura.setTotalComprobantesReembolso(totalBaseImponibleReembolso.add(totalImpuestoReembolso));
         }
     }
 

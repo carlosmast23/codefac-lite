@@ -166,6 +166,11 @@ public class ComprobanteElectronicoService implements Runnable {
     private String uriAutorizacion;
 
     private ServicioSri servicioSri;
+    private boolean sinValidarFecha=false;
+
+    public void setSinValidarFecha(boolean sinValidarFecha) {
+        this.sinValidarFecha = sinValidarFecha;
+    }
 
     private URL pathFacturaJasper;
 
@@ -360,7 +365,10 @@ public class ComprobanteElectronicoService implements Runnable {
             }
             
             if (etapaActual.equals(ETAPA_ENVIAR)) {
-                validacionRecepcionSri(new ClaveAcceso(claveAcceso));
+                if(!sinValidarFecha)
+                {
+                    validacionRecepcionSri(new ClaveAcceso(claveAcceso));
+                }
                 enviarSri();
                 if(escucha!=null)escucha.procesando(etapaActual,new ClaveAcceso(claveAcceso));
                 System.out.println("enviarSri()");
@@ -1009,7 +1017,11 @@ public class ComprobanteElectronicoService implements Runnable {
             String xmlStr=new String(Files.readAllBytes(archivoXml.toPath()),StandardCharsets.UTF_8);
             
             //Verificar si no encuentra una etiqueta básica o puede ser que este en otro formato
-            if(xmlStr.indexOf("<claveAcceso>")<0)
+            //Nota: en el formato de "autorizacion" del SRI (la factura viene envuelta y escapada
+            //dentro de <comprobante>), <claveAcceso> solo existe como &lt;claveAcceso&gt; escapado.
+            //Sin este chequeo, un archivo UTF-8 valido se reinterpretaba como UTF-16LE por error,
+            //corrompiendo el contenido y haciendo fallar toda la carga.
+            if(xmlStr.indexOf("<claveAcceso>")<0 && xmlStr.indexOf("&lt;claveAcceso&gt;")<0)
             {
                 xmlStr=new String(Files.readAllBytes(archivoXml.toPath()),StandardCharsets.UTF_16LE);
             }
@@ -1298,10 +1310,18 @@ public class ComprobanteElectronicoService implements Runnable {
     
     private List<ClaveAcceso> generarLote() throws ComprobanteElectronicoException{
          
-        List<ClaveAcceso> listaClaves=new ArrayList<ClaveAcceso>();                    
+        List<ClaveAcceso> listaClaves=new ArrayList<ClaveAcceso>();
+        if (comprobantesLote == null) {
+            if (clavesAccesoLote != null) {
+                for (String claveAcceso : clavesAccesoLote) {
+                    listaClaves.add(new ClaveAcceso(claveAcceso));
+                }
+            }
+            return listaClaves;
+        }
         try {
-                    
-            //claveAcceso = obtenerClaveAccesoLote();            
+
+            //claveAcceso = obtenerClaveAccesoLote();
 
             //Generar los xml individuales de los comprobantes para procesar en lote
             clavesAccesoLote=new ArrayList<String>();
@@ -1533,6 +1553,7 @@ public class ComprobanteElectronicoService implements Runnable {
 
     private Autorizacion autorizarSri() throws ComprobanteElectronicoException {
         servicioSri = new ServicioSri();
+        servicioSri.setSinValidarFecha(sinValidarFecha);
         servicioSri.setUri_autorizacion(uriAutorizacion);
         servicioSri.setUri_recepcion(uriRecepcion);
         servicioSri.setUrlFile(getPathComprobante(CARPETA_FIRMADOS));

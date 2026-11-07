@@ -3,6 +3,12 @@
 	<property name="ireport.zoom" value="1.9453068450750362"/>
 	<property name="ireport.x" value="217"/>
 	<property name="ireport.y" value="116"/>
+	<style name="estiloFilaInformativa" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean("true".equals($F{informativo}))]]></conditionExpression>
+			<style backcolor="#FFF3CD"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\Carlos\\Documents\\GitHub\\codefac-lite\\workspace\\recursos\\src\\main\\resources\\reportes\\crm\\"]]></defaultValueExpression>
 	</parameter>
@@ -55,20 +61,24 @@
 	<field name="signo" class="java.lang.String"/>
 	<field name="descripcion" class="java.lang.String"/>
 	<field name="id" class="java.lang.String"/>
+	<field name="informativo" class="java.lang.String"/>
 	<variable name="SUBTOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}.equals("+"))?new BigDecimal($F{total}):new BigDecimal("0")]]></variableExpression>
+		<variableExpression><![CDATA[("true".equals($F{informativo}))?BigDecimal.ZERO:(($F{signo}.equals("+"))?new BigDecimal($F{total}):new BigDecimal("0"))]]></variableExpression>
 	</variable>
 	<variable name="ELIMINADOS_TOT" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal($F{total}):BigDecimal.ZERO;]]></variableExpression>
+		<variableExpression><![CDATA[("true".equals($F{informativo}))?BigDecimal.ZERO:(($F{signo}.equals("-"))?new BigDecimal($F{total}):BigDecimal.ZERO)]]></variableExpression>
+	</variable>
+	<variable name="INFORMATIVO_TOT" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
+		<variableExpression><![CDATA[("true".equals($F{informativo}))?new BigDecimal($F{total}):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_FINAL" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
+		<variableExpression><![CDATA[("true".equals($F{informativo}))?BigDecimal.ZERO:(($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total}))]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_GROUP" class="java.math.BigDecimal" resetType="Group" resetGroup="GROUP_FORMA_PAGO" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
+		<variableExpression><![CDATA[("true".equals($F{informativo}))?BigDecimal.ZERO:(($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total}))]]></variableExpression>
 	</variable>
 	<variable name="TOTAL_SIGNO" class="java.math.BigDecimal" resetType="Group" resetGroup="signo" calculation="Sum">
-		<variableExpression><![CDATA[($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total})]]></variableExpression>
+		<variableExpression><![CDATA[("true".equals($F{informativo}))?BigDecimal.ZERO:(($F{signo}.equals("-"))?new BigDecimal("-"+$F{total}):new BigDecimal($F{total}))]]></variableExpression>
 	</variable>
 	<group name="signo">
 		<groupExpression><![CDATA[$F{signo}]]></groupExpression>
@@ -242,7 +252,7 @@
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="52">
+			<band height="69">
 				<staticText>
 					<reportElement mode="Opaque" x="446" y="0" width="65" height="17" forecolor="#FFFFFF" backcolor="#999999" uuid="6377b6af-7845-4d25-a350-a710e49bc341"/>
 					<box>
@@ -300,7 +310,35 @@
 					<textFieldExpression><![CDATA[$V{ELIMINADOS_TOT}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement mode="Opaque" x="446" y="34" width="65" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="d81c888b-e106-4aed-b517-c016d22e42e4"/>
+					<reportElement mode="Opaque" x="446" y="34" width="65" height="17" forecolor="#FFFFFF" backcolor="#B08900" uuid="c3f1b8a2-1a2d-4e3a-9c7a-3a1b2c4d5e6f"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Informativo: ]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Opaque" x="511" y="34" width="44" height="17" forecolor="#FFFFFF" backcolor="#B08900" uuid="f2e3d4c5-6b7a-48c9-9d0e-1f2a3b4c5d6e"/>
+					<box>
+						<pen lineWidth="0.75"/>
+						<topPen lineWidth="0.75"/>
+						<leftPen lineWidth="0.75"/>
+						<bottomPen lineWidth="0.75"/>
+						<rightPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
+						<paragraph leftIndent="3" rightIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{INFORMATIVO_TOT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="446" y="51" width="65" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="d81c888b-e106-4aed-b517-c016d22e42e4"/>
 					<box>
 						<topPen lineWidth="1.0"/>
 						<leftPen lineWidth="1.0"/>
@@ -313,7 +351,7 @@
 					<text><![CDATA[Total: ]]></text>
 				</staticText>
 				<textField>
-					<reportElement mode="Opaque" x="511" y="34" width="44" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="33d8de5f-40fc-4ce7-a2ba-1dd3449054d2"/>
+					<reportElement mode="Opaque" x="511" y="51" width="44" height="17" forecolor="#FFFFFF" backcolor="#666666" uuid="33d8de5f-40fc-4ce7-a2ba-1dd3449054d2"/>
 					<box>
 						<pen lineWidth="0.75"/>
 						<topPen lineWidth="0.75"/>
@@ -878,7 +916,7 @@
 	<detail>
 		<band height="13">
 			<textField>
-				<reportElement x="33" y="0" width="53" height="13" uuid="44d2a158-eb34-46ff-b16e-98d3de653644"/>
+				<reportElement style="estiloFilaInformativa" x="33" y="0" width="53" height="13" uuid="44d2a158-eb34-46ff-b16e-98d3de653644"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -893,7 +931,7 @@
 				<textFieldExpression><![CDATA[$F{secuencial}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="86" y="0" width="71" height="13" uuid="186fdf75-c360-4f67-8cfc-ddd5b304314e"/>
+				<reportElement style="estiloFilaInformativa" x="86" y="0" width="71" height="13" uuid="186fdf75-c360-4f67-8cfc-ddd5b304314e"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -908,7 +946,7 @@
 				<textFieldExpression><![CDATA[$F{identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="192" y="0" width="144" height="13" uuid="5aa67a24-2a65-461e-9b94-237db168c0a7"/>
+				<reportElement style="estiloFilaInformativa" x="192" y="0" width="144" height="13" uuid="5aa67a24-2a65-461e-9b94-237db168c0a7"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -923,7 +961,7 @@
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="511" y="0" width="44" height="13" uuid="f93c90d0-8d6a-48e0-a6b1-6ca4e4a79626"/>
+				<reportElement style="estiloFilaInformativa" x="511" y="0" width="44" height="13" uuid="f93c90d0-8d6a-48e0-a6b1-6ca4e4a79626"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -938,7 +976,7 @@
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="157" y="0" width="35" height="13" uuid="dc6b3a56-7b3d-404b-b0f4-847372474865"/>
+				<reportElement style="estiloFilaInformativa" x="157" y="0" width="35" height="13" uuid="dc6b3a56-7b3d-404b-b0f4-847372474865"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -953,7 +991,7 @@
 				<textFieldExpression><![CDATA[$F{hora}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="481" y="0" width="30" height="13" uuid="1ea715c8-f07a-4f14-a767-f68c824c3b49"/>
+				<reportElement style="estiloFilaInformativa" x="481" y="0" width="30" height="13" uuid="1ea715c8-f07a-4f14-a767-f68c824c3b49"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -965,10 +1003,10 @@
 					<font size="10" isBold="false"/>
 					<paragraph leftIndent="3" rightIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{signo}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[("true".equals($F{informativo})) ? "i" : $F{signo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="336" y="0" width="145" height="13" uuid="6efe3054-3004-4b8e-a461-23ff0575f70b"/>
+				<reportElement style="estiloFilaInformativa" x="336" y="0" width="145" height="13" uuid="6efe3054-3004-4b8e-a461-23ff0575f70b"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>
@@ -983,7 +1021,7 @@
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="33" height="13" uuid="8dc01299-6c53-4b5f-9b28-ed0dbccc4c60"/>
+				<reportElement style="estiloFilaInformativa" x="0" y="0" width="33" height="13" uuid="8dc01299-6c53-4b5f-9b28-ed0dbccc4c60"/>
 				<box>
 					<pen lineWidth="0.75"/>
 					<topPen lineWidth="0.75"/>

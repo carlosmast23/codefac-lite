@@ -82,6 +82,7 @@ public class ComprobanteElectronicoComponente {
                             case NOTA_VENTA:
                             case LIQUIDACION_COMPRA:
                             case FACTURA:
+                            case FACTURA_REEMBOLSO:
                                 ServiceFactory.getFactory().getFacturacionServiceIf().eliminarFactura((Factura) comprobante);
                                 break;
 
@@ -260,6 +261,7 @@ public class ComprobanteElectronicoComponente {
                     break;
 
                 case FACTURA:
+                case FACTURA_REEMBOLSO:
                     secuencial = puntoEmision.getSecuencialFactura();
                     break;
 

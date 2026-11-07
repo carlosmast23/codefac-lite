@@ -144,7 +144,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         filtroRapido=ParametroUtilidades.compararSinEmpresa(ParametroCodefac.FILTRO_RAPIDO_BUSQUEDA,EnumSiNo.SI);        
         initListener();
         //crearConsulta("");
-        UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
+        UtilidadVarios.medirTiempoProceso(model.getClass().getSimpleName()+".apertura dialogo (ejecutarConsulta total)", new UtilidadVarios.ProcesoTiempoIf() {
             @Override
             public void proceso() {
                 ejecutarConsulta();
@@ -361,7 +361,7 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
         convertirMinusculasParametros(queryDialog);
         
         //TODO: Metodo temporal para ir analizando los tiempos de consulta para ver donde se va demorando más
-        UtilidadVarios.medirTiempoProceso(new UtilidadVarios.ProcesoTiempoIf() {
+        UtilidadVarios.medirTiempoProceso(model.getClass().getSimpleName()+".consultaSecundaria (RMI consultaGeneralDialogos, pagina "+paginaActual+")", new UtilidadVarios.ProcesoTiempoIf() {
             @Override
             public void proceso() {
                 try {
@@ -485,7 +485,6 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
     
     private int obtenerTamanioConsulta()
     {
-        try {
             String filtro=getTxtBuscar().getText().toLowerCase();
             filtro=(normalizarTextoBusqueda)?UtilidadesDerby.normalizarTextoDerby(filtro):filtro;
             
@@ -523,18 +522,27 @@ public class BuscarDialogoModel extends DialogoBuscadorForm
             */
             String queryModificado=UtilidadSql.convertirConsultaEnConsultaTamanio(queryDialog.query);
             
-            System.out.println(queryModificado);            
+            System.out.println(queryModificado);
             convertirMinusculasParametros(queryDialog);
-            Long tamanio=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryModificado, queryDialog.getParametros());
-            
+            final String[] queryTamanioHolder={queryModificado};
+            final Map<Integer,Object>[] paramsHolder=new Map[]{queryDialog.getParametros()};
+            final Long[] tamanioHolder=new Long[1];
+            UtilidadVarios.medirTiempoProceso(model.getClass().getSimpleName()+".obtenerTamanioConsulta (RMI consultaTamanioGeneralDialogos)", new UtilidadVarios.ProcesoTiempoIf() {
+                @Override
+                public void proceso() {
+                    try {
+                        tamanioHolder[0]=ServiceFactory.getFactory().getUtilidadesServiceIf().consultaTamanioGeneralDialogos(queryTamanioHolder[0], paramsHolder[0]);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
+                        FuncionesSistemaCodefac.servidorConexionPerdida();
+                    }
+                }
+            });
+            Long tamanio=tamanioHolder[0];
+
             return (tamanio!=null)?tamanio.intValue():0;
-        } catch (RemoteException ex) {
-            Logger.getLogger(BuscarDialogoModel.class.getName()).log(Level.SEVERE, null, ex);
-            FuncionesSistemaCodefac.servidorConexionPerdida();
-        }
-        return 0;
     }
-    
+
     /**
      * Consulta inicial que establece los parametros como cantidad de datos, numero de paginas
      * y otras configuraciones para costruir el dialogo

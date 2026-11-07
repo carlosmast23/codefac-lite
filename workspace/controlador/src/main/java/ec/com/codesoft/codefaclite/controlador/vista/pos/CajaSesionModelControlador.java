@@ -346,7 +346,12 @@ public class CajaSesionModelControlador extends ModelControladorAbstract<CajaSes
         this.cajaSessionSeleccionada = cajaSessionSeleccionada;
         //Al cambiar la caja seleccionada en el combo hay que refrescar la pantalla (fechas, denominaciones,
         //valor teorico/real) con los datos de la nueva sesion, si no se queda mostrando los de la anterior
-        cargarDatosPantalla(cajaSessionSeleccionada);
+        //Nota: el binding del combo cmbCajaSession dispara este setter con null durante la carga inicial
+        //(setSelectedItem siempre lanza el ActionListener, incluso sin seleccion). Si se deja pasar, se
+        //pisa el cajaSession que "Abrir Caja" recien creo en limpiarDatos(), dejandolo null (NPE al grabar).
+        if (cajaSessionSeleccionada != null) {
+            cargarDatosPantalla(cajaSessionSeleccionada);
+        }
     }
 
     

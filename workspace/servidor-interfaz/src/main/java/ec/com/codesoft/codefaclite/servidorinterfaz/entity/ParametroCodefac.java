@@ -316,7 +316,17 @@ public class ParametroCodefac implements Serializable {
      * Venta producto en modo de descuento
      */
     public static final String VENTA_PRODUCTO_MODO_DESCUENTO="VENTA_PRODUCTO_MODO_DESCUENTO";
-    
+
+    /**
+     * Permite habilitar/deshabilitar que al grabar un comprobante de venta (Factura, Nota de Venta, Nota de Venta Interna)
+     * se imprima automaticamente junto al ticket/factura una Nota de Entrega interna (sin precios/totales) para bodega.
+     */
+    public static final String IMPRIMIR_NOTA_ENTREGA_AUTOMATICO="IMPRIMIR_NOTA_ENTREGA_AUTOMATICO";
+
+    public static final String IMPRESORA_DEFECTO_NOTA_ENTREGA="impresora_defecto_nota_entrega";
+
+    public static final String COPIAS_IMPRESORA_NOTA_ENTREGA="copias_impresora_nota_entrega";
+
     /**
      * Parametros para la firma de la factura
      */

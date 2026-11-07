@@ -218,6 +218,11 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
         } else {
             generarReportePdf(clave.clave);
         }
+
+        if(ParametroUtilidades.comparar(facturaProcesando.getEmpresa(), ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO, EnumSiNo.SI))
+        {
+            FacturaModelControlador.imprimirNotaEntrega(facturaProcesando, facturacionModel.panelPadre);
+        }
     }
         
     private void generarReportePdf(String clave) {

@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Factura;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaAdicional;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FacturaDetalle;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.FormaPago;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.NotaCredito;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PersonaEstablecimiento;
@@ -378,8 +379,12 @@ public class ControladorReporteFactura {
                         reporteData.setCosto((mapCostos.get(factura)!=null)?mapCostos.get(factura).toString():"0");     
                         //Agregar por defecto la primera forma de pago que se aplico en la factura
                         //TODO: Terminar de aplicar la misma logica para las notas de credito
-                        //TODO: Analizar como debe funcionar cuando se tiene varias formas de pago , seguramente se tiene que dividir los registros en varios
                         reporteData.setFormaPago(obtenerFormaPago(factura));
+                        //Guardar el desglose completo (puede tener mas de una forma de pago si el pago fue
+                        //mixto) para que el reporte AGRUPADO_POR_FORMA_PAGO pueda dividir esta fila en una
+                        //por cada forma de pago - ver expandirPorFormaPago. El resto de agrupaciones no usa
+                        //este campo, asi que no les afecta.
+                        reporteData.setFormasPagoDetalle(construirFormasPagoDetalle(factura));
                         reporteData.mostrarReferido = filtrarReferidos; //Variables para saber si se debe mostrar las personas que le refieren
                         reporteData.setMesa((factura.getMesa()!=null)?factura.getMesa().getNombre():"");
                         //Agregando Zona y Ruta
@@ -516,7 +521,91 @@ public class ControladorReporteFactura {
         }
         return "Sin forma de pago";
     }
-    
+
+    private List<ReporteFacturaData.FormaPagoResumen> construirFormasPagoDetalle(Factura factura)
+    {
+        List<ReporteFacturaData.FormaPagoResumen> resultado = new ArrayList<ReporteFacturaData.FormaPagoResumen>();
+        if(factura.getFormaPagos()!=null)
+        {
+            for (FormaPago formaPago : factura.getFormaPagos())
+            {
+                String nombre = (formaPago.getSriFormaPago()!=null)?formaPago.getSriFormaPago().getNombre():"Sin forma de pago";
+                BigDecimal total = (formaPago.getTotal()!=null)?formaPago.getTotal():BigDecimal.ZERO;
+                resultado.add(new ReporteFacturaData.FormaPagoResumen(nombre, total));
+            }
+        }
+        return resultado;
+    }
+
+    /**
+     * Divide cada fila que tenga mas de una forma de pago (factura con pago mixto) en una fila por cada
+     * forma de pago, prorrateando los montos segun el peso de cada forma de pago sobre el total de la
+     * factura. Las filas con una sola forma de pago (o ninguna) se dejan intactas. No modifica la lista
+     * recibida ("data"), retorna una lista nueva - asi el resto de agrupaciones y la exportacion a Excel
+     * (que siguen usando "data" directamente) no se ven afectadas por este desglose.
+     */
+    private List<ReporteFacturaData> expandirPorFormaPago(List<ReporteFacturaData> original)
+    {
+        List<ReporteFacturaData> resultado = new ArrayList<ReporteFacturaData>();
+        for (ReporteFacturaData fila : original)
+        {
+            List<ReporteFacturaData.FormaPagoResumen> formas = fila.getFormasPagoDetalle();
+            BigDecimal totalFactura = null;
+            if(formas!=null && formas.size()>1 && !UtilidadesTextos.verificarNullOVacio(fila.getTotalFactura()))
+            {
+                try {
+                    totalFactura = new BigDecimal(fila.getTotalFactura());
+                } catch (NumberFormatException ex) {
+                    totalFactura = null;
+                }
+            }
+
+            if(totalFactura==null || totalFactura.compareTo(BigDecimal.ZERO)==0)
+            {
+                //Una sola forma de pago, ninguna, o total en cero: no hay nada que prorratear
+                resultado.add(fila);
+                continue;
+            }
+
+            for (ReporteFacturaData.FormaPagoResumen forma : formas)
+            {
+                try {
+                    ReporteFacturaData clon = (ReporteFacturaData) fila.clone();
+                    BigDecimal proporcion = forma.total.divide(totalFactura, 10, RoundingMode.HALF_UP);
+
+                    clon.setFormaPago(forma.nombre);
+                    clon.setTotalFactura(prorratearValorReporte(fila.getTotalFactura(), proporcion));
+                    clon.setTotalFinal(prorratearValorReporte(fila.getTotalFinal(), proporcion));
+                    clon.setSubtotalDoceFactura(prorratearValorReporte(fila.getSubtotalDoceFactura(), proporcion));
+                    clon.setSubtotalCeroFactura(prorratearValorReporte(fila.getSubtotalCeroFactura(), proporcion));
+                    clon.setIvaDoceFactura(prorratearValorReporte(fila.getIvaDoceFactura(), proporcion));
+                    clon.setDescFactura(prorratearValorReporte(fila.getDescFactura(), proporcion));
+                    clon.setValorAfecta(prorratearValorReporte(fila.getValorAfecta(), proporcion));
+                    clon.setCantidad(prorratearValorReporte(fila.getCantidad(), proporcion));
+
+                    resultado.add(clon);
+                } catch (CloneNotSupportedException ex) {
+                    Logger.getLogger(ControladorReporteFactura.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return resultado;
+    }
+
+    private String prorratearValorReporte(String valorStr, BigDecimal proporcion)
+    {
+        if(UtilidadesTextos.verificarNullOVacio(valorStr))
+        {
+            return valorStr;
+        }
+        try {
+            BigDecimal valor = new BigDecimal(valorStr);
+            return valor.multiply(proporcion).setScale(2, RoundingMode.HALF_UP).toString();
+        } catch (NumberFormatException ex) {
+            return valorStr;
+        }
+    }
+
     /**
      * Metodo que permite convertir el dato de reporte original para separar por detalles para el reporte de productos
      * @param factura
@@ -793,13 +882,23 @@ public class ControladorReporteFactura {
             intercambiarInfoProductosReporte();
         }
 
+        //Una factura con pago mixto (varias formas de pago) necesita una fila por forma de pago con su
+        //monto proporcional, no una sola fila con el total completo atribuido solo a la primera forma de
+        //pago. Se arma una lista derivada aparte (no se toca "data") para que el resto de agrupaciones y
+        //la exportacion a Excel, que siguen usando "data" tal cual, no se vean afectadas.
+        List<ReporteFacturaData> datosReporte = data;
+        if(tipoReporteEnum.equals(TipoReporteEnum.AGRUPADO_POR_FORMA_PAGO))
+        {
+            datosReporte = expandirPorFormaPago(data);
+        }
+
         //tipoReporteEnum.procesarDatosReporte(datosProcesar);
-        UtilidadReporteJasper.obtenerDatosReporteAgrupado(tipoReporteEnum, data);
+        UtilidadReporteJasper.obtenerDatosReporteAgrupado(tipoReporteEnum, datosReporte);
 
         try
         {
             //ordenarListaPorPrecio(data);
-            ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(tipoReporteEnum), data, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
+            ReporteCodefac.generarReporteInternalFramePlantilla(path, mapParametrosReportePdf(tipoReporteEnum), datosReporte, panelPadre,titulo, OrientacionReporteEnum.HORIZONTAL,FormatoHojaEnum.A4);
         }
         finally
         {

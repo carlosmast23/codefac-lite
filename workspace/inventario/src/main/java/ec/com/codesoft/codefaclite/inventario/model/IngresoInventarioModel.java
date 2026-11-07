@@ -23,6 +23,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Compra;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.CompraDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexDetalle;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.KardexItemEspecifico;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Lote;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Persona;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -869,11 +870,37 @@ public class IngresoInventarioModel extends IngresoInventarioPanel {
                 }
                 
                 
+                //El lote pudo haber quedado enganchado a la presentacion (EMPAQUE) que estaba seleccionada
+                //en la pantalla de Compra en vez del producto original ya reconstruido arriba. Si no coincide,
+                //buscar (o crear) el lote correcto para el producto convertido, para que el stock real no quede
+                //invisible en Ajuste de Inventario/Compra (que buscan lotes filtrando por producto exacto)
+                Lote lote=compraDetalle.getLote();
+                if(lote!=null && lote.getProducto()!=null && !lote.getProducto().equals(producto))
+                {
+                    Lote loteCorregido=null;
+                    if(lote.getFechaVencimiento()!=null)
+                    {
+                        loteCorregido=ServiceFactory.getFactory().getLoteSeviceIf().buscarPorProductoYFechaCaducidad(producto,lote.getFechaVencimiento());
+                    }
+                    if(loteCorregido==null)
+                    {
+                        loteCorregido=new Lote();
+                        loteCorregido.setCodigo(lote.getCodigo());
+                        loteCorregido.setFechaVencimiento(lote.getFechaVencimiento());
+                        loteCorregido.setFechaElaboracion(lote.getFechaElaboracion());
+                        loteCorregido.setEmpresa(producto.getEmpresa());
+                        loteCorregido.setEstadoEnum(GeneralEnumEstado.ACTIVO);
+                        loteCorregido.setProducto(producto);
+                        loteCorregido.setUsuarioCreacion(session.getUsuario());
+                    }
+                    lote=loteCorregido;
+                }
+
                 Kardex kardex=new Kardex();
                 kardex.setBodega(kardexDetalle.bodega);
                 kardex.setProducto(producto);
-                kardex.setLote(compraDetalle.getLote());
-                                
+                kardex.setLote(lote);
+
                 kardexDetalleNuevo.setKardex(kardex);
                 kardexDetalleNuevo.setUsuarioNick(session.getUsuario().getNick());
                 //kardexDetalleNuevo.setCodigoTipoDocumentoReferenciaEnum(compraDetalle.getCompra().getCodigoTipoDocumentoEnum());

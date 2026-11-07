@@ -235,6 +235,7 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         
         UtilidadesComboBox.llenarComboBox(getCmbFacturarInventarioNegativo(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbVisualizarCierreCaja(),EnumSiNo.values());
+        UtilidadesComboBox.llenarComboBox(getCmbImprimirNotaEntregaAutomatico(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbAdvertenciaActualizarCostos(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbBuscadorSoloInventario(),EnumSiNo.values());
         UtilidadesComboBox.llenarComboBox(getCmbCalculaDescuentoCostos(),EnumSiNo.values());
@@ -763,7 +764,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
             ParametroCodefac parametroVisualizarCierreCaja = parametrosTodos.get(ParametroCodefac.VISUALIZAR_CIERRE_CAJA);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroVisualizarCierreCaja != null) ? parametroVisualizarCierreCaja.getValor() : null);
             getCmbVisualizarCierreCaja().setSelectedItem((enumSiNo!=null)?enumSiNo:null);
-            
+
+            ParametroCodefac parametroImprimirNotaEntregaAutomatico = parametrosTodos.get(ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO);
+            enumSiNo = EnumSiNo.getEnumByLetra((parametroImprimirNotaEntregaAutomatico != null) ? parametroImprimirNotaEntregaAutomatico.getValor() : null);
+            getCmbImprimirNotaEntregaAutomatico().setSelectedItem((enumSiNo!=null)?enumSiNo:EnumSiNo.NO);
+
             ParametroCodefac parametroAdvertenciaActualizarCosto = parametrosTodos.get(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO);
             enumSiNo = EnumSiNo.getEnumByLetra((parametroAdvertenciaActualizarCosto != null) ? parametroAdvertenciaActualizarCosto.getValor() : null);
             getCmbAdvertenciaActualizarCostos().setSelectedItem((enumSiNo != null) ? enumSiNo : null);
@@ -1077,7 +1082,11 @@ public class ConfiguracionDefectoModel extends ConfiguracionDefectoPanel {
         enumSiNo = (EnumSiNo) getCmbVisualizarCierreCaja().getSelectedItem();
         agregarParametro(ParametroCodefac.VISUALIZAR_CIERRE_CAJA, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.VISUALIZAR_CIERRE_CAJA);
-        
+
+        enumSiNo = (EnumSiNo) getCmbImprimirNotaEntregaAutomatico().getSelectedItem();
+        agregarParametro(ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
+        agregarParametroEditar(ParametroCodefac.IMPRIMIR_NOTA_ENTREGA_AUTOMATICO);
+
         enumSiNo = (EnumSiNo) getCmbAdvertenciaActualizarCostos().getSelectedItem();
         agregarParametro(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO, (enumSiNo != null) ? enumSiNo.getLetra() : null);
         agregarParametroEditar(ParametroCodefac.ADVERTENCIA_ACTUALIZAR_COSTO);
