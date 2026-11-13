@@ -47,6 +47,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.AtsServiceIf;
 import ec.com.codesoft.codefaclite.utilidades.fecha.UtilidadesFecha;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
 import ec.com.codesoft.codefaclite.utilidades.validadores.UtilidadBigDecimal;
+import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesJuridicas;
 import ec.com.codesoft.codefaclite.utilidades.varios.UtilidadesNumeros;
 import jakarta.persistence.EntityManager;
 import java.io.Serializable;
@@ -150,7 +151,7 @@ public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Ser
                  * ===================> VENTAS <==========================
                  */
                 if (ventasBool) {
-                    List<VentaAts> ventas = consultarVentasAts(fechaInicial, fechaFinal, empresa,entityManager);
+                    List<VentaAts> ventas = consultarVentasAts(fechaInicial, fechaFinal, empresa,alertas,entityManager);
                     ats.setVentas(ventas);
                     ats.calcularTotalVentas();
 
@@ -733,7 +734,12 @@ public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Ser
     
     private String generarFormatoAlerta(String documento,String preimpreso,String mensaje)
     {
-        return "El documento "+documento+" con preimpreso "+preimpreso+" tiene la siguiente advertencia: "+mensaje;        
+        return "El documento "+documento+" con preimpreso "+preimpreso+" tiene la siguiente advertencia: "+mensaje;
+    }
+
+    private String generarFormatoAlertaIdentificacion(String identificacion,String mensaje)
+    {
+        return "El cliente con identificación "+identificacion+" tiene la siguiente advertencia: "+mensaje;
     }
     
     private void agregarAirAts(List<AirAts> retencionesAts,AirAts retencionRentaAts)
@@ -825,7 +831,7 @@ public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Ser
         return total.setScale(2, RoundingMode.HALF_UP);
     }
     
-    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,EntityManager em) throws  RemoteException,ServicioCodefacException
+    public List<VentaAts> consultarVentasAts(java.sql.Date fechaInicial,java.sql.Date fechaFinal,Empresa empresa,List<String> alertas,EntityManager em) throws  RemoteException,ServicioCodefacException
     {
         //FacturacionService facturacionService=new FacturacionService();
         /**
@@ -858,7 +864,19 @@ public class AtsService extends ServiceAbstract<Object,AtsFacade> implements Ser
                 }
                 
                 ventaAts.setIdCliente(identificacion);
-                
+
+                //Alerta temprana: si el formato no pasa el algoritmo del SRI, mejor avisar aqui que
+                //dejar que lo descubra el validador DIMM al momento de declarar el ATS. No bloquea la
+                //generacion del XML, solo informa (ver AtsJaxb.alertas).
+                if(Persona.TipoIdentificacionEnum.CEDULA.getCodigoSriVenta().equals(codigoSri) && !UtilidadesJuridicas.validarCedula(identificacion))
+                {
+                    alertas.add(generarFormatoAlertaIdentificacion(identificacion,"la cédula no pasa el dígito verificador y no corresponde a un formato de extranjero conocido (provincia 30/50 o tercer dígito 6) - revisar el dato antes de declarar"));
+                }
+                else if(Persona.TipoIdentificacionEnum.RUC.getCodigoSriVenta().equals(codigoSri) && !UtilidadesJuridicas.validarTodosRuc(identificacion))
+                {
+                    alertas.add(generarFormatoAlertaIdentificacion(identificacion,"el RUC no pasa el algoritmo de validación - si es un RUC real y activo en el SRI esta advertencia se puede ignorar, caso contrario revisar el dato"));
+                }
+
                 //Este campo solo se incluye cuando el cliente es diferente del cliente final
                 if(!ventaAts.getTpIdCliente().equals(Persona.TipoIdentificacionEnum.CLIENTE_FINAL.getCodigoSriVenta()))
                 {

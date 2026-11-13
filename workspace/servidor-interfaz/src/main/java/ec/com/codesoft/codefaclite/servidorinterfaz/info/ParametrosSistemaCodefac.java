@@ -178,6 +178,8 @@ public abstract class ParametrosSistemaCodefac {
     public static final String CORREO_DEFECTO_PUERTO="587";
     
     public static final String CORREO_SOPORTE="info@codesoft-ec.com";
+
+    public static final String WEB_SOPORTE="www.cf.codesoft-ec.com";
     
     public static final EstiloCodefacEnum TEMA_DEFECTO_CODEFAC=EstiloCodefacEnum.MCWIN;
     

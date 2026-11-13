@@ -67,6 +67,7 @@ import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import ec.com.codesoft.codefaclite.main.archivos.ArchivoConfiguracionesCodefac;
 import ec.com.codesoft.codefaclite.main.init.Main;
 import ec.com.codesoft.codefaclite.main.interfaces.BusquedaCodefacInterface;
+import ec.com.codesoft.codefaclite.main.other.DatosContactoSoporte;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
 import ec.com.codesoft.codefaclite.licence.ValidacionLicenciaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ArchivoComprobacionCodefac;
@@ -715,6 +716,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
     {
         Image fondoImg=null;
         fondoImg = new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoGeneral.png")).getImage();
+        Boolean fondoPersonalizado=false;
         if(sessionCodefac!=null)
         {
             //Solo establecer fondos personalizados para usuarios pro
@@ -731,11 +733,12 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                             String valor=parametroCodefac.getValor();
                             if(!valor.equals(""))
                             {
-                                
+
                                 InputStream inputStream=RemoteInputStreamClient.wrap(ServiceFactory.getFactory().getRecursosServiceIf().getResourceInputStreamByFile(sessionCodefac.getEmpresa(),DirectorioCodefac.IMAGENES,valor));
                                 //String pathImagen=map.get(ParametroCodefac.DIRECTORIO_RECURSOS).valor + "/" + DirectorioCodefac.IMAGENES.getNombre() + "/"+valor;
                                 BufferedImage bufferImage= ImageIO.read(inputStream);
                                 fondoImg = bufferImage;
+                                fondoPersonalizado=true;
                             }
                         }
                     }
@@ -747,7 +750,16 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             }
         }
 
-        getjDesktopPane1().setBorder(new Fondo(fondoImg));
+        //Los datos de contacto solo se dibujan sobre el fondo por defecto de Codefac, nunca sobre el fondo
+        //personalizado que haya subido el cliente PRO
+        if(fondoPersonalizado)
+        {
+            getjDesktopPane1().setBorder(new Fondo(fondoImg));
+        }
+        else
+        {
+            getjDesktopPane1().setBorder(new Fondo(fondoImg,DatosContactoSoporte.obtenerCorreoSoporte(),DatosContactoSoporte.obtenerTelefonoSoporte(),DatosContactoSoporte.obtenerWebSoporte()));
+        }
 
         getjSplitPanel().setDividerLocation(PROPORCION_HORIZONTAL);
         getjSplitPanelVerticalSecundario().setDividerLocation(PROPORCION_VERTICAL);
@@ -2800,7 +2812,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             
             //Cargar el fondo de la pantalla
             Image fondoImg=new javax.swing.ImageIcon(getClass().getResource("/img/general/fondoGeneral.png")).getImage();
-            getjDesktopPane1().setBorder(new Fondo(fondoImg));
+            getjDesktopPane1().setBorder(new Fondo(fondoImg,DatosContactoSoporte.obtenerCorreoSoporte(),DatosContactoSoporte.obtenerTelefonoSoporte(),DatosContactoSoporte.obtenerWebSoporte()));
             
             //Setear el segundo componente de la ventana auxliar
             getjSplitPanel().setRightComponent(getJpanelAuxiliar());
@@ -3682,7 +3694,7 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
             public void actionPerformed(ActionEvent e) {
                  try {
                     //TODO: Solucion temporal pero ver otra manera mejor para solo enviar los parametros necesarios y no toda la empresa
-                    String correoEnviar=ParametrosSistemaCodefac.CORREO_SOPORTE;
+                    String correoEnviar=DatosContactoSoporte.obtenerCorreoSoporte();
                     DialogoCodefac.mensaje(MensajeCodefacSistema.AccionesFormulario.PROCESO_ESPERA);
                     RespaldosModelUtilidades.generarRespaldoUbicacion(true,sessionCodefac.getEmpresa(),correoEnviar,true);
                     DialogoCodefac.mensaje("Correcto","El proceso termino correctamente",DialogoCodefac.MENSAJE_CORRECTO);

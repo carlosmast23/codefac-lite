@@ -173,11 +173,29 @@ public class PersonaService extends ServiceAbstract<Persona, PersonaFacade> impl
          * Validaciones previas de los datos
          */
         if (validarCedula) {
-            if(!modoForzado)
-            {
-                if (!persona.validarCedula()) {
-                    throw new ServicioCodefacException("Error al validar la identificación",true);
+            Persona.ResultadoValidacionIdentificacionEnum resultadoValidacion = persona.obtenerResultadoValidacionIdentificacion();
+
+            if (Persona.ResultadoValidacionIdentificacionEnum.INVALIDO.equals(resultadoValidacion)) {
+                //Formato estandar que no pasa el algoritmo y sin ninguna excepcion conocida (ej. cedula
+                //nacional con digito verificador mal): nunca se debe poder forzar, modoForzado se ignora
+                //a proposito aqui para que no se vuelva a colar un dato asi hasta el Anexo Transaccional.
+                throw new ServicioCodefacException("Error al validar la identificación");
+            }
+
+            if (Persona.ResultadoValidacionIdentificacionEnum.FORZABLE.equals(resultadoValidacion)) {
+                //RUC de sociedad/sector publico que no cumple el modulo 11 propio del SRI: aqui si hay
+                //casos reales donde el RUC es valido y esta activo aunque no cumpla el algoritmo, asi
+                //que se deja continuar en modo forzado, dejando un rastro en observaciones.
+                if (!modoForzado) {
+                    throw new ServicioCodefacException("Error al validar la identificación", true);
                 }
+
+                String notaForzado = "[Identificación forzada - no superó la validación estándar, aceptada manualmente el "
+                        + UtilidadesFecha.getFechaHoyTimeStamp() + "]";
+                String observacionesActuales = persona.getObservaciones();
+                persona.setObservaciones(UtilidadesTextos.verificarNullOVacio(observacionesActuales)
+                        ? notaForzado
+                        : observacionesActuales + " " + notaForzado);
             }
         }
 

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.main.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.main.other.DatosContactoSoporte;
 import ec.com.codesoft.codefaclite.main.panel.WidgetNotificacionesCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
@@ -129,7 +130,7 @@ public class WidgetNotificacionCodefacModelo extends WidgetNotificacionesCodefac
         for (AlertaResponse alertaResponse : alertaList) {
             if(alertaResponse.getTipoAdvertenciaEnum().equals(TipoAdvertenciaEnum.GRAVE))
             {
-                DialogoCodefac.mensaje(new CodefacMsj("Existe ERRORES URGENTES en el sistema\nLlamar a SOPORTE de Codefac: "+ParametrosSistemaCodefac.NUMERO_SOPORTE+"\nRecuerde que algunos problemas pueden generar MULTAS en el SRI", CodefacMsj.TipoMensajeEnum.ERROR));
+                DialogoCodefac.mensaje(new CodefacMsj("Existe ERRORES URGENTES en el sistema\nLlamar a SOPORTE de Codefac: "+DatosContactoSoporte.obtenerTelefonoSoporte()+"\nRecuerde que algunos problemas pueden generar MULTAS en el SRI", CodefacMsj.TipoMensajeEnum.ERROR));
                 return;
             }
         }

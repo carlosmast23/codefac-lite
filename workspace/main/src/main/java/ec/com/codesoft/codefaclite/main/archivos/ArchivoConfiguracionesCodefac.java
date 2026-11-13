@@ -98,7 +98,22 @@ public class ArchivoConfiguracionesCodefac {
      * Campo que me permite desactivar la publicidad en la parte inferior de la barra lateral despues de realizar una venta
      */
     public static final String CAMPO_DESACTIVAR_PUBLICIDAD="desactivar_publicidad";
-    
+
+    /**
+     * Campos para cachear localmente los datos de contacto de soporte (telefono/correo/web) que se descargan
+     * junto con ultimaVersion.codefac en cada arranque, para no depender de un valor compilado y desactualizado
+     * en el .jar (ver ActualizarVersionCodefac.verificarUltimaVersionCodefac)
+     */
+    public static final String CAMPO_TELEFONO_SOPORTE="telefono_soporte";
+    public static final String CAMPO_CORREO_SOPORTE="correo_soporte";
+    public static final String CAMPO_WEB_SOPORTE="web_soporte";
+
+    /**
+     * Campo para guardar el id mas alto de noticia ya mostrada (ver NoticiasInicioUtil), asi no se repite
+     * en cada arranque. Los ids de noticias.json deben ser siempre crecientes (autoincrement del lado PHP).
+     */
+    public static final String CAMPO_ULTIMA_NOTICIA_MOSTRADA="ultima_noticia_mostrada";
+
     private PropertiesConfiguration propiedadesIniciales;
     
     private static ArchivoConfiguracionesCodefac instance;

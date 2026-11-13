@@ -1997,7 +1997,11 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
                 //Obtengo el usuario de la factura esto es importante porque con ese usuario igual va a interactuar con la caja
                 //carteraFactura.setUsuario(factura.getUsuario());
                 //tambien eliminar los cruces para evitar inconsistencias
-                carteraService.eliminarCrucesPorCartera(carteraFactura,Boolean.TRUE,entityManager);
+                //IMPORTANTE: debe respetar generarMovimientoCaja igual que la linea de abajo. Si se vuelve a
+                //hardcodear Boolean.TRUE aqui, la conversion de NVI a Factura vuelve a generar un egreso
+                //"[ Anulacion ]" real en caja por el abono original de la NVI, aunque ese efectivo ya estaba
+                //cobrado y no debe volver a salir de la caja (ver comentario de este metodo mas arriba).
+                carteraService.eliminarCrucesPorCartera(carteraFactura,generarMovimientoCaja,entityManager);
 
                 carteraService.eliminarCarteraSinTransaccion(carteraFactura, ModoProcesarEnum.FORZADO,entityManager,generarMovimientoCaja);
             }

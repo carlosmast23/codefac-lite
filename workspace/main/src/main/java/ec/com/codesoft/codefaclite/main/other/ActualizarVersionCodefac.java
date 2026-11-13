@@ -66,7 +66,11 @@ public class ActualizarVersionCodefac {
             try {
                 propiedadesIniciales.load(new FileReader(carpetaDescarga+"/"+nameVersionPropiedades));
                 String ultimaVersion=propiedadesIniciales.getProperty("version"); //TODO: Parametrizar estos datos
-                
+
+                //Actualizar el cache local de datos de contacto de soporte (si el archivo trae esas claves), independiente
+                //de si hay o no una nueva version disponible. Ver DatosContactoSoporte para donde se consumen estos valores.
+                actualizarCacheDatosContactoSoporte(propiedadesIniciales);
+
                 //Verificar si el MODO FORZAR ACTUALIZAR ESTA ACTIVO
                 Boolean forzarActualizacion=verificarForzarActualizacionPropiedadesInit();
                 
@@ -158,6 +162,51 @@ public class ActualizarVersionCodefac {
         
     }
     
+    /**
+     * Si ultimaVersion.codefac trae las claves telefono_soporte/correo_soporte/web_soporte, las guarda en el
+     * cache local (codefac.ini) para que DatosContactoSoporte las use en vez del valor compilado en el .jar.
+     * Las claves son opcionales: si no vienen (servidor viejo sin esos campos), no se toca el cache existente.
+     */
+    private static void actualizarCacheDatosContactoSoporte(Properties propiedadesDescargadas)
+    {
+        try
+        {
+            Boolean huboCambios=false;
+            ArchivoConfiguracionesCodefac configuraciones=ArchivoConfiguracionesCodefac.getInstance();
+
+            String telefonoSoporte=propiedadesDescargadas.getProperty("telefono_soporte");
+            if(telefonoSoporte!=null && !telefonoSoporte.trim().isEmpty())
+            {
+                configuraciones.agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_TELEFONO_SOPORTE, telefonoSoporte.trim());
+                huboCambios=true;
+            }
+
+            String correoSoporte=propiedadesDescargadas.getProperty("correo_soporte");
+            if(correoSoporte!=null && !correoSoporte.trim().isEmpty())
+            {
+                configuraciones.agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_CORREO_SOPORTE, correoSoporte.trim());
+                huboCambios=true;
+            }
+
+            String webSoporte=propiedadesDescargadas.getProperty("web_soporte");
+            if(webSoporte!=null && !webSoporte.trim().isEmpty())
+            {
+                configuraciones.agregarCampo(ArchivoConfiguracionesCodefac.CAMPO_WEB_SOPORTE, webSoporte.trim());
+                huboCambios=true;
+            }
+
+            if(huboCambios)
+            {
+                configuraciones.guardar();
+            }
+        }
+        catch (Exception ex)
+        {
+            //Nunca debe interrumpir el arranque ni la verificacion de actualizaciones por un problema cacheando estos datos
+            Logger.getLogger(ActualizarVersionCodefac.class.getName()).log(Level.WARNING, "No se pudo actualizar el cache de datos de contacto de soporte", ex);
+        }
+    }
+
     private static Boolean verificarForzarActualizacionPropiedadesInit()
     {
         String campoForzarActualizacion=ArchivoConfiguracionesCodefac.getInstance().obtenerValor(ArchivoConfiguracionesCodefac.CAMPO_FORZAR_ACTUALIZACION);

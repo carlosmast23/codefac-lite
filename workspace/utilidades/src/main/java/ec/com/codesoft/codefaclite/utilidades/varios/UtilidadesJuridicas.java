@@ -21,6 +21,12 @@ public class UtilidadesJuridicas {
      * @return 
      */
     public static boolean validarCedula(String cedula) {
+        //Cedulas de extranjeros residentes: usan provincia 30/50 o tercer digito 6,
+        //formatos que el Registro Civil no emite siguiendo el algoritmo modulo 10 de
+        //cedulas nacionales, por lo que nunca van a pasar el checksum de abajo.
+        if (esPatronCedulaExtranjero(cedula)) {
+            return true;
+        }
         try {
             int suma = 0;
             if (cedula.length() == 9) {
@@ -64,9 +70,29 @@ public class UtilidadesJuridicas {
     }
     
     /**
+     * Detecta el patron de cedula de extranjero residente en Ecuador (provincia 30/50,
+     * o tercer digito 6), que es un formato valido documentado pero que no sigue el
+     * algoritmo modulo 10 de cedulas nacionales.
+     * @param cedula
+     * @return
+     */
+    public static boolean esPatronCedulaExtranjero(String cedula) {
+        if (cedula == null || cedula.length() != 10) {
+            return false;
+        }
+        try {
+            int provincia = Integer.parseInt(cedula.substring(0, 2));
+            int tercerDigito = Integer.parseInt(cedula.substring(2, 3));
+            return provincia == 30 || provincia == 50 || tercerDigito == 6;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    /**
      * Algoritmo para validar cedulas naturales
      * @param cedula
-     * @return 
+     * @return
      */
     public static Boolean validacionRucPersonaNatural(String cedula) {
 		boolean isValid = false;

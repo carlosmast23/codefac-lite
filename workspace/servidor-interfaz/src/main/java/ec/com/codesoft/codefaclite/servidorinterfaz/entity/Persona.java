@@ -609,33 +609,52 @@ public class Persona implements Serializable, Comparable<Persona> {
      * ==================> Validadores de los campos <======================
      * TODO: Terminar de hacer la validacion para casos mas complicados @return
      */
-    public boolean validarCedula() {
-        boolean verificador = false;
+    /**
+     * Resultado detallado de validar la identificacion, usado por PersonaService.validarCliente
+     * para decidir si un fallo de validacion se puede forzar o no:
+     * - VALIDO: paso la validacion (incluye el patron de cedula de extranjero).
+     * - FORZABLE: no paso el algoritmo pero es un caso documentado donde el SRI emite
+     *   numeros que no cumplen su propio algoritmo (RUC de sociedades/publico), asi que
+     *   si se debe poder continuar grabando en modo forzado.
+     * - INVALIDO: formato estandar que no pasa el algoritmo y no tiene ninguna excepcion
+     *   conocida (ej. cedula nacional con digito verificador mal) - nunca se debe poder forzar.
+     */
+    public enum ResultadoValidacionIdentificacionEnum {
+        VALIDO,
+        FORZABLE,
+        INVALIDO
+    }
+
+    public ResultadoValidacionIdentificacionEnum obtenerResultadoValidacionIdentificacion() {
         Persona.TipoIdentificacionEnum tipoIdentificacion = getTipoIdentificacionEnum();
 
         if (tipoIdentificacion == null) {
-            return false;
+            return ResultadoValidacionIdentificacionEnum.INVALIDO;
         }
 
         switch (tipoIdentificacion) {
             case RUC:
-                verificador = UtilidadesJuridicas.validarTodosRuc(identificacion);
-                break;
+                return UtilidadesJuridicas.validarTodosRuc(identificacion)
+                        ? ResultadoValidacionIdentificacionEnum.VALIDO
+                        : ResultadoValidacionIdentificacionEnum.FORZABLE;
             case CEDULA:
-                verificador = UtilidadesJuridicas.validarCedula(identificacion);
-                break;
+                return UtilidadesJuridicas.validarCedula(identificacion)
+                        ? ResultadoValidacionIdentificacionEnum.VALIDO
+                        : ResultadoValidacionIdentificacionEnum.INVALIDO;
             case PASAPORTE:
             case SIN_DEFINIR:
-                verificador = true;
-                break;
+                return ResultadoValidacionIdentificacionEnum.VALIDO;
             case CLIENTE_FINAL:
-                verificador = (identificacion.equals("9999999999999")) ? true : false;
-                break;
+                return identificacion.equals("9999999999999")
+                        ? ResultadoValidacionIdentificacionEnum.VALIDO
+                        : ResultadoValidacionIdentificacionEnum.INVALIDO;
             default:
-                verificador = false;
-                break;
+                return ResultadoValidacionIdentificacionEnum.INVALIDO;
         }
-        return verificador;
+    }
+
+    public boolean validarCedula() {
+        return ResultadoValidacionIdentificacionEnum.VALIDO.equals(obtenerResultadoValidacionIdentificacion());
     }
 
     public void contruirRazonSocialConNombreYApellidos() {
