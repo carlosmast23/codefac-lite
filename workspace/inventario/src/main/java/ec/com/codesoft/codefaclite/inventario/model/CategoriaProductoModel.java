@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.inventario.model;
 
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
+import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.DialogInterfacePanel;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
@@ -20,6 +21,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.servicios.CategoriaProductoS
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.nio.file.Path;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -35,9 +39,21 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
 
     private CategoriaProducto catProducto;
     private CategoriaProductoServiceIf catProductoService;
+    private Path fotoPendiente;
 
     public CategoriaProductoModel() {
         catProductoService = ServiceFactory.getFactory().getCategoriaProductoServiceIf();
+
+        getJButton1().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Path path = UtilidadesImagenesCodefac.buscarImagen();
+                if (path != null) {
+                    fotoPendiente = path;
+                    getTxtFoto().setText(path.getFileName().toString());
+                }
+            }
+        });
     }
 
     @Override
@@ -63,7 +79,11 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
         cat.setEstado(GeneralEnumEstado.ACTIVO.getEstado());
         cat.setNombre(getTxtNombre().getText());
         cat.setDescripcion(getTxtDescripcion().getText());
-        //cat.setImagenPath(getTxtFoto().getText());
+        if (fotoPendiente != null) {
+            UtilidadesImagenesCodefac.moverArchivo(fotoPendiente, session.getEmpresa());
+            fotoPendiente = null;
+        }
+        cat.setImagenPath(getTxtFoto().getText());
     }
 
     public void editar() throws ExcepcionCodefacLite {
@@ -145,6 +165,7 @@ public class CategoriaProductoModel extends CategoriaProductoPanel implements Di
         }
         getTxtNombre().setText(catProducto.getNombre());
         getTxtDescripcion().setText(catProducto.getDescripcion());
+        getTxtFoto().setText((catProducto.getImagenPath() != null) ? catProducto.getImagenPath() : "");
     }
 
     @Override

@@ -84,6 +84,8 @@ create table PRODUCTO
     PSICOTROPICO varchar(2),
     /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.3.1.0.1)*/
     RESPONSABLE_REQUERIDO varchar(1),
+    /*@AGREGAR_COLUMNA(VERSION_SISTEMA=1.4.1.7)*/
+    FAVORITO varchar(1),
     primary key (ID_PRODUCTO)
 );
 

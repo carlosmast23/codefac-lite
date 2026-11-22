@@ -142,7 +142,10 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
     
     @Column(name = "RESPONSABLE_REQUERIDO")
     private String responsableRequerido;
-    
+
+    @Column(name = "FAVORITO")
+    private String favorito;
+
     @Column(name = "TRANSPORTAR_EN_GUIA_REMISION")
     private String transportarEnGuiaRemision;
     
@@ -522,10 +525,33 @@ public class Producto implements Serializable, Comparable<Producto>,Cloneable {
         {
             this.responsableRequerido = null;
         }
-        
+
     }
-    
-    
+
+    public String getFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(String favorito) {
+        this.favorito = favorito;
+    }
+
+    public EnumSiNo getFavoritoEnum() {
+        return EnumSiNo.getEnumByLetra(favorito);
+    }
+
+    public void setFavoritoEnum(EnumSiNo favoritoEnum) {
+        if(favoritoEnum!=null)
+        {
+            this.favorito=favoritoEnum.getLetra();
+        }
+        else
+        {
+            this.favorito = null;
+        }
+    }
+
+
     
     
     

@@ -132,6 +132,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         btnCrearCategoria = new javax.swing.JButton();
         jLabel54 = new javax.swing.JLabel();
         txtPvp1ConIva = new javax.swing.JTextField();
+        chkFavorito = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -615,6 +616,15 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         jPanel1.add(txtPvp1ConIva, gridBagConstraints);
+
+        chkFavorito.setFont(new java.awt.Font("Arial", 0, 12));
+        chkFavorito.setText("Favorito (venta rapida)");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel1.add(chkFavorito, gridBagConstraints);
 
         jPanel3.add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -1923,6 +1933,7 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
     private javax.swing.JButton btnQuitarActividad;
     private javax.swing.JButton btnUtilidadesCostos;
     private javax.swing.JCheckBox chkCompras;
+    private javax.swing.JCheckBox chkFavorito;
     private javax.swing.JCheckBox chkGenerarCodigoAutomatico;
     private javax.swing.JCheckBox chkOcultarDetalleVenta;
     private javax.swing.JCheckBox chkPsicotropicos;
@@ -2887,6 +2898,14 @@ public abstract class ProductoForm extends ControladorCodefacInterface {
 
     public void setChkResponsableRequerido(JCheckBox chkResponsableRequerido) {
         this.chkResponsableRequerido = chkResponsableRequerido;
+    }
+
+    public JCheckBox getChkFavorito() {
+        return chkFavorito;
+    }
+
+    public void setChkFavorito(JCheckBox chkFavorito) {
+        this.chkFavorito = chkFavorito;
     }
 
     public JButton getBtnAgregarActividad() {

@@ -5,13 +5,13 @@
  */
 package ec.com.codesoft.codefaclite.facturacion.callback;
 
+import ec.com.codesoft.codefaclite.controlador.aplicacion.ControladorCodefacInterface;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteData;
 import ec.com.codesoft.codefaclite.controlador.comprobantes.MonitorComprobanteModel;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import static ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.ComprobanteVentaData;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
@@ -61,17 +61,20 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ClienteFacturaImplComprobante extends UnicastRemoteObject implements ClienteInterfaceComprobante {
 
-    private FacturacionModel facturacionModel;
+    //Generalizado a ControladorCodefacInterface (en vez de FacturacionModel) porque esta clase solo
+    //necesita .session y .panelPadre, ya declarados ahi; asi cualquier pantalla de facturacion
+    //(Venta Rapida, Comanda, etc.) puede generar el comprobante electronico sin duplicar esta logica.
+    private ControladorCodefacInterface facturacionModel;
     private MonitorComprobanteData monitorData;
     //private FacturacionServiceIf servicio;
     private Factura facturaProcesando;
-    
+
     /**
      * Opcion para saber si se se va a mandar a autorizar o solo se va a firmar el comprobante electronica
      */
     private Boolean facturacionOffline;
 
-    public ClienteFacturaImplComprobante(FacturacionModel facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
+    public ClienteFacturaImplComprobante(ControladorCodefacInterface facturacionModel, Factura facturaProcesando,Boolean facturacionOffline) throws RemoteException {
         super(ParametrosClienteEscritorio.puertoCallBack);
         
         this.facturacionModel = facturacionModel;
@@ -167,7 +170,7 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             
             //solo cuando este en el proceso normal seteo el 65 % porque para el proceso autorizado se supone que ya esta con el 100%
             //TODO: Ver un forma estar con las demas pantallas que hacen lo mismo
-            if(ParametroUtilidades.comparar(facturacionModel.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
+            if(ParametroUtilidades.comparar(facturacionModel.session.getEmpresa(),ParametroCodefac.TIPO_ENVIO_COMPROBANTE, ParametroCodefac.TipoEnvioComprobanteEnum.ENVIAR_FIRMADO))
             {
                 monitorData.getBarraProgreso().setValue(65);
             }

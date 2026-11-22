@@ -10,6 +10,7 @@ import ec.com.codesoft.codefaclite.corecodefaclite.util.LimpiarAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.util.MayusculaAnotacion;
 import ec.com.codesoft.codefaclite.corecodefaclite.validation.ValidacionCodefacAnotacion;
 import ec.com.codesoft.codefaclite.utilidades.validadores.ExpresionRegular;
+import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -173,6 +174,14 @@ public abstract class CategoriaProductoPanel extends ControladorCodefacInterface
 
     public void setTxtFoto(JTextField txtFoto) {
         this.txtFoto = txtFoto;
+    }
+
+    public JButton getJButton1() {
+        return jButton1;
+    }
+
+    public void setJButton1(JButton jButton1) {
+        this.jButton1 = jButton1;
     }
 
     @MayusculaAnotacion

@@ -13,7 +13,6 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.vista.factura.FacturaModelControlador;
 import ec.com.codesoft.codefaclite.facturacion.callback.ClienteFacturaImplComprobante;
-import ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel;
 import static ec.com.codesoft.codefaclite.facturacion.model.FacturacionModel.NOMBRE_REPORTE_FACTURA_ELECTRONICA;
 import ec.com.codesoft.codefaclite.facturacionelectronica.AlertaComprobanteElectronico;
 import ec.com.codesoft.codefaclite.facturacionelectronica.ClaveAcceso;
@@ -39,9 +38,12 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class FacturaRespuestaNoCallBack extends ComprobanteRespuestaNoCallBack
 {
-    private FacturacionModel facturacionModel;
+    //Generalizado a ControladorCodefacInterface (en vez de FacturacionModel): la superclase
+    //ComprobanteRespuestaNoCallBack ya aceptaba ControladorCodefacInterface, y esta clase solo
+    //usa .session/.panelPadre, asi que cualquier pantalla de facturacion puede reusarla.
+    private ControladorCodefacInterface facturacionModel;
 
-    public FacturaRespuestaNoCallBack(Factura factura, FacturacionModel panel,Boolean procesoCompleto) {
+    public FacturaRespuestaNoCallBack(Factura factura, ControladorCodefacInterface panel,Boolean procesoCompleto) {
         super(factura, panel);
         this.facturacionModel=panel;
         this.procesoCompleto=procesoCompleto;

@@ -6,6 +6,7 @@
 package ec.com.codesoft.codefaclite.controlador.vista.factura;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
+import ec.com.codesoft.codefaclite.controlador.aplicacion.dialog.busqueda.ProductoInventarioEspecificoDialogo;
 import ec.com.codesoft.codefaclite.controlador.core.swing.GeneralPanelInterface;
 import ec.com.codesoft.codefaclite.controlador.core.swing.InterfazComunicacionPanel;
 import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac;
@@ -13,6 +14,7 @@ import ec.com.codesoft.codefaclite.controlador.core.swing.ReporteCodefac.Impresi
 import ec.com.codesoft.codefaclite.controlador.dialog.DialogoCodefac;
 import ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac;
 import static ec.com.codesoft.codefaclite.controlador.utilidades.UtilidadesImagenesCodefac.buscarImagenServidorInputStream;
+import ec.com.codesoft.codefaclite.corecodefaclite.dialog.BuscarDialogoModel;
 import ec.com.codesoft.codefaclite.servidorinterfaz.mensajes.CodefacMsj;
 import ec.com.codesoft.codefaclite.corecodefaclite.enumerador.OrientacionReporteEnum;
 import ec.com.codesoft.codefaclite.facturacionelectronica.jaxb.general.InformacionAdicional;
@@ -205,7 +207,52 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
         
         this.pvpDefecto=pvpDefecto;
     }
-    
+
+    public String getPvpDefecto() {
+        return pvpDefecto;
+    }
+
+    /**
+     * Precio de venta final (impuestos incluidos) de un producto segun el PVP activo (ver
+     * seleccionarPvpDefecto), pensado para pantallas tipo grid (Venta Rapida) que necesitan mostrar
+     * un precio de referencia para muchos productos a la vez sin disparar una consulta remota por
+     * cada tarjeta. Usa la MISMA fuente de precio (Producto.buscarPrecioPorNombre) y el mismo calculo
+     * de IVA/ICE que agregarProductoVista, para que el precio mostrado en la tarjeta coincida con el
+     * que termina en la linea del pedido al agregarlo.
+     *
+     * Limitacion conocida y aceptada: NO incluye descuentos de producto (DescuentoServiceIf.
+     * consultarDescuentosPorProducto es una consulta remota por producto; llamarla una vez por cada
+     * tarjeta del grid congelaria la pantalla al cambiar de categoria). Esos descuentos si se aplican
+     * correctamente al agregar el producto (agregarProductoVista los consulta una sola vez, para ese
+     * producto puntual). El precio de lote/costo tampoco afecta el precio de venta en este sistema
+     * (ver agregarProductoVista: "costo" solo se usa para mostrar el costo, no el valorUnitario).
+     */
+    public BigDecimal obtenerPrecioVentaConImpuestos(Producto producto) {
+        if (producto == null) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal valorUnitario = producto.buscarPrecioPorNombre(pvpDefecto);
+        if (valorUnitario == null) {
+            valorUnitario = producto.getValorUnitario();
+        }
+        if (valorUnitario == null) {
+            return BigDecimal.ZERO;
+        }
+        if (producto.getCatalogoProducto() == null || producto.getCatalogoProducto().getIva() == null
+                || producto.getCatalogoProducto().getIva().getTarifa() == null
+                || producto.getCatalogoProducto().getIva().getTarifa() == 0) {
+            return valorUnitario;
+        }
+        BigDecimal tarifaDecimal = new BigDecimal(producto.getCatalogoProducto().getIva().getTarifa())
+                .divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+        BigDecimal icePorcentaje = null;
+        if (producto.getCatalogoProducto().getIce() != null) {
+            icePorcentaje = producto.getCatalogoProducto().getIce().getPorcentaje();
+        }
+        return UtilidadIva.calcularValorConIvaIncluido(tarifaDecimal, icePorcentaje, valorUnitario);
+    }
+
+
     /**
      * TODO: Ver si esta parte no debe manejar el cliente si no directamente en el servidor para todos los casos
      * NOTA: Metodo duplicado
@@ -506,10 +553,139 @@ public class FacturaModelControlador extends FacturaNotaCreditoModelControladorA
     }
     
     /**
+     * Resuelve la informacion de lote/item especifico/variante de un producto seleccionado desde inventario
+     * (kardex) y lo agrega a la factura via agregarProductoVista. Centralizado aqui (en vez de en el Model
+     * de cada pantalla) para que Facturacion, Comanda, Venta Rapida, etc. compartan la misma logica de
+     * resolucion de lote/garantia/variante sin duplicarla.
+     * @param manejaInventario
+     * @param kardexSeleccionado
+     * @param productoSeleccionado
+     * @throws RemoteException
+     * @throws ServicioCodefacException
+     */
+    public void resolverYAgregarProducto(EnumSiNo manejaInventario, final Kardex kardexSeleccionado, final Producto productoSeleccionado) throws RemoteException, ServicioCodefacException
+    {
+        if (kardexSeleccionado != null && kardexSeleccionado.getLote() != null)
+        {
+            if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_LOTE_FACTURA, EnumSiNo.SI))
+            {
+                String fechaStr = "";
+                if (kardexSeleccionado.getLote().getFechaVencimiento() != null) {
+                    fechaStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaVencimiento());
+                } else {
+                    DialogoCodefac.mensaje(new CodefacMsj("El producto no tiene fecha de caducidad en el lote", CodefacMsj.TipoMensajeEnum.ADVERTENCIA));
+                }
+
+                String detalleTexto = productoSeleccionado.getNombre();
+                detalleTexto = detalleTexto + " [ lote: " + kardexSeleccionado.getLote().getCodigo() + ", fecha caducidad: " + fechaStr;
+
+                if (ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.AGREGAR_INFO_ADICIONAL_LOTE_FACTURA, EnumSiNo.SI))
+                {
+                    Lote lote=kardexSeleccionado.getLote();
+                    String fechaElaboracionStr="";
+
+                    if(lote.getFechaElaboracion()!=null)
+                    {
+                        fechaElaboracionStr = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(kardexSeleccionado.getLote().getFechaElaboracion());
+                        detalleTexto=detalleTexto+", F.Elab: "+fechaElaboracionStr;
+                    }
+
+                    if(!UtilidadesTextos.verificarNullOVacio(productoSeleccionado.getRegistroSanitario()))
+                    {
+                        detalleTexto=detalleTexto+", Reg.San:"+productoSeleccionado.getRegistroSanitario();
+                    }
+
+                    if(productoSeleccionado.getCasaComercial()!=null)
+                    {
+                        detalleTexto=detalleTexto+", Casa.Comr:"+productoSeleccionado.getCasaComercial().getNombre();
+                    }
+                }
+
+                detalleTexto=detalleTexto+" ]";
+                productoSeleccionado.setNombre(detalleTexto);
+            }
+        }
+
+        final int[] cantidadItemsIndividualesHolder=new int[1];
+        final RemoteException[] exHolder=new RemoteException[1];
+        final ServicioCodefacException[] exHolder2=new ServicioCodefacException[1];
+        UtilidadVarios.medirTiempoProceso("resolverYAgregarProducto.obtenerCantidadItemsEspecificosPorKardex (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+            @Override
+            public void proceso() {
+                try {
+                    cantidadItemsIndividualesHolder[0]=ServiceFactory.getFactory().getItemEspecificoServiceIf().obtenerCantidadItemsEspecificosPorKardex(productoSeleccionado);
+                } catch (RemoteException ex) {
+                    exHolder[0]=ex;
+                } catch (ServicioCodefacException ex) {
+                    exHolder2[0]=ex;
+                }
+            }
+        });
+        if(exHolder[0]!=null)
+        {
+            throw exHolder[0];
+        }
+        if(exHolder2[0]!=null)
+        {
+            throw exHolder2[0];
+        }
+        int cantidadItemsIndividuales = cantidadItemsIndividualesHolder[0];
+
+        KardexItemEspecifico kardexItemEspecifico =null;
+        if (productoSeleccionado.getGarantiaEnum().equals(EnumSiNo.SI) && cantidadItemsIndividuales > 0)
+        {
+            ProductoInventarioEspecificoDialogo dialogoEspecifico = new ProductoInventarioEspecificoDialogo(productoSeleccionado);
+            BuscarDialogoModel buscarDialogoModel = new BuscarDialogoModel(dialogoEspecifico);
+            buscarDialogoModel.setVisible(true);
+            kardexItemEspecifico = (KardexItemEspecifico) buscarDialogoModel.getResultado();
+            productoSeleccionado.setNombre("[" + kardexItemEspecifico.getCodigoEspecifico() + "] " + productoSeleccionado.getNombre());
+        }
+        interfaz.setComboIva(EnumSiNo.NO);
+
+        if (manejaInventario.equals(EnumSiNo.SI))
+        {
+            if(kardexSeleccionado!=null)
+            {
+                java.sql.Date fechaCaducidad=null;
+                if(kardexSeleccionado.getLote()!=null)
+                {
+                    fechaCaducidad=kardexSeleccionado.getLote().getFechaVencimiento();
+                }
+
+                final java.sql.Date fechaCaducidadFinal=fechaCaducidad;
+                final KardexItemEspecifico kardexItemEspecificoFinal=kardexItemEspecifico;
+                UtilidadVarios.medirTiempoProceso("resolverYAgregarProducto.agregarProductoVista (producto="+productoSeleccionado.getCodigoPersonalizado()+")", new UtilidadVarios.ProcesoTiempoIf() {
+                    @Override
+                    public void proceso() {
+                        agregarProductoVista(productoSeleccionado, kardexSeleccionado.getLote(),kardexItemEspecificoFinal,kardexSeleccionado.getStock(),kardexSeleccionado.getPrecioUltimo(),fechaCaducidadFinal);
+                    }
+                });
+                FacturaDetalle facturaDetalleSeleccionadoTmp = interfaz.obtenerFacturaDetalle();
+                if(kardexSeleccionado.getVariante() != null && facturaDetalleSeleccionadoTmp != null)
+                {
+                    facturaDetalleSeleccionadoTmp.setVariante(kardexSeleccionado.getVariante());
+                }
+                if (facturaDetalleSeleccionadoTmp != null) {
+                    String descripcion = kardexSeleccionado.obtenerDescripcionConVariante(facturaDetalleSeleccionadoTmp.getDescripcion());
+                    facturaDetalleSeleccionadoTmp.setDescripcion(descripcion);
+                }
+            }
+            else
+            {
+                agregarProductoVista(productoSeleccionado, null,null,null,null,null);
+            }
+
+        }
+        else if (manejaInventario.equals(EnumSiNo.NO)) {
+            agregarProductoVista(productoSeleccionado, null,null,BigDecimal.ZERO,null,null);
+        }
+    }
+
+    /**
      * TODO: Ver si en este mismo metodo se puede hacer para tener seleccionado el kardex del producto para no tener en el modelo de la vista
      * @param productoSeleccionado
      * @param lote
-     * @param stock 
+     * @param stock
      */
     public void agregarProductoVista(Producto productoSeleccionado,Lote lote,KardexItemEspecifico itemEspecifico,BigDecimal stock,BigDecimal costo,java.sql.Date fechaCaducidad) {
         //Si no existe ningun producto seleccionado no realiza ningun calculo

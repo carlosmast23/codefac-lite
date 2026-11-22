@@ -145,6 +145,7 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             VentanaEnum.IMPRIMIR_CODIGO_BARRAS,
             VentanaEnum.FACTURACION,
             VentanaEnum.FACTURACION_PEDIDO_LOTE,
+            VentanaEnum.VENTA_RAPIDA,
             VentanaEnum.EMPRESA,
             VentanaEnum.COMPROBANTE_CONFIGURACION,
             VentanaEnum.UTILIDAD_COMPROBANTE,
@@ -182,15 +183,17 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             VentanaEnum.CLIENTE,
             VentanaEnum.PRODUCTO,
             VentanaEnum.FACTURACION,
+            VentanaEnum.VENTA_RAPIDA,
             VentanaEnum.NOTA_CREDITO,
             VentanaEnum.ABRIR_CAJA,
             VentanaEnum.CERRAR_CAJA,
         });
-        
+
         crearPerfilAbstract(empresa, Perfil.PERFIL_CAJERO_SUPERVISOR,new VentanaEnum[]{
             VentanaEnum.CLIENTE,
             VentanaEnum.PRODUCTO,
             VentanaEnum.FACTURACION,
+            VentanaEnum.VENTA_RAPIDA,
             VentanaEnum.NOTA_CREDITO,
             VentanaEnum.ABRIR_CAJA,
             VentanaEnum.CERRAR_CAJA,
@@ -200,11 +203,12 @@ public class PerfilService extends ServiceAbstract<Perfil,PerfilFacade> implemen
             VentanaEnum.REPORTE_CAJA_SESSION,
             VentanaEnum.REPORTE_ARQUEO_CAJA,
         });
-        
+
         crearPerfilAbstract(empresa, Perfil.PERFIL_VENDEDOR_SIN_CAJA,new VentanaEnum[]{
             VentanaEnum.CLIENTE,
             VentanaEnum.PRODUCTO,
             VentanaEnum.FACTURACION,
+            VentanaEnum.VENTA_RAPIDA,
             VentanaEnum.NOTA_CREDITO,
         });
         

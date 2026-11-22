@@ -57,11 +57,15 @@ import ec.com.codesoft.codefaclite.utilidades.file.UtilidadesArchivos;
 import ec.com.codesoft.codefaclite.utilidades.swing.UtilidadesComboBox;
 import ec.com.codesoft.codefaclite.utilidades.tabla.UtilidadesTablas;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import ec.com.codesoft.codefaclite.utilidades.imagen.UtilidadImagen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.rmi.RemoteException;
@@ -160,9 +164,12 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         enumSiNo=enumSiNo.getEnumByBoolean(getChkOcultarDetalleVenta().isSelected());        
         producto.setOcultarDetalleVentaEnum(enumSiNo);
         
-        enumSiNo=enumSiNo.getEnumByBoolean(getChkResponsableRequerido().isSelected());        
+        enumSiNo=enumSiNo.getEnumByBoolean(getChkResponsableRequerido().isSelected());
         producto.setResponsableRequeridoEnum(enumSiNo);
-        
+
+        enumSiNo=enumSiNo.getEnumByBoolean(getChkFavorito().isSelected());
+        producto.setFavoritoEnum(enumSiNo);
+
         producto.setEmpresa(session.getEmpresa());
         producto.setDisponibleVentaEnum(EnumSiNo.getEnumByBoolean(getChkVentas().isSelected()));
         producto.setDisponibleCompraEnum(EnumSiNo.getEnumByBoolean(getChkCompras().isSelected()));
@@ -215,6 +222,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         
         getChkOcultarDetalleVenta().setEnabled(true);
         getChkResponsableRequerido().setSelected(false);
+        getChkFavorito().setSelected(false);
         getChkGenerarCodigoAutomatico().setSelected(false);
         actualizarTablaEmpaques();
         cargarFotoFormulario();
@@ -568,6 +576,16 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
                 {
                     controlador.producto.setPathFotoTmp(imagenPath);
                     getTxtImagenProducto().setText(imagenPath.getFileName().toString());
+
+                    //Vista previa inmediata del archivo elegido (todavia no subido al servidor, eso ocurre al grabar)
+                    try {
+                        BufferedImage imagenPreview = UtilidadImagen.resizeImage(new FileInputStream(imagenPath.toFile()), 150, 150);
+                        if (imagenPreview != null) {
+                            getLblFoto().setIcon(new ImageIcon(imagenPreview));
+                        }
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(ProductoModel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         });
@@ -1036,6 +1054,7 @@ public class ProductoModel extends ProductoForm implements DialogInterfacePanel<
         getChkTransportarGuiaRemision().setSelected(controlador.producto.getTransportarEnGuiaRemisionEnum().getBool());
         getChkOcultarDetalleVenta().setSelected(controlador.producto.getOcultarDetalleVentaEnum().getBool());
         getChkResponsableRequerido().setSelected((controlador.producto.getResponsableRequeridoEnum()!=null)?controlador.producto.getResponsableRequeridoEnum().getBool():false);
+        getChkFavorito().setSelected((controlador.producto.getFavoritoEnum()!=null)?controlador.producto.getFavoritoEnum().getBool():false);
         
         getChkCompras().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleCompra(),EnumSiNo.SI).getBool());
         getChkVentas().setSelected(EnumSiNo.getEnumByLetra(controlador.producto.getDisponibleVenta(),EnumSiNo.SI).getBool());
