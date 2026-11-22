@@ -86,14 +86,21 @@ public class DashBoardModel extends DashBoardPanel{
                 public void pdf() {
                     try {
                         InputStream path = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("dashboard.jrxml");
-                        
-                        
+
+
                         InputStream pathSubReporteTopProducto = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("dashboard_top_productos.jrxml");
-                        
+
                         JasperReport reportPiePagina = JasperCompileManager.compileReport(pathSubReporteTopProducto);
-                        
+
                         reporte.agregarParametro("subreporte_top_productos",reportPiePagina);
-                        
+
+                        //Mismo .jrxml que el de Top Productos (parametrizado con "titulo"), compilado una
+                        //segunda vez para la tabla de desglose por forma de pago -evita duplicar el archivo
+                        //solo para cambiar el encabezado de la tabla-.
+                        InputStream pathSubReporteFormaPago = RecursoCodefac.JASPER_FACTURACION.getResourceInputStream("dashboard_top_productos.jrxml");
+                        JasperReport reportFormaPago = JasperCompileManager.compileReport(pathSubReporteFormaPago);
+                        reporte.agregarParametro("subreporte_forma_pago",reportFormaPago);
+
                         ReporteCodefac.generarReporteInternalFramePlantilla(path,panelPadre, reporte);
                         dispose();
                         setVisible(false);

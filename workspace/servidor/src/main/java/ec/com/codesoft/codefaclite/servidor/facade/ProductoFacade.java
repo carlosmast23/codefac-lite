@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import jakarta.persistence.Query;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -327,11 +328,32 @@ public class ProductoFacade extends AbstractFacade<Producto>
         String queryString = "SELECT FD.CODIGO_PRINCIPAL,FD.DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD FROM FACTURA_DETALLE FD INNER JOIN FACTURA F ON FD.FACTURA_ID =F.ID INNER JOIN PRODUCTO P ON FD.CODIGO_PRINCIPAL=P.CODIGO_PERSONALIZADO WHERE F.ESTADO <>'E' AND F.ESTADO<>'N' AND F.ESTADO_NOTA_CREDITO='N' AND P.TIPO_PRODUCTO_COD='p' GROUP BY DESCRIPCION,CODIGO_PRINCIPAL ORDER BY SUM(CANTIDAD) DESC" ;
         Query query=em.createNativeQuery(queryString);
         //Object resultado= query.getResultList();
-        
+
         List<Object[]> listaResultado= query.getResultList();
-        
+
         return TopProductoRespuesta.castList(listaResultado);
-        
+
+    }
+
+    /**
+     * Igual que topProductosMasVendidosFacade(EntityManager) pero acotado a un rango de fechas (ver
+     * F.FECHA_EMISION): el Dashboard (UtilidadesService.consultarDashboard) usaba la version sin
+     * fecha para su tabla "Top Productos Vendidos", mostrando un ranking de TODA la historia mientras
+     * las demas tarjetas del dashboard (Ventas/Compras del Dia) si estan acotadas al dia -fechaInicio/
+     * fechaFin deben venir con el mismo valor (fechaHoy) que ya usan esas otras consultas, para que
+     * los datos del dashboard sean consistentes entre si.
+     */
+    public List<TopProductoRespuesta> topProductosMasVendidosFacade(Date fechaInicio, Date fechaFin, EntityManager em) throws ServicioCodefacException, RemoteException
+    {
+        String queryString = "SELECT FD.CODIGO_PRINCIPAL,FD.DESCRIPCION,SUM(CANTIDAD) AS CANTIDAD FROM FACTURA_DETALLE FD INNER JOIN FACTURA F ON FD.FACTURA_ID =F.ID INNER JOIN PRODUCTO P ON FD.CODIGO_PRINCIPAL=P.CODIGO_PERSONALIZADO WHERE F.ESTADO <>'E' AND F.ESTADO<>'N' AND F.ESTADO_NOTA_CREDITO='N' AND P.TIPO_PRODUCTO_COD='p' AND F.FECHA_EMISION>=?1 AND F.FECHA_EMISION<=?2 GROUP BY DESCRIPCION,CODIGO_PRINCIPAL ORDER BY SUM(CANTIDAD) DESC" ;
+        Query query=em.createNativeQuery(queryString);
+        query.setParameter(1, fechaInicio);
+        query.setParameter(2, fechaFin);
+
+        List<Object[]> listaResultado= query.getResultList();
+
+        return TopProductoRespuesta.castList(listaResultado);
+
     }
     
       

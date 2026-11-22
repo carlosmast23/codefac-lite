@@ -1646,7 +1646,18 @@ public class ProductoService extends ServiceAbstract<Producto,ProductoFacade> im
                 return getFacade().topProductosMasVendidosFacade(entityManager);
             }
         });
-        
+
+    }
+
+    public List<TopProductoRespuesta> topProductosMasVendidosService(final java.util.Date fechaInicio, final java.util.Date fechaFin) throws ServicioCodefacException, RemoteException
+    {
+        return (List<TopProductoRespuesta>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+            @Override
+            public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                return getFacade().topProductosMasVendidosFacade(fechaInicio, fechaFin, entityManager);
+            }
+        });
+
     }
     
     

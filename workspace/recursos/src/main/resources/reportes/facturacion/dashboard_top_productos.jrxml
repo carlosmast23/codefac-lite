@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="2.853116706110016"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="titulo" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Top Productos Vendidos"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -14,7 +17,7 @@
 	</background>
 	<pageHeader>
 		<band height="20">
-			<staticText>
+			<textField>
 				<reportElement mode="Opaque" x="0" y="0" width="265" height="20" forecolor="#FFFFFF" backcolor="#666666" uuid="bb24d932-d169-4ba8-b0f2-f28a273f434e"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#666666"/>
@@ -25,8 +28,8 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[	Top Productos Vendidos]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$P{titulo}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

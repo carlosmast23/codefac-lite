@@ -83,7 +83,14 @@ public interface FacturacionServiceIf extends ServiceAbstractIf<Factura>
     public UtilidadReport consultaUtilidadVentas(Date fechaMenor, Date fechaMayor,CategoriaProducto categoriaProducto,Sucursal sucursal,Empleado empleado) throws RemoteException,ServicioCodefacException;
     
     public BigDecimal obtenerFacturasReporteTotalVenta(PersonaEstablecimiento persona,Date fi,Date ff,ComprobanteEntity.ComprobanteEnumEstado estadEnum,Boolean consultarReferidos,Persona referido,Boolean agrupadoReferido,PuntoEmision puntoEmision,Empresa empresa,DocumentoEnum documentoEnum,Sucursal sucursal, Usuario usuario,Empleado vendedor,EnumSiNo enviadoGuiaRemision,Boolean quitarVentasAnuladasNCTotal) throws java.rmi.RemoteException;
-    
+
+    /**
+     * Desglose de ventas por forma de pago (Efectivo/Tarjeta/etc.) en un rango de fechas, para el
+     * Dashboard. Cuenta Factura AUTORIZADO + Nota de Venta Interna SIN_AUTORIZAR (mismo criterio que
+     * ya usa "Ventas del Dia" en UtilidadesService.consultarDashboard).
+     */
+    public List<ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FormaPagoTotalRespuesta> obtenerDesgloseFormaPagoDia(Date fechaInicio, Date fechaFin, Empresa empresa) throws java.rmi.RemoteException;
+
     //public Long obtenerSecuencialComanda(Empresa empresa) throws RemoteException;
     
     public List<Factura> consultarComandaReporte(Persona cliente,Date fechaInicial,Date fechaFinal,Empresa empresa,ComprobanteEntity.ComprobanteEnumEstado estado) throws java.rmi.RemoteException,ServicioCodefacException;

@@ -83,6 +83,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.CarteraParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.parameros.FacturaParametro;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadReport;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FacturaLoteRespuesta;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FormaPagoTotalRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ProductoConversionPresentacionRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.ReferenciaDetalleFacturaRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.reportData.UtilidadResult;
@@ -1865,6 +1866,22 @@ public class FacturacionService extends ServiceAbstract<Factura, FacturaFacade> 
         return null;
     }
     
+    public List<FormaPagoTotalRespuesta> obtenerDesgloseFormaPagoDia(final Date fechaInicio, final Date fechaFin, final Empresa empresa) throws RemoteException
+    {
+        try {
+            return (List<FormaPagoTotalRespuesta>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {
+                @Override
+                public Object transaccion(EntityManager entityManager) throws ServicioCodefacException, RemoteException {
+                    List<Object[]> resultado = facturaFacade.obtenerDesgloseFormaPagoDiaFacade(fechaInicio, fechaFin, empresa, entityManager);
+                    return FormaPagoTotalRespuesta.castList(resultado);
+                }
+            });
+        } catch (ServicioCodefacException ex) {
+            Logger.getLogger(FacturacionService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public Map<Factura,BigDecimal> obtenerCostoFacturas(List<Factura> facturas) throws RemoteException, ServicioCodefacException
     {
         return (Map<Factura, BigDecimal>) ejecutarTransaccionConResultado(new MetodoInterfaceTransaccionResultado() {

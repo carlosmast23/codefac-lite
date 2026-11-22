@@ -31,6 +31,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoDocumentoEnum
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoLicenciaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoQueryEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.EmpresaLicencia;
+import ec.com.codesoft.codefaclite.servidorinterfaz.respuesta.FormaPagoTotalRespuesta;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ModoSistemaEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.info.ParametrosSistemaCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.other.session.Licencia;
@@ -625,26 +626,96 @@ public class UtilidadesService extends ServiceAbstract<Object,UtilidadFacade> im
         
         //////////// CONSULTAR EL TOTAL DE VENTAS ///////////////////////////
         // TODO: Ver si mejor se puede poner un metodo simplificado en el servidor para evitar hacer tanta consulta
-        BigDecimal totalVentasDiarias= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTotalVenta
+        BigDecimal totalVentasFactura= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTotalVenta
         (
-                null, 
-                fechaHoy, 
-                fechaHoy, 
-                ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO, 
-                null, 
-                null, 
-                Boolean.TRUE, 
-                null, 
-                empresa, 
-                DocumentoEnum.FACTURA, 
-                null, 
-                null, 
-                null, 
-                null, 
+                null,
+                fechaHoy,
+                fechaHoy,
+                ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,
+                null,
+                null,
+                Boolean.TRUE,
+                null,
+                empresa,
+                DocumentoEnum.FACTURA,
+                null,
+                null,
+                null,
+                null,
                 Boolean.TRUE);
-        
+
+        //La Nota de Venta Interna (ver DocumentoEnum.NOTA_VENTA_INTERNA, usada entre otras por Venta
+        //Rapida) NUNCA llega a estado AUTORIZADO -no pasa por firma SRI, ComprobantesService.
+        //setearEstadoComoprobante() la deja fija en SIN_AUTORIZAR apenas se graba, y nada la promueve
+        //despues-. Si solo se consulta con estadoEnum=AUTORIZADO (como hacia esta consulta antes),
+        //esas ventas quedan permanentemente fuera de "Ventas del Dia". Se suma aparte, filtrando por
+        //su propio estado "final" (SIN_AUTORIZAR), en vez de intentar forzar un solo estadoEnum comun
+        //para ambos tipos de documento en la misma consulta.
+        BigDecimal totalVentasNotaVentaInterna= ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTotalVenta
+        (
+                null,
+                fechaHoy,
+                fechaHoy,
+                ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR,
+                null,
+                null,
+                Boolean.TRUE,
+                null,
+                empresa,
+                DocumentoEnum.NOTA_VENTA_INTERNA,
+                null,
+                null,
+                null,
+                null,
+                Boolean.TRUE);
+
+        BigDecimal totalVentasDiarias=((totalVentasFactura!=null)?totalVentasFactura:BigDecimal.ZERO)
+                .add((totalVentasNotaVentaInterna!=null)?totalVentasNotaVentaInterna:BigDecimal.ZERO);
+
         reporte.agregarParametro("ventasDiarias",totalVentasDiarias+"");
-        
+
+        //////////// CONSULTAR EL TICKET PROMEDIO DEL DIA ///////////////////////////
+        //Mismo criterio de documentos/estado que "Ventas del Dia" de arriba (Factura AUTORIZADO +
+        //Nota de Venta Interna SIN_AUTORIZAR), reutilizando obtenerFacturasReporteTamanio que ya
+        //existia (solo para contar registros, no para sumar valores).
+        Long numeroFacturasFactura=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTamanio
+        (
+                null,
+                fechaHoy,
+                fechaHoy,
+                ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO,
+                null,
+                null,
+                Boolean.TRUE,
+                null,
+                empresa,
+                DocumentoEnum.FACTURA,
+                null,
+                null,
+                null,
+                null);
+        Long numeroFacturasNVI=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerFacturasReporteTamanio
+        (
+                null,
+                fechaHoy,
+                fechaHoy,
+                ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR,
+                null,
+                null,
+                Boolean.TRUE,
+                null,
+                empresa,
+                DocumentoEnum.NOTA_VENTA_INTERNA,
+                null,
+                null,
+                null,
+                null);
+        long numeroFacturasDia=((numeroFacturasFactura!=null)?numeroFacturasFactura:0L)+((numeroFacturasNVI!=null)?numeroFacturasNVI:0L);
+        BigDecimal ticketPromedio=(numeroFacturasDia>0)
+                ?totalVentasDiarias.divide(new BigDecimal(numeroFacturasDia),2,RoundingMode.HALF_UP)
+                :BigDecimal.ZERO;
+        reporte.agregarParametro("ticketPromedio","$"+ticketPromedio);
+
         //////////// CONSULTAR EL TOTAL DE COMPRAS ///////////////////////////
         BigDecimal totalComprasDiarias=ServiceFactory.getFactory().getCompraServiceIf().obtenerCompraReporteTotalValor(
                 null, 
@@ -696,7 +767,11 @@ public class UtilidadesService extends ServiceAbstract<Object,UtilidadFacade> im
         DashBoardData dashBoardData=new DashBoardData();
         
         ////////////////// CONSULTAR EL TOP DE LOS PRODUCTOS MÁS VENDIDOS /////////////////////////////
-        List<TopProductoRespuesta> topProductoRespuestaList=ServiceFactory.getFactory().getProductoServiceIf().topProductosMasVendidosService();
+        //Acotado al mismo "fechaHoy" que ya usan las tarjetas de Ventas/Compras del Dia de arriba
+        //-antes consultaba TODO el historico (topProductosMasVendidosService() sin fechas), lo que
+        //hacia que esta tabla mostrara cantidades acumuladas de años mientras el resto del dashboard
+        //mostraba datos de hoy.
+        List<TopProductoRespuesta> topProductoRespuestaList=ServiceFactory.getFactory().getProductoServiceIf().topProductosMasVendidosService(fechaHoy, fechaHoy);
         List<DashBoardData.DashboardProductoTopData> listaDetalle=new ArrayList<DashBoardData.DashboardProductoTopData>();
         int cantidad=10;
         int acumulador=0;
@@ -712,9 +787,22 @@ public class UtilidadesService extends ServiceAbstract<Object,UtilidadFacade> im
         }        
         
         reporte.agregarParametro("productosList",listaDetalle);
-        
-        
-        
+
+        ////////////////// CONSULTAR EL DESGLOSE DE VENTAS POR FORMA DE PAGO /////////////////////////////
+        List<FormaPagoTotalRespuesta> formaPagoRespuestaList=ServiceFactory.getFactory().getFacturacionServiceIf().obtenerDesgloseFormaPagoDia(fechaHoy, fechaHoy, empresa);
+        List<DashBoardData.DashboardProductoTopData> listaFormaPago=new ArrayList<DashBoardData.DashboardProductoTopData>();
+        if(formaPagoRespuestaList!=null)
+        {
+            for (FormaPagoTotalRespuesta formaPagoTotal : formaPagoRespuestaList)
+            {
+                //Reutiliza el mismo DTO de 3 campos (codigo/nombre/valor) que ya usa la tabla de Top
+                //Productos -y el mismo subreporte .jrxml, ver dashboard.jrxml-, sin "codigo" porque una
+                //forma de pago no tiene uno.
+                listaFormaPago.add(new DashBoardData.DashboardProductoTopData("", formaPagoTotal.getAlias(), "$"+formaPagoTotal.getTotal()));
+            }
+        }
+        reporte.agregarParametro("formaPagoList",listaFormaPago);
+
         reporte.agregarDetalle(dashBoardData);
         
         return reporte;

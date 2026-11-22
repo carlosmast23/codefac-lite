@@ -58,6 +58,9 @@
 	<parameter name="comprasDiarias" class="java.lang.String"/>
 	<parameter name="cuentasPorCobrar" class="java.lang.String"/>
 	<parameter name="cuentasPorPagar" class="java.lang.String"/>
+	<parameter name="ticketPromedio" class="java.lang.String"/>
+	<parameter name="formaPagoList" class="java.util.Collection"/>
+	<parameter name="subreporte_forma_pago" class="java.lang.Object"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -183,8 +186,40 @@
 			</textField>
 			<subreport>
 				<reportElement x="0" y="89" width="265" height="177" uuid="15ddced7-9d10-455b-95f5-bd7d84c1083a"/>
+				<subreportParameter name="titulo">
+					<subreportParameterExpression><![CDATA["Top Productos Vendidos"]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{productosList})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subreporte_top_productos}]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement mode="Opaque" x="289" y="89" width="266" height="20" forecolor="#FFFFFF" backcolor="#8E44AD" uuid="a3f1b6a1-3b45-4b1e-9f1c-1a2b3c4d5e6f"/>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineStyle="Dashed"/>
+					<leftPen lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dotted"/>
+					<rightPen lineStyle="Dashed"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ticket Promedio]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="289" y="109" width="266" height="42" forecolor="#FFFFFF" backcolor="#8E44AD" uuid="b4a2c7b2-4c56-4c2d-8e2d-2b3c4d5e6f7a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ticketPromedio}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="289" y="155" width="266" height="111" uuid="c5b3d8c3-5d67-4d3e-9f3e-3c4d5e6f7a8b"/>
+				<subreportParameter name="titulo">
+					<subreportParameterExpression><![CDATA["Ventas por Forma de Pago (hoy)"]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{formaPagoList})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subreporte_forma_pago}]]></subreportExpression>
 			</subreport>
 		</band>
 	</pageHeader>

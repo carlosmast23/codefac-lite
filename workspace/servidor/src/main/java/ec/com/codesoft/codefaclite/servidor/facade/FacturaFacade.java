@@ -258,6 +258,35 @@ public class FacturaFacade extends AbstractFacade<Factura> {
     }
    
 
+    /**
+     * Desglose de ventas por forma de pago (ej. "Efectivo $9.20", "Tarjeta crédito $25.00") en un
+     * rango de fechas, para el Dashboard. Misma regla de negocio ya usada para "Ventas del Dia" en
+     * UtilidadesService.consultarDashboard: Factura cuenta cuando esta AUTORIZADO (SRI), Nota de
+     * Venta Interna cuenta en SIN_AUTORIZAR (su estado "final" real, nunca llega a AUTORIZADO -ver
+     * ComprobantesService.setearEstadoComoprobante-). Se repite ese mismo par de condiciones aqui en
+     * vez de generalizar, porque es la unica consulta que hoy necesita esta combinacion.
+     */
+    public List<Object[]> obtenerDesgloseFormaPagoDiaFacade(Date fechaInicio, Date fechaFin, Empresa empresa, EntityManager em)
+    {
+        String queryString = "SELECT SFP.ALIAS, SUM(FP.TOTAL) AS TOTAL "
+                + "FROM FACTURA_FORMA_PAGO FP "
+                + "INNER JOIN FACTURA F ON FP.FACTURA_ID = F.ID "
+                + "INNER JOIN SRI_FORMA_PAGO SFP ON FP.SRI_FORMA_PAGO_ID = SFP.ID "
+                + "WHERE F.EMPRESA_ID = ?1 AND F.FECHA_EMISION >= ?2 AND F.FECHA_EMISION <= ?3 "
+                + "AND ((F.CODIGO_DOCUMENTO = ?4 AND F.ESTADO = ?5) OR (F.CODIGO_DOCUMENTO = ?6 AND F.ESTADO = ?7)) "
+                + "GROUP BY SFP.ALIAS ORDER BY SUM(FP.TOTAL) DESC";
+        Query query = em.createNativeQuery(queryString);
+        query.setParameter(1, empresa.getId());
+        query.setParameter(2, fechaInicio);
+        query.setParameter(3, fechaFin);
+        query.setParameter(4, DocumentoEnum.FACTURA.getCodigo());
+        query.setParameter(5, ComprobanteEntity.ComprobanteEnumEstado.AUTORIZADO.getEstado());
+        query.setParameter(6, DocumentoEnum.NOTA_VENTA_INTERNA.getCodigo());
+        query.setParameter(7, ComprobanteEntity.ComprobanteEnumEstado.SIN_AUTORIZAR.getEstado());
+
+        return query.getResultList();
+    }
+
     public List<Factura> getFacturaEnable(EntityManager em) {
         try {
             

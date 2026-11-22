@@ -1113,7 +1113,8 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             
             //Cargar los precios con iva en el caso que se tenga configurado
             Integer ivaPorcentaje=facturaDetalle.getIvaPorcentaje();
-            if (ivaPorcentaje>0 && ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI))
+            boolean cargarConIva = ivaPorcentaje>0 && ParametroUtilidades.comparar(session.getEmpresa(), ParametroCodefac.CARGAR_PRODUCTO_IVA_FACTURA, EnumSiNo.SI);
+            if (cargarConIva)
             {
                 setComboIva(EnumSiNo.SI);
                 BigDecimal valorConIva = UtilidadIva.calcularValorConIvaIncluido(
@@ -1121,7 +1122,7 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
                         BigDecimal.ZERO,
                         facturaDetalle.getPrecioUnitario());
                 getTxtValorUnitario().setText(UtilidadBigDecimal.convertirATextoPlano(valorConIva));
-                
+
             }
             else
             {
@@ -1134,8 +1135,34 @@ public class FacturacionModel extends FacturacionPanel implements InterfazPostCo
             getTxtDescripcion().setText(facturaDetalle.getDescripcion());
             getTxtDescripcion().setCaretPosition(0);
             //getTxtDescuento().setText(facturaDetalle.getDescuento() + "");
-            getCmbDescuento().addItem(facturaDetalle.getDescuento() + "");
-            getCmbDescuento().setSelectedItem(facturaDetalle.getDescuento() + "");
+            //IMPORTANTE: FacturaDetalle.descuento se guarda como el TOTAL de la linea SIN IVA (precio_
+            //unitario_descuento x cantidad, con el iva ya quitado si se ingreso "Inc. Iva: si" -ver
+            //FacturaModelControlador.agregarDetallesFactura(), que SIEMPRE hace "quitarValorIva(...)" +
+            //"descuento.multiply(cantidad)" al grabar-), pero este combo se interpreta como descuento POR
+            //UNIDAD, y CON iva incluido si "Inc. Iva" sigue en "si", en ese mismo punto. Si aqui se
+            //recargaba el total crudo sin revertir ninguna de las 2 transformaciones, pasaban 2 cosas:
+            //1) cambiar la cantidad y volver a grabar multiplicaba el total anterior otra vez por la nueva
+            //cantidad (ej. 0.05/u x 2 -> total 0.10; al subir a 4 sin tocar el combo se grababa 0.10 x 4 =
+            //0.40 en vez de 0.05 x 4 = 0.20); 2) con "Inc. Iva: si" el valor sin iva ya guardado se volvia a
+            //tratar como si TUVIERA iva y se le quitaba el iva OTRA VEZ al grabar, reduciendo el descuento
+            //incluso sin cambiar nada (el caso reportado: click en Editar sin tocar ningun campo ya movia
+            //los valores). Se revierten aqui las 2 transformaciones -dividir entre la cantidad original, y
+            //re-agregar el iva si corresponde- para que el combo quede exactamente como el commit lo espera.
+            BigDecimal descuentoPorUnidad = (facturaDetalle.getCantidad().compareTo(BigDecimal.ZERO) != 0)
+                    ? facturaDetalle.getDescuento().divide(facturaDetalle.getCantidad(), 5, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO)
+                    : BigDecimal.ZERO;
+            if (cargarConIva)
+            {
+                ParametroCodefac parametroIva = session.getParametrosCodefac().get(ParametroCodefac.IVA_DEFECTO);
+                if (parametroIva != null)
+                {
+                    BigDecimal ivaDefectoPorcentaje = new BigDecimal(parametroIva.getValor());
+                    descuentoPorUnidad = UtilidadesImpuestos.agregarValorIva(ivaDefectoPorcentaje, descuentoPorUnidad)
+                            .setScale(5, ParametrosSistemaCodefac.REDONDEO_POR_DEFECTO);
+                }
+            }
+            getCmbDescuento().addItem(descuentoPorUnidad.toPlainString());
+            getCmbDescuento().setSelectedItem(descuentoPorUnidad.toPlainString());
             getCheckPorcentaje().setSelected(false);
             getBtnEditarDetalle().setEnabled(true);
             getBtnAgregarDetalleFactura().setEnabled(false);

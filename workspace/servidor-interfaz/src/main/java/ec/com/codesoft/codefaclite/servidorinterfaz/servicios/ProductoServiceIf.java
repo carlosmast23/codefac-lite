@@ -64,7 +64,14 @@ public interface ProductoServiceIf extends ServiceAbstractIf<Producto> {
     public ProductoPresentacionDetalle buscarProductoPorPresentacion(PresentacionProducto presentacion,Producto producto) throws RemoteException,ServicioCodefacException;
     
     public List<TopProductoRespuesta> topProductosMasVendidosService() throws ServicioCodefacException, RemoteException;
-    
+
+    /**
+     * Igual que topProductosMasVendidosService() pero acotado a un rango de fechas (sobre
+     * Factura.fechaEmision), para poder mostrar un ranking "del dia" (o de cualquier periodo)
+     * consistente con otras consultas acotadas por fecha, en vez de todo el historico.
+     */
+    public List<TopProductoRespuesta> topProductosMasVendidosService(java.util.Date fechaInicio, java.util.Date fechaFin) throws ServicioCodefacException, RemoteException;
+
     public ProductoConversionPresentacionRespuesta convertirProductoEmpaqueSecundarioEnPrincipal(Producto productoEmpaqueSecundario,BigDecimal cantidad,BigDecimal precioUnitario) throws RemoteException,ServicioCodefacException;
     
     public String actualizarProductoExportados(ProductoExportar productoExportar,Empresa empresa) throws  ServicioCodefacException, RemoteException;
