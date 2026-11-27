@@ -20,9 +20,14 @@ import ec.com.codesoft.codefaclite.servidor.service.UtilidadesService;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Perfil;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PerfilUsuario;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.PermisoVentana;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
+import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.VentanaEnum;
+import ec.com.codesoft.codefaclite.controlador.dialog.AvisoDialog;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
@@ -349,7 +354,9 @@ public class LoginModel extends LoginFormDialog{
             {
                 return;
             }
-            StringBuilder mensaje = new StringBuilder();
+            //Se calcula una sola vez, no por cada sesion encontrada (el permiso no cambia entre una
+            //sesion vieja y otra del mismo usuario).
+            Boolean tienePermisoAbrirCaja = tienePermisoVentana(usuarioLogueado, VentanaEnum.ABRIR_CAJA);
             for (CajaSession sesion : sesionesActivas)
             {
                 if (sesion.getFechaHoraApertura() == null)
@@ -358,25 +365,99 @@ public class LoginModel extends LoginFormDialog{
                 }
                 if (!UtilidadesFecha.verificarFechaHoy(sesion.getFechaHoraApertura()))
                 {
-                    String nombreCaja = (sesion.getCaja() != null) ? sesion.getCaja().getNombre() : "sin nombre";
-                    mensaje.append("- Caja \"").append(nombreCaja).append("\", abierta el ")
-                            .append(ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(sesion.getFechaHoraApertura()))
-                            .append("\n");
+                    //Piloto 2026-11-26 del componente AvisoDialog reutilizable (ver controlador.dialog.
+                    //AvisoDialog): un dialogo por cada sesion de caja vieja encontrada, en vez del
+                    //DialogoCodefac.mensaje(...) generico (JOptionPane) que se usaba antes. El criterio
+                    //de deteccion (fecha de apertura distinta a hoy) no cambio, solo la presentacion y
+                    //la navegacion directa a "Abrir Caja".
+                    mostrarAvisoCajaPendienteCierre(sesion, tienePermisoAbrirCaja);
                 }
-            }
-            if (mensaje.length() > 0)
-            {
-                DialogoCodefac.mensaje("Aviso de caja",
-                        "Tiene una sesion de caja abierta desde un dia anterior, todavia sin cerrar:\n" + mensaje
-                        + "\nSi sigue vendiendo sin cerrarla, el proximo cierre va a sumar las ventas de todos esos dias juntos "
-                        + "y puede parecer que falta dinero quen en realidad ya fue retirado/entregado en su momento. "
-                        + "Se recomienda cerrar esa caja antes de continuar.",
-                        MENSAJE_ADVERTENCIA);
             }
         }
         catch (RemoteException ex)
         {
             Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void mostrarAvisoCajaPendienteCierre(CajaSession sesion, Boolean tienePermisoAbrirCaja)
+    {
+        String nombreCaja = (sesion.getCaja() != null) ? sesion.getCaja().getNombre() : "sin nombre";
+        String fechaApertura = ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(sesion.getFechaHoraApertura());
+
+        //null (no se pudo determinar, ej. perfiles no cargados en esta respuesta de login) se trata
+        //igual que "si tiene permiso": es preferible ofrecer de mas la accion de ir a revisar la caja
+        //a negarsela de forma incorrecta por un dato que no se pudo confirmar. Solo un "false" firme
+        //(se encontraron los perfiles del usuario y ninguno incluye Abrir Caja) oculta la accion.
+        boolean ofrecerRevisarCierre = !Boolean.FALSE.equals(tienePermisoAbrirCaja);
+
+        AvisoDialog.Builder constructor = new AvisoDialog.Builder(panelPrincipal)
+                .tipo(AvisoDialog.TipoAviso.ADVERTENCIA)
+                .titulo("Caja pendiente de cierre")
+                .dato(nombreCaja)
+                .dato("Abierta desde el " + fechaApertura)
+                .accionSecundaria("Más tarde", null);
+
+        if (ofrecerRevisarCierre)
+        {
+            constructor.descripcion("Las nuevas ventas se sumarán a esta sesión. Revisa el cierre antes de iniciar una nueva jornada.")
+                    .accionPrincipal("Revisar cierre", new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            //No cierra la caja automaticamente: solo abre la pantalla existente de
+                            //Abrir/Cerrar Caja (VentanaEnum.ABRIR_CAJA) para que el usuario decida y
+                            //confirme el cierre el mismo, con los datos reales de esa sesion.
+                            panelPrincipal.crearVentanaCodefac(VentanaEnum.ABRIR_CAJA, false, null);
+                        }
+                    });
+        }
+        else
+        {
+            constructor.descripcion("Las nuevas ventas se sumarán a esta sesión. No tiene permiso para revisar el cierre de caja: pida a un responsable que lo revise.");
+        }
+
+        constructor.build().mostrar();
+    }
+
+    /**
+     * Verifica si el usuario tiene permiso para abrir una pantalla (VentanaEnum), replicando la
+     * misma fuente de datos que ya usa el menu principal (Perfil.getVentanasPermisos()), pero sin
+     * depender del arbol de menu ya construido (este chequeo corre antes de que la ventana principal
+     * termine de armar su menu). Devuelve null (no "false") cuando no se pudo determinar con certeza
+     * -ej. si la respuesta de login no trajo cargados los perfiles del usuario-, para que quien
+     * llama pueda tratar ese caso como "se asume que si tiene permiso" en vez de bloquear de mas.
+     */
+    private Boolean tienePermisoVentana(Usuario usuario, VentanaEnum ventanaEnum)
+    {
+        try
+        {
+            if (usuario == null || usuario.getPerfilesUsuario() == null || usuario.getPerfilesUsuario().isEmpty())
+            {
+                return null;
+            }
+            for (PerfilUsuario perfilUsuario : usuario.getPerfilesUsuario())
+            {
+                Perfil perfil = perfilUsuario.getPerfil();
+                if (perfil == null || perfil.getVentanasPermisos() == null)
+                {
+                    continue;
+                }
+                for (PermisoVentana permiso : perfil.getVentanasPermisos())
+                {
+                    if (ventanaEnum.equals(permiso.getVentanaEnum()))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.WARNING, "No se pudo verificar permiso de ventana: " + ventanaEnum, ex);
+            return null;
         }
     }
 

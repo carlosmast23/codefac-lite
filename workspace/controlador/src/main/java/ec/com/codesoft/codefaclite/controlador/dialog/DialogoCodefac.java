@@ -91,36 +91,46 @@ public abstract class DialogoCodefac {
         mensaje(titulo, mensaje, tipoMensaje.getCodigo());
     }
     
+    /**
+     * Unico punto de implementacion real de mensaje(...) -las demas sobrecargas (CodefacMsj,
+     * ModoMensajeEnum, 2 argumentos) terminan llamando a esta- asi que migrarlo aqui alcanza a
+     * TODOS los usos existentes de mensaje() en toda la aplicacion sin tocar ninguna de las
+     * llamadas (misma firma publica, mismo comportamiento bloqueante/modal).
+     *
+     * Migrado de JOptionPane.showMessageDialog(...) a AvisoDialog (ver piloto 2026-11-26, "Caja
+     * pendiente de cierre" en LoginModel) a pedido explicito del usuario, UNICAMENTE para este
+     * metodo informativo -las preguntas Si/No (dialogoPregunta) y los dialogos de opciones
+     * personalizadas (dialogoPreguntaPersonalizada) se dejaron sin tocar a proposito, son un alcance
+     * aparte-.
+     */
     @Deprecated
     public static void mensaje(String titulo,String mensaje,Integer tipoMensaje)
     {
-        ImageIcon icono=null;
-        //CodefacMsj.ModoMensajeEnum modoMensajeEnum=CodefacMsj.ModoMensajeEnum.buscarPorCodigo(tipoMensaje);
-       
+        AvisoDialog.TipoAviso tipo;
         if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_CORRECTO.getCodigo()))
         {
-            icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
+            tipo = AvisoDialog.TipoAviso.EXITO;
+        }
+        else if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
+        {
+            tipo = AvisoDialog.TipoAviso.ERROR;
+        }
+        else if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo()))
+        {
+            tipo = AvisoDialog.TipoAviso.ADVERTENCIA;
         }
         else
         {
-            if(tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_INCORRECTO.getCodigo()))
-            {
-                icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-error.png"));
-            }
-            else
-            {
-                if (tipoMensaje.equals(CodefacMsj.ModoMensajeEnum.MENSAJE_ADVERTENCIA.getCodigo())) {
-                    icono = new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-informacion.png"));
-                }
-            }
+            tipo = AvisoDialog.TipoAviso.INFORMACION;
         }
-       
-        //ImageIcon icono=new ImageIcon(RecursoCodefac.IMAGENES_ICONOS_DIALOGOS.getResourceURL("icono-correcto.png"));
-        JOptionPane.showMessageDialog(null,
-                mensaje,
-                "Codefac ["+titulo+"]",
-                JOptionPane.WARNING_MESSAGE,
-                icono);
+
+        new AvisoDialog.Builder(null)
+                .tipo(tipo)
+                .titulo(titulo)
+                .descripcion(mensaje)
+                .accionSecundaria("Cerrar", null)
+                .build()
+                .mostrar();
     }
     
     public static void mostrarDialogoCargando(ProcesoSegundoPlano proceso) throws ExcepcionCodefacLite
