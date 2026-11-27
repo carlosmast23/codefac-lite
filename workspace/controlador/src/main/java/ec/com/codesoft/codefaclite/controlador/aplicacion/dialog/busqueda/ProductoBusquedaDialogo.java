@@ -78,14 +78,32 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     private List<Bodega> bodegaActivaList;
 
     /**
-     * Mapa idProducto->stock calculado en getConsulta() (una vez por busqueda/cambio de filtro)
-     * y leido en agregarObjeto() (una vez por fila) para no hacer una consulta remota por producto.
+     * Mapa idProducto->stock calculado en getConsulta() y leido en agregarObjeto() (una vez por
+     * fila) para no hacer una consulta remota por producto. Se recalcula solo cuando cambia la
+     * bodega seleccionada (ver ultimaClaveStockCalculada), no en cada pagina/busqueda, porque
+     * BuscarDialogoModel llama a getConsulta() de nuevo en cada cambio de pagina.
      */
     private Map<Long,BigDecimal> mapStockProductoPorBodega;
 
+    /**
+     * Clave de la ultima bodega usada para calcular mapStockProductoPorBodega (id de la bodega, o
+     * "TODOS" cuando no hay seleccion) - evita recalcular el stock en cada cambio de pagina.
+     */
+    private String ultimaClaveStockCalculada;
+
     private static final int INDICE_FILTRO_MARCA=97;
 
-    private static final int INDICE_FILTRO_BODEGA=96;
+    /**
+     * Negativo a proposito: BuscarDialogoModel.agregarParametrosFiltros() trata cualquier indice
+     * de ComponenteFiltro >=0 como si tuviera que existir literalmente como "?indice" en el JPQL
+     * de getConsulta() (y si no, EclipseLink lanza IllegalArgumentException "parameter at position
+     * N which does not exist"); los indices negativos los ignora a proposito (ver su comentario
+     * "parametros con simbolo negativo... no agregar como parametro"). El combo de Bodega no debe
+     * filtrar la lista de productos via SQL -solo decide para que bodega se calcula la columna
+     * Stock-, asi que necesita ese escape, a diferencia de INDICE_FILTRO_MARCA que si aparece como
+     * "?97" dentro del JPQL.
+     */
+    private static final int INDICE_FILTRO_BODEGA=-96;
 
     /**
      * TODO: Variable temporal por que los filtros estan dando problemas con la parte web
@@ -324,11 +342,18 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
      * Calcula el stock por producto para la bodega seleccionada en el combo de filtro, o la suma
      * de todas las bodegas activas cuando no se selecciono ninguna (opcion "Todos", representada
      * por el null que BuscarDialogoModel siempre agrega como primer item del combo).
-     * Se calcula una sola vez por busqueda/cambio de filtro (desde getConsulta) y se reutiliza
-     * en agregarObjeto() fila por fila, para no hacer una consulta remota por cada producto listado.
+     * getConsulta() (y por lo tanto este metodo) se invoca de nuevo en cada cambio de pagina del
+     * dialogo, no solo cuando cambia el filtro -por eso aqui se cachea por bodega seleccionada y
+     * solo se vuelve a consultar el kardex cuando el usuario realmente cambio de bodega-.
      */
     private Map<Long,BigDecimal> calcularMapaStockPorBodega(Bodega bodegaSeleccionada)
     {
+        String claveStock=(bodegaSeleccionada!=null)?("BODEGA_"+bodegaSeleccionada.getIdBodega()):"TODOS";
+        if(claveStock.equals(ultimaClaveStockCalculada) && mapStockProductoPorBodega!=null)
+        {
+            return mapStockProductoPorBodega;
+        }
+
         Map<Long,BigDecimal> mapaStock=new HashMap<Long,BigDecimal>();
         try
         {
@@ -369,6 +394,7 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         {
             Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
         }
+        ultimaClaveStockCalculada=claveStock;
         return mapaStock;
     }
 
