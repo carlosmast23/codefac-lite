@@ -92,7 +92,11 @@ public class ClienteFacturaImplComprobante extends UnicastRemoteObject implement
             monitorData.getBarraProgreso().setForeground(Color.GREEN);
             monitorData.getBtnAbrir().setEnabled(true);
             monitorData.getBtnCerrar().setEnabled(true);
-            
+            //Si ya no queda ningun otro comprobante pendiente/con error, el panel lateral se oculta
+            //solo despues de unos segundos -evita que se quede ocupando espacio en pantallas chicas
+            //hasta que alguien lo cierre a mano-.
+            MonitorComprobanteModel.getInstance().notificarComprobanteTerminado();
+
             if(!monitorData.getBtnReporte().isEnabled() && alertas.size()>0)
             {
                 monitorData.getBtnReporte().setEnabled(true);

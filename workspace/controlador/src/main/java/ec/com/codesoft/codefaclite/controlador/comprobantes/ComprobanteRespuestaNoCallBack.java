@@ -161,6 +161,9 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
         monitorData.getBarraProgreso().setForeground(Color.GREEN);
         monitorData.getBarraProgreso().setValue(100);
         monitorData.getBtnCerrar().setEnabled(true);
+        //Si ya no queda ningun otro comprobante pendiente/con error, el panel lateral se oculta solo
+        //despues de unos segundos (ver MonitorComprobanteModel.notificarComprobanteTerminado()).
+        MonitorComprobanteModel.getInstance().notificarComprobanteTerminado();
 
         //Solo activar si aun no se ha activado el evento de imprimir (generadoRide() ya lo hizo)
         if (verificarEventGeneradoRide) {

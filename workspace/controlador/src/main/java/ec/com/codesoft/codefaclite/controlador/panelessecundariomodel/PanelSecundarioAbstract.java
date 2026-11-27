@@ -41,6 +41,10 @@ public abstract class PanelSecundarioAbstract extends javax.swing.JPanel {
     {
         this.listener.mostrar();
     }
-    
+
+    public void ocultar()
+    {
+        this.listener.ocultar();
+    }
 
 }

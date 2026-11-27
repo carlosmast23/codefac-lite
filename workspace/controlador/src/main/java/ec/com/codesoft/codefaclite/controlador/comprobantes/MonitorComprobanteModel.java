@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -38,6 +39,12 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
     private MonitorComprobanteListener listener;
     private static  Integer numeroVentanas=0;
     //private InterfazComunicacionPanel interfazPadre;
+
+    //Tiempo que se espera, una vez que TODO termino bien (sin errores pendientes), antes de ocultar
+    //el panel solo -ver notificarComprobanteTerminado()-. Si en ese lapso se agrega un comprobante
+    //nuevo o alguno queda con error, se cancela el auto-ocultado.
+    private static final int MILISEGUNDOS_ESPERA_AUTO_OCULTAR = 3000;
+    private Timer timerAutoOcultar;
 
     public static MonitorComprobanteModel getInstance() {
         if (monitorComprobanteModel == null) {
@@ -162,7 +169,72 @@ public class MonitorComprobanteModel extends MonitorComprobantesPanel {
     {
         getjPanelComponentesCarga().removeAll();
         getjPanelComponentesCarga().repaint();
-        
+
+    }
+
+    /**
+     * Avisa que un comprobante termino de procesarse (exitoso o con error) para evaluar si ya no
+     * queda nada pendiente y el panel se puede ocultar solo -pedido del usuario: en pantallas de
+     * baja resolucion este panel ocupa espacio fijo y antes se quedaba visible indefinidamente hasta
+     * que alguien lo ocultaba a mano desde el toolbar principal-. Llamado desde
+     * ClienteFacturaImplComprobante.termino(...) y ComprobanteRespuestaNoCallBack.terminado()
+     * -los 2 unicos lugares que marcan un comprobante como terminado con exito-.
+     */
+    public void notificarComprobanteTerminado()
+    {
+        if (todosTerminadosSinError())
+        {
+            programarAutoOcultar();
+        }
+    }
+
+    /**
+     * true solo si HAY al menos una fila y TODAS estan en 100% con la barra en verde (exito). Un
+     * panel vacio (ya cerrado/limpiado a mano) no dispara auto-ocultado -no hay nada que ocultar
+     * "solo", esa decision ya la tomo el usuario-; cualquier fila en progreso o en color de error
+     * (amarillo/naranja, ver ClienteFacturaImplComprobante) cancela el auto-ocultado.
+     */
+    private boolean todosTerminadosSinError()
+    {
+        Component[] componentes = getjPanelComponentesCarga().getComponents();
+        if (componentes.length == 0)
+        {
+            return false;
+        }
+        for (Component componente : componentes)
+        {
+            JPanel panel = (JPanel) componente;
+            Component[] componentesMonitor = panel.getComponents();
+            JProgressBar barraProgreso = (JProgressBar) componentesMonitor[0];
+            if (barraProgreso.getPercentComplete() != 1d || !Color.GREEN.equals(barraProgreso.getForeground()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void programarAutoOcultar()
+    {
+        if (timerAutoOcultar != null && timerAutoOcultar.isRunning())
+        {
+            timerAutoOcultar.stop();
+        }
+        timerAutoOcultar = new Timer(MILISEGUNDOS_ESPERA_AUTO_OCULTAR, new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                //Se re-verifica aqui (no solo al programar el timer) porque en esos 3 segundos pudo
+                //haberse agregado un comprobante nuevo o haber quedado alguno con error.
+                if (todosTerminadosSinError())
+                {
+                    ocultar();
+                }
+            }
+        });
+        timerAutoOcultar.setRepeats(false);
+        timerAutoOcultar.start();
     }
 
     @Override

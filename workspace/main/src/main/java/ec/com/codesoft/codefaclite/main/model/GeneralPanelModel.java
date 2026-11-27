@@ -354,6 +354,11 @@ public class GeneralPanelModel extends GeneralPanelForm implements InterfazComun
                 public void mostrar() {
                     mostrarPanelSecundario(true,key);
                 }
+
+                @Override
+                public void ocultar() {
+                    mostrarPanelSecundario(false);
+                }
             });
         }
     }

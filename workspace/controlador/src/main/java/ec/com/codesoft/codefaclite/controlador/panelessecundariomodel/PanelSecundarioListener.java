@@ -11,4 +11,11 @@ package ec.com.codesoft.codefaclite.controlador.panelessecundariomodel;
  */
 public interface PanelSecundarioListener {
     public void mostrar();
+
+    /**
+     * Oculta el panel secundario (inverso de mostrar()). Agregado para que un panel secundario
+     * (ej. MonitorComprobanteModel) pueda auto-ocultarse solo cuando ya no necesita el espacio en
+     * pantalla, sin depender de que el usuario presione el boton del toolbar principal.
+     */
+    public void ocultar();
 }
