@@ -17,7 +17,9 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado
 import java.util.Vector;
 import ec.com.codesoft.codefaclite.corecodefaclite.dialog.InterfaceModelFind;import java.util.Map;
 import ec.com.codesoft.codefaclite.servidorinterfaz.controller.ServiceFactory;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Bodega;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Kardex;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.MarcaProducto;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
@@ -25,9 +27,11 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.TipoProductoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.util.ParametroUtilidades;
 import ec.com.codesoft.codefaclite.utilidades.list.UtilidadesLista;
 import ec.com.codesoft.codefaclite.utilidades.texto.UtilidadesTextos;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,16 +63,37 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
      * Solución temporal para agregar o quitar una columna
      */
     private Boolean aplicacionColumna;
-    
+
+    /**
+     * Si esta en true se agrega la columna "Stock" y el filtro combo de bodega (ver
+     * INDICE_FILTRO_BODEGA). Pensado para pantallas de compra donde es util ver el stock
+     * actual del producto antes de vincularlo/comprarlo.
+     */
+    private Boolean mostrarStockBodega;
+
+    /**
+     * Cache de bodegas activas de la empresa, cargada una sola vez en getfiltrosList() y
+     * reutilizada en getConsulta() para sumar el stock de "Todos" sin volver a pedir el listado.
+     */
+    private List<Bodega> bodegaActivaList;
+
+    /**
+     * Mapa idProducto->stock calculado en getConsulta() (una vez por busqueda/cambio de filtro)
+     * y leido en agregarObjeto() (una vez por fila) para no hacer una consulta remota por producto.
+     */
+    private Map<Long,BigDecimal> mapStockProductoPorBodega;
+
     private static final int INDICE_FILTRO_MARCA=97;
-    
+
+    private static final int INDICE_FILTRO_BODEGA=96;
+
     /**
      * TODO: Variable temporal por que los filtros estan dando problemas con la parte web
      */
     //@Deprecated
     //private Boolean buscarFiltroMarca=true;
 
-    public ProductoBusquedaDialogo(Empresa empresa,Boolean productosVenta,Boolean productosCompra) 
+    public ProductoBusquedaDialogo(Empresa empresa,Boolean productosVenta,Boolean productosCompra)
     {
         this.generarCodigoBarrasEnum = null; //Le pongo en null para que filtre todo
         this.empresa=empresa;
@@ -76,16 +101,18 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         this.productosCompra=productosCompra;
         this.productosVenta=productosVenta;
         this.aplicacionColumna=false;
-        
+        this.mostrarStockBodega=false;
+
     }
-    
-    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa,Boolean productosVenta,Boolean productosCompra) 
+
+    public ProductoBusquedaDialogo(EnumSiNo isManejoInvetario, Empresa empresa,Boolean productosVenta,Boolean productosCompra)
     {
         this.isManejoInvetario = isManejoInvetario;
         this.empresa = empresa;
         this.productosCompra=productosCompra;
         this.productosVenta=productosVenta;
         this.aplicacionColumna=false;
+        this.mostrarStockBodega=false;
     }
 
     @Override
@@ -101,9 +128,13 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
             titulo.add(new ColumnaDialogo("Aplicación",0.2d));
         }
         titulo.add(new ColumnaDialogo("Pvp1 ", 0.05d));
-        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.05d));        
-        titulo.add(new ColumnaDialogo("IVA", 0.05d));        
-        titulo.add(new ColumnaDialogo("ICE", 0.05d));        
+        titulo.add(new ColumnaDialogo("Pvp1 + Iva ", 0.05d));
+        titulo.add(new ColumnaDialogo("IVA", 0.05d));
+        titulo.add(new ColumnaDialogo("ICE", 0.05d));
+        if(mostrarStockBodega)
+        {
+            titulo.add(new ColumnaDialogo("Stock",0.1d));
+        }
         titulo.add(new ColumnaDialogo("Imagen", 0.2d));
         return titulo;
     }
@@ -155,6 +186,12 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
         else
         {
             dato.add("");
+        }
+
+        if(mostrarStockBodega)
+        {
+            BigDecimal stock=(mapStockProductoPorBodega!=null)?mapStockProductoPorBodega.get(t.getIdProducto()):null;
+            dato.add((stock!=null)?stock.setScale(numeroDecimales, RoundingMode.HALF_UP):BigDecimal.ZERO.setScale(numeroDecimales, RoundingMode.HALF_UP));
         }
     }
 
@@ -273,9 +310,66 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
                 queryDialog.agregarParametro(95,EnumSiNo.getEnumByBoolean(productosVenta).getLetra());
             }
         }
-        
-        
+
+        if(mostrarStockBodega)
+        {
+            Bodega bodegaSeleccionada=(Bodega) mapFiltro.get(INDICE_FILTRO_BODEGA);
+            mapStockProductoPorBodega=calcularMapaStockPorBodega(bodegaSeleccionada);
+        }
+
         return queryDialog;
+    }
+
+    /**
+     * Calcula el stock por producto para la bodega seleccionada en el combo de filtro, o la suma
+     * de todas las bodegas activas cuando no se selecciono ninguna (opcion "Todos", representada
+     * por el null que BuscarDialogoModel siempre agrega como primer item del combo).
+     * Se calcula una sola vez por busqueda/cambio de filtro (desde getConsulta) y se reutiliza
+     * en agregarObjeto() fila por fila, para no hacer una consulta remota por cada producto listado.
+     */
+    private Map<Long,BigDecimal> calcularMapaStockPorBodega(Bodega bodegaSeleccionada)
+    {
+        Map<Long,BigDecimal> mapaStock=new HashMap<Long,BigDecimal>();
+        try
+        {
+            List<Bodega> bodegasAConsultar=new ArrayList<Bodega>();
+            if(bodegaSeleccionada!=null)
+            {
+                bodegasAConsultar.add(bodegaSeleccionada);
+            }
+            else if(bodegaActivaList!=null)
+            {
+                bodegasAConsultar.addAll(bodegaActivaList);
+            }
+
+            for(Bodega bodega:bodegasAConsultar)
+            {
+                List<Kardex> kardexList=ServiceFactory.getFactory().getKardexServiceIf().buscarPorBodega(bodega);
+                if(kardexList==null)
+                {
+                    continue;
+                }
+                for(Kardex kardex:kardexList)
+                {
+                    if(kardex.getProducto()==null || kardex.getStock()==null)
+                    {
+                        continue;
+                    }
+                    Long idProducto=kardex.getProducto().getIdProducto();
+                    BigDecimal stockActual=mapaStock.get(idProducto);
+                    mapaStock.put(idProducto,(stockActual!=null)?stockActual.add(kardex.getStock()):kardex.getStock());
+                }
+            }
+        }
+        catch(ServicioCodefacException ex)
+        {
+            Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch(RemoteException ex)
+        {
+            Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mapaStock;
     }
 
     public EnumSiNo getGenerarCodigoBarrasEnum() {
@@ -316,18 +410,25 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
     {
         try {
             List<MarcaProducto> marcaList=ServiceFactory.getFactory().getMarcaProductoServiceIf().obtenerActivosPorEmpresa(empresa);
-            
+
             Vector<ComponenteFiltro> filtroList=new Vector<ComponenteFiltro>();
             //UtilidadesLista.castListToListString(marcaList, new UtilidadesLista.CastListInterface<MarcaProducto>() {
-                        
+
             //UtilidadesLista.castListToString(marcaList, caracter, interfaz);
-            
+
             ComponenteFiltro componenteFiltro=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"marca",INDICE_FILTRO_MARCA,marcaList);
-            
+
             filtroList.add(componenteFiltro);
-            
+
+            if(mostrarStockBodega)
+            {
+                bodegaActivaList=ServiceFactory.getFactory().getBodegaServiceIf().obtenerActivosPorEmpresa(empresa);
+                ComponenteFiltro componenteFiltroBodega=new ComponenteFiltro(ComponenteFiltro.TipoFiltroEnum.COMBO_BOX,"bodega",INDICE_FILTRO_BODEGA,bodegaActivaList);
+                filtroList.add(componenteFiltroBodega);
+            }
+
             return filtroList;
-            
+
         } catch (ServicioCodefacException ex) {
             Logger.getLogger(ProductoBusquedaDialogo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
@@ -351,6 +452,14 @@ public class ProductoBusquedaDialogo implements InterfaceModelFind<Producto> , I
 
     public void setAplicacionColumna(Boolean aplicacionColumna) {
         this.aplicacionColumna = aplicacionColumna;
+    }
+
+    public Boolean getMostrarStockBodega() {
+        return mostrarStockBodega;
+    }
+
+    public void setMostrarStockBodega(Boolean mostrarStockBodega) {
+        this.mostrarStockBodega = mostrarStockBodega;
     }
     
     

@@ -307,6 +307,7 @@ public class CompraXmlModel extends CompraXmlPanel implements DialogInterfacePan
     
     public Producto enlazarProveedor() {
         ProductoBusquedaDialogo buscarBusquedaDialogo = new ProductoBusquedaDialogo(session.getEmpresa(),false,true);
+        buscarBusquedaDialogo.setMostrarStockBodega(true);
         BuscarDialogoModel buscarDialogo = new BuscarDialogoModel(buscarBusquedaDialogo);
         buscarDialogo.setVisible(true);
         Producto productoTmp = (Producto) buscarDialogo.getResultado();
