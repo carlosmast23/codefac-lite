@@ -16,15 +16,12 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ParametroCodefac;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Retencion;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.transporte.GuiaRemision;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.EnumSiNo;
-import ec.com.codesoft.codefaclite.utilidades.rmi.UtilidadesRmi;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -161,32 +158,34 @@ public abstract class ComprobanteRespuestaNoCallBack implements Runnable{
     
     private void terminado()
     {
-        try {
-            byte[] bytes = ServiceFactory.getFactory().getComprobanteServiceIf().getReporteComprobante(comprobante.getClaveAcceso(),comprobante.getEmpresa());
-            JasperPrint jasperPrint = (JasperPrint) UtilidadesRmi.deserializar(bytes);
-            monitorData.getBarraProgreso().setForeground(Color.GREEN);            
-            monitorData.getBarraProgreso().setValue(100);
-            monitorData.getBtnCerrar().setEnabled(true);
-            
-            //Solo activar si aun no se a activa el evento de imprimir
-            if (verificarEventGeneradoRide) {
-                return;
+        monitorData.getBarraProgreso().setForeground(Color.GREEN);
+        monitorData.getBarraProgreso().setValue(100);
+        monitorData.getBtnCerrar().setEnabled(true);
+
+        //Solo activar si aun no se ha activado el evento de imprimir (generadoRide() ya lo hizo)
+        if (verificarEventGeneradoRide) {
+            return;
+        }
+
+        //BUG CORREGIDO (ver analisis 2026-11-26, "cliente-servidor no imprime automaticamente"):
+        //antes este metodo descargaba y deserializaba el JasperPrint del comprobante pero nunca lo
+        //usaba -solo actualizaba la barra de progreso a verde/100%-, asi que si el SRI autorizaba el
+        //comprobante tan rapido que el primer sondeo de run() (cada 2s) ya traia clave de acceso Y
+        //fecha de autorizacion juntas, se saltaba por completo generadoRide() (el unico lugar que
+        //llamaba a imprimirComprobante()) y no se abria/imprimia nada en automatico -el usuario tenia
+        //que hacer clic manualmente en "Abrir" para que recien ahi se disparara la impresion-. Ahora
+        //se llama aqui tambien, con la misma proteccion de verificarEventGeneradoRide para no
+        //imprimir dos veces si de casualidad ambos metodos llegaran a ejecutarse.
+        imprimirComprobante();
+
+        monitorData.getBtnAbrir().setEnabled(true);
+        monitorData.getBtnAbrir().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imprimirComprobante();
             }
-            
-            monitorData.getBtnAbrir().setEnabled(true);
-            monitorData.getBtnAbrir().addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    imprimirComprobante();
-                }
-            });
-                       
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ComprobanteRespuestaNoCallBack.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        });
+        verificarEventGeneradoRide = true;
     }
     
     /*private void generarReportePdf(String clave) {
