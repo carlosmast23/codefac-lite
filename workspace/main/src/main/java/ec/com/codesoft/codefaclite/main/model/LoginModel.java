@@ -22,6 +22,7 @@ import ec.com.codesoft.codefaclite.servidorinterfaz.entity.ComprobanteEntity;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Empresa;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.Sucursal;
 import ec.com.codesoft.codefaclite.servidorinterfaz.entity.excepciones.ServicioCodefacException;
+import ec.com.codesoft.codefaclite.servidorinterfaz.entity.pos.CajaSession;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.DocumentoEnum;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.GeneralEnumEstado;
 import ec.com.codesoft.codefaclite.servidorinterfaz.enumerados.OrdenarEnum;
@@ -252,12 +253,14 @@ public class LoginModel extends LoginFormDialog{
                         LOG.log(Level.INFO, "Ingresando con el usuario: " + usuarioTxt);
                         setVisible(false);
                         usuario=loginRespuesta.usuario;
-                        panelPrincipal.setSessionCodefac(getDatosLogin());
+                        DatosLogin datosLogin=getDatosLogin();
+                        panelPrincipal.setSessionCodefac(datosLogin);
                         panelPrincipal.cambiarAspectoDependiendoUsuario(usuario);
                         //Grabar los datos de comprobacion de licencia para saber que se esta accediendo
                         //TODO: Hago esto de forma temporal porque aveces en el proceso interno de comprobar no se graba en la base de datos la fecha
                         UtilidadesServiceIf utilidadesService=ServiceFactory.getFactory().getUtilidadesServiceIf();
                         utilidadesService.grabarFechaRevisionLicencia(null, empresaSeleccionada);
+                        advertirCajaSessionAbiertaDiaAnterior(datosLogin.usuario, datosLogin.sucursal);
                         break;
                     case INCORRECTO_USUARIO:
                         LOG.log(Level.WARNING, "Error al ingresar con el usuario: " + usuarioTxt+" \n"+LoginRespuesta.EstadoLoginEnum.INCORRECTO_USUARIO.getMensaje());
@@ -322,6 +325,59 @@ public class LoginModel extends LoginFormDialog{
             }
         }
     
+    }
+
+    /**
+     * Advierte (sin bloquear el ingreso) si el usuario tiene una sesion de caja activa cuya apertura
+     * quedo en un dia anterior -sintoma de que nadie hizo el cierre de caja al final del turno
+     * pasado-. Si no se cierra, las ventas de HOY se siguen sumando sobre esa misma sesion vieja, y
+     * el "valor teorico" del proximo cierre termina reflejando varios dias de ventas juntos en vez de
+     * solo el dia actual, lo que hace parecer un faltante de caja que en realidad no es tal (ver
+     * incidente de auditoria 2026-11-26: sesion de caja abierta desde el 24/11 que siguio acumulando
+     * ventas el 25/11, dando un "valor teorico" que sumaba los 2 dias).
+     */
+    private void advertirCajaSessionAbiertaDiaAnterior(Usuario usuarioLogueado, Sucursal sucursal)
+    {
+        if (usuarioLogueado == null || sucursal == null)
+        {
+            return;
+        }
+        try
+        {
+            List<CajaSession> sesionesActivas = ServiceFactory.getFactory().getCajaSesionServiceIf().obtenerCajaSessionPorUsuarioYSucursal(usuarioLogueado, sucursal);
+            if (sesionesActivas == null)
+            {
+                return;
+            }
+            StringBuilder mensaje = new StringBuilder();
+            for (CajaSession sesion : sesionesActivas)
+            {
+                if (sesion.getFechaHoraApertura() == null)
+                {
+                    continue;
+                }
+                if (!UtilidadesFecha.verificarFechaHoy(sesion.getFechaHoraApertura()))
+                {
+                    String nombreCaja = (sesion.getCaja() != null) ? sesion.getCaja().getNombre() : "sin nombre";
+                    mensaje.append("- Caja \"").append(nombreCaja).append("\", abierta el ")
+                            .append(ParametrosSistemaCodefac.FORMATO_ESTANDAR_FECHA.format(sesion.getFechaHoraApertura()))
+                            .append("\n");
+                }
+            }
+            if (mensaje.length() > 0)
+            {
+                DialogoCodefac.mensaje("Aviso de caja",
+                        "Tiene una sesion de caja abierta desde un dia anterior, todavia sin cerrar:\n" + mensaje
+                        + "\nSi sigue vendiendo sin cerrarla, el proximo cierre va a sumar las ventas de todos esos dias juntos "
+                        + "y puede parecer que falta dinero quen en realidad ya fue retirado/entregado en su momento. "
+                        + "Se recomienda cerrar esa caja antes de continuar.",
+                        MENSAJE_ADVERTENCIA);
+            }
+        }
+        catch (RemoteException ex)
+        {
+            Logger.getLogger(LoginModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private boolean manejarErrorConexionFatal(Exception ex)
